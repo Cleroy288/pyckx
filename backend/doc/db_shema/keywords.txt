@@ -1,0 +1,73 @@
+-- Keywords Game Tables
+-- Run this migration in Supabase SQL Editor
+
+-- ============================================================================
+-- Keywords Sets table
+-- ============================================================================
+CREATE TABLE IF NOT EXISTS intello_keyword_sets (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+    name TEXT NOT NULL,
+    description TEXT NOT NULL,
+    level TEXT NOT NULL CHECK (level IN ('easy', 'medium', 'hard')),
+    language TEXT NOT NULL DEFAULT 'en',
+    subjects TEXT[] NOT NULL DEFAULT '{}',
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ============================================================================
+-- Keywords Questions table
+-- ============================================================================
+CREATE TABLE IF NOT EXISTS intello_keyword_questions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    set_id UUID NOT NULL REFERENCES intello_keyword_sets(id) ON DELETE CASCADE,
+    statement TEXT NOT NULL,
+    explanation TEXT NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ============================================================================
+-- Keywords table (individual keyword options)
+-- ============================================================================
+CREATE TABLE IF NOT EXISTS intello_keywords (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    question_id UUID NOT NULL REFERENCES intello_keyword_questions(id) ON DELETE CASCADE,
+    word TEXT NOT NULL,
+    is_correct BOOLEAN NOT NULL DEFAULT false,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ============================================================================
+-- Indexes for performance
+-- ============================================================================
+CREATE INDEX IF NOT EXISTS idx_keyword_sets_user_id ON intello_keyword_sets(user_id);
+CREATE INDEX IF NOT EXISTS idx_keyword_questions_set_id ON intello_keyword_questions(set_id);
+CREATE INDEX IF NOT EXISTS idx_keywords_question_id ON intello_keywords(question_id);
+
+-- ============================================================================
+-- Row Level Security Policies
+-- ============================================================================
+ALTER TABLE intello_keyword_sets ENABLE ROW LEVEL SECURITY;
+ALTER TABLE intello_keyword_questions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE intello_keywords ENABLE ROW LEVEL SECURITY;
+
+-- Users can manage their own sets
+CREATE POLICY "Users can manage own keyword sets" ON intello_keyword_sets
+    FOR ALL USING (auth.uid() = user_id);
+
+-- Users can manage questions in their own sets
+CREATE POLICY "Users can manage own keyword questions" ON intello_keyword_questions
+    FOR ALL USING (
+        EXISTS (SELECT 1 FROM intello_keyword_sets WHERE id = set_id AND user_id = auth.uid())
+    );
+
+-- Users can manage keywords in their own questions
+CREATE POLICY "Users can manage own keywords" ON intello_keywords
+    FOR ALL USING (
+        EXISTS (
+            SELECT 1 FROM intello_keyword_questions q
+            JOIN intello_keyword_sets s ON q.set_id = s.id
+            WHERE q.id = question_id AND s.user_id = auth.uid()
+        )
+    );

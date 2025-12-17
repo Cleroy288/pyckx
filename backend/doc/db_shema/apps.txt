@@ -1,0 +1,11 @@
+CREATE TABLE public.apps (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL UNIQUE,
+    description TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Seed with initial apps
+INSERT INTO public.apps (name, description) VALUES
+    ('collection', 'Create and manage collections of DVDs, books, and resources');

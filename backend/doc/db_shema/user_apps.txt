@@ -1,0 +1,14 @@
+-- User Apps table - Links users to their enabled apps
+-- Uses app_id (INTEGER FK) for proper normalization
+
+CREATE TABLE public.user_apps (
+    id SERIAL PRIMARY KEY,
+    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+    app_id INTEGER NOT NULL REFERENCES public.apps(id) ON DELETE CASCADE,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE(user_id, app_id)  -- One user can't have same app twice
+);
+
+-- Indexes for faster lookups
+CREATE INDEX idx_user_apps_user_id ON public.user_apps(user_id);
+CREATE INDEX idx_user_apps_app_id ON public.user_apps(app_id);

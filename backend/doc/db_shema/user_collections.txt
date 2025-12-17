@@ -1,0 +1,34 @@
+-- User's collections (one per type per user)
+-- Each user can have one collection per item type (DVD, Book, etc.)
+
+CREATE TABLE public.user_collections (
+    id SERIAL PRIMARY KEY,
+    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+    collection_type_id INTEGER NOT NULL REFERENCES public.collection_types(id) ON DELETE CASCADE,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    
+    -- Ensure one collection per type per user
+    CONSTRAINT unique_user_collection_type UNIQUE(user_id, collection_type_id)
+);
+
+-- Indexes for fast lookups
+CREATE INDEX IF NOT EXISTS idx_user_collections_user_id 
+    ON public.user_collections(user_id);
+
+CREATE INDEX IF NOT EXISTS idx_user_collections_type_id 
+    ON public.user_collections(collection_type_id);
+
+-- RLS Policies
+ALTER TABLE public.user_collections ENABLE ROW LEVEL SECURITY;
+
+-- Users can only see their own collections
+CREATE POLICY "Users can view own collections" ON public.user_collections
+    FOR SELECT USING (auth.uid() = user_id);
+
+-- Users can create their own collections
+CREATE POLICY "Users can create own collections" ON public.user_collections
+    FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+-- Users can delete their own collections
+CREATE POLICY "Users can delete own collections" ON public.user_collections
+    FOR DELETE USING (auth.uid() = user_id);

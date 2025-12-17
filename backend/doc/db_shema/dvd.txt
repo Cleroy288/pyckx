@@ -1,0 +1,69 @@
+-- DVDs table - stores DVD items in user collections
+-- Updated to support collection_id foreign key
+
+CREATE TABLE public.dvds (
+    id UUID NOT NULL DEFAULT gen_random_uuid(),
+    collection_id INTEGER REFERENCES public.user_collections(id) ON DELETE CASCADE,
+    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+    name TEXT NOT NULL,
+    year TIMESTAMPTZ NOT NULL,
+    realisator TEXT NULL,
+    actors TEXT NOT NULL DEFAULT ''::text,
+    genre TEXT NULL,
+    created_at TIMESTAMPTZ NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NULL DEFAULT NOW(),
+    
+    CONSTRAINT dvds_pkey PRIMARY KEY (id)
+) TABLESPACE pg_default;
+
+-- Indexes for fast lookups
+CREATE INDEX IF NOT EXISTS idx_dvds_name 
+    ON public.dvds USING btree (name) TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS idx_dvds_genre 
+    ON public.dvds USING btree (genre) TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS idx_dvds_year 
+    ON public.dvds USING btree (year) TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS idx_dvds_realisator 
+    ON public.dvds USING btree (realisator) TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS idx_dvds_user_id 
+    ON public.dvds USING btree (user_id) TABLESPACE pg_default;
+
+CREATE INDEX IF NOT EXISTS idx_dvds_collection_id 
+    ON public.dvds USING btree (collection_id) TABLESPACE pg_default;
+
+-- Trigger to auto-update updated_at
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = NOW();
+    RETURN NEW;
+END;
+$$ language 'plpgsql';
+
+CREATE TRIGGER update_dvds_updated_at 
+    BEFORE UPDATE ON dvds 
+    FOR EACH ROW
+    EXECUTE FUNCTION update_updated_at_column();
+
+-- RLS Policies
+ALTER TABLE public.dvds ENABLE ROW LEVEL SECURITY;
+
+-- Users can only see their own DVDs
+CREATE POLICY "Users can view own DVDs" ON public.dvds
+    FOR SELECT USING (auth.uid() = user_id);
+
+-- Users can create their own DVDs
+CREATE POLICY "Users can create own DVDs" ON public.dvds
+    FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+-- Users can update their own DVDs
+CREATE POLICY "Users can update own DVDs" ON public.dvds
+    FOR UPDATE USING (auth.uid() = user_id);
+
+-- Users can delete their own DVDs
+CREATE POLICY "Users can delete own DVDs" ON public.dvds
+    FOR DELETE USING (auth.uid() = user_id);

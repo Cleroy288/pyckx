@@ -1,0 +1,51 @@
+-- True or False Game Tables
+-- Run this migration in Supabase SQL Editor
+
+-- ============================================================================
+-- True/False Sets table
+-- ============================================================================
+CREATE TABLE IF NOT EXISTS intello_true_false_sets (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+    name TEXT NOT NULL,
+    description TEXT NOT NULL,
+    level TEXT NOT NULL CHECK (level IN ('easy', 'medium', 'hard')),
+    language TEXT NOT NULL DEFAULT 'en',
+    subjects TEXT[] NOT NULL DEFAULT '{}',
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ============================================================================
+-- True/False Statements table
+-- ============================================================================
+CREATE TABLE IF NOT EXISTS intello_true_false_statements (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    set_id UUID NOT NULL REFERENCES intello_true_false_sets(id) ON DELETE CASCADE,
+    statement TEXT NOT NULL,
+    answer BOOLEAN NOT NULL,
+    explanation TEXT NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ============================================================================
+-- Indexes for performance
+-- ============================================================================
+CREATE INDEX IF NOT EXISTS idx_true_false_sets_user_id ON intello_true_false_sets(user_id);
+CREATE INDEX IF NOT EXISTS idx_true_false_statements_set_id ON intello_true_false_statements(set_id);
+
+-- ============================================================================
+-- Row Level Security Policies
+-- ============================================================================
+ALTER TABLE intello_true_false_sets ENABLE ROW LEVEL SECURITY;
+ALTER TABLE intello_true_false_statements ENABLE ROW LEVEL SECURITY;
+
+-- Users can manage their own sets
+CREATE POLICY "Users can manage own true/false sets" ON intello_true_false_sets
+    FOR ALL USING (auth.uid() = user_id);
+
+-- Users can manage statements in their own sets
+CREATE POLICY "Users can manage own true/false statements" ON intello_true_false_statements
+    FOR ALL USING (
+        EXISTS (SELECT 1 FROM intello_true_false_sets WHERE id = set_id AND user_id = auth.uid())
+    );

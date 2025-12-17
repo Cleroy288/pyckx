@@ -1,0 +1,106 @@
+-- Level enum type
+CREATE TYPE level_type AS ENUM ('easy', 'medium', 'hard');
+-- =============================================================================
+-- QCM Tables
+-- =============================================================================
+CREATE TABLE qcm_sets (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+    name VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL DEFAULT '',
+    level level_type NOT NULL DEFAULT 'medium',
+    language VARCHAR(10) NOT NULL DEFAULT 'en',
+    subjects TEXT[] NOT NULL DEFAULT '{}',
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+CREATE TABLE qcm_questions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    set_id UUID NOT NULL REFERENCES qcm_sets(id) ON DELETE CASCADE,
+    question TEXT NOT NULL,
+    wrong_answers TEXT[] NOT NULL,
+    right_answer TEXT NOT NULL,
+    explanation TEXT NOT NULL DEFAULT ''
+);
+CREATE INDEX idx_qcm_sets_user_id ON qcm_sets(user_id);
+CREATE INDEX idx_qcm_questions_set_id ON qcm_questions(set_id);
+-- =============================================================================
+-- Open Question Tables
+-- =============================================================================
+CREATE TABLE open_question_sets (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+    name VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL DEFAULT '',
+    level level_type NOT NULL DEFAULT 'medium',
+    language VARCHAR(10) NOT NULL DEFAULT 'en',
+    subjects TEXT[] NOT NULL DEFAULT '{}',
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+CREATE TABLE open_questions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    set_id UUID NOT NULL REFERENCES open_question_sets(id) ON DELETE CASCADE,
+    question TEXT NOT NULL,
+    user_answer TEXT NOT NULL DEFAULT '',
+    expected_answer TEXT,
+    hint TEXT
+);
+CREATE INDEX idx_open_question_sets_user_id ON open_question_sets(user_id);
+CREATE INDEX idx_open_questions_set_id ON open_questions(set_id);
+-- =============================================================================
+-- Flashcard Tables
+-- =============================================================================
+CREATE TABLE flashcard_sets (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+    name VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL DEFAULT '',
+    level level_type NOT NULL DEFAULT 'medium',
+    language VARCHAR(10) NOT NULL DEFAULT 'en',
+    subjects TEXT[] NOT NULL DEFAULT '{}',
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+CREATE TABLE flashcards (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    set_id UUID NOT NULL REFERENCES flashcard_sets(id) ON DELETE CASCADE,
+    front TEXT NOT NULL,
+    back TEXT NOT NULL
+);
+CREATE INDEX idx_flashcard_sets_user_id ON flashcard_sets(user_id);
+CREATE INDEX idx_flashcards_set_id ON flashcards(set_id);
+-- =============================================================================
+-- Row Level Security
+-- =============================================================================
+ALTER TABLE qcm_sets ENABLE ROW LEVEL SECURITY;
+ALTER TABLE qcm_questions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE open_question_sets ENABLE ROW LEVEL SECURITY;
+ALTER TABLE open_questions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE flashcard_sets ENABLE ROW LEVEL SECURITY;
+ALTER TABLE flashcards ENABLE ROW LEVEL SECURITY;
+-- Users can only access their own data (for set tables)
+CREATE POLICY "Users own qcm_sets" ON qcm_sets FOR ALL USING (auth.uid() = user_id);
+CREATE POLICY "Users own open_question_sets" ON open_question_sets FOR ALL USING (auth.uid() = user_id);
+CREATE POLICY "Users own flashcard_sets" ON flashcard_sets FOR ALL USING (auth.uid() = user_id);
+-- Questions inherit access from parent set
+CREATE POLICY "Users access qcm_questions via set" ON qcm_questions FOR ALL 
+    USING (EXISTS (SELECT 1 FROM qcm_sets WHERE id = set_id AND user_id = auth.uid()));
+CREATE POLICY "Users access open_questions via set" ON open_questions FOR ALL 
+    USING (EXISTS (SELECT 1 FROM open_question_sets WHERE id = set_id AND user_id = auth.uid()));
+CREATE POLICY "Users access flashcards via set" ON flashcards FOR ALL 
+    USING (EXISTS (SELECT 1 FROM flashcard_sets WHERE id = set_id AND user_id = auth.uid()));
+-- Auto-update updated_at
+CREATE OR REPLACE FUNCTION update_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = NOW();
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+CREATE TRIGGER update_qcm_sets_updated_at BEFORE UPDATE ON qcm_sets
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+CREATE TRIGGER update_open_question_sets_updated_at BEFORE UPDATE ON open_question_sets
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+CREATE TRIGGER update_flashcard_sets_updated_at BEFORE UPDATE ON flashcard_sets
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at();

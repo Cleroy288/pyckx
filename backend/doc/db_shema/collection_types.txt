@@ -1,0 +1,19 @@
+-- Collection types registry (dvd, book, etc.)
+-- This table defines the available collection item types
+
+CREATE TABLE public.collection_types (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL UNIQUE,      -- 'dvd', 'book'
+    display_name VARCHAR(100) NOT NULL,    -- 'DVD', 'Book'
+    description TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Seed with initial collection types
+INSERT INTO public.collection_types (name, display_name, description) VALUES
+    ('dvd', 'DVD', 'DVD movie collection'),
+    ('book', 'Book', 'Book collection');
+
+-- Index for fast lookup by name
+CREATE INDEX IF NOT EXISTS idx_collection_types_name 
+    ON public.collection_types(name);
