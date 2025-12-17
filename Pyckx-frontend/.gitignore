@@ -1,0 +1,13 @@
+node_modules
+out
+.env
+.next
+.vscode/
+.idea/
+bun.lock
+tsconfig.tsbuildinfo
+.env.local
+.env.development
+next-env.d.ts
+*.log
+*.DS_Store
