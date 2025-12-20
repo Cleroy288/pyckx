@@ -20,11 +20,9 @@ impl IntelloService {
     pub async fn get_user_qcm_sets(&self, user_id: &str) -> Result<Vec<QcmSet>, IntelloError> {
         self.validate_user_id(user_id)?;
 
-        let manual_sets = self.qcm_repo.find_by_user(user_id).await?;
-        let ai_sets = self.ai_qcm_repo.find_by_user(user_id).await?;
-
-        let mut all_sets = manual_sets;
-        all_sets.extend(ai_sets);
+        // Note: Both qcm_repo and ai_qcm_repo use the same table (qcm_sets),
+        // so we only need to query once to get all sets (manual + AI-generated).
+        let all_sets = self.qcm_repo.find_by_user(user_id).await?;
 
         info!(count = all_sets.len(), "Retrieved user QCM sets");
         Ok(all_sets)

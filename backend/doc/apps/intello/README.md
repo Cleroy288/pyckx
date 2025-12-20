@@ -22,14 +22,25 @@ Base URL: `/app/intello`
 
 ### Data Model
 ```rust
-QcmSet { id, user_id, name, description, level, questions: Vec<QcmQuestion> }
-QcmQuestion { id, question, choices: Vec<String>, correct_answer: usize }
+QcmSet { id, user_id, name, description, level, language, subjects, questions: Vec<QcmQuestion> }
+QcmQuestion { id, question, wrong_answers: Vec<String>, right_answer: String, explanation: String }
 ```
 
 ### Endpoints
-- `POST /qcm` - Create from JSON
-- `POST /custom-question` - Generate from documents (multipart)
-- `GET /qcm` - List user's sets
+- `POST /qcm` - **Manual creation** from JSON (user types questions)
+- `POST /custom-question` - **AI generation** from documents (multipart)
+- `GET /qcm` - List all user's sets (manual + AI-generated)
+- `GET /qcm/{id}` - Get specific set
+- `PUT /qcm/{id}` - Update set
+- `DELETE /qcm/{id}` - Delete set
+
+### Manual QCM Validation
+- Name: required, non-empty
+- Description: required, non-empty
+- Level: "easy" | "medium" | "hard"
+- Language: default "en"
+- Subjects: max 3, max 20 chars each
+- Questions: each must have unique answers (case-insensitive)
 
 ---
 

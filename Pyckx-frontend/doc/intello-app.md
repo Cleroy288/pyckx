@@ -2,13 +2,15 @@
 
 ## Overview
 
-Intello is an educational game platform within Pyckx that offers AI-powered quiz generation. Users can create quizzes from their own documents and test their knowledge.
+Intello is an educational game platform within Pyckx. Users can create quizzes manually or generate them with AI from their documents.
 
 ## Features
 
-### 1. QCM (Multiple Choice Questions)
-- Pre-made quiz sets stored in the backend
+### 1. Manual QCM (Multiple Choice Questions)
+- **Create questions manually** without AI
 - 4 answer options per question (1 correct, 3 wrong)
+- Configurable: name, description, language, level, subjects
+- **Duplicate answer validation** - all answers must be unique
 - Immediate feedback with explanations
 - Score tracking and results review
 
@@ -138,6 +140,30 @@ interface CustomQuestionFormProps {
 - **AI Model** (selectable: 4 free + 5 paid models with context limits)
 - Subjects (max 3)
 - Documents (required, multiple files)
+
+### ManualQcmForm (`components/manual-qcm-form.tsx`)
+
+Form for creating manual QCM sets without AI:
+
+**Props:**
+```typescript
+interface ManualQcmFormProps {
+  onBack: () => void
+  onSuccess?: (setId: string) => void
+}
+```
+
+**Form Fields:**
+- Name (required)
+- Description (required)
+- Language (en, fr, es, de, nl)
+- Difficulty (easy, medium, hard)
+- Subjects (max 3, optional)
+
+**Question Builder:**
+- Dynamic add/remove questions
+- Each question: question text, 1 correct answer, 3 wrong answers, explanation
+- **Validation**: All answers must be unique (case-insensitive)
 
 ### Player Components
 

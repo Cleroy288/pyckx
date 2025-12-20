@@ -76,6 +76,13 @@ export function ManualQcmForm({ onBack, onSuccess }: ManualQcmFormProps) {
 		setQuestions(updated)
 	}
 
+	// Check for duplicate answers within a question
+	const hasDuplicateAnswers = (q: CreateQcmQuestionInput): boolean => {
+		const allAnswers = [q.right_answer.trim().toLowerCase(), ...q.wrong_answers.map(w => w.trim().toLowerCase())]
+		const uniqueAnswers = new Set(allAnswers.filter(a => a.length > 0))
+		return uniqueAnswers.size < allAnswers.filter(a => a.length > 0).length
+	}
+
 	// Validation
 	const isValid = () => {
 		if (!name.trim()) return false
@@ -85,8 +92,15 @@ export function ManualQcmForm({ onBack, onSuccess }: ManualQcmFormProps) {
 			if (!q.right_answer.trim()) return false
 			if (q.wrong_answers.some((w) => !w.trim())) return false
 			if (!q.explanation.trim()) return false
+			if (hasDuplicateAnswers(q)) return false // Check for duplicate answers
 		}
 		return true
+	}
+
+	// Get validation error message for a question
+	const getQuestionError = (q: CreateQcmQuestionInput): string | null => {
+		if (hasDuplicateAnswers(q)) return "All answers must be unique"
+		return null
 	}
 
 	// Submit
@@ -259,6 +273,11 @@ export function ManualQcmForm({ onBack, onSuccess }: ManualQcmFormProps) {
 							placeholder="Explanation (shown after answer) *"
 							rows={2}
 						/>
+
+						{/* Duplicate answer warning */}
+						{getQuestionError(q) && (
+							<p className="text-sm text-destructive">{getQuestionError(q)}</p>
+						)}
 					</div>
 				))}
 			</div>
