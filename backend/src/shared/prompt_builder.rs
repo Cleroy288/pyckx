@@ -65,7 +65,11 @@ The questions should encourage critical thinking and detailed responses."#,
   ]
 }
 
-IMPORTANT: Each question MUST have a question, expected_answer, and hint field."#,
+CRITICAL JSON RULES:
+- Each object must have UNIQUE field names - NEVER duplicate any field
+- Each question object must have exactly ONE "question", ONE "expected_answer", and ONE "hint" field
+- Do NOT repeat the same field twice in any object
+- Validate your JSON structure before outputting"#,
     },
     GameOutputFormat {
         game_id: "flashcard",
@@ -171,6 +175,36 @@ Phrases should be:
 
 IMPORTANT: The "position" field is 0-indexed and indicates the correct position of each word. Phrases should be 4-10 words long."#,
     },
+    GameOutputFormat {
+        game_id: "fill_blank",
+        game_name: "Fill in the Blank",
+        format_description: r#"Create fill-in-the-blank exercises where users complete phrases by selecting the correct answer:
+- One phrase with a blank to fill (marked with ___ or [blank])
+- At least 4 answer options
+- Exactly ONE correct answer
+- An explanation of why the correct answer is right
+
+Phrases should be:
+- Meaningful sentences from the source content
+- Clear about what type of answer is expected
+- Testing important concepts or vocabulary"#,
+        json_schema: r#"{
+  "questions": [
+    {
+      "phrase": "The ___ is the powerhouse of the cell.",
+      "options": [
+        {"text": "mitochondria", "is_correct": true},
+        {"text": "nucleus", "is_correct": false},
+        {"text": "ribosome", "is_correct": false},
+        {"text": "cytoplasm", "is_correct": false}
+      ],
+      "explanation": "The mitochondria is known as the powerhouse of the cell because it produces ATP, the cell's energy currency."
+    }
+  ]
+}
+
+IMPORTANT: Each question MUST have at least 4 options with EXACTLY ONE correct answer (is_correct: true). All other options must have is_correct: false."#,
+    },
 ];
 
 /// Get the output format for a specific game
@@ -204,6 +238,60 @@ fn level_to_string(level: &Level) -> &'static str {
    - Wrong answers should be sophisticated and require careful analysis to eliminate"#,
     }
 }
+
+// =============================================================================
+// GENERIC PROMPT INPUT - Shared by all game types
+// =============================================================================
+
+/// Generic input parameters for building any game prompt.
+///
+/// This struct consolidates the identical fields from all game-specific prompt inputs
+/// (OpenQuestionPromptInput, FlashcardPromptInput, TrueOrFalsePromptInput, etc.).
+///
+/// # Usage
+///
+/// Use this struct directly with the game-specific build functions:
+///
+/// ```ignore
+/// let input = GamePromptInput {
+///     name: "My Quiz".to_string(),
+///     description: "A quiz about Rust".to_string(),
+///     instructions: "Make it fun!".to_string(),
+///     language: "en".to_string(),
+///     level: Level::Medium,
+///     subjects: vec!["Rust".to_string()],
+///     num_questions: 10,
+///     documents: vec![("file.txt".to_string(), "content...".to_string())],
+/// };
+/// let prompt = build_open_question_prompt(&input);
+/// ```
+///
+/// For backwards compatibility, type aliases like `OpenQuestionPromptInput = GamePromptInput`
+/// are provided at the bottom of this module.
+#[allow(dead_code)] // Prepared for future migration from game-specific prompt inputs
+#[derive(Debug, Clone)]
+pub struct GamePromptInput {
+    /// Name of the question/game set
+    pub name: String,
+    /// Description of what this generates
+    pub description: String,
+    /// Specific instructions for the AI model
+    pub instructions: String,
+    /// Language for generated content (e.g., "en", "fr")
+    pub language: String,
+    /// Difficulty level
+    pub level: Level,
+    /// Subjects/topics for the questions
+    pub subjects: Vec<String>,
+    /// Number of questions/items to generate
+    pub num_questions: u8,
+    /// Document contents (filename, content pairs)
+    pub documents: Vec<(String, String)>,
+}
+
+// =============================================================================
+// BUILD PROMPT FUNCTIONS
+// =============================================================================
 
 /// Build the complete AI prompt from a CustomQuestion
 pub fn build_prompt(custom_question: &CustomQuestion) -> String {
@@ -1241,6 +1329,162 @@ Before outputting, verify:
 ✓ All content is in {language}
 ✓ All phrases are from the source documents
 ✓ Positions are correctly 0-indexed
+✓ JSON format is valid
+
+**OUTPUT ONLY THE JSON. No other text.**"#,
+        name = input.name,
+        description = input.description,
+        game_name = game_format.game_name,
+        format_description = game_format.format_description,
+        subjects = subjects_list,
+        level = level_to_string(&input.level),
+        language = get_language_name(&input.language),
+        num_questions = input.num_questions,
+        instructions = if input.instructions.is_empty() {
+            "No additional instructions provided.".to_string()
+        } else {
+            input.instructions.clone()
+        },
+        documents = documents_content,
+        json_schema = game_format.json_schema,
+    )
+}
+
+// == FILL BLANK PROMPT ==
+
+/// Input parameters for building a fill blank prompt
+pub struct FillBlankPromptInput {
+    /// Name of the fill blank set
+    pub name: String,
+    /// Description of what this generates
+    pub description: String,
+    /// Specific instructions for the AI model
+    pub instructions: String,
+    /// Language for generated content (e.g., "en", "fr")
+    pub language: String,
+    /// Difficulty level
+    pub level: Level,
+    /// Subjects/topics for the questions
+    pub subjects: Vec<String>,
+    /// Number of questions to generate
+    pub num_questions: u8,
+    /// Document contents (filename, content pairs)
+    pub documents: Vec<(String, String)>,
+}
+
+/// Build an AI prompt for generating fill in the blank questions
+pub fn build_fill_blank_prompt(input: &FillBlankPromptInput) -> String {
+    let game_format = get_game_format("fill_blank").unwrap_or(&GAME_FORMATS[6]);
+
+    let subjects_list = if input.subjects.is_empty() {
+        "General topics from the provided content".to_string()
+    } else {
+        input.subjects.join(", ")
+    };
+
+    let documents_content = input
+        .documents
+        .iter()
+        .enumerate()
+        .map(|(i, (filename, content))| {
+            format!("### Document {} - {}\n```\n{}\n```", i + 1, filename, content)
+        })
+        .collect::<Vec<_>>()
+        .join("\n\n");
+
+    format!(
+        r#"# EDUCATIONAL FILL IN THE BLANK GENERATION
+
+You are an expert educational content creator. Your task is to generate high-quality fill-in-the-blank exercises that help students test their knowledge by completing phrases with the correct answer from multiple options.
+
+## CRITICAL REQUIREMENTS
+
+### 1. SUBJECT FOCUS (MOST IMPORTANT)
+The user wants to learn about: **{subjects}**
+
+You MUST:
+- Generate questions that DIRECTLY test knowledge about {subjects}
+- Every phrase MUST be specifically about {subjects}
+- Extract the most important concepts, facts, and terminology about {subjects}
+- If the documents contain information about multiple topics, ONLY use content related to {subjects}
+
+### 2. Output Format: {game_name}
+
+{format_description}
+
+### 3. DIFFICULTY LEVEL (STRICTLY ENFORCE)
+{level}
+
+Adjust complexity based on this level:
+- Easy: Simple vocabulary, basic concepts, obvious correct answers
+- Medium: Technical terms, concepts requiring understanding, plausible distractors
+- Hard: Advanced vocabulary, nuanced concepts, very plausible distractors
+
+### 4. LANGUAGE
+All content MUST be in {language}. This includes phrases, options, and explanations.
+
+---
+
+## Question Set Details
+
+**Name**: {name}
+**Description**: {description}
+**Number of Questions**: {num_questions} (generate EXACTLY this many)
+
+**User Instructions**: {instructions}
+
+---
+
+## Source Documents
+
+Study these documents and extract content ONLY about {subjects}:
+
+{documents}
+
+---
+
+## Output Format
+
+Respond with ONLY valid JSON:
+
+```json
+{json_schema}
+```
+
+---
+
+## Question Generation Rules
+
+1. **Subject Relevance**: Each phrase MUST test knowledge about {subjects}
+   - Use key definitions, facts, concepts, and vocabulary
+   - Do NOT create generic phrases unrelated to {subjects}
+
+2. **Phrase Quality**:
+   - Each phrase should have ONE clear blank (marked with ___)
+   - The blank should be for an important term or concept
+   - The phrase should be grammatically correct when completed
+
+3. **Answer Options**:
+   - Provide at least 4 options per question
+   - EXACTLY ONE option must be correct (is_correct: true)
+   - Wrong options should be plausible distractors from the same domain
+   - Avoid obviously wrong answers
+
+4. **Explanations**:
+   - Explain WHY the correct answer is right
+   - Reference the source material when appropriate
+   - Be educational and helpful
+
+5. **Source Accuracy**: All phrases and answers must come from the provided documents
+
+## Final Check
+
+Before outputting, verify:
+✓ All {num_questions} questions are specifically about {subjects}
+✓ All questions match the difficulty level
+✓ All content is in {language}
+✓ All phrases are from the source documents
+✓ Each question has at least 4 options with EXACTLY ONE correct
 ✓ JSON format is valid
 
 **OUTPUT ONLY THE JSON. No other text.**"#,

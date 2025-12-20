@@ -65,7 +65,7 @@ export class Dvd {
   }
 
   // == Instance Methods ==
-  
+
   toJSON(): DvdData {
     return {
       id: this.id,
@@ -84,7 +84,7 @@ export class Dvd {
   }
 
   // == Static Factory ==
-  
+
   static fromAPI(data: DvdData): Dvd {
     return new Dvd(data);
   }
@@ -92,7 +92,7 @@ export class Dvd {
   // == API Methods ==
 
   static async create(input: CreateDvdInput): Promise<Dvd> {
-    const res = await fetch(endpoints.collection.addDvd(), {
+    const res = await fetch(endpoints.collection.dvds(), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -109,7 +109,7 @@ export class Dvd {
   }
 
   async save(input: UpdateDvdInput): Promise<Dvd> {
-    const res = await fetch(endpoints.collection.updateDvd(this.id), {
+    const res = await fetch(endpoints.collection.dvd(this.id), {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -126,7 +126,7 @@ export class Dvd {
   }
 
   async delete(): Promise<void> {
-    const res = await fetch(endpoints.collection.deleteDvd(this.id), {
+    const res = await fetch(endpoints.collection.dvd(this.id), {
       method: "DELETE",
       credentials: "include",
     });
@@ -138,7 +138,7 @@ export class Dvd {
   }
 
   static async getById(id: string): Promise<Dvd> {
-    const res = await fetch(endpoints.collection.getDvd(id), {
+    const res = await fetch(endpoints.collection.dvd(id), {
       method: "GET",
       credentials: "include",
     });

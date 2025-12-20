@@ -127,6 +127,7 @@ impl RateLimiter {
     }
 
     /// Configure multiple routes with the same config
+    #[allow(dead_code)] // Utility kept for future use
     pub fn configure_many(&self, routes: &[&str], config: RateLimitConfig) {
         for route in routes {
             self.configs.insert((*route).to_string(), config.clone());

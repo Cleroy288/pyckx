@@ -8,6 +8,7 @@ import { FlashcardPlayer } from "@/components/flashcard-player"
 import { TrueOrFalsePlayer } from "@/components/true-false-player"
 import { KeywordsPlayer } from "@/components/keywords-player"
 import { OrderPhrasePlayer } from "@/components/order-phrase-player"
+import { FillBlankPlayer } from "@/components/fill-blank-player"
 import { useIntello } from "../context"
 
 // == PLAYING QCM VIEW ==
@@ -166,3 +167,17 @@ export function PlayingOrderPhraseView() {
 	)
 }
 
+// == PLAYING FILL BLANK VIEW ==
+export function PlayingFillBlankView() {
+	const { selectedFillBlankSet, setView } = useIntello()
+
+	if (!selectedFillBlankSet) return null
+
+	return (
+		<FillBlankPlayer
+			questions={selectedFillBlankSet.questions}
+			title={selectedFillBlankSet.name}
+			onBack={() => setView("play-fill-blank")}
+		/>
+	)
+}

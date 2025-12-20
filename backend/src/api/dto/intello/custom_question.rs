@@ -1,9 +1,7 @@
 //! Custom Question DTOs
 
 use crate::domain::intello::Level;
-use crate::api::dto::intello::validation::{
-    validate_subjects, parse_level, validate_num_questions, default_language, default_num_questions
-};
+use crate::api::dto::intello::validation::{parse_level, default_language, default_num_questions};
 use crate::api::dto::intello::qcm::QcmQuestionResponse;
 use serde::{Deserialize, Serialize};
 
@@ -30,14 +28,6 @@ pub struct CreateCustomQuestionRequest {
 impl CreateCustomQuestionRequest {
     pub fn parse_level(&self) -> Result<Level, String> {
         parse_level(&self.level)
-    }
-
-    pub fn validate_subjects(&self) -> Result<(), String> {
-        validate_subjects(&self.subjects)
-    }
-
-    pub fn validate_num_questions(&self) -> Result<(), String> {
-        validate_num_questions(self.num_questions)
     }
 }
 

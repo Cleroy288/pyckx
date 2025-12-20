@@ -26,8 +26,11 @@ fn test_intello_app_default() {
 fn test_get_available_games() {
     let service = create_test_service();
     let games = service.get_available_games();
-    assert_eq!(games.len(), 1);
+    // Currently 3 games: qcm, true_false, fill_blank
+    assert_eq!(games.len(), 3);
     assert!(games.iter().any(|g| g.id == "qcm"));
+    assert!(games.iter().any(|g| g.id == "true_false"));
+    assert!(games.iter().any(|g| g.id == "fill_blank"));
 }
 
 // ============================================================================

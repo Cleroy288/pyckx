@@ -1,49 +1,31 @@
 //! True or False operations
 
+use super::crud_ops;
 use super::types::{GenerateContentInput, IntelloService};
 use crate::domain::intello::TrueOrFalseSet;
 use crate::error::IntelloError;
 use crate::shared::TrueOrFalsePromptInput;
-use tracing::{info, instrument, warn};
+use tracing::{info, instrument};
 
 impl IntelloService {
     /// Get all true/false sets for a user
     #[instrument(skip(self), fields(user_id = %user_id))]
     pub async fn get_user_true_false_sets(&self, user_id: &str) -> Result<Vec<TrueOrFalseSet>, IntelloError> {
-        self.validate_user_id(user_id)?;
-        let sets = self.true_false_repo.find_by_user(user_id).await?;
-        info!(count = sets.len(), "Retrieved user true/false sets");
-        Ok(sets)
+        crud_ops::get_user_sets(self.true_false_repo.as_ref(), user_id, "true_false").await
     }
 
     /// Get a specific true/false set by ID
     #[allow(dead_code)] // Available for future use
     #[instrument(skip(self), fields(user_id = %user_id, set_id = %set_id))]
     pub async fn get_true_false_set(&self, set_id: &str, user_id: &str) -> Result<Option<TrueOrFalseSet>, IntelloError> {
-        self.validate_user_id(user_id)?;
-        self.validate_set_id(set_id)?;
-        self.true_false_repo.find_by_id(set_id, user_id).await
+        crud_ops::get_set(self.true_false_repo.as_ref(), set_id, user_id).await
     }
 
     /// Delete a true/false set with ownership verification
     #[allow(dead_code)] // Available for future use
     #[instrument(skip(self), fields(user_id = %user_id, set_id = %set_id))]
     pub async fn delete_true_false_set(&self, set_id: &str, user_id: &str) -> Result<bool, IntelloError> {
-        self.validate_user_id(user_id)?;
-        self.validate_set_id(set_id)?;
-
-        // Verify ownership
-        let existing = self.true_false_repo.find_by_id(set_id, user_id).await?;
-        if existing.is_none() {
-            warn!(set_id = %set_id, "True/false set not found or user doesn't own it");
-            return Ok(false);
-        }
-
-        let deleted = self.true_false_repo.delete(set_id, user_id).await?;
-        if deleted {
-            info!(set_id = %set_id, "True/false set deleted");
-        }
-        Ok(deleted)
+        crud_ops::delete_set(self.true_false_repo.as_ref(), set_id, user_id, "true_false").await
     }
 
     /// Generate AI true/false statements and store them

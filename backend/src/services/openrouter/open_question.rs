@@ -1,7 +1,7 @@
 //! Open question generation and parsing
 
 use super::types::OpenRouterService;
-use super::utils::extract_json_from_response;
+use super::utils::{extract_json_from_response, sanitize_json_duplicates};
 use crate::domain::intello::OpenQuestion;
 use crate::error::IntelloError;
 use crate::shared::{build_open_question_prompt, OpenQuestionPromptInput};
@@ -53,18 +53,25 @@ impl OpenRouterService {
     }
 
     /// Parse open question response from AI
+    /// 
+    /// Applies sanitization to remove duplicate JSON keys that AI models
+    /// sometimes generate erroneously.
     fn parse_open_question_response(
         &self,
         response: &str,
     ) -> Result<Vec<OpenQuestion>, IntelloError> {
+        // Extract JSON from markdown code blocks if present
         let json_str = extract_json_from_response(response);
+        
+        // Sanitize duplicate keys (defensive against AI model errors)
+        let sanitized_json = sanitize_json_duplicates(&json_str);
 
-        let ai_response: OpenQuestionAiResponse = serde_json::from_str(&json_str).map_err(|e| {
+        let ai_response: OpenQuestionAiResponse = serde_json::from_str(&sanitized_json).map_err(|e| {
             IntelloError::validation(
                 "ai_response",
                 format!(
                     "Failed to parse AI response as open questions: {}. Response was: {}",
-                    e, json_str
+                    e, sanitized_json
                 ),
             )
         })?;

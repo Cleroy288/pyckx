@@ -17,6 +17,7 @@
 pub mod course;
 pub mod custom_question;
 pub mod enums;
+pub mod fill_blank;
 pub mod flashcard;
 pub mod keywords;
 pub mod open_question;
@@ -30,6 +31,7 @@ pub mod true_false;
 // pub use course::{Course, Exercise, ExerciseContent, ExerciseType, Lesson};
 pub use custom_question::{CustomQuestion, CustomQuestionDocument, DocumentType};
 pub use enums::Level;
+pub use fill_blank::{FillBlankOption, FillBlankQuestion, FillBlankSet};
 pub use flashcard::{Flashcard, FlashcardSet};
 pub use keywords::{Keyword, KeywordQuestion, KeywordSet};
 pub use open_question::{OpenQuestion, OpenQuestionSet};

@@ -59,7 +59,7 @@ export class KeywordSet {
 	 * Fetch all keyword sets for the current user
 	 */
 	static async getAll(): Promise<KeywordSet[]> {
-		const response = await fetch(endpoints.intello.keywordsList(), {
+		const response = await fetch(endpoints.intello.keywords(), {
 			method: "GET",
 			credentials: "include",
 		})

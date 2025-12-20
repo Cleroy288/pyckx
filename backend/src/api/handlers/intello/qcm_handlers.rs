@@ -12,7 +12,7 @@ use crate::shared::session::get_user_id_from_session;
 use actix_web::{delete, get, post, put, web, HttpRequest, HttpResponse};
 use tracing::instrument;
 
-/// POST /app/intello/qcm - Create a new manual QCM set
+/// POST /api/intello/qcm - Create a new manual QCM set
 #[post("/qcm")]
 #[instrument(skip(app, req, body))]
 pub async fn create_qcmset_handler(
@@ -46,7 +46,7 @@ pub async fn create_qcmset_handler(
     Ok(HttpResponse::Created().json(QcmSuccessResponse::created(&created)))
 }
 
-/// GET /app/intello/qcm - Get all user's QCM sets
+/// GET /api/intello/qcm - Get all user's QCM sets
 #[get("/qcm")]
 #[instrument(skip(app, req))]
 pub async fn get_user_qcmsets_handler(
@@ -58,7 +58,7 @@ pub async fn get_user_qcmsets_handler(
     Ok(HttpResponse::Ok().json(QcmSetListResponse::from_sets(sets)))
 }
 
-/// GET /app/intello/qcm/{id} - Get a specific QCM set
+/// GET /api/intello/qcm/{id} - Get a specific QCM set
 #[get("/qcm/{set_id}")]
 #[instrument(skip(app, req), fields(set_id = %path.as_str()))]
 pub async fn get_qcmset_handler(
@@ -75,7 +75,7 @@ pub async fn get_qcmset_handler(
     }
 }
 
-/// PUT /app/intello/qcm/{id} - Update a QCM set
+/// PUT /api/intello/qcm/{id} - Update a QCM set
 #[put("/qcm/{set_id}")]
 #[instrument(skip(app, req, body), fields(set_id = %path.as_str()))]
 pub async fn update_qcmset_handler(
@@ -124,7 +124,7 @@ pub async fn update_qcmset_handler(
     }
 }
 
-/// DELETE /app/intello/qcm/{id} - Delete a QCM set
+/// DELETE /api/intello/qcm/{id} - Delete a QCM set
 #[delete("/qcm/{set_id}")]
 #[instrument(skip(app, req), fields(set_id = %path.as_str()))]
 pub async fn delete_qcmset_handler(

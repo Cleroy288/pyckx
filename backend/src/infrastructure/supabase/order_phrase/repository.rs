@@ -9,7 +9,7 @@ use super::types::{
 use crate::config::Config;
 use crate::domain::intello::{OrderPhraseQuestion, OrderPhraseSet, OrderPhraseWord};
 use crate::error::IntelloError;
-use crate::infrastructure::repository::OrderPhraseRepository;
+use crate::infrastructure::repository::GameSetRepository;
 use async_trait::async_trait;
 use reqwest::Client;
 use tracing::{debug, error, info, instrument};
@@ -284,7 +284,7 @@ impl SupabaseOrderPhraseRepository {
 }
 
 #[async_trait]
-impl OrderPhraseRepository for SupabaseOrderPhraseRepository {
+impl GameSetRepository<OrderPhraseSet> for SupabaseOrderPhraseRepository {
     #[instrument(skip(self, set), fields(set_id = %set.id))]
     async fn insert(&self, set: &OrderPhraseSet) -> Result<OrderPhraseSet, IntelloError> {
         // Insert the set

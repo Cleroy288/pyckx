@@ -154,11 +154,11 @@ const handleAdd = async (input) => {
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| GET | `/app/collection/get-user-dvd` | Get all user DVDs |
-| POST | `/app/collection/add-dvd` | Add new DVD |
-| GET | `/app/collection/dvd/:id` | Get single DVD |
-| PUT | `/app/collection/mod-dvd/:id` | Update DVD |
-| DELETE | `/app/collection/del/:id` | Delete DVD |
+| GET | `/api/collection/dvds` | Get all user DVDs |
+| POST | `/api/collection/dvds` | Add new DVD |
+| GET | `/api/collection/dvds/:id` | Get single DVD |
+| PUT | `/api/collection/dvds/:id` | Update DVD |
+| DELETE | `/api/collection/dvds/:id` | Delete DVD |
 
 ## Pre-configured Data
 

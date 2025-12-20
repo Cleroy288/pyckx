@@ -12,6 +12,7 @@ AI-powered learning games generated from your documents.
 | **True/False** | Statement verification | `POST /true-false/create` | `GET /true-false/list` |
 | **Keywords** | Keyword identification | `POST /keywords/create` | `GET /keywords/list` |
 | **Order Phrase** | Arrange shuffled words | `POST /order-phrase/create` | `GET /order-phrase/list` |
+| **Fill Blank** | Fill in missing words | `POST /fill-blank/create` | `GET /fill-blank/list` |
 
 Base URL: `/app/intello`
 
@@ -115,6 +116,24 @@ Users arrange shuffled words into the correct order. Each word has a `position` 
 
 ---
 
+## Fill Blank
+
+### Data Model
+```rust
+FillBlankSet { id, user_id, name, level, language, subjects, questions }
+FillBlankQuestion { id, phrase, options: Vec<FillBlankOption>, explanation }
+FillBlankOption { id, text, is_correct: bool }
+```
+
+### Endpoints
+- `POST /fill-blank/create` - Generate from documents
+- `GET /fill-blank/list` - List user's sets
+
+### Game Logic
+AI generates phrases with blanks (marked as `___`). Users select the correct word from multiple options to fill in the blank.
+
+---
+
 ## Creating Content (All Games)
 
 All AI-generation endpoints accept **multipart form data**:
@@ -133,7 +152,7 @@ All AI-generation endpoints accept **multipart form data**:
   "level": "easy|medium|hard",
   "subjects": ["Subject1", "Subject2"],
   "num_questions": 10,
-  "model": "amazon/nova-2-lite-v1:free"
+  "model": "google/gemini-2.0-flash-exp:free"
 }
 ```
 
@@ -161,5 +180,30 @@ src/
 ├── api/dto/intello/          # DTOs per game
 └── api/handlers/intello/     # HTTP handlers
 ```
+
+---
+
+## AI Response Handling
+
+### Duplicate Key Sanitization
+
+AI models may occasionally generate invalid JSON with duplicate keys:
+```json
+{
+  "expected_answer": "...",
+  "expected_answer": "..."  // Invalid duplicate
+}
+```
+
+The backend automatically sanitizes AI responses before parsing:
+1. **Prompt Prevention**: Prompts include explicit JSON validation rules
+2. **Defensive Parsing**: `sanitize_json_duplicates()` removes duplicates, keeping first occurrence
+3. **Warning Logs**: Duplicates are logged for monitoring
+
+**Files:**
+- `src/services/openrouter/utils.rs` - Sanitization utility
+- `src/shared/prompt_builder.rs` - JSON validation rules in prompts
+
+---
 
 See [AI Models](ai-models.md) for available models.

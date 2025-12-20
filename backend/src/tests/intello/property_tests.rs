@@ -11,28 +11,32 @@ use crate::domain::intello::{Level, QcmQuestion, QcmSet};
 use crate::error::IntelloError;
 use crate::infrastructure::json_storage::{JsonQcmRepository, JsonOpenQuestionRepository, JsonFlashcardRepository};
 use crate::infrastructure::repository::QcmRepository;
-use crate::services::{IntelloService, OpenRouterService};
+use crate::services::{IntelloRepositories, IntelloService, OpenRouterService};
 use crate::shared::OpenQuestionCache;
+use super::helpers::{StubTrueOrFalseRepository, StubKeywordsRepository, StubOrderPhraseRepository, StubFillBlankRepository};
 
 /// Create a test IntelloService with temporary files for QCM repos
 fn create_test_intello_service(qcm_temp: &NamedTempFile, ai_qcm_temp: &NamedTempFile) -> IntelloService {
-    let qcm_repo = Arc::new(JsonQcmRepository::new(qcm_temp.path()));
-    let ai_qcm_repo = Arc::new(JsonQcmRepository::new(ai_qcm_temp.path()));
-    // Use in-memory temp files for other repos (not used in QCM tests)
-    let open_question_repo = Arc::new(JsonOpenQuestionRepository::new("data/intello/openquestion.json"));
-    let flashcard_repo = Arc::new(JsonFlashcardRepository::new("data/intello/flashcard.json"));
-    let openrouter_service = Arc::new(OpenRouterService::new(String::new()));
-    let open_question_cache = Arc::new(OpenQuestionCache::new());
+    // Custom QCM repos using temp files, stub everything else
+    let repos = IntelloRepositories {
+        qcm_repo: Arc::new(JsonQcmRepository::new(qcm_temp.path())),
+        ai_qcm_repo: Arc::new(JsonQcmRepository::new(ai_qcm_temp.path())),
+        open_question_repo: Arc::new(JsonOpenQuestionRepository::new("data/intello/openquestion.json")),
+        flashcard_repo: Arc::new(JsonFlashcardRepository::new("data/intello/flashcard.json")),
+        true_false_repo: Arc::new(StubTrueOrFalseRepository),
+        keywords_repo: Arc::new(StubKeywordsRepository),
+        order_phrase_repo: Arc::new(StubOrderPhraseRepository),
+        fill_blank_repo: Arc::new(StubFillBlankRepository),
+    };
     
-    IntelloService::new(
-        qcm_repo,
-        ai_qcm_repo,
-        open_question_repo,
-        flashcard_repo,
-        openrouter_service,
-        open_question_cache,
-    )
+    IntelloService::builder()
+        .with_repositories(repos)
+        .with_openrouter(Arc::new(OpenRouterService::with_google_key(String::new(), None)))
+        .with_cache(Arc::new(OpenQuestionCache::new()))
+        .build()
+        .expect("Test IntelloService setup should not fail")
 }
+
 
 // == GENERATORS ==
 
@@ -125,6 +129,9 @@ fn arb_intello_error() -> impl Strategy<Value = IntelloError> {
         // QcmSetNotFound with arbitrary resource and set_id
         (arb_non_empty_string(), arb_non_empty_string())
             .prop_map(|(resource, set_id)| IntelloError::not_found(resource, set_id)),
+        // GameSetNotFound with arbitrary game_type and set_id
+        (arb_non_empty_string(), arb_non_empty_string())
+            .prop_map(|(game_type, set_id)| IntelloError::game_not_found(game_type, set_id)),
         // ValidationFailed with arbitrary field and message
         (arb_non_empty_string(), arb_non_empty_string())
             .prop_map(|(field, message)| IntelloError::validation(field, message)),
@@ -169,6 +176,9 @@ proptest! {
         match &error {
             IntelloError::QcmSetNotFound { .. } => {
                 prop_assert_eq!(status_code, 404, "QcmSetNotFound should map to 404");
+            }
+            IntelloError::GameSetNotFound { .. } => {
+                prop_assert_eq!(status_code, 404, "GameSetNotFound should map to 404");
             }
             IntelloError::ValidationFailed { .. } => {
                 prop_assert_eq!(status_code, 400, "ValidationFailed should map to 400");

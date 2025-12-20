@@ -20,6 +20,7 @@ import {
   createTrueOrFalse,
   createKeywords,
   createOrderPhrase,
+  createFillBlank,
   getAvailableModels,
   type Level,
   type GameData,
@@ -30,6 +31,7 @@ import {
   type TrueOrFalseStatement,
   type KeywordQuestionData,
   type OrderPhraseQuestionData,
+  type FillBlankQuestionData,
   VALID_NUM_QUESTIONS,
 } from "@/lib/api/intello"
 import { QcmPlayer } from "./qcm-player"
@@ -38,6 +40,7 @@ import { FlashcardPlayer } from "./flashcard-player"
 import { TrueOrFalsePlayer } from "./true-false-player"
 import { KeywordsPlayer } from "./keywords-player"
 import { OrderPhrasePlayer } from "./order-phrase-player"
+import { FillBlankPlayer } from "./fill-blank-player"
 
 interface CustomQuestionFormProps {
   games: GameData[]
@@ -45,7 +48,7 @@ interface CustomQuestionFormProps {
   /** Pre-set the output game type (hides the selector) */
   defaultOutputGame?: string
   /** Callback to navigate to a specific game page */
-  onNavigateToGame?: (gameType: "qcm" | "open" | "flashcard" | "true_false" | "keywords" | "order_phrase") => void
+  onNavigateToGame?: (gameType: "qcm" | "open" | "flashcard" | "true_false" | "keywords" | "order_phrase" | "fill_blank") => void
 }
 
 export function CustomQuestionForm({ games, onBack, defaultOutputGame, onNavigateToGame }: CustomQuestionFormProps) {
@@ -88,7 +91,7 @@ export function CustomQuestionForm({ games, onBack, defaultOutputGame, onNavigat
   // Success state - shows success view with navigation button
   const [successData, setSuccessData] = useState<{
     message: string
-    gameType: "qcm" | "open" | "flashcard" | "true_false" | "keywords" | "order_phrase"
+    gameType: "qcm" | "open" | "flashcard" | "true_false" | "keywords" | "order_phrase" | "fill_blank"
     itemCount: number
     setName: string
   } | null>(null)
@@ -116,6 +119,10 @@ export function CustomQuestionForm({ games, onBack, defaultOutputGame, onNavigat
   // Game state - Order Phrase
   const [orderPhraseQuestions, setOrderPhraseQuestions] = useState<OrderPhraseQuestionData[] | null>(null)
   const [orderPhraseTitle, setOrderPhraseTitle] = useState("")
+
+  // Game state - Fill Blank
+  const [fillBlankQuestions, setFillBlankQuestions] = useState<FillBlankQuestionData[] | null>(null)
+  const [fillBlankTitle, setFillBlankTitle] = useState("")
 
   const handleAddSubject = useCallback(() => {
     if (newSubject.trim() && subjects.length < 3) {
@@ -305,6 +312,34 @@ export function CustomQuestionForm({ games, onBack, defaultOutputGame, onNavigat
           setOrderPhraseTitle(name.trim())
           setOrderPhraseQuestions(response.questions)
         }
+      } else if (outputGame === "fill_blank") {
+        // Create fill blank questions
+        const response = await createFillBlank(
+          {
+            name: name.trim(),
+            description: description.trim(),
+            instructions: instructions.trim(),
+            language,
+            level,
+            subjects,
+            num_questions: numQuestions,
+            model: selectedModel || undefined,
+          },
+          files
+        )
+
+        // Show success view with navigation option
+        setSuccessData({
+          message: `Successfully generated ${response.questions.length} fill-in-the-blank questions!`,
+          gameType: "fill_blank",
+          itemCount: response.questions.length,
+          setName: name.trim(),
+        })
+        // Also store for immediate play option
+        if (response.questions && response.questions.length > 0) {
+          setFillBlankTitle(name.trim())
+          setFillBlankQuestions(response.questions)
+        }
       } else {
         // Create QCM questions (default)
         const response = await createCustomQuestion(
@@ -361,6 +396,8 @@ export function CustomQuestionForm({ games, onBack, defaultOutputGame, onNavigat
     setKeywordsTitle("")
     setOrderPhraseQuestions(null)
     setOrderPhraseTitle("")
+    setFillBlankQuestions(null)
+    setFillBlankTitle("")
     setQuizTitle("")
     setSuccessData(null)
     // Reset form for new quiz
@@ -391,6 +428,7 @@ export function CustomQuestionForm({ games, onBack, defaultOutputGame, onNavigat
       true_false: "True or False Sets",
       keywords: "Keyword Sets",
       order_phrase: "Order Phrase Sets",
+      fill_blank: "Fill in the Blank Sets",
     }
 
     return (
@@ -505,6 +543,17 @@ export function CustomQuestionForm({ games, onBack, defaultOutputGame, onNavigat
       <OrderPhrasePlayer
         questions={orderPhraseQuestions}
         title={orderPhraseTitle}
+        onBack={handleBackFromPlayer}
+      />
+    )
+  }
+
+  // Show Fill Blank player if we have generated questions (after clicking Play Now)
+  if (fillBlankQuestions && fillBlankQuestions.length > 0 && !successData) {
+    return (
+      <FillBlankPlayer
+        questions={fillBlankQuestions}
+        title={fillBlankTitle}
         onBack={handleBackFromPlayer}
       />
     )

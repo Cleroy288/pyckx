@@ -21,13 +21,22 @@ impl OpenRouterService {
             temperature: 0.7,
         };
 
-        let response = self
+        let mut request_builder = self
             .client
             .post(OPENROUTER_API_URL)
             .header("Authorization", format!("Bearer {}", self.api_key))
             .header("Content-Type", "application/json")
             .header("HTTP-Referer", "http://localhost:8080")
-            .header("X-Title", "Pyckx Educational Games")
+            .header("X-Title", "Pyckx Educational Games");
+        
+        // Add Google AI API key header if available and using a Google/Gemini model
+        if let Some(ref google_key) = self.google_ai_key {
+            if model_to_use.starts_with("google/") {
+                request_builder = request_builder.header("X-Google-AI-Key", google_key.as_str());
+            }
+        }
+        
+        let response = request_builder
             .json(&request)
             .send()
             .await
@@ -59,3 +68,4 @@ impl OpenRouterService {
         self.send_chat_request_with_model(prompt, None).await
     }
 }
+

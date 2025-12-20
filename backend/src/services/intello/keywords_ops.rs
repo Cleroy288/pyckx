@@ -1,5 +1,6 @@
 //! Keywords operations
 
+use super::crud_ops;
 use super::types::{GenerateContentInput, IntelloService};
 use crate::domain::intello::KeywordSet;
 use crate::error::IntelloError;
@@ -10,41 +11,23 @@ impl IntelloService {
     /// Get all keyword sets for a user
     #[instrument(skip(self), fields(user_id = %user_id))]
     pub async fn get_user_keyword_sets(&self, user_id: &str) -> Result<Vec<KeywordSet>, IntelloError> {
-        self.validate_user_id(user_id)?;
-        let sets = self.keywords_repo.find_by_user(user_id).await?;
-        info!(count = sets.len(), "Retrieved user keyword sets");
-        Ok(sets)
+        crud_ops::get_user_sets(self.keywords_repo.as_ref(), user_id, "keywords").await
     }
 
     /// Get a specific keyword set by ID
     #[allow(dead_code)] // Available for future use
     #[instrument(skip(self), fields(user_id = %user_id, set_id = %set_id))]
     pub async fn get_keyword_set(&self, set_id: &str, user_id: &str) -> Result<Option<KeywordSet>, IntelloError> {
-        self.validate_user_id(user_id)?;
-        self.validate_set_id(set_id)?;
-        self.keywords_repo.find_by_id(set_id, user_id).await
+        crud_ops::get_set(self.keywords_repo.as_ref(), set_id, user_id).await
     }
 
     /// Delete a keyword set with ownership verification
     #[allow(dead_code)] // Available for future use
     #[instrument(skip(self), fields(user_id = %user_id, set_id = %set_id))]
     pub async fn delete_keyword_set(&self, set_id: &str, user_id: &str) -> Result<bool, IntelloError> {
-        self.validate_user_id(user_id)?;
-        self.validate_set_id(set_id)?;
-
-        // Verify ownership
-        let existing = self.keywords_repo.find_by_id(set_id, user_id).await?;
-        if existing.is_none() {
-            tracing::warn!(set_id = %set_id, "Keyword set not found or user doesn't own it");
-            return Ok(false);
-        }
-
-        let deleted = self.keywords_repo.delete(set_id, user_id).await?;
-        if deleted {
-            info!(set_id = %set_id, "Keyword set deleted");
-        }
-        Ok(deleted)
+        crud_ops::delete_set(self.keywords_repo.as_ref(), set_id, user_id, "keywords").await
     }
+
 
     /// Generate AI keyword questions and store them
     #[instrument(skip(self, input), fields(user_id = %user_id, name = %input.name))]

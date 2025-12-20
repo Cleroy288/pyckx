@@ -1,7 +1,9 @@
 //! Intello Service module
 //!
-//! Business logic for all Intello app operations (QCM, Open Questions, Flashcards, True/False, Keywords).
+//! Business logic for all Intello app operations (QCM, Open Questions, Flashcards, True/False, Keywords, Fill Blank).
 
+pub mod crud_ops;  // Generic CRUD helpers
+mod fill_blank_ops;
 mod flashcard_ops;
 mod games;
 mod keywords_ops;
@@ -13,7 +15,6 @@ mod types;
 mod validation;
 
 pub use types::{
-    AnswerGrade, CheckAnswersInput, GenerateContentInput, IntelloService, UserAnswer,
+    AnswerGrade, CheckAnswersInput, GenerateContentInput, GradingResult, IntelloRepositories,
+    IntelloService, UserAnswer,
 };
-
-

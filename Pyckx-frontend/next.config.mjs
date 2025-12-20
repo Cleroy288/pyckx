@@ -94,12 +94,12 @@ const nextConfig = {
     // Production-only security headers (HTTPS required)
     const productionHeaders = isProductionSecurity
       ? [
-          // Enforce HTTPS - only enable with valid SSL certificate
-          {
-            key: "Strict-Transport-Security",
-            value: "max-age=31536000; includeSubDomains; preload",
-          },
-        ]
+        // Enforce HTTPS - only enable with valid SSL certificate
+        {
+          key: "Strict-Transport-Security",
+          value: "max-age=31536000; includeSubDomains; preload",
+        },
+      ]
       : [];
 
     // Log security mode for debugging
@@ -119,27 +119,12 @@ const nextConfig = {
   async rewrites() {
     // Only apply rewrites in development
     const backendUrl = process.env.BACKEND_URL || "http://localhost:8080";
-    
+
     return {
       // beforeFiles rewrites are checked before pages/public files
       // which allows proxying to work even with /app prefix
       beforeFiles: [
-        {
-          source: "/app/collection/:path*",
-          destination: `${backendUrl}/app/collection/:path*`,
-        },
-        {
-          source: "/app/intello/:path*",
-          destination: `${backendUrl}/app/intello/:path*`,
-        },
-        {
-          source: "/auth/:path*",
-          destination: `${backendUrl}/auth/:path*`,
-        },
-        {
-          source: "/user/:path*",
-          destination: `${backendUrl}/user/:path*`,
-        },
+        // All API routes are now under /api/* prefix
         {
           source: "/api/:path*",
           destination: `${backendUrl}/api/:path*`,

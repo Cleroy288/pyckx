@@ -63,7 +63,7 @@ export class DvdList {
 
   filter(query: string, field: FilterField): DvdList {
     if (!query.trim()) return this;
-    
+
     const q = query.toLowerCase();
     const filtered = this.items.filter(dvd => {
       switch (field) {
@@ -77,7 +77,7 @@ export class DvdList {
           return true;
       }
     });
-    
+
     return new DvdList(filtered);
   }
 
@@ -97,14 +97,14 @@ export class DvdList {
       }
       return order === "asc" ? comparison : -comparison;
     });
-    
+
     return new DvdList(sorted);
   }
 
   // == Static API Methods ==
 
   static async fetchAll(): Promise<DvdList> {
-    const res = await fetch(endpoints.collection.getUserDvds(), {
+    const res = await fetch(endpoints.collection.dvds(), {
       method: "GET",
       credentials: "include",
     });

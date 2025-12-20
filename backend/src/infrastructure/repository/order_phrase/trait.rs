@@ -1,14 +1,16 @@
 //! Order Phrase Repository Trait - Abstraction for order phrase set persistence
+//!
+//! This trait extends the generic `GameSetRepository` for order phrase-specific operations.
 
 use crate::domain::intello::OrderPhraseSet;
-use crate::error::IntelloError;
-use async_trait::async_trait;
+use super::super::game_set::GameSetRepository;
 
-/// Repository trait for order phrase set persistence operations
-#[async_trait]
-pub trait OrderPhraseRepository: Send + Sync {
-    async fn insert(&self, set: &OrderPhraseSet) -> Result<OrderPhraseSet, IntelloError>;
-    async fn find_by_id(&self, set_id: &str, user_id: &str) -> Result<Option<OrderPhraseSet>, IntelloError>;
-    async fn find_by_user(&self, user_id: &str) -> Result<Vec<OrderPhraseSet>, IntelloError>;
-    async fn delete(&self, set_id: &str, user_id: &str) -> Result<bool, IntelloError>;
-}
+/// Repository trait for order phrase set persistence operations.
+/// 
+/// This is a type alias to `GameSetRepository<OrderPhraseSet>` for backwards compatibility.
+/// New code should use `GameSetRepository<OrderPhraseSet>` directly.
+pub trait OrderPhraseRepository: GameSetRepository<OrderPhraseSet> {}
+
+/// Blanket implementation: any type implementing GameSetRepository<OrderPhraseSet>
+/// automatically implements OrderPhraseRepository.
+impl<T: GameSetRepository<OrderPhraseSet>> OrderPhraseRepository for T {}

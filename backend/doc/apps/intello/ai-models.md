@@ -1,6 +1,6 @@
 # AI Models
 
-Available free models for content generation via OpenRouter.
+Available models for content generation via OpenRouter.
 
 ## Get Available Models
 
@@ -10,14 +10,24 @@ GET /app/intello/models
 
 ## Models
 
-| Model ID | Name |
-|----------|------|
-| `nvidia/nemotron-nano-12b-v2-vl:free` | NVIDIA Nemotron Nano 12B |
-| `tngtech/deepseek-r1t-chimera:free` | DeepSeek R1T Chimera |
-| `z-ai/glm-4.5-air:free` | GLM 4.5 Air |
-| `nex-agi/deepseek-v3.1-nex-n1:free` | DeepSeek v3.1 Nex N1 |
-| `amazon/nova-2-lite-v1:free` | Amazon Nova 2 Lite **(default)** |
-| `tngtech/deepseek-r1t2-chimera:free` | DeepSeek R1T2 Chimera |
+### Free Models
+
+| Model ID | Context Limit |
+|----------|---------------|
+| `google/gemini-2.0-flash-exp:free` | 1.05M tokens **(default)** |
+| `kwaipilot/kat-coder-pro:free` | 256K tokens |
+| `mistralai/devstral-2512:free` | 262K tokens |
+| `tngtech/deepseek-r1t2-chimera:free` | 164K tokens |
+
+### Paid Models
+
+| Model ID | Context Limit |
+|----------|---------------|
+| `google/gemini-3-flash-preview` | 1.05M tokens |
+| `google/gemini-3-pro-preview` | 1.05M tokens |
+| `openai/gpt-5.2` | 400K tokens |
+| `amazon/nova-2-lite-v1` | 1M tokens |
+| `x-ai/grok-4.1-fast` | 2M tokens |
 
 ## Usage
 
@@ -26,17 +36,29 @@ Pass `model` in the metadata when creating content:
 ```json
 {
   "name": "My Quiz",
-  "model": "nvidia/nemotron-nano-12b-v2-vl:free",
+  "model": "google/gemini-2.0-flash-exp:free",
   ...
 }
 ```
 
-If omitted, defaults to `amazon/nova-2-lite-v1:free`.
+If omitted, defaults to `google/gemini-2.0-flash-exp:free`.
 
 ## Token Limits
 
-- **Max tokens per request**: 800,000
+- Each model has its own context limit (see table above)
+- A 10K token safety buffer is subtracted from each limit
 - Tokens are counted from extracted document text
+- Requests exceeding the limit return a validation error
+
+## Google API Key (Optional)
+
+For higher rate limits with Google/Gemini models, add `GOOGLE_AI_KEY` to your `.env`:
+
+```
+GOOGLE_AI_KEY=your_google_ai_studio_api_key
+```
+
+Get a free key from: https://aistudio.google.com/apikey
 
 ## Supported Documents
 

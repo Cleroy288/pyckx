@@ -9,7 +9,7 @@ use super::types::{
 use crate::config::Config;
 use crate::domain::intello::{Keyword, KeywordQuestion, KeywordSet};
 use crate::error::IntelloError;
-use crate::infrastructure::repository::KeywordsRepository;
+use crate::infrastructure::repository::GameSetRepository;
 use async_trait::async_trait;
 use reqwest::Client;
 use tracing::{debug, error, info, instrument};
@@ -284,7 +284,7 @@ impl SupabaseKeywordsRepository {
 }
 
 #[async_trait]
-impl KeywordsRepository for SupabaseKeywordsRepository {
+impl GameSetRepository<KeywordSet> for SupabaseKeywordsRepository {
     #[instrument(skip(self, set), fields(set_id = %set.id))]
     async fn insert(&self, set: &KeywordSet) -> Result<KeywordSet, IntelloError> {
         // Insert the set

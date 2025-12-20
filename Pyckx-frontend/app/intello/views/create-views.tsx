@@ -3,11 +3,12 @@
 import { ArrowLeft, Brain, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { CustomQuestionForm } from "@/components/custom-question-form"
+import { ManualQcmForm } from "@/components/manual-qcm-form"
 import { useIntello } from "../context"
 
 // == MANUAL QCM VIEW ==
 export function CreateQcmView() {
-	const { handleBackToHome } = useIntello()
+	const { handleBackToHome, handlePlayQcm } = useIntello()
 
 	return (
 		<div className="space-y-6 max-w-2xl mx-auto">
@@ -26,8 +27,7 @@ export function CreateQcmView() {
 				</div>
 			</div>
 			<div className="rounded-2xl border border-accent/30 bg-card/60 backdrop-blur-sm p-6">
-				<p className="text-muted-foreground text-center py-8">Manual QCM creation coming soon...</p>
-				<Button onClick={handleBackToHome} className="w-full">Back to Home</Button>
+				<ManualQcmForm onBack={handleBackToHome} onSuccess={() => handlePlayQcm()} />
 			</div>
 		</div>
 	)
@@ -190,6 +190,33 @@ export function CreateAiOrderPhraseView() {
 			</div>
 			<div className="rounded-2xl border border-primary/30 bg-card/60 backdrop-blur-sm p-6">
 				<CustomQuestionForm games={games} onBack={handleBackToHome} defaultOutputGame="order_phrase" onNavigateToGame={handleNavigateToGame} />
+			</div>
+		</div>
+	)
+}
+
+// == AI FILL BLANK VIEW ==
+export function CreateAiFillBlankView() {
+	const { games, handleBackToHome, handleNavigateToGame } = useIntello()
+
+	return (
+		<div className="space-y-6 max-w-2xl mx-auto">
+			<div className="flex items-center gap-4">
+				<Button variant="ghost" size="icon" onClick={handleBackToHome} className="shrink-0">
+					<ArrowLeft className="h-5 w-5" />
+				</Button>
+				<div className="flex items-center gap-3">
+					<div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 border border-primary/20">
+						<Sparkles className="h-6 w-6 text-primary" />
+					</div>
+					<div>
+						<h1 className="text-2xl font-bold tracking-tight text-foreground">AI Fill in the Blank</h1>
+						<p className="text-sm text-muted-foreground">Generate fill-in-the-blank exercises from your documents</p>
+					</div>
+				</div>
+			</div>
+			<div className="rounded-2xl border border-primary/30 bg-card/60 backdrop-blur-sm p-6">
+				<CustomQuestionForm games={games} onBack={handleBackToHome} defaultOutputGame="fill_blank" onNavigateToGame={handleNavigateToGame} />
 			</div>
 		</div>
 	)

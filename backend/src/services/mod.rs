@@ -20,8 +20,8 @@ pub use apps::AppService;
 pub use auth::AuthService;
 pub use collection::CollectionService;
 pub use intello::{
-    AnswerGrade as IntelloAnswerGrade, CheckAnswersInput, GenerateContentInput, IntelloService,
-    UserAnswer,
+    AnswerGrade as IntelloAnswerGrade, CheckAnswersInput, GenerateContentInput, GradingResult,
+    IntelloRepositories, IntelloService, UserAnswer,
 };
-pub use openrouter::{AnswerGrade, GradedAnswer, OpenRouterService, AVAILABLE_MODELS, DEFAULT_MODEL, validate_model};
+pub use openrouter::{AnswerGrade, GradedAnswer, OpenRouterService, AVAILABLE_MODELS, DEFAULT_MODEL, validate_model, validate_token_count};
 

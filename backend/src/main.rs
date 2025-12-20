@@ -13,6 +13,7 @@ mod infrastructure;
 mod middleware;
 mod services;
 mod shared;
+mod use_cases;
 
 #[cfg(test)]
 mod tests;
@@ -196,24 +197,10 @@ fn configure_rate_limiter() -> RateLimiter {
     limiter.configure("/api/auth/register", RateLimitConfig::strict());
     limiter.configure("/api/auth/logout", RateLimitConfig::standard());
 
-    // == COLLECTION READ ENDPOINTS (relaxed) // ==
-    limiter.configure_many(
-        &[
-            "/app/collection/get-user-dvd",
-            "/app/collection/dvd",
-        ],
-        RateLimitConfig::relaxed(),
-    );
-
-    // == COLLECTION WRITE ENDPOINTS (standard) // ==
-    limiter.configure_many(
-        &[
-            "/app/collection/add-dvd",
-            "/app/collection/mod-dvd",
-            "/app/collection/del",
-        ],
-        RateLimitConfig::standard(),
-    );
+    // == COLLECTION ENDPOINTS (relaxed for reads) // ==
+    // All DVD operations are now on /api/collection/dvds
+    // Rate limiting applies to path prefix, covering both reads and writes
+    limiter.configure("/api/collection/dvds", RateLimitConfig::relaxed());
 
     limiter
 }

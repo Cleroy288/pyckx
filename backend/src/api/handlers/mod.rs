@@ -16,10 +16,11 @@ pub mod user;
 use actix_web::web;
 
 /// Initialize all API routes
+/// Note: Order matters! More specific routes must be registered first.
 pub fn init(cfg: &mut web::ServiceConfig) {
     auth::init(cfg);
+    apps::init(cfg);       // /api/user/apps BEFORE /api/user
     user::init(cfg);
     collection::init(cfg);
-    apps::init(cfg);
     intello::init(cfg);
 }

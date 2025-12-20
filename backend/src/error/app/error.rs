@@ -90,6 +90,9 @@ impl AppError {
                     IntelloError::QcmSetNotFound { set_id } => {
                         warn!(error_code = %self.code().as_str(), set_id = %set_id, "QCM set not found");
                     }
+                    IntelloError::GameSetNotFound { game_type, set_id } => {
+                        warn!(error_code = %self.code().as_str(), game_type = %game_type, set_id = %set_id, "Game set not found");
+                    }
                     IntelloError::ValidationFailed { field, message } => {
                         warn!(error_code = %self.code().as_str(), field = %field, message = %message, "Intello validation error");
                     }

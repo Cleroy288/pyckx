@@ -7,10 +7,12 @@
 //! - `flashcard/` - Flashcard DTOs
 //! - `true_false/` - True or False DTOs
 //! - `keywords/` - Keywords DTOs
+//! - `fill_blank/` - Fill in the Blank DTOs
 //! - `custom_question.rs` - Custom Question generation DTOs
 //! - `validation.rs` - Shared validation logic
 
 pub mod custom_question;
+pub mod fill_blank;
 pub mod flashcard;
 pub mod games;
 pub mod keywords;
@@ -58,6 +60,12 @@ pub use keywords::{
 pub use order_phrase::{
     CreateOrderPhraseRequest, CreateOrderPhraseResponse, OrderPhraseQuestionResponse,
     OrderPhraseSetListResponse, OrderPhraseSetWithQuestionsResponse, OrderPhraseWordResponse,
+};
+
+// Re-export Fill Blank types
+pub use fill_blank::{
+    CreateFillBlankRequest, CreateFillBlankResponse, FillBlankOptionResponse,
+    FillBlankQuestionResponse, FillBlankSetListResponse, FillBlankSetWithQuestionsResponse,
 };
 
 // Re-export Custom Question types

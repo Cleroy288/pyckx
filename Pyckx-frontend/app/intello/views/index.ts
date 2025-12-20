@@ -7,7 +7,8 @@ export {
 	CreateAiFlashcardView,
 	CreateAiTrueOrFalseView,
 	CreateAiKeywordsView,
-	CreateAiOrderPhraseView
+	CreateAiOrderPhraseView,
+	CreateAiFillBlankView
 } from "./create-views"
 export {
 	PlayQcmView,
@@ -15,7 +16,8 @@ export {
 	PlayFlashcardView,
 	PlayTrueOrFalseView,
 	PlayKeywordsView,
-	PlayOrderPhraseView
+	PlayOrderPhraseView,
+	PlayFillBlankView
 } from "./play-views"
 export {
 	PlayingQcmView,
@@ -23,7 +25,7 @@ export {
 	PlayingFlashcardView,
 	PlayingTrueOrFalseView,
 	PlayingKeywordsView,
-	PlayingOrderPhraseView
+	PlayingOrderPhraseView,
+	PlayingFillBlankView
 } from "./playing-views"
 export { ResultsView } from "./results-view"
-

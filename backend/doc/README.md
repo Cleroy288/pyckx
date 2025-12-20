@@ -15,6 +15,7 @@ cargo test         # Run tests
 ```
 src/
 ├── api/            # Handlers & DTOs
+├── use_cases/      # Application orchestration (Handler → UseCase → Service)
 ├── services/       # Business logic
 ├── domain/         # Pure entities
 ├── infrastructure/ # Repository traits + Supabase/JSON implementations
@@ -28,6 +29,7 @@ src/
 | Doc | Description |
 |-----|-------------|
 | [Architecture](architecture/overview.md) | Layers, request flow, folder structure |
+| [Use Cases](architecture/use-cases.md) | Use Cases layer pattern |
 | [Adding Features](architecture/adding-features.md) | Step-by-step templates |
 | [End-to-End Feature](architecture/end-to-end-feature.md) | Complete backend + frontend implementation guide |
 | [Intello App](apps/intello/README.md) | AI-powered games (QCM, flashcards, etc.) |
@@ -37,20 +39,28 @@ src/
 
 ## API Routes
 
+All routes follow pattern: `/api/{service}/{feature}/{id}`
+
 | Prefix | Description |
 |--------|-------------|
-| `/auth/*` | Login, register, logout |
+| `/api/auth/*` | Login, register, logout |
+| `/api/user/*` | User profile |
 | `/api/apps/*` | App management |
-| `/app/collection/*` | DVD CRUD |
-| `/app/intello/*` | Games & AI generation |
+| `/api/collection/dvds` | DVD CRUD |
+| `/api/intello/*` | Games & AI generation |
 
 ## Environment
 
 ```bash
+# Required
 SUPABASE_URL=https://xxx.supabase.co
 SUPABASE_ANON_KEY=xxx
 SUPABASE_SERVICE_KEY=xxx
 OPENROUTER_API_KEY=xxx
 HOST=127.0.0.1
 PORT=8080
+
+# Optional (for higher Gemini rate limits)
+GOOGLE_AI_KEY=xxx
 ```
+

@@ -12,7 +12,7 @@ pub struct AvailableModelsResponse {
     pub default_model: String,
 }
 
-/// GET /app/intello/models
+/// GET /api/intello/models
 #[get("/models")]
 #[instrument]
 pub async fn get_available_models_handler() -> HttpResponse {

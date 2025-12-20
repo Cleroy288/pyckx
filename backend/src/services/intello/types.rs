@@ -1,6 +1,6 @@
 //! IntelloService struct, constructor, and input/output types
 
-use crate::infrastructure::{FlashcardRepository, KeywordsRepository, OpenQuestionRepository, OrderPhraseRepository, QcmRepository, TrueOrFalseRepository};
+use crate::infrastructure::{FillBlankRepository, FlashcardRepository, KeywordsRepository, OpenQuestionRepository, OrderPhraseRepository, QcmRepository, TrueOrFalseRepository};
 use crate::services::OpenRouterService;
 use crate::shared::OpenQuestionCache;
 use crate::domain::intello::Level;
@@ -56,12 +56,40 @@ pub enum AnswerGrade {
     Error,
 }
 
+// == REPOSITORY BUNDLE ==
+
+/// Bundle of all Intello repositories for cleaner dependency injection.
+///
+/// Instead of passing 8+ repositories as individual parameters, group them
+/// into this struct for easier construction and testing.
+pub struct IntelloRepositories {
+    pub qcm_repo: Arc<dyn QcmRepository>,
+    pub ai_qcm_repo: Arc<dyn QcmRepository>,
+    pub open_question_repo: Arc<dyn OpenQuestionRepository>,
+    pub flashcard_repo: Arc<dyn FlashcardRepository>,
+    pub true_false_repo: Arc<dyn TrueOrFalseRepository>,
+    pub keywords_repo: Arc<dyn KeywordsRepository>,
+    pub order_phrase_repo: Arc<dyn OrderPhraseRepository>,
+    pub fill_blank_repo: Arc<dyn FillBlankRepository>,
+}
+
 // == INTELLO SERVICE STRUCT ==
 
-/// Service for managing all Intello operations (QCM, Open Questions, Flashcards, True/False, Keywords, Order Phrase)
+/// Service for managing all Intello operations (QCM, Open Questions, Flashcards, True/False, Keywords, Order Phrase, Fill Blank)
 ///
 /// This service uses generic repositories that implement the respective traits,
 /// allowing for different storage backends (JSON, database, etc.)
+///
+/// # Construction
+///
+/// Prefer using the builder pattern for new code:
+/// ```ignore
+/// let service = IntelloService::builder()
+///     .with_repositories(repos)
+///     .with_openrouter(openrouter_service)
+///     .with_cache(cache)
+///     .build()?;
+/// ```
 pub struct IntelloService {
     // QCM repositories
     pub(super) qcm_repo: Arc<dyn QcmRepository>,
@@ -76,6 +104,8 @@ pub struct IntelloService {
     pub(super) keywords_repo: Arc<dyn KeywordsRepository>,
     // Order Phrase repository
     pub(super) order_phrase_repo: Arc<dyn OrderPhraseRepository>,
+    // Fill Blank repository
+    pub(super) fill_blank_repo: Arc<dyn FillBlankRepository>,
     // AI service for content generation
     pub(super) openrouter_service: Arc<OpenRouterService>,
     // Cache for open question source content
@@ -83,30 +113,96 @@ pub struct IntelloService {
 }
 
 impl IntelloService {
-    /// Create a new IntelloService with all required dependencies
-    pub fn new(
-        qcm_repo: Arc<dyn QcmRepository>,
-        ai_qcm_repo: Arc<dyn QcmRepository>,
-        open_question_repo: Arc<dyn OpenQuestionRepository>,
-        flashcard_repo: Arc<dyn FlashcardRepository>,
-        true_false_repo: Arc<dyn TrueOrFalseRepository>,
-        keywords_repo: Arc<dyn KeywordsRepository>,
-        order_phrase_repo: Arc<dyn OrderPhraseRepository>,
+    /// Create a new IntelloService from a repository bundle.
+    pub fn from_repositories(
+        repos: IntelloRepositories,
         openrouter_service: Arc<OpenRouterService>,
         open_question_cache: Arc<OpenQuestionCache>,
     ) -> Self {
-        info!("IntelloService initialized with all repositories and AI service");
+        info!("IntelloService initialized with repository bundle and AI service");
         Self {
-            qcm_repo,
-            ai_qcm_repo,
-            open_question_repo,
-            flashcard_repo,
-            true_false_repo,
-            keywords_repo,
-            order_phrase_repo,
+            qcm_repo: repos.qcm_repo,
+            ai_qcm_repo: repos.ai_qcm_repo,
+            open_question_repo: repos.open_question_repo,
+            flashcard_repo: repos.flashcard_repo,
+            true_false_repo: repos.true_false_repo,
+            keywords_repo: repos.keywords_repo,
+            order_phrase_repo: repos.order_phrase_repo,
+            fill_blank_repo: repos.fill_blank_repo,
             openrouter_service,
             open_question_cache,
         }
+    }
+
+    /// Create a builder for constructing IntelloService with fluent API.
+    pub fn builder() -> IntelloServiceBuilder {
+        IntelloServiceBuilder::new()
+    }
+}
+
+// == INTELLO SERVICE BUILDER ==
+
+/// Builder for IntelloService with fluent API.
+///
+/// # Example
+/// ```ignore
+/// let service = IntelloService::builder()
+///     .with_repositories(repos)
+///     .with_openrouter(openrouter_service)
+///     .with_cache(cache)
+///     .build()
+///     .expect("Missing required dependencies");
+/// ```
+pub struct IntelloServiceBuilder {
+    repos: Option<IntelloRepositories>,
+    openrouter_service: Option<Arc<OpenRouterService>>,
+    open_question_cache: Option<Arc<OpenQuestionCache>>,
+}
+
+impl IntelloServiceBuilder {
+    /// Create a new empty builder.
+    pub fn new() -> Self {
+        Self {
+            repos: None,
+            openrouter_service: None,
+            open_question_cache: None,
+        }
+    }
+
+    /// Set all repositories from a bundle.
+    pub fn with_repositories(mut self, repos: IntelloRepositories) -> Self {
+        self.repos = Some(repos);
+        self
+    }
+
+    /// Set the OpenRouter AI service.
+    pub fn with_openrouter(mut self, service: Arc<OpenRouterService>) -> Self {
+        self.openrouter_service = Some(service);
+        self
+    }
+
+    /// Set the open question cache.
+    pub fn with_cache(mut self, cache: Arc<OpenQuestionCache>) -> Self {
+        self.open_question_cache = Some(cache);
+        self
+    }
+
+    /// Build the IntelloService.
+    ///
+    /// # Errors
+    /// Returns an error string if any required dependency is missing.
+    pub fn build(self) -> Result<IntelloService, &'static str> {
+        let repos = self.repos.ok_or("Missing repositories")?;
+        let openrouter_service = self.openrouter_service.ok_or("Missing OpenRouter service")?;
+        let open_question_cache = self.open_question_cache.ok_or("Missing OpenQuestion cache")?;
+
+        Ok(IntelloService::from_repositories(repos, openrouter_service, open_question_cache))
+    }
+}
+
+impl Default for IntelloServiceBuilder {
+    fn default() -> Self {
+        Self::new()
     }
 }
 

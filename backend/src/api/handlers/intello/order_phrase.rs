@@ -7,14 +7,15 @@ use crate::api::dto::intello::{
 };
 use crate::app::App;
 use crate::error::{AppError, AppResult};
-use crate::services::validate_model;
 use crate::shared::session::get_user_id_from_session;
+use crate::use_cases::intello::{GenerateOrderPhraseInput, GenerateOrderPhraseUseCase};
 use actix_multipart::Multipart;
 use actix_web::{get, post, web, HttpRequest, HttpResponse};
-use tracing::{info, instrument};
+use std::sync::Arc;
+use tracing::instrument;
 
-/// POST /app/intello/order-phrase/create - Generate AI order phrase questions
-#[post("/order-phrase/create")]
+/// POST /api/intello/order-phrases - Generate AI order phrase questions
+#[post("/order-phrases")]
 #[instrument(skip(app, req, payload))]
 pub async fn create_order_phrase_handler(
     app: web::Data<App>,
@@ -26,29 +27,12 @@ pub async fn create_order_phrase_handler(
     // Parse multipart form data
     let (metadata, documents) = parse_multipart::<CreateOrderPhraseRequest>(payload).await?;
 
-    // Validate metadata
+    // Parse level (DTO validation)
     let level = metadata.parse_level().map_err(|e| AppError::validation("level", e))?;
-    metadata.validate_subjects().map_err(|e| AppError::validation("subjects", e))?;
-    metadata.validate_num_questions().map_err(|e| AppError::validation("num_questions", e))?;
-    
-    // Validate model if provided
-    if let Some(ref model) = metadata.model {
-        validate_model(model).map_err(|e| AppError::validation("model", e))?;
-    }
 
-    let total_token_count: u32 = documents.iter().map(|(_, _, t)| t).sum();
-
-    info!(
-        name = %metadata.name,
-        num_questions = metadata.num_questions,
-        model = ?metadata.model,
-        documents = documents.len(),
-        total_tokens = total_token_count,
-        "Generating AI order phrase questions"
-    );
-
-    // Build input for service
-    let input = crate::services::GenerateContentInput {
+    // Build use case input
+    let input = GenerateOrderPhraseInput {
+        user_id,
         name: metadata.name,
         description: metadata.description,
         instructions: metadata.instructions,
@@ -56,15 +40,16 @@ pub async fn create_order_phrase_handler(
         level,
         subjects: metadata.subjects,
         num_questions: metadata.num_questions,
-        documents: documents.clone(),
+        documents,
         model: metadata.model,
     };
 
-    // Delegate to service
-    let order_phrase_set = app.intello_service.generate_ai_order_phrases(&user_id, input).await?;
+    // Execute use case
+    let use_case = GenerateOrderPhraseUseCase::new(Arc::clone(&app.intello_service));
+    let output = use_case.execute(input).await?;
 
     // Build response
-    let question_responses: Vec<OrderPhraseQuestionResponse> = order_phrase_set.questions.iter()
+    let question_responses: Vec<OrderPhraseQuestionResponse> = output.game_set.questions.iter()
         .map(|q| OrderPhraseQuestionResponse {
             id: q.id.clone(),
             original_phrase: q.original_phrase.clone(),
@@ -75,16 +60,16 @@ pub async fn create_order_phrase_handler(
 
     Ok(HttpResponse::Created().json(CreateOrderPhraseResponse {
         success: true,
-        message: format!("Order phrase set created with {} questions", order_phrase_set.questions.len()),
-        id: order_phrase_set.id,
-        total_token_count,
-        documents_processed: documents.len(),
+        message: format!("Order phrase set created with {} questions", output.game_set.questions.len()),
+        id: output.game_set.id,
+        total_token_count: output.total_token_count,
+        documents_processed: output.documents_processed,
         questions: question_responses,
     }))
 }
 
-/// GET /app/intello/order-phrase/list - List user's order phrase sets (with questions for playing)
-#[get("/order-phrase/list")]
+/// GET /api/intello/order-phrases - List user's order phrase sets (with questions for playing)
+#[get("/order-phrases")]
 #[instrument(skip(app, req))]
 pub async fn list_order_phrase_sets_handler(
     app: web::Data<App>,

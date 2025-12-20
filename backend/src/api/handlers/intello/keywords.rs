@@ -7,14 +7,15 @@ use crate::api::dto::intello::{
 };
 use crate::app::App;
 use crate::error::{AppError, AppResult};
-use crate::services::validate_model;
 use crate::shared::session::get_user_id_from_session;
+use crate::use_cases::intello::{GenerateKeywordsInput, GenerateKeywordsUseCase};
 use actix_multipart::Multipart;
 use actix_web::{get, post, web, HttpRequest, HttpResponse};
-use tracing::{info, instrument};
+use std::sync::Arc;
+use tracing::instrument;
 
-/// POST /app/intello/keywords/create - Generate AI keyword questions
-#[post("/keywords/create")]
+/// POST /api/intello/keywords - Generate AI keyword questions
+#[post("/keywords")]
 #[instrument(skip(app, req, payload))]
 pub async fn create_keywords_handler(
     app: web::Data<App>,
@@ -26,29 +27,12 @@ pub async fn create_keywords_handler(
     // Parse multipart form data
     let (metadata, documents) = parse_multipart::<CreateKeywordsRequest>(payload).await?;
 
-    // Validate metadata
+    // Parse level (DTO validation)
     let level = metadata.parse_level().map_err(|e| AppError::validation("level", e))?;
-    metadata.validate_subjects().map_err(|e| AppError::validation("subjects", e))?;
-    metadata.validate_num_questions().map_err(|e| AppError::validation("num_questions", e))?;
-    
-    // Validate model if provided
-    if let Some(ref model) = metadata.model {
-        validate_model(model).map_err(|e| AppError::validation("model", e))?;
-    }
 
-    let total_token_count: u32 = documents.iter().map(|(_, _, t)| t).sum();
-
-    info!(
-        name = %metadata.name,
-        num_questions = metadata.num_questions,
-        model = ?metadata.model,
-        documents = documents.len(),
-        total_tokens = total_token_count,
-        "Generating AI keyword questions"
-    );
-
-    // Build input for service
-    let input = crate::services::GenerateContentInput {
+    // Build use case input
+    let input = GenerateKeywordsInput {
+        user_id,
         name: metadata.name,
         description: metadata.description,
         instructions: metadata.instructions,
@@ -56,15 +40,16 @@ pub async fn create_keywords_handler(
         level,
         subjects: metadata.subjects,
         num_questions: metadata.num_questions,
-        documents: documents.clone(),
+        documents,
         model: metadata.model,
     };
 
-    // Delegate to service
-    let keyword_set = app.intello_service.generate_ai_keywords(&user_id, input).await?;
+    // Execute use case
+    let use_case = GenerateKeywordsUseCase::new(Arc::clone(&app.intello_service));
+    let output = use_case.execute(input).await?;
 
     // Build response
-    let question_responses: Vec<KeywordQuestionResponse> = keyword_set.questions.iter()
+    let question_responses: Vec<KeywordQuestionResponse> = output.game_set.questions.iter()
         .map(|q| KeywordQuestionResponse {
             id: q.id.clone(),
             statement: q.statement.clone(),
@@ -75,16 +60,16 @@ pub async fn create_keywords_handler(
 
     Ok(HttpResponse::Created().json(CreateKeywordsResponse {
         success: true,
-        message: format!("Keyword set created with {} questions", keyword_set.questions.len()),
-        id: keyword_set.id,
-        total_token_count,
-        documents_processed: documents.len(),
+        message: format!("Keyword set created with {} questions", output.game_set.questions.len()),
+        id: output.game_set.id,
+        total_token_count: output.total_token_count,
+        documents_processed: output.documents_processed,
         questions: question_responses,
     }))
 }
 
-/// GET /app/intello/keywords/list - List user's keyword sets (with questions for playing)
-#[get("/keywords/list")]
+/// GET /api/intello/keywords - List user's keyword sets (with questions for playing)
+#[get("/keywords")]
 #[instrument(skip(app, req))]
 pub async fn list_keyword_sets_handler(
     app: web::Data<App>,

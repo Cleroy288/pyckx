@@ -5,6 +5,7 @@
 //! traits rather than concrete implementations.
 //!
 //! # Structure
+//! - `game_set/` - Generic game set repository trait (shared by all Intello games)
 //! - `app/` - App repository trait and DTOs
 //! - `user_app/` - User app repository trait
 //! - `collection/` - Collection repository trait
@@ -18,7 +19,9 @@
 mod app;
 mod collection;
 mod dvd;
+mod fill_blank;
 mod flashcard;
+mod game_set;
 mod keywords;
 mod open_question;
 mod order_phrase;
@@ -26,15 +29,20 @@ mod qcm;
 mod true_false;
 mod user_app;
 
+// Generic game set repository trait
+pub use game_set::GameSetRepository;
+
+// App repositories
 pub use app::{AppRepository, CreateApp, UpdateApp};
 pub use collection::CollectionRepository;
 pub use dvd::{CreateDvd, DvdRepository, UpdateDvd};
+pub use user_app::UserAppRepository;
+
+// Intello game repositories
+pub use fill_blank::FillBlankRepository;
 pub use flashcard::FlashcardRepository;
 pub use keywords::KeywordsRepository;
 pub use open_question::OpenQuestionRepository;
 pub use order_phrase::OrderPhraseRepository;
 pub use qcm::QcmRepository;
 pub use true_false::TrueOrFalseRepository;
-pub use user_app::UserAppRepository;
-
-

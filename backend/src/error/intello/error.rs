@@ -10,8 +10,10 @@ use std::fmt;
 #[derive(Debug, Clone)]
 #[allow(dead_code)]
 pub enum IntelloError {
-    /// QCM set not found
+    /// QCM set not found (legacy, kept for backwards compatibility)
     QcmSetNotFound { set_id: String },
+    /// Game set not found (generic, works for any game type)
+    GameSetNotFound { game_type: String, set_id: String },
     /// Validation failed
     ValidationFailed { field: String, message: String },
     /// Storage operation failed
@@ -26,6 +28,7 @@ impl IntelloError {
     pub fn code(&self) -> ErrorCode {
         match self {
             Self::QcmSetNotFound { .. } => ErrorCode::IntelloQcmSetNotFound,
+            Self::GameSetNotFound { .. } => ErrorCode::IntelloGameSetNotFound,
             Self::ValidationFailed { .. } => ErrorCode::IntelloValidationFailed,
             Self::StorageError { .. } => ErrorCode::IntelloStorageError,
             Self::ExternalServiceError { .. } => ErrorCode::IntelloStorageError,
@@ -36,15 +39,24 @@ impl IntelloError {
     pub fn status_code(&self) -> u16 {
         match self {
             Self::QcmSetNotFound { .. } => 404,
+            Self::GameSetNotFound { .. } => 404,
             Self::ValidationFailed { .. } => 400,
             Self::StorageError { .. } => 500,
             Self::ExternalServiceError { .. } => 502,
         }
     }
 
-    /// Create a QcmSetNotFound error
+    /// Create a QcmSetNotFound error (legacy)
     pub fn not_found(_resource: impl Into<String>, set_id: impl Into<String>) -> Self {
         Self::QcmSetNotFound { set_id: set_id.into() }
+    }
+
+    /// Create a GameSetNotFound error (generic, works for any game type)
+    pub fn game_not_found(game_type: impl Into<String>, set_id: impl Into<String>) -> Self {
+        Self::GameSetNotFound { 
+            game_type: game_type.into(), 
+            set_id: set_id.into() 
+        }
     }
 
     /// Create a ValidationFailed error
@@ -67,6 +79,9 @@ impl fmt::Display for IntelloError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             Self::QcmSetNotFound { set_id } => write!(f, "QCM set not found: {}", set_id),
+            Self::GameSetNotFound { game_type, set_id } => {
+                write!(f, "{} set not found: {}", game_type, set_id)
+            }
             Self::ValidationFailed { field, message } => write!(f, "Validation failed on '{}': {}", field, message),
             Self::StorageError { message } => write!(f, "Storage error: {}", message),
             Self::ExternalServiceError { service, message } => write!(f, "External service '{}' error: {}", service, message),
@@ -89,6 +104,15 @@ mod tests {
     }
 
     #[test]
+    fn test_game_set_not_found_error() {
+        let err = IntelloError::game_not_found("keywords", "kw-456");
+        assert_eq!(err.code(), ErrorCode::IntelloGameSetNotFound);
+        assert_eq!(err.status_code(), 404);
+        assert!(err.to_string().contains("keywords"));
+        assert!(err.to_string().contains("kw-456"));
+    }
+
+    #[test]
     fn test_validation_failed_error() {
         let err = IntelloError::validation("name", "Name cannot be empty");
         assert_eq!(err.code(), ErrorCode::IntelloValidationFailed);
@@ -104,3 +128,4 @@ mod tests {
         assert!(err.to_string().contains("Failed to write file"));
     }
 }
+

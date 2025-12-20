@@ -1,6 +1,6 @@
 "use client"
 
-import { ArrowLeft, Brain, FileText, Layers, CheckCircle2, BookOpen, Play, Loader2, Tags, ListOrdered } from "lucide-react"
+import { ArrowLeft, Brain, FileText, Layers, CheckCircle2, BookOpen, Play, Loader2, Tags, ListOrdered, TextCursor } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useIntello } from "../context"
 
@@ -544,3 +544,92 @@ export function PlayOrderPhraseView() {
 	)
 }
 
+// == PLAY FILL BLANK VIEW ==
+export function PlayFillBlankView() {
+	const {
+		loading, error, fillBlankSets, setView,
+		handleBackToHome, handleSelectFillBlankSet, loadFillBlankSets, getLevelBadgeClass
+	} = useIntello()
+
+	return (
+		<div className="space-y-6">
+			<div className="flex items-center gap-4">
+				<Button variant="ghost" size="icon" onClick={handleBackToHome} className="shrink-0">
+					<ArrowLeft className="h-5 w-5" />
+				</Button>
+				<div className="flex items-center gap-3">
+					<div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10 border border-accent/20">
+						<TextCursor className="h-6 w-6 text-accent" />
+					</div>
+					<div>
+						<h1 className="text-2xl font-bold tracking-tight text-foreground">Fill in the Blank Sets</h1>
+						<p className="text-sm text-muted-foreground">Select a set to play</p>
+					</div>
+				</div>
+			</div>
+
+			{loading && (
+				<div className="flex items-center justify-center py-16">
+					<Loader2 className="h-8 w-8 animate-spin text-accent" />
+				</div>
+			)}
+
+			{error && (
+				<div className="rounded-lg bg-destructive/10 border border-destructive/20 p-4">
+					<p className="text-sm text-destructive">{error}</p>
+					<Button variant="link" onClick={loadFillBlankSets} className="text-destructive p-0 h-auto mt-2">Try again</Button>
+				</div>
+			)}
+
+			{!loading && !error && fillBlankSets.length === 0 && (
+				<div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border/50 bg-card/20 py-16">
+					<TextCursor className="h-12 w-12 text-muted-foreground mb-4" />
+					<h3 className="text-lg font-semibold text-foreground mb-2">No fill blank sets yet</h3>
+					<p className="text-sm text-muted-foreground mb-4">Create some fill blank sets first!</p>
+					<Button onClick={() => setView("create-ai-fill-blank")}>Create with AI</Button>
+				</div>
+			)}
+
+			{!loading && !error && fillBlankSets.length > 0 && (
+				<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+					{fillBlankSets.map((set) => (
+						<button
+							key={set.id}
+							onClick={() => handleSelectFillBlankSet(set)}
+							disabled={set.questions.length === 0}
+							className="group rounded-xl border border-accent/30 bg-accent/10 p-5 backdrop-blur-sm transition-all hover:border-accent/50 hover:bg-accent/20 hover:scale-[1.02] text-left cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+						>
+							<div className="flex items-start justify-between mb-3">
+								<h3 className="font-semibold text-foreground line-clamp-1">{set.name}</h3>
+								<div className="flex items-center gap-1.5 shrink-0 ml-2">
+									<span className="text-xs px-2 py-0.5 rounded-full border bg-blue-500/10 text-blue-500 border-blue-500/20 uppercase">{set.language}</span>
+									<span className={`text-xs px-2 py-0.5 rounded-full border ${getLevelBadgeClass(set.level as "easy" | "medium" | "hard")}`}>{set.level}</span>
+								</div>
+							</div>
+							<p className="text-sm text-muted-foreground mb-3 line-clamp-2">{set.description}</p>
+							{set.subjects?.length > 0 && (
+								<div className="flex flex-wrap gap-1 mb-3">
+									{set.subjects.slice(0, 3).map((subject: string, i: number) => (
+										<span key={i} className="inline-block px-2 py-0.5 text-xs rounded-full bg-primary/10 text-primary border border-primary/20">{subject}</span>
+									))}
+								</div>
+							)}
+							<div className="flex items-center justify-between pt-3 border-t border-border/30">
+								<div className="flex items-center gap-2 text-sm text-muted-foreground">
+									<TextCursor className="h-4 w-4" />
+									<span>{set.questions.length} questions</span>
+								</div>
+								{set.questions.length > 0 && (
+									<div className="flex items-center gap-1 text-accent">
+										<Play className="h-4 w-4" />
+										<span className="text-sm font-medium">Play</span>
+									</div>
+								)}
+							</div>
+						</button>
+					))}
+				</div>
+			)}
+		</div>
+	)
+}

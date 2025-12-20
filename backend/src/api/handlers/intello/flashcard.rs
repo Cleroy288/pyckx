@@ -9,8 +9,8 @@ use crate::shared::session::get_user_id_from_session;
 use actix_web::{get, web, HttpRequest, HttpResponse};
 use tracing::instrument;
 
-/// GET /app/intello/flashcard/list - Get user's flashcard sets
-#[get("/flashcard/list")]
+/// GET /api/intello/flashcards - Get user's flashcard sets
+#[get("/flashcards")]
 #[instrument(skip(app, req))]
 pub async fn list_flashcards_handler(
     app: web::Data<App>,

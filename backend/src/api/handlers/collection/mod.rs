@@ -10,7 +10,7 @@ use actix_web::web;
 
 pub fn init(cfg: &mut web::ServiceConfig) {
     cfg.service(
-        web::scope("/app/collection")
+        web::scope("/api/collection")
             // DVD operations (specific routes BEFORE wildcards)
             .service(dvd_handlers::add_dvd_handler)
             .service(dvd_handlers::get_user_dvds_handler)

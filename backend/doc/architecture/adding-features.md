@@ -72,7 +72,42 @@ impl IntelloService {
 }
 ```
 
-## 5. Create DTOs
+## 5. Create Use Case
+
+Location: `use_cases/intello/my_game.rs`
+
+```rust
+pub struct GenerateMyGameInput {
+    pub user_id: String,
+    pub name: String,
+    // ... other input fields
+}
+
+pub struct GenerateMyGameOutput {
+    pub my_game_set: MyGameSet,
+}
+
+pub struct GenerateMyGameUseCase {
+    intello_service: Arc<IntelloService>,
+}
+
+impl GenerateMyGameUseCase {
+    pub fn new(intello_service: Arc<IntelloService>) -> Self {
+        Self { intello_service }
+    }
+
+    pub async fn execute(&self, input: GenerateMyGameInput) -> AppResult<GenerateMyGameOutput> {
+        // 1. Validate input
+        // 2. Delegate to service
+        let set = self.intello_service.create_my_game(input).await?;
+        Ok(GenerateMyGameOutput { my_game_set: set })
+    }
+}
+```
+
+Export in `use_cases/intello/mod.rs`.
+
+## 6. Create DTOs
 
 Location: `api/dto/intello/my_game/`
 
@@ -94,9 +129,29 @@ pub struct MyGameResponse {
 }
 ```
 
-## 6. Create Handler
+## 7. Create Handler
 
 Location: `api/handlers/intello/my_game.rs`
+
+```rust
+#[post("/my-game/create")]
+pub async fn create_my_game_handler(
+    app: web::Data<App>,
+    req: HttpRequest,
+    payload: Multipart,
+) -> Result<HttpResponse, AppError> {
+    let user_id = get_user_id_from_session(&app, &req)?;
+    let input = parse_multipart(payload).await?;
+    
+    // Use the use case for orchestration
+    let use_case = GenerateMyGameUseCase::new(Arc::clone(&app.intello_service));
+    let output = use_case.execute(input).await?;
+    
+    Ok(HttpResponse::Created().json(MyGameResponse::from(output)))
+}
+```
+
+## 8. Wire Everything
 
 ```rust
 #[post("/my-game/create")]
@@ -114,11 +169,48 @@ pub async fn create_my_game_handler(
 
 ## 7. Wire Everything
 
-### Add to `app.rs`:
+### Add repository to `IntelloRepositories` in `services/intello/types.rs`:
 ```rust
-pub struct App {
-    // Add repository and update service constructor
+/// Bundle of all Intello repositories
+pub struct IntelloRepositories {
+    // Add new repository
     pub my_game_repo: Arc<dyn MyGameRepository>,
+    // ... existing repos
+}
+```
+
+### Create and inject repository in `app.rs`:
+```rust
+pub fn new() -> Result<Self, ConfigError> {
+    // Create repository bundle with new game repo
+    let intello_repos = IntelloRepositories {
+        my_game_repo: Arc::new(SupabaseMyGameRepository::new(&cfg)),
+        // ... existing repos
+    };
+    
+    // Build IntelloService using builder pattern
+    let intello_service = Arc::new(
+        IntelloService::builder()
+            .with_repositories(intello_repos)
+            .with_openrouter(openrouter_service)
+            .with_cache(open_question_cache)
+            .build()
+            .expect("IntelloService must have all dependencies"),
+    );
+    
+    // ...
+}
+```
+
+> **Note:** Services are wrapped in `Arc` for efficient cloning across Actix workers. Repositories are bundled in `IntelloRepositories` for cleaner construction.
+
+### Update test helpers in `tests/intello/helpers.rs`:
+```rust
+pub fn stub_intello_repositories() -> IntelloRepositories {
+    IntelloRepositories {
+        my_game_repo: Arc::new(StubMyGameRepository),
+        // ... existing repos
+    }
 }
 ```
 
@@ -139,6 +231,7 @@ pub struct App {
 - [ ] Repository trait defined
 - [ ] Supabase implementation added
 - [ ] Service methods implemented
+- [ ] **Use Case created and exported**
 - [ ] DTOs created (request + response)
 - [ ] Handler created and registered
 - [ ] Dependencies wired in `app.rs`

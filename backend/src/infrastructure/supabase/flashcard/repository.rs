@@ -9,7 +9,7 @@ use super::types::{
 use crate::config::Config;
 use crate::domain::intello::{Flashcard, FlashcardSet};
 use crate::error::IntelloError;
-use crate::infrastructure::repository::FlashcardRepository;
+use crate::infrastructure::repository::GameSetRepository;
 use async_trait::async_trait;
 use reqwest::Client;
 use tracing::{debug, error, info, instrument};
@@ -161,7 +161,7 @@ impl SupabaseFlashcardRepository {
 }
 
 #[async_trait]
-impl FlashcardRepository for SupabaseFlashcardRepository {
+impl GameSetRepository<FlashcardSet> for SupabaseFlashcardRepository {
     #[instrument(skip(self, set), fields(set_id = %set.id))]
     async fn insert(&self, set: &FlashcardSet) -> Result<FlashcardSet, IntelloError> {
         // Insert the set

@@ -1,4 +1,8 @@
 //! Shared validation for Intello DTOs
+//!
+//! Note: Some validation is now handled by Use Cases.
+
+#![allow(dead_code)]
 
 use crate::domain::intello::Level;
 

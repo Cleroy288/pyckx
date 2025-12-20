@@ -39,6 +39,8 @@ pub struct Config {
     pub static_dir: String,
     /// OpenRouter API key for AI services
     pub openrouter_api_key: Option<String>,
+    /// Google AI API key for Gemini models (optional, for higher rate limits)
+    pub google_ai_key: Option<String>,
 }
 
 impl Config {
@@ -84,6 +86,8 @@ impl Config {
             static_dir: std::env::var("STATIC_DIR").unwrap_or_else(|_| "./static".to_string()),
             // OpenRouter API key (optional)
             openrouter_api_key: std::env::var("OPENROUTER_API_KEY").ok().filter(|s| !s.is_empty()),
+            // Google AI API key for Gemini models (optional, for higher rate limits)
+            google_ai_key: std::env::var("GOOGLE_AI_KEY").ok().filter(|s| !s.is_empty()),
         };
 
         info!(
@@ -138,6 +142,7 @@ mod tests {
             serve_frontend: false,
             static_dir: "./static".to_string(),
             openrouter_api_key: None,
+            google_ai_key: None,
         };
         assert_eq!(config.to_string(), "Config(127.0.0.1:8080)");
     }
@@ -156,6 +161,7 @@ mod tests {
             serve_frontend: false,
             static_dir: "./static".to_string(),
             openrouter_api_key: None,
+            google_ai_key: None,
         };
         assert_eq!(config.get_test_user_id(), Some("user-uuid-123"));
     }

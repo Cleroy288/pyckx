@@ -1,8 +1,6 @@
 //! True or False Request DTOs
 
-use crate::api::dto::intello::validation::{
-    default_language, default_num_questions, parse_level, validate_num_questions, validate_subjects,
-};
+use crate::api::dto::intello::validation::{default_language, default_num_questions, parse_level};
 use crate::domain::intello::Level;
 use serde::Deserialize;
 
@@ -27,13 +25,5 @@ pub struct CreateTrueOrFalseRequest {
 impl CreateTrueOrFalseRequest {
     pub fn parse_level(&self) -> Result<Level, String> {
         parse_level(&self.level)
-    }
-
-    pub fn validate_subjects(&self) -> Result<(), String> {
-        validate_subjects(&self.subjects)
-    }
-
-    pub fn validate_num_questions(&self) -> Result<(), String> {
-        validate_num_questions(self.num_questions)
     }
 }

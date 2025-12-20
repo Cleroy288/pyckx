@@ -1,15 +1,15 @@
 "use client"
 
 import { createContext, useContext, useState, useCallback, useMemo, useRef, type ReactNode } from "react"
-import { getAvailableGames, getAllQcmSets, getAllOpenQuestionSets, getAllFlashcardSets, getAllTrueOrFalseSets, getAllKeywordSets, getAllOrderPhraseSets, type GameData, type OpenQuestionSetData, type FlashcardSetData, type TrueOrFalseSetData, type KeywordSetData, type OrderPhraseSetData } from "@/lib/api/intello"
+import { getAvailableGames, getAllQcmSets, getAllOpenQuestionSets, getAllFlashcardSets, getAllTrueOrFalseSets, getAllKeywordSets, getAllOrderPhraseSets, getAllFillBlankSets, type GameData, type OpenQuestionSetData, type FlashcardSetData, type TrueOrFalseSetData, type KeywordSetData, type OrderPhraseSetData, type FillBlankSetData } from "@/lib/api/intello"
 import type { QcmSetData, QcmQuestionData, Level } from "@/lib/classes/intello"
 
 // == Types ==
 export type ViewState =
 	| "home"
-	| "create-qcm" | "create-ai-qcm" | "create-ai-open" | "create-ai-flashcard" | "create-ai-true-false" | "create-ai-keywords" | "create-ai-order-phrase"
-	| "play-qcm" | "play-open" | "play-flashcard" | "play-true-false" | "play-keywords" | "play-order-phrase"
-	| "playing-qcm" | "playing-open" | "playing-flashcard" | "playing-true-false" | "playing-keywords" | "playing-order-phrase"
+	| "create-qcm" | "create-ai-qcm" | "create-ai-open" | "create-ai-flashcard" | "create-ai-true-false" | "create-ai-keywords" | "create-ai-order-phrase" | "create-ai-fill-blank"
+	| "play-qcm" | "play-open" | "play-flashcard" | "play-true-false" | "play-keywords" | "play-order-phrase" | "play-fill-blank"
+	| "playing-qcm" | "playing-open" | "playing-flashcard" | "playing-true-false" | "playing-keywords" | "playing-order-phrase" | "playing-fill-blank"
 	| "results"
 
 export interface QuizAnswer {
@@ -39,6 +39,7 @@ interface IntelloContextType {
 	trueOrFalseSets: TrueOrFalseSetData[]
 	keywordSets: KeywordSetData[]
 	orderPhraseSets: OrderPhraseSetData[]
+	fillBlankSets: FillBlankSetData[]
 
 	// Selected sets
 	selectedQcmSet: QcmSetData | null
@@ -47,6 +48,7 @@ interface IntelloContextType {
 	selectedTrueOrFalseSet: TrueOrFalseSetData | null
 	selectedKeywordSet: KeywordSetData | null
 	selectedOrderPhraseSet: OrderPhraseSetData | null
+	selectedFillBlankSet: FillBlankSetData | null
 
 	// QCM quiz state
 	currentQuestionIndex: number
@@ -64,16 +66,18 @@ interface IntelloContextType {
 	loadTrueOrFalseSets: () => Promise<void>
 	loadKeywordSets: () => Promise<void>
 	loadOrderPhraseSets: () => Promise<void>
+	loadFillBlankSets: () => Promise<void>
 
 	// Navigation handlers
 	handleBackToHome: () => void
-	handleNavigateToGame: (gameType: "qcm" | "open" | "flashcard" | "true_false" | "keywords" | "order_phrase") => Promise<void>
+	handleNavigateToGame: (gameType: "qcm" | "open" | "flashcard" | "true_false" | "keywords" | "order_phrase" | "fill_blank") => Promise<void>
 	handlePlayQcm: () => Promise<void>
 	handlePlayOpen: () => Promise<void>
 	handlePlayFlashcard: () => Promise<void>
 	handlePlayTrueOrFalse: () => Promise<void>
 	handlePlayKeywords: () => Promise<void>
 	handlePlayOrderPhrase: () => Promise<void>
+	handlePlayFillBlank: () => Promise<void>
 
 	// Selection handlers
 	handleSelectQcmSet: (set: QcmSetData) => void
@@ -82,6 +86,7 @@ interface IntelloContextType {
 	handleSelectTrueOrFalseSet: (set: TrueOrFalseSetData) => void
 	handleSelectKeywordSet: (set: KeywordSetData) => void
 	handleSelectOrderPhraseSet: (set: OrderPhraseSetData) => void
+	handleSelectFillBlankSet: (set: FillBlankSetData) => void
 
 	// QCM game handlers
 	handleAnswerSelect: (answer: string) => void
@@ -111,6 +116,7 @@ export function IntelloProvider({ children }: { children: ReactNode }) {
 	const [trueOrFalseSets, setTrueOrFalseSets] = useState<TrueOrFalseSetData[]>([])
 	const [keywordSets, setKeywordSets] = useState<KeywordSetData[]>([])
 	const [orderPhraseSets, setOrderPhraseSets] = useState<OrderPhraseSetData[]>([])
+	const [fillBlankSets, setFillBlankSets] = useState<FillBlankSetData[]>([])
 
 	// Selected sets
 	const [selectedQcmSet, setSelectedQcmSet] = useState<QcmSetData | null>(null)
@@ -119,6 +125,7 @@ export function IntelloProvider({ children }: { children: ReactNode }) {
 	const [selectedTrueOrFalseSet, setSelectedTrueOrFalseSet] = useState<TrueOrFalseSetData | null>(null)
 	const [selectedKeywordSet, setSelectedKeywordSet] = useState<KeywordSetData | null>(null)
 	const [selectedOrderPhraseSet, setSelectedOrderPhraseSet] = useState<OrderPhraseSetData | null>(null)
+	const [selectedFillBlankSet, setSelectedFillBlankSet] = useState<FillBlankSetData | null>(null)
 
 	// QCM state
 	const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
@@ -215,6 +222,19 @@ export function IntelloProvider({ children }: { children: ReactNode }) {
 		}
 	}, [])
 
+	const loadFillBlankSets = useCallback(async () => {
+		setLoading(true)
+		setError(null)
+		try {
+			const data = await getAllFillBlankSets()
+			setFillBlankSets(data)
+		} catch (err) {
+			setError(err instanceof Error ? err.message : "Failed to load fill blank sets")
+		} finally {
+			setLoading(false)
+		}
+	}, [])
+
 	// == Helpers ==
 	const shuffleAnswers = useCallback((question: QcmQuestionData): string[] => {
 		const allAnswers = [...question.wrong_answers, question.right_answer]
@@ -250,6 +270,7 @@ export function IntelloProvider({ children }: { children: ReactNode }) {
 		setSelectedTrueOrFalseSet(null)
 		setSelectedKeywordSet(null)
 		setSelectedOrderPhraseSet(null)
+		setSelectedFillBlankSet(null)
 		setAnswers([])
 		setError(null)
 	}, [])
@@ -284,7 +305,12 @@ export function IntelloProvider({ children }: { children: ReactNode }) {
 		setView("play-order-phrase")
 	}, [loadOrderPhraseSets])
 
-	const handleNavigateToGame = useCallback(async (gameType: "qcm" | "open" | "flashcard" | "true_false" | "keywords" | "order_phrase") => {
+	const handlePlayFillBlank = useCallback(async () => {
+		await loadFillBlankSets()
+		setView("play-fill-blank")
+	}, [loadFillBlankSets])
+
+	const handleNavigateToGame = useCallback(async (gameType: "qcm" | "open" | "flashcard" | "true_false" | "keywords" | "order_phrase" | "fill_blank") => {
 		switch (gameType) {
 			case "qcm":
 				await loadQcmSets()
@@ -310,8 +336,12 @@ export function IntelloProvider({ children }: { children: ReactNode }) {
 				await loadOrderPhraseSets()
 				setView("play-order-phrase")
 				break
+			case "fill_blank":
+				await loadFillBlankSets()
+				setView("play-fill-blank")
+				break
 		}
-	}, [loadQcmSets, loadOpenQuestionSets, loadFlashcardSets, loadTrueOrFalseSets, loadKeywordSets, loadOrderPhraseSets])
+	}, [loadQcmSets, loadOpenQuestionSets, loadFlashcardSets, loadTrueOrFalseSets, loadKeywordSets, loadOrderPhraseSets, loadFillBlankSets])
 
 	// == Selection Handlers ==
 	const handleSelectQcmSet = useCallback((set: QcmSetData) => {
@@ -373,6 +403,15 @@ export function IntelloProvider({ children }: { children: ReactNode }) {
 		setView("playing-order-phrase")
 	}, [])
 
+	const handleSelectFillBlankSet = useCallback((set: FillBlankSetData) => {
+		if (set.questions.length === 0) {
+			setError("This set has no questions yet!")
+			return
+		}
+		setSelectedFillBlankSet(set)
+		setView("playing-fill-blank")
+	}, [])
+
 	// == QCM Game Handlers ==
 	const handleAnswerSelect = useCallback((answer: string) => {
 		if (hasAnswered || !selectedQcmSet) return
@@ -415,12 +454,12 @@ export function IntelloProvider({ children }: { children: ReactNode }) {
 	const value: IntelloContextType = {
 		view, setView,
 		loading, error, setError,
-		games, qcmSets, openQuestionSets, flashcardSets, trueOrFalseSets, keywordSets, orderPhraseSets,
-		selectedQcmSet, selectedOpenSet, selectedFlashcardSet, selectedTrueOrFalseSet, selectedKeywordSet, selectedOrderPhraseSet,
+		games, qcmSets, openQuestionSets, flashcardSets, trueOrFalseSets, keywordSets, orderPhraseSets, fillBlankSets,
+		selectedQcmSet, selectedOpenSet, selectedFlashcardSet, selectedTrueOrFalseSet, selectedKeywordSet, selectedOrderPhraseSet, selectedFillBlankSet,
 		currentQuestionIndex, selectedAnswer, hasAnswered, answers, shuffledAnswersRef, score,
-		loadGames, loadQcmSets, loadOpenQuestionSets, loadFlashcardSets, loadTrueOrFalseSets, loadKeywordSets, loadOrderPhraseSets,
-		handleBackToHome, handleNavigateToGame, handlePlayQcm, handlePlayOpen, handlePlayFlashcard, handlePlayTrueOrFalse, handlePlayKeywords, handlePlayOrderPhrase,
-		handleSelectQcmSet, handleSelectOpenSet, handleSelectFlashcardSet, handleSelectTrueOrFalseSet, handleSelectKeywordSet, handleSelectOrderPhraseSet,
+		loadGames, loadQcmSets, loadOpenQuestionSets, loadFlashcardSets, loadTrueOrFalseSets, loadKeywordSets, loadOrderPhraseSets, loadFillBlankSets,
+		handleBackToHome, handleNavigateToGame, handlePlayQcm, handlePlayOpen, handlePlayFlashcard, handlePlayTrueOrFalse, handlePlayKeywords, handlePlayOrderPhrase, handlePlayFillBlank,
+		handleSelectQcmSet, handleSelectOpenSet, handleSelectFlashcardSet, handleSelectTrueOrFalseSet, handleSelectKeywordSet, handleSelectOrderPhraseSet, handleSelectFillBlankSet,
 		handleAnswerSelect, handleNextQuestion, handlePlayAgain, shuffleAnswers,
 		getLevelBadgeClass, getScoreColor,
 	}

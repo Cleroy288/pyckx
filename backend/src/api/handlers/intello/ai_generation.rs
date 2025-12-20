@@ -1,6 +1,7 @@
 //! AI content generation handlers
 //!
 //! Handlers for generating QCM, open questions, and flashcards using AI.
+//! All handlers delegate to Use Cases for validation and orchestration.
 
 use super::helpers::parse_multipart;
 use crate::api::dto::intello::{
@@ -9,15 +10,19 @@ use crate::api::dto::intello::{
     FlashcardResponse, OpenQuestionResponse, QcmQuestionResponse,
 };
 use crate::app::App;
-use crate::error::{AppError, AppResult};
-use crate::services::{validate_model, GenerateContentInput};
+use crate::error::AppResult;
 use crate::shared::session::get_user_id_from_session;
+use crate::use_cases::intello::{
+    GenerateFlashcardsInput, GenerateFlashcardsUseCase, GenerateOpenQuestionsInput,
+    GenerateOpenQuestionsUseCase, GenerateQcmInput, GenerateQcmUseCase,
+};
 use actix_multipart::Multipart;
 use actix_web::{post, web, HttpRequest, HttpResponse};
-use tracing::{info, instrument};
+use std::sync::Arc;
+use tracing::instrument;
 
-/// POST /app/intello/custom-question - Generate AI QCM from documents
-#[post("/custom-question")]
+/// POST /api/intello/qcm/generate - Generate AI QCM from documents
+#[post("/qcm/generate")]
 #[instrument(skip(app, req, payload))]
 pub async fn create_custom_question_handler(
     app: web::Data<App>,
@@ -29,29 +34,12 @@ pub async fn create_custom_question_handler(
     // Parse multipart form data
     let (metadata, documents) = parse_multipart::<CreateCustomQuestionRequest>(payload).await?;
 
-    // Validate metadata
-    let level = metadata.parse_level().map_err(|e| AppError::validation("level", e))?;
-    metadata.validate_subjects().map_err(|e| AppError::validation("subjects", e))?;
-    metadata.validate_num_questions().map_err(|e| AppError::validation("num_questions", e))?;
-    
-    // Validate model if provided
-    if let Some(ref model) = metadata.model {
-        validate_model(model).map_err(|e| AppError::validation("model", e))?;
-    }
+    // Parse level from metadata (DTO validation)
+    let level = metadata.parse_level().map_err(|e| crate::error::AppError::validation("level", e))?;
 
-    let total_token_count: u32 = documents.iter().map(|(_, _, t)| t).sum();
-
-    info!(
-        name = %metadata.name,
-        num_questions = metadata.num_questions,
-        model = ?metadata.model,
-        documents = documents.len(),
-        total_tokens = total_token_count,
-        "Generating AI QCM"
-    );
-
-    // Build input for service
-    let input = GenerateContentInput {
+    // Build use case input
+    let input = GenerateQcmInput {
+        user_id,
         name: metadata.name,
         description: metadata.description,
         instructions: metadata.instructions,
@@ -59,30 +47,31 @@ pub async fn create_custom_question_handler(
         level,
         subjects: metadata.subjects,
         num_questions: metadata.num_questions,
-        documents: documents.clone(),
+        documents,
         model: metadata.model,
     };
 
-    // Delegate to service
-    let qcm_set = app.intello_service.generate_ai_qcm(&user_id, input).await?;
+    // Execute use case (validation + generation inside)
+    let use_case = GenerateQcmUseCase::new(Arc::clone(&app.intello_service));
+    let output = use_case.execute(input).await?;
 
     // Build response
-    let question_responses: Vec<QcmQuestionResponse> = qcm_set.questions.iter()
+    let question_responses: Vec<QcmQuestionResponse> = output.game_set.questions.iter()
         .map(QcmQuestionResponse::from)
         .collect();
 
     Ok(HttpResponse::Created().json(CustomQuestionResponse {
         success: true,
-        message: format!("Custom question created with {} AI-generated questions", qcm_set.questions.len()),
-        id: qcm_set.id,
-        total_token_count,
-        documents_processed: documents.len(),
+        message: format!("Custom question created with {} AI-generated questions", output.game_set.questions.len()),
+        id: output.game_set.id,
+        total_token_count: output.total_token_count,
+        documents_processed: output.documents_processed,
         questions: question_responses,
     }))
 }
 
-/// POST /app/intello/open-question/create - Generate AI open questions
-#[post("/open-question/create")]
+/// POST /api/intello/open-questions - Generate AI open questions
+#[post("/open-questions")]
 #[instrument(skip(app, req, payload))]
 pub async fn create_open_question_handler(
     app: web::Data<App>,
@@ -94,35 +83,12 @@ pub async fn create_open_question_handler(
     // Parse multipart form data
     let (metadata, documents) = parse_multipart::<CreateOpenQuestionRequest>(payload).await?;
 
-    // Validate metadata
-    let level = metadata.parse_level().map_err(|e| AppError::validation("level", e))?;
-    metadata.validate_subjects().map_err(|e| AppError::validation("subjects", e))?;
-    metadata.validate_num_questions().map_err(|e| AppError::validation("num_questions", e))?;
-    
-    // Validate model if provided
-    if let Some(ref model) = metadata.model {
-        validate_model(model).map_err(|e| AppError::validation("model", e))?;
-    }
+    // Parse level from metadata (DTO validation)
+    let level = metadata.parse_level().map_err(|e| crate::error::AppError::validation("level", e))?;
 
-    let total_token_count: u32 = documents.iter().map(|(_, _, t)| t).sum();
-
-    info!(
-        name = %metadata.name,
-        num_questions = metadata.num_questions,
-        model = ?metadata.model,
-        documents = documents.len(),
-        total_tokens = total_token_count,
-        "Generating AI open questions"
-    );
-
-    // Build source content for caching (used during grading)
-    let source_content = documents.iter()
-        .map(|(filename, content, _)| format!("=== {} ===\n{}", filename, content))
-        .collect::<Vec<_>>()
-        .join("\n\n");
-
-    // Build input for service
-    let input = GenerateContentInput {
+    // Build use case input
+    let input = GenerateOpenQuestionsInput {
+        user_id,
         name: metadata.name,
         description: metadata.description,
         instructions: metadata.instructions,
@@ -130,32 +96,31 @@ pub async fn create_open_question_handler(
         level,
         subjects: metadata.subjects,
         num_questions: metadata.num_questions,
-        documents: documents.clone(),
+        documents,
         model: metadata.model,
     };
 
-    // Delegate to service
-    let open_question_set = app.intello_service
-        .generate_ai_open_questions(&user_id, input, source_content)
-        .await?;
+    // Execute use case (validation + generation inside)
+    let use_case = GenerateOpenQuestionsUseCase::new(Arc::clone(&app.intello_service));
+    let output = use_case.execute(input).await?;
 
     // Build response
-    let question_responses: Vec<OpenQuestionResponse> = open_question_set.questions.iter()
+    let question_responses: Vec<OpenQuestionResponse> = output.game_set.questions.iter()
         .map(OpenQuestionResponse::from)
         .collect();
 
     Ok(HttpResponse::Created().json(CreateOpenQuestionResponse {
         success: true,
-        message: format!("Open question set created with {} questions", open_question_set.questions.len()),
-        id: open_question_set.id,
-        total_token_count,
-        documents_processed: documents.len(),
+        message: format!("Open question set created with {} questions", output.game_set.questions.len()),
+        id: output.game_set.id,
+        total_token_count: output.total_token_count,
+        documents_processed: output.documents_processed,
         questions: question_responses,
     }))
 }
 
-/// POST /app/intello/flashcard/create - Generate AI flashcards
-#[post("/flashcard/create")]
+/// POST /api/intello/flashcards - Generate AI flashcards
+#[post("/flashcards")]
 #[instrument(skip(app, req, payload))]
 pub async fn create_flashcard_handler(
     app: web::Data<App>,
@@ -167,29 +132,12 @@ pub async fn create_flashcard_handler(
     // Parse multipart form data
     let (metadata, documents) = parse_multipart::<CreateFlashcardRequest>(payload).await?;
 
-    // Validate metadata
-    let level = metadata.parse_level().map_err(|e| AppError::validation("level", e))?;
-    metadata.validate_subjects().map_err(|e| AppError::validation("subjects", e))?;
-    metadata.validate_num_questions().map_err(|e| AppError::validation("num_questions", e))?;
-    
-    // Validate model if provided
-    if let Some(ref model) = metadata.model {
-        validate_model(model).map_err(|e| AppError::validation("model", e))?;
-    }
+    // Parse level from metadata (DTO validation)
+    let level = metadata.parse_level().map_err(|e| crate::error::AppError::validation("level", e))?;
 
-    let total_token_count: u32 = documents.iter().map(|(_, _, t)| t).sum();
-
-    info!(
-        name = %metadata.name,
-        num_cards = metadata.num_questions,
-        model = ?metadata.model,
-        documents = documents.len(),
-        total_tokens = total_token_count,
-        "Generating AI flashcards"
-    );
-
-    // Build input for service
-    let input = GenerateContentInput {
+    // Build use case input
+    let input = GenerateFlashcardsInput {
+        user_id,
         name: metadata.name,
         description: metadata.description,
         instructions: metadata.instructions,
@@ -197,24 +145,25 @@ pub async fn create_flashcard_handler(
         level,
         subjects: metadata.subjects,
         num_questions: metadata.num_questions,
-        documents: documents.clone(),
+        documents,
         model: metadata.model,
     };
 
-    // Delegate to service
-    let flashcard_set = app.intello_service.generate_ai_flashcards(&user_id, input).await?;
+    // Execute use case (validation + generation inside)
+    let use_case = GenerateFlashcardsUseCase::new(Arc::clone(&app.intello_service));
+    let output = use_case.execute(input).await?;
 
     // Build response
-    let card_responses: Vec<FlashcardResponse> = flashcard_set.cards.iter()
+    let card_responses: Vec<FlashcardResponse> = output.game_set.cards.iter()
         .map(FlashcardResponse::from)
         .collect();
 
     Ok(HttpResponse::Created().json(CreateFlashcardResponse {
         success: true,
-        message: format!("Flashcard set created with {} cards", flashcard_set.cards.len()),
-        id: flashcard_set.id,
-        total_token_count,
-        documents_processed: documents.len(),
+        message: format!("Flashcard set created with {} cards", output.game_set.cards.len()),
+        id: output.game_set.id,
+        total_token_count: output.total_token_count,
+        documents_processed: output.documents_processed,
         cards: card_responses,
     }))
 }

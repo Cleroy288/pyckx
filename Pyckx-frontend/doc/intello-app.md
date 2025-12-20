@@ -16,8 +16,8 @@ Intello is an educational game platform within Pyckx that offers AI-powered quiz
 - Upload documents (PDF, Word, PowerPoint, TXT)
 - AI generates multiple choice questions from content
 - Customizable: subjects, difficulty, language, number of questions
-- **Select AI model** for generation (6 free models available)
-- Questions target specific subjects from the source material
+- **Select AI model** for generation (4 free + 5 paid models available)
+- Token limit validation per model (up to 2M context)
 
 ### 3. AI Open Questions
 - Upload documents for AI analysis
@@ -53,6 +53,13 @@ Intello is an educational game platform within Pyckx that offers AI-powered quiz
 - Tests sentence structure and comprehension
 - Each phrase includes optional hint
 
+### 8. AI Fill in the Blank
+- Upload documents for AI analysis
+- AI generates phrases with blanks (marked as `___`)
+- Users select correct word from multiple options
+- Tests vocabulary and context understanding
+- Each question includes explanation
+
 ## Page Structure
 
 ```
@@ -62,9 +69,9 @@ app/intello/
 └── views/
     ├── index.ts          # Barrel export
     ├── home-view.tsx     # Create + Play buttons
-    ├── create-views.tsx  # 6 create view components
-    ├── play-views.tsx    # 5 set selection views
-    ├── playing-views.tsx # 5 active game views
+    ├── create-views.tsx  # 7 create view components
+    ├── play-views.tsx    # 6 set selection views
+    ├── playing-views.tsx # 6 active game views
     └── results-view.tsx  # QCM results view
 ```
 
@@ -73,7 +80,7 @@ app/intello/
 /intello
 ├── HomeView (default)
 │   ├── CreateQcmView / CreateAi*View → Sets View → Playing View
-│   └── PlayQcmView / PlayOpenView / PlayFlashcardView / PlayTrueOrFalseView / PlayKeywordsView
+│   └── PlayQcmView / PlayOpenView / PlayFlashcardView / PlayTrueOrFalseView / PlayKeywordsView / PlayOrderPhraseView / PlayFillBlankView
 │       └── Playing*View → ResultsView (for QCM)
 ```
 
@@ -102,9 +109,9 @@ React context managing all Intello state:
 | File | Components |
 |------|------------|
 | `home-view.tsx` | HomeView |
-| `create-views.tsx` | CreateQcmView, CreateAiQcmView, CreateAiOpenView, CreateAiFlashcardView, CreateAiTrueOrFalseView, CreateAiKeywordsView, CreateAiOrderPhraseView |
-| `play-views.tsx` | PlayQcmView, PlayOpenView, PlayFlashcardView, PlayTrueOrFalseView, PlayKeywordsView, PlayOrderPhraseView |
-| `playing-views.tsx` | PlayingQcmView, PlayingOpenView, PlayingFlashcardView, PlayingTrueOrFalseView, PlayingKeywordsView, PlayingOrderPhraseView |
+| `create-views.tsx` | CreateQcmView, CreateAiQcmView, CreateAiOpenView, CreateAiFlashcardView, CreateAiTrueOrFalseView, CreateAiKeywordsView, CreateAiOrderPhraseView, CreateAiFillBlankView |
+| `play-views.tsx` | PlayQcmView, PlayOpenView, PlayFlashcardView, PlayTrueOrFalseView, PlayKeywordsView, PlayOrderPhraseView, PlayFillBlankView |
+| `playing-views.tsx` | PlayingQcmView, PlayingOpenView, PlayingFlashcardView, PlayingTrueOrFalseView, PlayingKeywordsView, PlayingOrderPhraseView, PlayingFillBlankView |
 | `results-view.tsx` | ResultsView |
 
 ### CustomQuestionForm (`components/custom-question-form.tsx`)
@@ -116,8 +123,8 @@ Form for creating AI-generated content:
 interface CustomQuestionFormProps {
   games: GameData[]
   onBack: () => void
-  defaultOutputGame?: string  // "qcm", "open_question", "flashcard", "true_false", "keywords", "order_phrase"
-  onNavigateToGame?: (gameType: "qcm" | "open" | "flashcard" | "true_false" | "keywords" | "order_phrase") => void
+  defaultOutputGame?: string  // "qcm", "open_question", "flashcard", "true_false", "keywords", "order_phrase", "fill_blank"
+  onNavigateToGame?: (gameType: "qcm" | "open" | "flashcard" | "true_false" | "keywords" | "order_phrase" | "fill_blank") => void
 }
 ```
 
@@ -128,7 +135,7 @@ interface CustomQuestionFormProps {
 - Language (en, fr, es, de, nl)
 - Difficulty (easy, medium, hard)
 - Number of Questions (5, 10, 15, 20, 25, 30)
-- **AI Model** (selectable from 6 free models)
+- **AI Model** (selectable: 4 free + 5 paid models with context limits)
 - Subjects (max 3)
 - Documents (required, multiple files)
 
@@ -142,6 +149,7 @@ interface CustomQuestionFormProps {
 | TrueOrFalsePlayer | `true-false-player.tsx` | True/False statement game |
 | KeywordsPlayer | `keywords-player.tsx` | Keyword identification game |
 | OrderPhrasePlayer | `order-phrase-player.tsx` | Word ordering game |
+| FillBlankPlayer | `fill-blank-player.tsx` | Fill in the blank game |
 
 ## Classes (`lib/classes/intello/`)
 
@@ -160,6 +168,10 @@ interface CustomQuestionFormProps {
 | KeywordSet | `KeywordSet.ts` | Keyword set with questions |
 | KeywordQuestion | `KeywordQuestion.ts` | Individual keyword question |
 | Keyword | `Keyword.ts` | Individual keyword option |
+| OrderPhraseSet | `OrderPhraseSet.ts` | Order phrase set |
+| OrderPhraseQuestion | `OrderPhraseQuestion.ts` | Individual order phrase |
+| FillBlankSet | `FillBlankSet.ts` | Fill blank set |
+| FillBlankQuestion | `FillBlankQuestion.ts` | Individual fill blank question |
 
 ## API Functions (`lib/api/intello.ts`)
 
@@ -202,6 +214,12 @@ createKeywords(input, files): Promise<CreateKeywordsResponse>
 ```typescript
 getAllOrderPhraseSets(): Promise<OrderPhraseSetListResponse>
 createOrderPhrase(input, files): Promise<CreateOrderPhraseResponse>
+```
+
+### Fill Blank Functions
+```typescript
+getAllFillBlankSets(): Promise<FillBlankSetListResponse>
+createFillBlank(input, files): Promise<CreateFillBlankResponse>
 ```
 
 ### AI Model Functions
@@ -251,6 +269,19 @@ interface OrderPhraseQuestion {
   words: OrderPhraseWord[]
   hint?: string
 }
+
+interface FillBlankOption {
+  id: string
+  text: string
+  is_correct: boolean
+}
+
+interface FillBlankQuestion {
+  id: string
+  phrase: string           // Contains `___` where blank is
+  options: FillBlankOption[]
+  explanation: string
+}
 ```
 
 ## API Endpoints
@@ -274,6 +305,8 @@ intello: {
   keywordsList: () => `${BACKEND}/app/intello/keywords/list`,
   orderPhraseCreate: () => `${BACKEND}/app/intello/order-phrase/create`,
   orderPhraseList: () => `${BACKEND}/app/intello/order-phrase/list`,
+  fillBlankCreate: () => `${BACKEND}/app/intello/fill-blank/create`,
+  fillBlankList: () => `${BACKEND}/app/intello/fill-blank/list`,
 }
 ```
 
@@ -308,3 +341,38 @@ intello: {
 | Word | `.docx` |
 | PowerPoint | `.pptx` |
 
+## AI Models
+
+### Available Models
+
+| Model | Context Limit | Type |
+|-------|---------------|------|
+| `google/gemini-2.0-flash-exp:free` | 1.05M **(default)** | Free |
+| `kwaipilot/kat-coder-pro:free` | 256K | Free |
+| `mistralai/devstral-2512:free` | 262K | Free |
+| `tngtech/deepseek-r1t2-chimera:free` | 164K | Free |
+| `google/gemini-3-flash-preview` | 1.05M | Paid |
+| `google/gemini-3-pro-preview` | 1.05M | Paid |
+| `openai/gpt-5.2` | 400K | Paid |
+| `amazon/nova-2-lite-v1` | 1M | Paid |
+| `x-ai/grok-4.1-fast` | 2M | Paid |
+
+### Token Limit Validation
+
+- Each model has a maximum context limit
+- A 10K token safety buffer is applied
+- Documents exceeding the limit trigger a validation error
+- Error message: "Document size (X tokens) exceeds the model's context limit"
+
+### Error Handling
+
+The form displays errors via toast notifications. Common errors:
+
+| Error | Cause | Solution |
+|-------|-------|----------|
+| Token limit exceeded | Documents too large | Use smaller/fewer files or a model with higher limit |
+| Rate limit (429) | Too many requests | Wait and retry, or add Google API key |
+| Model unavailable | Model offline | Select a different model |
+| AI parsing error | AI returned malformed JSON | Backend auto-sanitizes; retry if persists |
+
+> **Note:** The backend automatically sanitizes AI responses to handle edge cases like duplicate JSON keys. If you see parsing errors, the system will attempt to recover automatically.

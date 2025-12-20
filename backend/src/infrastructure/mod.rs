@@ -15,8 +15,9 @@ pub mod supabase;
 
 // Repository traits
 pub use repository::{
-    AppRepository, CollectionRepository, CreateApp, CreateDvd, DvdRepository, FlashcardRepository,
-    KeywordsRepository, OpenQuestionRepository, OrderPhraseRepository, QcmRepository, TrueOrFalseRepository, UpdateApp, UpdateDvd, UserAppRepository,
+    AppRepository, CollectionRepository, CreateApp, CreateDvd, DvdRepository, FillBlankRepository,
+    FlashcardRepository, GameSetRepository, KeywordsRepository, OpenQuestionRepository, 
+    OrderPhraseRepository, QcmRepository, TrueOrFalseRepository, UpdateApp, UpdateDvd, UserAppRepository,
 };
 
 // JSON storage implementations (legacy, used in tests only)
@@ -26,7 +27,8 @@ pub use json_storage::{JsonFlashcardRepository, JsonOpenQuestionRepository, Json
 // Supabase implementations
 pub use supabase::{
     SupabaseAppRepository, SupabaseClient, SupabaseCollectionRepository, SupabaseDvdRepository,
-    SupabaseFlashcardRepository, SupabaseKeywordsRepository, SupabaseOpenQuestionRepository, SupabaseOrderPhraseRepository, SupabaseQcmRepository,
+    SupabaseFillBlankRepository, SupabaseFlashcardRepository, SupabaseKeywordsRepository,
+    SupabaseOpenQuestionRepository, SupabaseOrderPhraseRepository, SupabaseQcmRepository,
     SupabaseTrueOrFalseRepository, SupabaseUserAppRepository,
 };
 

@@ -9,7 +9,7 @@ use super::types::{
 use crate::config::Config;
 use crate::domain::intello::{TrueOrFalseSet, TrueOrFalseStatement};
 use crate::error::IntelloError;
-use crate::infrastructure::repository::TrueOrFalseRepository;
+use crate::infrastructure::repository::GameSetRepository;
 use async_trait::async_trait;
 use reqwest::Client;
 use tracing::{debug, error, info, instrument};
@@ -163,7 +163,7 @@ impl SupabaseTrueOrFalseRepository {
 }
 
 #[async_trait]
-impl TrueOrFalseRepository for SupabaseTrueOrFalseRepository {
+impl GameSetRepository<TrueOrFalseSet> for SupabaseTrueOrFalseRepository {
     #[instrument(skip(self, set), fields(set_id = %set.id))]
     async fn insert(&self, set: &TrueOrFalseSet) -> Result<TrueOrFalseSet, IntelloError> {
         // Insert the set

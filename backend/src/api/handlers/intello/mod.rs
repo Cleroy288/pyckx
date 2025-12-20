@@ -3,6 +3,7 @@
 //! Quiz/educational game management endpoints.
 
 mod ai_generation;
+mod fill_blank;
 mod flashcard;
 mod games;
 mod helpers;
@@ -17,7 +18,7 @@ use actix_web::web;
 
 pub fn init(cfg: &mut web::ServiceConfig) {
     cfg.service(
-        web::scope("/app/intello")
+        web::scope("/api/intello")
             .service(games::get_available_games_handler)
             .service(models::get_available_models_handler)
             .service(qcm_handlers::create_qcmset_handler)
@@ -36,7 +37,9 @@ pub fn init(cfg: &mut web::ServiceConfig) {
             .service(keywords::create_keywords_handler)
             .service(keywords::list_keyword_sets_handler)
             .service(order_phrase::create_order_phrase_handler)
-            .service(order_phrase::list_order_phrase_sets_handler),
+            .service(order_phrase::list_order_phrase_sets_handler)
+            .service(fill_blank::create_fill_blank_handler)
+            .service(fill_blank::list_fill_blank_sets_handler),
     );
 }
 

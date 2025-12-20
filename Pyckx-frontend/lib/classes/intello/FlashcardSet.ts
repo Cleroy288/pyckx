@@ -66,7 +66,7 @@ export class FlashcardSet {
 
 	/** Get all flashcard sets for the current user */
 	static async getAll(): Promise<FlashcardSet[]> {
-		const res = await fetch(endpoints.intello.flashcardList(), {
+		const res = await fetch(endpoints.intello.flashcards(), {
 			method: "GET",
 			credentials: "include",
 		});

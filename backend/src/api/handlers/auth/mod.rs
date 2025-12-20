@@ -11,7 +11,7 @@ use actix_web::web;
 
 pub fn init(cfg: &mut web::ServiceConfig) {
     cfg.service(
-        web::scope("/auth")
+        web::scope("/api/auth")
             .service(login::login_handler)
             .service(register::register_handler)
             .service(logout::logout_handler),

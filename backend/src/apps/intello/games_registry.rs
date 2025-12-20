@@ -34,4 +34,9 @@ pub const AVAILABLE_GAMES: &[GameInstance] = &[
         "True or False",
         "Determine if statements are true or false based on your study materials",
     ),
+    GameInstance::new(
+        "fill_blank",
+        "Fill in the Blank",
+        "Complete phrases by selecting the correct answer from multiple options",
+    ),
 ];

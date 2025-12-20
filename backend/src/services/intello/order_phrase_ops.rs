@@ -1,5 +1,6 @@
 //! Order Phrase operations
 
+use super::crud_ops;
 use super::types::{GenerateContentInput, IntelloService};
 use crate::domain::intello::OrderPhraseSet;
 use crate::error::IntelloError;
@@ -10,40 +11,21 @@ impl IntelloService {
     /// Get all order phrase sets for a user
     #[instrument(skip(self), fields(user_id = %user_id))]
     pub async fn get_user_order_phrase_sets(&self, user_id: &str) -> Result<Vec<OrderPhraseSet>, IntelloError> {
-        self.validate_user_id(user_id)?;
-        let sets = self.order_phrase_repo.find_by_user(user_id).await?;
-        info!(count = sets.len(), "Retrieved user order phrase sets");
-        Ok(sets)
+        crud_ops::get_user_sets(self.order_phrase_repo.as_ref(), user_id, "order_phrase").await
     }
 
     /// Get a specific order phrase set by ID
     #[allow(dead_code)] // Available for future use
     #[instrument(skip(self), fields(user_id = %user_id, set_id = %set_id))]
     pub async fn get_order_phrase_set(&self, set_id: &str, user_id: &str) -> Result<Option<OrderPhraseSet>, IntelloError> {
-        self.validate_user_id(user_id)?;
-        self.validate_set_id(set_id)?;
-        self.order_phrase_repo.find_by_id(set_id, user_id).await
+        crud_ops::get_set(self.order_phrase_repo.as_ref(), set_id, user_id).await
     }
 
     /// Delete an order phrase set with ownership verification
     #[allow(dead_code)] // Available for future use
     #[instrument(skip(self), fields(user_id = %user_id, set_id = %set_id))]
     pub async fn delete_order_phrase_set(&self, set_id: &str, user_id: &str) -> Result<bool, IntelloError> {
-        self.validate_user_id(user_id)?;
-        self.validate_set_id(set_id)?;
-
-        // Verify ownership
-        let existing = self.order_phrase_repo.find_by_id(set_id, user_id).await?;
-        if existing.is_none() {
-            tracing::warn!(set_id = %set_id, "Order phrase set not found or user doesn't own it");
-            return Ok(false);
-        }
-
-        let deleted = self.order_phrase_repo.delete(set_id, user_id).await?;
-        if deleted {
-            info!(set_id = %set_id, "Order phrase set deleted");
-        }
-        Ok(deleted)
+        crud_ops::delete_set(self.order_phrase_repo.as_ref(), set_id, user_id, "order_phrase").await
     }
 
     /// Generate AI order phrase questions and store them

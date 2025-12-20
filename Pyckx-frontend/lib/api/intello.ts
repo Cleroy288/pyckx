@@ -60,7 +60,7 @@ export function validateSubjects(subjects: string[] | undefined): void {
 
 // == Get All User QCM Sets // ==
 export async function getAllQcmSets(): Promise<QcmSetData[]> {
-  const res = await fetch(endpoints.intello.qcmSets(), {
+  const res = await fetch(endpoints.intello.qcm(), {
     method: "GET",
     credentials: "include",
   });
@@ -79,7 +79,7 @@ export async function addQcmSet(input: CreateQcmSetInput): Promise<QcmSetData> {
   // Validate subjects before sending
   validateSubjects(input.subjects);
 
-  const res = await fetch(endpoints.intello.qcmSets(), {
+  const res = await fetch(endpoints.intello.qcm(), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
@@ -103,7 +103,7 @@ export async function modifyQcmSet(id: string, input: UpdateQcmSetInput): Promis
   // Validate subjects before sending
   validateSubjects(input.subjects);
 
-  const res = await fetch(endpoints.intello.qcmSet(id), {
+  const res = await fetch(endpoints.intello.qcmById(id), {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
@@ -124,7 +124,7 @@ export async function modifyQcmSet(id: string, input: UpdateQcmSetInput): Promis
 
 // == Delete QCM Set // ==
 export async function deleteQcmSet(id: string): Promise<void> {
-  const res = await fetch(endpoints.intello.qcmSet(id), {
+  const res = await fetch(endpoints.intello.qcmById(id), {
     method: "DELETE",
     credentials: "include",
   });
@@ -253,7 +253,7 @@ export async function createCustomQuestion(
     formData.append("files", file);
   }
 
-  const res = await fetch(endpoints.intello.customQuestion(), {
+  const res = await fetch(endpoints.intello.qcmGenerate(), {
     method: "POST",
     credentials: "include",
     body: formData,
@@ -368,7 +368,7 @@ export async function createOpenQuestions(
     formData.append("files", file);
   }
 
-  const res = await fetch(endpoints.intello.openQuestionCreate(), {
+  const res = await fetch(endpoints.intello.openQuestions(), {
     method: "POST",
     credentials: "include",
     body: formData,
@@ -384,7 +384,7 @@ export async function createOpenQuestions(
 
 // == Get All User Open Question Sets ==
 export async function getAllOpenQuestionSets(): Promise<OpenQuestionSetData[]> {
-  const res = await fetch(endpoints.intello.openQuestionList(), {
+  const res = await fetch(endpoints.intello.openQuestions(), {
     method: "GET",
     credentials: "include",
   });
@@ -403,7 +403,7 @@ export async function checkOpenQuestionAnswers(
   setId: string,
   answers: UserAnswer[]
 ): Promise<CheckAnswersResponse> {
-  const res = await fetch(endpoints.intello.openQuestionCheck(), {
+  const res = await fetch(endpoints.intello.openQuestionsCheck(), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
@@ -487,7 +487,7 @@ export async function createFlashcards(
     formData.append("files", file);
   }
 
-  const res = await fetch(endpoints.intello.flashcardCreate(), {
+  const res = await fetch(endpoints.intello.flashcards(), {
     method: "POST",
     credentials: "include",
     body: formData,
@@ -503,7 +503,7 @@ export async function createFlashcards(
 
 // == Get All User Flashcard Sets ==
 export async function getAllFlashcardSets(): Promise<FlashcardSetData[]> {
-  const res = await fetch(endpoints.intello.flashcardList(), {
+  const res = await fetch(endpoints.intello.flashcards(), {
     method: "GET",
     credentials: "include",
   });
@@ -586,7 +586,7 @@ export async function createTrueOrFalse(
     formData.append("files", file);
   }
 
-  const res = await fetch(endpoints.intello.trueOrFalseCreate(), {
+  const res = await fetch(endpoints.intello.trueFalse(), {
     method: "POST",
     credentials: "include",
     body: formData,
@@ -602,7 +602,7 @@ export async function createTrueOrFalse(
 
 // == Get All User True or False Sets ==
 export async function getAllTrueOrFalseSets(): Promise<TrueOrFalseSetData[]> {
-  const res = await fetch(endpoints.intello.trueOrFalseList(), {
+  const res = await fetch(endpoints.intello.trueFalse(), {
     method: "GET",
     credentials: "include",
   });
@@ -685,7 +685,7 @@ export async function createKeywords(
     formData.append("files", file);
   }
 
-  const res = await fetch(endpoints.intello.keywordsCreate(), {
+  const res = await fetch(endpoints.intello.keywords(), {
     method: "POST",
     credentials: "include",
     body: formData,
@@ -701,7 +701,7 @@ export async function createKeywords(
 
 // == Get All User Keyword Sets ==
 export async function getAllKeywordSets(): Promise<KeywordSetData[]> {
-  const res = await fetch(endpoints.intello.keywordsList(), {
+  const res = await fetch(endpoints.intello.keywords(), {
     method: "GET",
     credentials: "include",
   });
@@ -784,7 +784,7 @@ export async function createOrderPhrase(
     formData.append("files", file);
   }
 
-  const res = await fetch(endpoints.intello.orderPhraseCreate(), {
+  const res = await fetch(endpoints.intello.orderPhrases(), {
     method: "POST",
     credentials: "include",
     body: formData,
@@ -800,7 +800,7 @@ export async function createOrderPhrase(
 
 // == Get All User Order Phrase Sets ==
 export async function getAllOrderPhraseSets(): Promise<OrderPhraseSetData[]> {
-  const res = await fetch(endpoints.intello.orderPhraseList(), {
+  const res = await fetch(endpoints.intello.orderPhrases(), {
     method: "GET",
     credentials: "include",
   });
@@ -811,5 +811,104 @@ export async function getAllOrderPhraseSets(): Promise<OrderPhraseSetData[]> {
   }
 
   const data: OrderPhraseSetListResponse = await res.json();
+  return data.sets;
+}
+
+// == Fill Blank Types ==
+export interface FillBlankOptionData {
+  id: string;
+  text: string;
+  is_correct: boolean;
+}
+
+export interface FillBlankQuestionData {
+  id: string;
+  phrase: string;
+  options: FillBlankOptionData[];
+  explanation: string;
+}
+
+export interface FillBlankSetData {
+  id: string;
+  user_id?: string;
+  name: string;
+  description: string;
+  level: string;
+  language: string;
+  subjects: string[];
+  questions: FillBlankQuestionData[];
+}
+
+export interface FillBlankSetListResponse {
+  sets: FillBlankSetData[];
+  count: number;
+}
+
+// == Create Fill Blank Input/Response ==
+export interface CreateFillBlankInput {
+  name: string;
+  description: string;
+  instructions: string;
+  language: string;
+  level: string;
+  subjects: string[];
+  num_questions: number;
+  model?: string;
+}
+
+export interface CreateFillBlankResponse {
+  success: boolean;
+  message: string;
+  id: string;
+  total_token_count: number;
+  documents_processed: number;
+  questions: FillBlankQuestionData[];
+}
+
+// == Create Fill Blank ==
+/**
+ * Create fill blank questions from uploaded documents.
+ * Sends multipart form data with JSON metadata and file uploads.
+ */
+export async function createFillBlank(
+  input: CreateFillBlankInput,
+  files: File[]
+): Promise<CreateFillBlankResponse> {
+  validateSubjects(input.subjects);
+
+  const formData = new FormData();
+  formData.append("metadata", JSON.stringify(input));
+
+  for (const file of files) {
+    formData.append("files", file);
+  }
+
+  const res = await fetch(endpoints.intello.fillBlanks(), {
+    method: "POST",
+    credentials: "include",
+    body: formData,
+  });
+
+  if (!res.ok) {
+    const errorBody = await res.json().catch(() => null);
+    throw new Error(extractErrorMessage(errorBody, `Failed to create fill blank questions (${res.status})`));
+  }
+
+  return await res.json();
+}
+
+// == Get All User Fill Blank Sets ==
+export async function getAllFillBlankSets(): Promise<FillBlankSetData[]> {
+  const res = await fetch(endpoints.intello.fillBlanks(), {
+    method: "GET",
+    credentials: "include",
+  });
+
+  if (!res.ok) {
+    const errorBody = await res.json().catch(() => null);
+    throw new Error(extractErrorMessage(errorBody, `Failed to fetch fill blank sets (${res.status})`));
+  }
+
+  const data: FillBlankSetListResponse = await res.json();
   return data.sets;
 }

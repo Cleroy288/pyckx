@@ -19,6 +19,7 @@ dependencies = [
  "futures-util",
  "pdf-extract",
  "proptest",
+ "regex",
  "reqwest",
  "serde",
  "serde_json",

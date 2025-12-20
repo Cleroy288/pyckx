@@ -2,11 +2,12 @@
 
 use crate::domain::intello::FlashcardSet;
 use crate::error::IntelloError;
-use crate::infrastructure::repository::FlashcardRepository;
+use crate::infrastructure::repository::GameSetRepository;
 use async_trait::async_trait;
 use std::fs;
 use std::path::PathBuf;
 use tracing::info;
+
 
 /// JSON file-based implementation of FlashcardRepository
 #[derive(Debug)]
@@ -54,7 +55,7 @@ impl JsonFlashcardRepository {
 }
 
 #[async_trait]
-impl FlashcardRepository for JsonFlashcardRepository {
+impl GameSetRepository<FlashcardSet> for JsonFlashcardRepository {
     async fn insert(&self, set: &FlashcardSet) -> Result<FlashcardSet, IntelloError> {
         let mut sets = self.load_all()?;
         sets.push(set.clone());

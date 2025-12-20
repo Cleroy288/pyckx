@@ -7,14 +7,15 @@ use crate::api::dto::intello::{
 };
 use crate::app::App;
 use crate::error::{AppError, AppResult};
-use crate::services::{validate_model, GenerateContentInput};
 use crate::shared::session::get_user_id_from_session;
+use crate::use_cases::intello::{GenerateTrueFalseInput, GenerateTrueFalseUseCase};
 use actix_multipart::Multipart;
 use actix_web::{get, post, web, HttpRequest, HttpResponse};
-use tracing::{info, instrument};
+use std::sync::Arc;
+use tracing::instrument;
 
-/// POST /app/intello/true-false/create - Generate AI true/false statements
-#[post("/true-false/create")]
+/// POST /api/intello/true-false - Generate AI true/false statements
+#[post("/true-false")]
 #[instrument(skip(app, req, payload))]
 pub async fn create_true_false_handler(
     app: web::Data<App>,
@@ -26,29 +27,12 @@ pub async fn create_true_false_handler(
     // Parse multipart form data
     let (metadata, documents) = parse_multipart::<CreateTrueOrFalseRequest>(payload).await?;
 
-    // Validate metadata
+    // Parse level (DTO validation)
     let level = metadata.parse_level().map_err(|e| AppError::validation("level", e))?;
-    metadata.validate_subjects().map_err(|e| AppError::validation("subjects", e))?;
-    metadata.validate_num_questions().map_err(|e| AppError::validation("num_questions", e))?;
-    
-    // Validate model if provided
-    if let Some(ref model) = metadata.model {
-        validate_model(model).map_err(|e| AppError::validation("model", e))?;
-    }
 
-    let total_token_count: u32 = documents.iter().map(|(_, _, t)| t).sum();
-
-    info!(
-        name = %metadata.name,
-        num_statements = metadata.num_questions,
-        model = ?metadata.model,
-        documents = documents.len(),
-        total_tokens = total_token_count,
-        "Generating AI true/false statements"
-    );
-
-    // Build input for service
-    let input = GenerateContentInput {
+    // Build use case input
+    let input = GenerateTrueFalseInput {
+        user_id,
         name: metadata.name,
         description: metadata.description,
         instructions: metadata.instructions,
@@ -56,30 +40,31 @@ pub async fn create_true_false_handler(
         level,
         subjects: metadata.subjects,
         num_questions: metadata.num_questions,
-        documents: documents.clone(),
+        documents,
         model: metadata.model,
     };
 
-    // Delegate to service
-    let true_false_set = app.intello_service.generate_ai_true_false(&user_id, input).await?;
+    // Execute use case
+    let use_case = GenerateTrueFalseUseCase::new(Arc::clone(&app.intello_service));
+    let output = use_case.execute(input).await?;
 
     // Build response
-    let statement_responses: Vec<TrueOrFalseStatementResponse> = true_false_set.statements.iter()
+    let statement_responses: Vec<TrueOrFalseStatementResponse> = output.game_set.statements.iter()
         .map(TrueOrFalseStatementResponse::from)
         .collect();
 
     Ok(HttpResponse::Created().json(CreateTrueOrFalseResponse {
         success: true,
-        message: format!("True/false set created with {} statements", true_false_set.statements.len()),
-        id: true_false_set.id,
-        total_token_count,
-        documents_processed: documents.len(),
+        message: format!("True/false set created with {} statements", output.game_set.statements.len()),
+        id: output.game_set.id,
+        total_token_count: output.total_token_count,
+        documents_processed: output.documents_processed,
         statements: statement_responses,
     }))
 }
 
-/// GET /app/intello/true-false/list - List user's true/false sets (with statements for playing)
-#[get("/true-false/list")]
+/// GET /api/intello/true-false - List user's true/false sets (with statements for playing)
+#[get("/true-false")]
 #[instrument(skip(app, req))]
 pub async fn list_true_false_sets_handler(
     app: web::Data<App>,
@@ -108,4 +93,3 @@ pub async fn list_true_false_sets_handler(
         sets: set_responses,
     }))
 }
-

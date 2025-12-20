@@ -1,7 +1,83 @@
 "use client"
 
-import { Brain, Play, PenTool, Sparkles, FileText, Layers, CheckCircle2, Tags, ListOrdered } from "lucide-react"
+import { Brain, Play, PenTool, Sparkles, FileText, Layers, CheckCircle2, Tags, ListOrdered, TextCursor, Plus, Gamepad2 } from "lucide-react"
 import { useIntello } from "../context"
+
+// Compact card component for consistent styling
+interface GameCardProps {
+	title: string
+	description: string
+	icon: React.ReactNode
+	onClick: () => void
+	variant: "create-manual" | "create-ai" | "play"
+	actionLabel: string
+}
+
+function GameCard({ title, description, icon, onClick, variant, actionLabel }: GameCardProps) {
+	const variantStyles = {
+		"create-manual": {
+			border: "border-accent/30 hover:border-accent/50",
+			bg: "bg-accent/10 hover:bg-accent/20",
+			iconBg: "bg-accent/20 border-accent/30",
+			actionColor: "text-accent",
+		},
+		"create-ai": {
+			border: "border-primary/30 hover:border-primary/50",
+			bg: "bg-primary/10 hover:bg-primary/20",
+			iconBg: "bg-primary/20 border-primary/30",
+			actionColor: "text-primary",
+		},
+		"play": {
+			border: "border-accent/30 hover:border-accent/50",
+			bg: "bg-accent/10 hover:bg-accent/20",
+			iconBg: "bg-accent/20 border-accent/30",
+			actionColor: "text-accent",
+		},
+	}
+
+	const styles = variantStyles[variant]
+
+	return (
+		<button
+			onClick={onClick}
+			className={`group rounded-lg border ${styles.border} ${styles.bg} p-3 backdrop-blur-sm transition-all hover:scale-[1.02] text-left cursor-pointer w-full`}
+		>
+			<div className="flex items-center gap-2.5">
+				<div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-md ${styles.iconBg} border`}>
+					{icon}
+				</div>
+				<div className="min-w-0 flex-1">
+					<h3 className="font-medium text-sm text-foreground truncate">{title}</h3>
+					<p className="text-xs text-muted-foreground truncate">{description}</p>
+				</div>
+			</div>
+			<div className={`flex items-center gap-1.5 mt-2 ${styles.actionColor}`}>
+				{variant === "create-ai" ? <Sparkles className="h-3 w-3" /> : variant === "create-manual" ? <PenTool className="h-3 w-3" /> : <Play className="h-3 w-3" />}
+				<span className="text-xs font-medium">{actionLabel}</span>
+			</div>
+		</button>
+	)
+}
+
+// Section header component
+interface SectionHeaderProps {
+	icon: React.ReactNode
+	title: string
+	subtitle?: string
+	iconColor: string
+}
+
+function SectionHeader({ icon, title, subtitle, iconColor }: SectionHeaderProps) {
+	return (
+		<div className="flex items-center gap-2 mb-3">
+			<div className={iconColor}>{icon}</div>
+			<div>
+				<h2 className="text-base font-semibold text-foreground leading-tight">{title}</h2>
+				{subtitle && <p className="text-xs text-muted-foreground">{subtitle}</p>}
+			</div>
+		</div>
+	)
+}
 
 export function HomeView() {
 	const {
@@ -11,272 +87,94 @@ export function HomeView() {
 		handlePlayFlashcard,
 		handlePlayTrueOrFalse,
 		handlePlayKeywords,
-		handlePlayOrderPhrase
+		handlePlayOrderPhrase,
+		handlePlayFillBlank
 	} = useIntello()
 
+	// Create game types data
+	const createGames = [
+		{ id: "manual-qcm", title: "Manual QCM", description: "Create questions manually", icon: <Brain className="h-4 w-4 text-accent" />, onClick: () => setView("create-qcm"), variant: "create-manual" as const, actionLabel: "Create" },
+		{ id: "ai-qcm", title: "AI QCM", description: "Generate from documents", icon: <Sparkles className="h-4 w-4 text-primary" />, onClick: () => setView("create-ai-qcm"), variant: "create-ai" as const, actionLabel: "Generate" },
+		{ id: "ai-open", title: "AI Open Questions", description: "AI-graded answers", icon: <Sparkles className="h-4 w-4 text-primary" />, onClick: () => setView("create-ai-open"), variant: "create-ai" as const, actionLabel: "Generate" },
+		{ id: "ai-flashcard", title: "AI Flashcards", description: "Study cards", icon: <Sparkles className="h-4 w-4 text-primary" />, onClick: () => setView("create-ai-flashcard"), variant: "create-ai" as const, actionLabel: "Generate" },
+		{ id: "ai-true-false", title: "AI True or False", description: "Statement verification", icon: <Sparkles className="h-4 w-4 text-primary" />, onClick: () => setView("create-ai-true-false"), variant: "create-ai" as const, actionLabel: "Generate" },
+		{ id: "ai-keywords", title: "AI Keywords", description: "Keyword recognition", icon: <Sparkles className="h-4 w-4 text-primary" />, onClick: () => setView("create-ai-keywords"), variant: "create-ai" as const, actionLabel: "Generate" },
+		{ id: "ai-order-phrase", title: "AI Order Phrase", description: "Word ordering", icon: <Sparkles className="h-4 w-4 text-primary" />, onClick: () => setView("create-ai-order-phrase"), variant: "create-ai" as const, actionLabel: "Generate" },
+		{ id: "ai-fill-blank", title: "AI Fill Blank", description: "Complete phrases", icon: <Sparkles className="h-4 w-4 text-primary" />, onClick: () => setView("create-ai-fill-blank"), variant: "create-ai" as const, actionLabel: "Generate" },
+	]
+
+	// Play game types data
+	const playGames = [
+		{ id: "play-qcm", title: "QCM Sets", description: "Multiple choice quizzes", icon: <Brain className="h-4 w-4 text-accent" />, onClick: handlePlayQcm, actionLabel: "Play" },
+		{ id: "play-open", title: "Open Questions", description: "Written answers", icon: <FileText className="h-4 w-4 text-accent" />, onClick: handlePlayOpen, actionLabel: "Play" },
+		{ id: "play-flashcard", title: "Flashcards", description: "Study cards", icon: <Layers className="h-4 w-4 text-accent" />, onClick: handlePlayFlashcard, actionLabel: "Study" },
+		{ id: "play-true-false", title: "True or False", description: "Statement games", icon: <CheckCircle2 className="h-4 w-4 text-accent" />, onClick: handlePlayTrueOrFalse, actionLabel: "Play" },
+		{ id: "play-keywords", title: "Keywords", description: "Keyword recognition", icon: <Tags className="h-4 w-4 text-accent" />, onClick: handlePlayKeywords, actionLabel: "Play" },
+		{ id: "play-order-phrase", title: "Order Phrase", description: "Arrange words", icon: <ListOrdered className="h-4 w-4 text-accent" />, onClick: handlePlayOrderPhrase, actionLabel: "Play" },
+		{ id: "play-fill-blank", title: "Fill Blank", description: "Complete phrases", icon: <TextCursor className="h-4 w-4 text-accent" />, onClick: handlePlayFillBlank, actionLabel: "Play" },
+	]
+
 	return (
-		<div className="space-y-8">
+		<div className="space-y-6">
 			{/* Header */}
 			<div className="flex items-center gap-3">
-				<div className="flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10 border border-accent/20">
-					<Brain className="h-6 w-6 text-accent" />
+				<div className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent/10 border border-accent/20">
+					<Brain className="h-5 w-5 text-accent" />
 				</div>
 				<div>
-					<h1 className="text-2xl font-bold tracking-tight text-foreground">Intello</h1>
-					<p className="text-sm text-muted-foreground">Create quizzes or play existing ones</p>
+					<h1 className="text-xl font-bold tracking-tight text-foreground">Intello</h1>
+					<p className="text-xs text-muted-foreground">Create quizzes or play existing ones</p>
 				</div>
 			</div>
 
-			{/* CREATE SECTION */}
-			<section className="space-y-4">
-				<div className="flex items-center gap-2">
-					<PenTool className="h-5 w-5 text-primary" />
-					<h2 className="text-lg font-semibold text-foreground">Create</h2>
-				</div>
-				<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-					{/* Manual QCM */}
-					<button
-						onClick={() => setView("create-qcm")}
-						className="group rounded-xl border border-accent/30 bg-accent/10 p-6 backdrop-blur-sm transition-all hover:border-accent/50 hover:bg-accent/20 hover:scale-[1.02] text-left cursor-pointer"
-					>
-						<div className="flex items-center gap-3 mb-3">
-							<div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent/20 border border-accent/30">
-								<Brain className="h-5 w-5 text-accent" />
-							</div>
-							<h3 className="font-semibold text-lg text-foreground">Manual QCM</h3>
-						</div>
-						<p className="text-sm text-muted-foreground mb-4">Create multiple choice questions manually</p>
-						<div className="flex items-center gap-2 text-accent">
-							<PenTool className="h-4 w-4" />
-							<span className="text-sm font-medium">Create</span>
-						</div>
-					</button>
+			{/* Two Column Layout for Create & Play */}
+			<div className="grid gap-6 lg:grid-cols-2">
+				{/* CREATE SECTION */}
+				<section className="rounded-xl border border-border/50 bg-card/30 backdrop-blur-sm p-4">
+					<SectionHeader
+						icon={<Plus className="h-4 w-4" />}
+						title="Create"
+						subtitle="Generate new learning content"
+						iconColor="text-primary"
+					/>
+					<div className="grid gap-2 sm:grid-cols-2">
+						{createGames.map((game) => (
+							<GameCard
+								key={game.id}
+								title={game.title}
+								description={game.description}
+								icon={game.icon}
+								onClick={game.onClick}
+								variant={game.variant}
+								actionLabel={game.actionLabel}
+							/>
+						))}
+					</div>
+				</section>
 
-					{/* AI QCM */}
-					<button
-						onClick={() => setView("create-ai-qcm")}
-						className="group rounded-xl border border-primary/30 bg-primary/10 p-6 backdrop-blur-sm transition-all hover:border-primary/50 hover:bg-primary/20 hover:scale-[1.02] text-left cursor-pointer"
-					>
-						<div className="flex items-center gap-3 mb-3">
-							<div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/20 border border-primary/30">
-								<Sparkles className="h-5 w-5 text-primary" />
-							</div>
-							<h3 className="font-semibold text-lg text-foreground">AI QCM</h3>
-						</div>
-						<p className="text-sm text-muted-foreground mb-4">Generate QCM from your documents using AI</p>
-						<div className="flex items-center gap-2 text-primary">
-							<Sparkles className="h-4 w-4" />
-							<span className="text-sm font-medium">Generate</span>
-						</div>
-					</button>
-
-					{/* AI Open Questions */}
-					<button
-						onClick={() => setView("create-ai-open")}
-						className="group rounded-xl border border-primary/30 bg-primary/10 p-6 backdrop-blur-sm transition-all hover:border-primary/50 hover:bg-primary/20 hover:scale-[1.02] text-left cursor-pointer"
-					>
-						<div className="flex items-center gap-3 mb-3">
-							<div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/20 border border-primary/30">
-								<Sparkles className="h-5 w-5 text-primary" />
-							</div>
-							<h3 className="font-semibold text-lg text-foreground">AI Open Questions</h3>
-						</div>
-						<p className="text-sm text-muted-foreground mb-4">Generate open-ended questions using AI</p>
-						<div className="flex items-center gap-2 text-primary">
-							<Sparkles className="h-4 w-4" />
-							<span className="text-sm font-medium">Generate</span>
-						</div>
-					</button>
-
-					{/* AI Flashcards */}
-					<button
-						onClick={() => setView("create-ai-flashcard")}
-						className="group rounded-xl border border-primary/30 bg-primary/10 p-6 backdrop-blur-sm transition-all hover:border-primary/50 hover:bg-primary/20 hover:scale-[1.02] text-left cursor-pointer"
-					>
-						<div className="flex items-center gap-3 mb-3">
-							<div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/20 border border-primary/30">
-								<Sparkles className="h-5 w-5 text-primary" />
-							</div>
-							<h3 className="font-semibold text-lg text-foreground">AI Flashcards</h3>
-						</div>
-						<p className="text-sm text-muted-foreground mb-4">Generate flashcards for memorization using AI</p>
-						<div className="flex items-center gap-2 text-primary">
-							<Sparkles className="h-4 w-4" />
-							<span className="text-sm font-medium">Generate</span>
-						</div>
-					</button>
-
-					<button
-						onClick={() => setView("create-ai-true-false")}
-						className="group rounded-xl border border-primary/30 bg-primary/10 p-6 backdrop-blur-sm transition-all hover:border-primary/50 hover:bg-primary/20 hover:scale-[1.02] text-left cursor-pointer"
-					>
-						<div className="flex items-center gap-3 mb-3">
-							<div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/20 border border-primary/30">
-								<Sparkles className="h-5 w-5 text-primary" />
-							</div>
-							<h3 className="font-semibold text-lg text-foreground">AI True or False</h3>
-						</div>
-						<p className="text-sm text-muted-foreground mb-4">Generate true/false statements using AI</p>
-						<div className="flex items-center gap-2 text-primary">
-							<Sparkles className="h-4 w-4" />
-							<span className="text-sm font-medium">Generate</span>
-						</div>
-					</button>
-
-					{/* AI Keywords */}
-					<button
-						onClick={() => setView("create-ai-keywords")}
-						className="group rounded-xl border border-primary/30 bg-primary/10 p-6 backdrop-blur-sm transition-all hover:border-primary/50 hover:bg-primary/20 hover:scale-[1.02] text-left cursor-pointer"
-					>
-						<div className="flex items-center gap-3 mb-3">
-							<div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/20 border border-primary/30">
-								<Sparkles className="h-5 w-5 text-primary" />
-							</div>
-							<h3 className="font-semibold text-lg text-foreground">AI Keywords</h3>
-						</div>
-						<p className="text-sm text-muted-foreground mb-4">Generate keyword recognition exercises using AI</p>
-						<div className="flex items-center gap-2 text-primary">
-							<Sparkles className="h-4 w-4" />
-							<span className="text-sm font-medium">Generate</span>
-						</div>
-					</button>
-
-					{/* AI Order Phrase */}
-					<button
-						onClick={() => setView("create-ai-order-phrase")}
-						className="group rounded-xl border border-primary/30 bg-primary/10 p-6 backdrop-blur-sm transition-all hover:border-primary/50 hover:bg-primary/20 hover:scale-[1.02] text-left cursor-pointer"
-					>
-						<div className="flex items-center gap-3 mb-3">
-							<div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/20 border border-primary/30">
-								<Sparkles className="h-5 w-5 text-primary" />
-							</div>
-							<h3 className="font-semibold text-lg text-foreground">AI Order Phrase</h3>
-						</div>
-						<p className="text-sm text-muted-foreground mb-4">Generate phrase ordering exercises using AI</p>
-						<div className="flex items-center gap-2 text-primary">
-							<Sparkles className="h-4 w-4" />
-							<span className="text-sm font-medium">Generate</span>
-						</div>
-					</button>
-				</div>
-			</section>
-
-			{/* PLAY SECTION */}
-			<section className="space-y-4">
-				<div className="flex items-center gap-2">
-					<Play className="h-5 w-5 text-accent" />
-					<h2 className="text-lg font-semibold text-foreground">Play</h2>
-				</div>
-				<div className="grid gap-4 sm:grid-cols-2">
-					{/* Play QCM */}
-					<button
-						onClick={handlePlayQcm}
-						className="group rounded-xl border border-accent/30 bg-accent/10 p-6 backdrop-blur-sm transition-all hover:border-accent/50 hover:bg-accent/20 hover:scale-[1.02] text-left cursor-pointer"
-					>
-						<div className="flex items-center gap-3 mb-3">
-							<div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent/20 border border-accent/30">
-								<Brain className="h-5 w-5 text-accent" />
-							</div>
-							<h3 className="font-semibold text-lg text-foreground">QCM Sets</h3>
-						</div>
-						<p className="text-sm text-muted-foreground mb-4">Play your multiple choice quizzes</p>
-						<div className="flex items-center gap-2 text-accent">
-							<Play className="h-4 w-4" />
-							<span className="text-sm font-medium">Browse & Play</span>
-						</div>
-					</button>
-
-					{/* Play Open Questions */}
-					<button
-						onClick={handlePlayOpen}
-						className="group rounded-xl border border-accent/30 bg-accent/10 p-6 backdrop-blur-sm transition-all hover:border-accent/50 hover:bg-accent/20 hover:scale-[1.02] text-left cursor-pointer"
-					>
-						<div className="flex items-center gap-3 mb-3">
-							<div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent/20 border border-accent/30">
-								<FileText className="h-5 w-5 text-accent" />
-							</div>
-							<h3 className="font-semibold text-lg text-foreground">Open Question Sets</h3>
-						</div>
-						<p className="text-sm text-muted-foreground mb-4">Play your open-ended question sets</p>
-						<div className="flex items-center gap-2 text-accent">
-							<Play className="h-4 w-4" />
-							<span className="text-sm font-medium">Browse & Play</span>
-						</div>
-					</button>
-
-					{/* Play Flashcards */}
-					<button
-						onClick={handlePlayFlashcard}
-						className="group rounded-xl border border-accent/30 bg-accent/10 p-6 backdrop-blur-sm transition-all hover:border-accent/50 hover:bg-accent/20 hover:scale-[1.02] text-left cursor-pointer"
-					>
-						<div className="flex items-center gap-3 mb-3">
-							<div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent/20 border border-accent/30">
-								<Layers className="h-5 w-5 text-accent" />
-							</div>
-							<h3 className="font-semibold text-lg text-foreground">Flashcard Sets</h3>
-						</div>
-						<p className="text-sm text-muted-foreground mb-4">Study your flashcard sets</p>
-						<div className="flex items-center gap-2 text-accent">
-							<Play className="h-4 w-4" />
-							<span className="text-sm font-medium">Browse & Study</span>
-						</div>
-					</button>
-
-					{/* Play True or False */}
-					<button
-						onClick={handlePlayTrueOrFalse}
-						className="group rounded-xl border border-accent/30 bg-accent/10 p-6 backdrop-blur-sm transition-all hover:border-accent/50 hover:bg-accent/20 hover:scale-[1.02] text-left cursor-pointer"
-					>
-						<div className="flex items-center gap-3 mb-3">
-							<div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent/20 border border-accent/30">
-								<CheckCircle2 className="h-5 w-5 text-accent" />
-							</div>
-							<h3 className="font-semibold text-lg text-foreground">True or False Sets</h3>
-						</div>
-						<p className="text-sm text-muted-foreground mb-4">Play your true/false games</p>
-						<div className="flex items-center gap-2 text-accent">
-							<Play className="h-4 w-4" />
-							<span className="text-sm font-medium">Browse & Play</span>
-						</div>
-					</button>
-
-					{/* Play Keywords */}
-					<button
-						onClick={handlePlayKeywords}
-						className="group rounded-xl border border-accent/30 bg-accent/10 p-6 backdrop-blur-sm transition-all hover:border-accent/50 hover:bg-accent/20 hover:scale-[1.02] text-left cursor-pointer"
-					>
-						<div className="flex items-center gap-3 mb-3">
-							<div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent/20 border border-accent/30">
-								<Tags className="h-5 w-5 text-accent" />
-							</div>
-							<h3 className="font-semibold text-lg text-foreground">Keyword Sets</h3>
-						</div>
-						<p className="text-sm text-muted-foreground mb-4">Practice keyword recognition</p>
-						<div className="flex items-center gap-2 text-accent">
-							<Play className="h-4 w-4" />
-							<span className="text-sm font-medium">Browse & Play</span>
-						</div>
-					</button>
-
-					{/* Play Order Phrase */}
-					<button
-						onClick={handlePlayOrderPhrase}
-						className="group rounded-xl border border-accent/30 bg-accent/10 p-6 backdrop-blur-sm transition-all hover:border-accent/50 hover:bg-accent/20 hover:scale-[1.02] text-left cursor-pointer"
-					>
-						<div className="flex items-center gap-3 mb-3">
-							<div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent/20 border border-accent/30">
-								<ListOrdered className="h-5 w-5 text-accent" />
-							</div>
-							<h3 className="font-semibold text-lg text-foreground">Order Phrase Sets</h3>
-						</div>
-						<p className="text-sm text-muted-foreground mb-4">Arrange words in correct order</p>
-						<div className="flex items-center gap-2 text-accent">
-							<Play className="h-4 w-4" />
-							<span className="text-sm font-medium">Browse & Play</span>
-						</div>
-					</button>
-				</div>
-			</section>
+				{/* PLAY SECTION */}
+				<section className="rounded-xl border border-border/50 bg-card/30 backdrop-blur-sm p-4">
+					<SectionHeader
+						icon={<Gamepad2 className="h-4 w-4" />}
+						title="Play"
+						subtitle="Practice with your saved games"
+						iconColor="text-accent"
+					/>
+					<div className="grid gap-2 sm:grid-cols-2">
+						{playGames.map((game) => (
+							<GameCard
+								key={game.id}
+								title={game.title}
+								description={game.description}
+								icon={game.icon}
+								onClick={game.onClick}
+								variant="play"
+								actionLabel={game.actionLabel}
+							/>
+						))}
+					</div>
+				</section>
+			</div>
 		</div>
 	)
 }

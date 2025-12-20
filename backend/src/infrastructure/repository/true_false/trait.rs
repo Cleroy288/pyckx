@@ -1,14 +1,16 @@
 //! True or False Repository Trait - Abstraction for true/false set persistence
+//!
+//! This trait extends the generic `GameSetRepository` for true/false-specific operations.
 
 use crate::domain::intello::TrueOrFalseSet;
-use crate::error::IntelloError;
-use async_trait::async_trait;
+use super::super::game_set::GameSetRepository;
 
-/// Repository trait for true/false set persistence operations
-#[async_trait]
-pub trait TrueOrFalseRepository: Send + Sync {
-    async fn insert(&self, set: &TrueOrFalseSet) -> Result<TrueOrFalseSet, IntelloError>;
-    async fn find_by_id(&self, set_id: &str, user_id: &str) -> Result<Option<TrueOrFalseSet>, IntelloError>;
-    async fn find_by_user(&self, user_id: &str) -> Result<Vec<TrueOrFalseSet>, IntelloError>;
-    async fn delete(&self, set_id: &str, user_id: &str) -> Result<bool, IntelloError>;
-}
+/// Repository trait for true/false set persistence operations.
+/// 
+/// This is a type alias to `GameSetRepository<TrueOrFalseSet>` for backwards compatibility.
+/// New code should use `GameSetRepository<TrueOrFalseSet>` directly.
+pub trait TrueOrFalseRepository: GameSetRepository<TrueOrFalseSet> {}
+
+/// Blanket implementation: any type implementing GameSetRepository<TrueOrFalseSet>
+/// automatically implements TrueOrFalseRepository.
+impl<T: GameSetRepository<TrueOrFalseSet>> TrueOrFalseRepository for T {}
