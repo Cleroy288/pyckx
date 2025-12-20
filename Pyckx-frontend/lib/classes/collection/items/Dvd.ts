@@ -92,7 +92,7 @@ export class Dvd {
   // == API Methods ==
 
   static async create(input: CreateDvdInput): Promise<Dvd> {
-    const res = await fetch(endpoints.collection.dvds(), {
+    const res = await fetch(endpoints.collection.dvds, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",

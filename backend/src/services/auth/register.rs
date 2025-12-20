@@ -7,6 +7,8 @@ use tracing::{info, instrument};
 
 impl AuthService {
     /// Register a new user with profile data
+    /// NOTE: Registration route is disabled - users are added via Supabase Dashboard
+    #[allow(dead_code)]
     #[instrument(skip(self, password), fields(email = %email, username = %username))]
     pub async fn register(
         &self,

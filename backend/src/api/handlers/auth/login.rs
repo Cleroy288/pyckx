@@ -22,7 +22,7 @@ pub async fn login_handler(
 
     let session_cookie = Cookie::build("session_id", session_id.clone())
         .http_only(true)
-        .secure(app.config.secure_http.parse().unwrap())
+        .secure(app.config.secure_http.to_lowercase() == "true")
         .same_site(SameSite::Lax)
         .path("/")
         .finish();

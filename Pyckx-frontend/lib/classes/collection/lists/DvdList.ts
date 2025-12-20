@@ -104,7 +104,7 @@ export class DvdList {
   // == Static API Methods ==
 
   static async fetchAll(): Promise<DvdList> {
-    const res = await fetch(endpoints.collection.dvds(), {
+    const res = await fetch(endpoints.collection.dvds, {
       method: "GET",
       credentials: "include",
     });

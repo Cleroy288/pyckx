@@ -4,6 +4,10 @@
 
 Pyckx uses session-based authentication with HTTP-only cookies managed by the Rust/Actix-Web backend.
 
+## Access Control
+
+> **Important:** This platform restricts access to pre-authorized users only. If you receive an "User not authorized to access this platform" error (HTTP 403), contact the administrator to be added to the allowed users list.
+
 ## Session Management
 
 ### Cookie
@@ -123,6 +127,10 @@ Backend returns errors in format:
   "field": "email"  // optional
 }
 ```
+
+Common error codes:
+- `INVALID_CREDENTIALS` - Wrong email or password
+- `AUTH_NOT_ALLOWED` - User not in allowed list (HTTP 403)
 
 Frontend extracts and displays the `message` field.
 

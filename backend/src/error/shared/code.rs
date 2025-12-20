@@ -10,6 +10,7 @@ use actix_web::http::StatusCode;
 pub enum ErrorCode {
     // Auth
     InvalidCredentials,
+    NotAllowed,
     // Supabase
     SupabaseHttpError,
     SupabaseNetworkError,
@@ -43,6 +44,7 @@ impl ErrorCode {
     pub fn as_str(&self) -> &'static str {
         match self {
             Self::InvalidCredentials => codes::AUTH_INVALID_CREDENTIALS,
+            Self::NotAllowed => "AUTH_NOT_ALLOWED",
             Self::SupabaseHttpError => codes::SUPABASE_HTTP_ERROR,
             Self::SupabaseNetworkError => codes::SUPABASE_NETWORK_ERROR,
             Self::SupabaseParseError => codes::SUPABASE_PARSE_ERROR,
@@ -74,6 +76,7 @@ impl ErrorCode {
     pub fn message(&self) -> &'static str {
         match self {
             Self::InvalidCredentials => messages::AUTH_INVALID_CREDENTIALS,
+            Self::NotAllowed => "User not authorized to access this platform",
             Self::SupabaseHttpError => messages::SUPABASE_HTTP_ERROR,
             Self::SupabaseNetworkError => messages::SUPABASE_NETWORK_ERROR,
             Self::SupabaseParseError => messages::SUPABASE_PARSE_ERROR,
@@ -105,6 +108,7 @@ impl ErrorCode {
     pub fn status(&self) -> StatusCode {
         match self {
             Self::InvalidCredentials => status::AUTH_INVALID_CREDENTIALS,
+            Self::NotAllowed => StatusCode::FORBIDDEN,
             Self::SupabaseHttpError => status::SUPABASE_HTTP_ERROR,
             Self::SupabaseNetworkError => status::SUPABASE_NETWORK_ERROR,
             Self::SupabaseParseError => status::SUPABASE_PARSE_ERROR,

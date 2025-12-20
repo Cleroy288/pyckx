@@ -13,6 +13,8 @@ pub struct LoginBody<'a> {
     pub password: &'a str,
 }
 
+// Registration is currently disabled but kept for future use
+#[allow(dead_code)]
 #[derive(Serialize)]
 pub struct RegisterBody<'a> {
     pub email: &'a str,
@@ -20,6 +22,7 @@ pub struct RegisterBody<'a> {
     pub data: RegisterMetadata<'a>,
 }
 
+#[allow(dead_code)]
 #[derive(Serialize)]
 pub struct RegisterMetadata<'a> {
     pub username: &'a str,

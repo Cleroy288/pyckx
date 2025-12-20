@@ -47,6 +47,7 @@ impl SupabaseClient {
 
 
     /// Register a new user with profile data
+    #[allow(dead_code)] // Registration route is disabled but kept for future use
     #[instrument(skip(self, password), fields(email = %email, username = %username))]
     pub async fn register(
         &self,

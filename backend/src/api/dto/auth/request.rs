@@ -13,6 +13,8 @@ pub struct LoginRequest {
     pub password: String,
 }
 
+// Registration is currently disabled but kept for future use
+#[allow(dead_code)]
 #[derive(Debug, Deserialize, Validate)]
 pub struct RegisterRequest {
     #[validate(email(message = "Invalid email format"))]

@@ -31,19 +31,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Check auth status on mount
   const refreshAuth = useCallback(async () => {
+    console.log("[AUTH] refreshAuth() called, setting state to 'loading'");
     setAuthState("loading");
     const result = await checkAuthStatus();
+    console.log("[AUTH] checkAuthStatus() result:", result);
 
     if (result.status === "authenticated") {
+      console.log("[AUTH] Setting user:", result.user);
       setUser(result.user);
       setAuthState("authenticated");
+      console.log("[AUTH] State set to 'authenticated'");
     } else {
+      console.log("[AUTH] Setting user to null, state to 'unauthenticated'");
       setUser(null);
       setAuthState("unauthenticated");
     }
   }, []);
 
   useEffect(() => {
+    console.log("[AUTH] useEffect triggered, calling refreshAuth()");
     refreshAuth();
   }, [refreshAuth]);
 

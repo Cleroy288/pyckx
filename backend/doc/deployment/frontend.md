@@ -11,58 +11,49 @@ This document explains how to build the frontend and serve it with the Rust back
 │  │              Rust Backend (Actix-web)               │   │
 │  │  ┌─────────────┐  ┌─────────────┐  ┌────────────┐  │   │
 │  │  │  API Routes │  │Static Files │  │SPA Fallback│  │   │
-│  │  │ /auth/*     │  │ /_next/*    │  │ index.html │  │   │
-│  │  │ /user/*     │  │ /static/*   │  │            │  │   │
-│  │  │ /api/*      │  │             │  │            │  │   │
-│  │  │ /app/*      │  │             │  │            │  │   │
+│  │  │ /api/*      │  │ /_next/*    │  │ index.html │  │   │
 │  │  └─────────────┘  └─────────────┘  └────────────┘  │   │
 │  └─────────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────────────┐
-│                   Development Mode                          │
-│  ┌──────────────────┐      ┌──────────────────────────┐    │
-│  │ Next.js Dev      │      │ Rust Backend             │    │
-│  │ localhost:3000   │─────▶│ localhost:8080           │    │
-│  │ (with proxy)     │      │ (API only)               │    │
-│  └──────────────────┘      └──────────────────────────┘    │
 └─────────────────────────────────────────────────────────────┘
 ```
 
 ## Quick Start
 
-### Development Mode
+### Development Mode (Standard)
 
 Run frontend and backend separately:
 
 ```bash
 # Terminal 1: Backend
-cd backend
-cargo run
+cd backend && cargo run
 
-# Terminal 2: Frontend (with proxy to backend)
-cd Pyckx-frontend
-bun run dev
+# Terminal 2: Frontend (Next.js dev server with proxy)
+cd Pyckx-frontend && npm run dev
 ```
 
-### Production Mode
+### Development Mode (Production Parity) ⭐ Recommended
 
-Build frontend and serve with backend:
+Single command that mirrors production - **backend serves frontend**:
 
 ```bash
-# Step 1: Build frontend for static export
 cd Pyckx-frontend
-BUILD_MODE=export SECURITY_MODE=production bun run build
+npm run dev:prod
+```
 
-# Step 2: Copy output to backend
-cp -r out/* ../backend/static/
+This runs:
+- 🟡 **RUST**: `cargo watch` - auto-recompiles backend on changes
+- 🔵 **NEXT**: Bun file watcher - rebuilds frontend to `backend/static/`
 
-# Step 3: Configure backend for frontend serving
-cd ../backend
-# Edit .env: SERVE_FRONTEND=true
+Access at `http://localhost:8080` (same as production).
 
-# Step 4: Run backend
-cargo run --release
+### Production Deploy (Fly.io)
+
+```bash
+# 1. Build frontend
+cd Pyckx-frontend && npm run build:static
+
+# 2. Deploy backend (includes frontend in static/)
+cd ../backend && fly deploy
 ```
 
 ## Detailed Instructions

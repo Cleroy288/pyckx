@@ -66,7 +66,7 @@ export class TrueOrFalseSet {
 
 	/** Get all true/false sets for the current user */
 	static async getAll(): Promise<TrueOrFalseSet[]> {
-		const res = await fetch(endpoints.intello.trueFalse(), {
+		const res = await fetch(endpoints.intello.trueFalse, {
 			method: "GET",
 			credentials: "include",
 		});

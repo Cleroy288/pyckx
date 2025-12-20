@@ -3,3 +3,6 @@
 /static
 .env
 .
+Dockerfile
+fly.toml
+.dockerignore 

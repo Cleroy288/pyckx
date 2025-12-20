@@ -15,7 +15,7 @@ const buildMode = process.env.BUILD_MODE || "development";
 const nextConfig = {
   // == Output Configuration // ==
   // Set to "export" for static HTML generation (served by Rust backend)
-  // Only enable for production builds: BUILD_MODE=export bun run build
+  // Use: bun run build:static (exports to ./out, then copies to backend/static)
   ...(buildMode === "export" && { output: "export", distDir: "out" }),
 
   // == Body Size Limit // ==
@@ -24,6 +24,12 @@ const nextConfig = {
     serverActions: {
       bodySizeLimit: '100mb',
     },
+  },
+
+  // == Remove console.log in production builds // ==
+  // This strips all console.log statements when building for production
+  compiler: {
+    removeConsole: buildMode === "export",
   },
 
   // == TypeScript Configuration // ==
@@ -81,8 +87,8 @@ const nextConfig = {
           "style-src 'self' 'unsafe-inline'",
           "img-src 'self' data: blob:",
           "font-src 'self' data:",
-          // Allow connections to self and backend (for large file uploads that bypass proxy)
-          `connect-src 'self' ${process.env.NEXT_PUBLIC_BACKEND_DIRECT_URL || "http://localhost:8080"}`,
+          // Allow connections to same origin (backend serves frontend)
+          "connect-src 'self'",
           "frame-ancestors 'self'",
           "form-action 'self'",
           "base-uri 'self'",
@@ -113,25 +119,7 @@ const nextConfig = {
       },
     ];
   },
-
-  // == API Proxy Configuration // ==
-  // Proxy API requests to backend during development
-  async rewrites() {
-    // Only apply rewrites in development
-    const backendUrl = process.env.BACKEND_URL || "http://localhost:8080";
-
-    return {
-      // beforeFiles rewrites are checked before pages/public files
-      // which allows proxying to work even with /app prefix
-      beforeFiles: [
-        // All API routes are now under /api/* prefix
-        {
-          source: "/api/:path*",
-          destination: `${backendUrl}/api/:path*`,
-        },
-      ],
-    };
-  },
 };
 
 export default nextConfig;
+

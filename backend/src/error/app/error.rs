@@ -63,6 +63,9 @@ impl AppError {
             Self::Auth(AuthError::InvalidCredentials) => {
                 warn!(error_code = %self.code().as_str(), "Authentication failed: invalid credentials");
             }
+            Self::Auth(AuthError::NotAllowed) => {
+                warn!(error_code = %self.code().as_str(), "Authentication failed: user not authorized");
+            }
             Self::Auth(AuthError::External(e)) => {
                 error!(error_code = %self.code().as_str(), supabase_error = %e, "External auth service error");
             }

@@ -60,7 +60,7 @@ export function validateSubjects(subjects: string[] | undefined): void {
 
 // == Get All User QCM Sets // ==
 export async function getAllQcmSets(): Promise<QcmSetData[]> {
-  const res = await fetch(endpoints.intello.qcm(), {
+  const res = await fetch(endpoints.intello.qcm, {
     method: "GET",
     credentials: "include",
   });
@@ -79,7 +79,7 @@ export async function addQcmSet(input: CreateQcmSetInput): Promise<QcmSetData> {
   // Validate subjects before sending
   validateSubjects(input.subjects);
 
-  const res = await fetch(endpoints.intello.qcm(), {
+  const res = await fetch(endpoints.intello.qcm, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
@@ -137,7 +137,7 @@ export async function deleteQcmSet(id: string): Promise<void> {
 
 // == Get Available Games // ==
 export async function getAvailableGames(): Promise<GameData[]> {
-  const res = await fetch(endpoints.intello.games(), {
+  const res = await fetch(endpoints.intello.games, {
     method: "GET",
     credentials: "include",
   });
@@ -172,7 +172,7 @@ export interface AvailableModelsResponse {
 
 // == Get Available AI Models ==
 export async function getAvailableModels(): Promise<AvailableModelsResponse> {
-  const res = await fetch(endpoints.intello.models(), {
+  const res = await fetch(endpoints.intello.models, {
     method: "GET",
     credentials: "include",
   });
@@ -253,7 +253,7 @@ export async function createCustomQuestion(
     formData.append("files", file);
   }
 
-  const res = await fetch(endpoints.intello.qcmGenerate(), {
+  const res = await fetch(endpoints.intello.qcmGenerate, {
     method: "POST",
     credentials: "include",
     body: formData,
@@ -368,7 +368,7 @@ export async function createOpenQuestions(
     formData.append("files", file);
   }
 
-  const res = await fetch(endpoints.intello.openQuestions(), {
+  const res = await fetch(endpoints.intello.openQuestions, {
     method: "POST",
     credentials: "include",
     body: formData,
@@ -384,7 +384,7 @@ export async function createOpenQuestions(
 
 // == Get All User Open Question Sets ==
 export async function getAllOpenQuestionSets(): Promise<OpenQuestionSetData[]> {
-  const res = await fetch(endpoints.intello.openQuestions(), {
+  const res = await fetch(endpoints.intello.openQuestions, {
     method: "GET",
     credentials: "include",
   });
@@ -403,7 +403,7 @@ export async function checkOpenQuestionAnswers(
   setId: string,
   answers: UserAnswer[]
 ): Promise<CheckAnswersResponse> {
-  const res = await fetch(endpoints.intello.openQuestionsCheck(), {
+  const res = await fetch(endpoints.intello.openQuestionsCheck, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
@@ -487,7 +487,7 @@ export async function createFlashcards(
     formData.append("files", file);
   }
 
-  const res = await fetch(endpoints.intello.flashcards(), {
+  const res = await fetch(endpoints.intello.flashcards, {
     method: "POST",
     credentials: "include",
     body: formData,
@@ -503,7 +503,7 @@ export async function createFlashcards(
 
 // == Get All User Flashcard Sets ==
 export async function getAllFlashcardSets(): Promise<FlashcardSetData[]> {
-  const res = await fetch(endpoints.intello.flashcards(), {
+  const res = await fetch(endpoints.intello.flashcards, {
     method: "GET",
     credentials: "include",
   });
@@ -586,7 +586,7 @@ export async function createTrueOrFalse(
     formData.append("files", file);
   }
 
-  const res = await fetch(endpoints.intello.trueFalse(), {
+  const res = await fetch(endpoints.intello.trueFalse, {
     method: "POST",
     credentials: "include",
     body: formData,
@@ -602,7 +602,7 @@ export async function createTrueOrFalse(
 
 // == Get All User True or False Sets ==
 export async function getAllTrueOrFalseSets(): Promise<TrueOrFalseSetData[]> {
-  const res = await fetch(endpoints.intello.trueFalse(), {
+  const res = await fetch(endpoints.intello.trueFalse, {
     method: "GET",
     credentials: "include",
   });
@@ -685,7 +685,7 @@ export async function createKeywords(
     formData.append("files", file);
   }
 
-  const res = await fetch(endpoints.intello.keywords(), {
+  const res = await fetch(endpoints.intello.keywords, {
     method: "POST",
     credentials: "include",
     body: formData,
@@ -701,7 +701,7 @@ export async function createKeywords(
 
 // == Get All User Keyword Sets ==
 export async function getAllKeywordSets(): Promise<KeywordSetData[]> {
-  const res = await fetch(endpoints.intello.keywords(), {
+  const res = await fetch(endpoints.intello.keywords, {
     method: "GET",
     credentials: "include",
   });
@@ -784,7 +784,7 @@ export async function createOrderPhrase(
     formData.append("files", file);
   }
 
-  const res = await fetch(endpoints.intello.orderPhrases(), {
+  const res = await fetch(endpoints.intello.orderPhrases, {
     method: "POST",
     credentials: "include",
     body: formData,
@@ -800,7 +800,7 @@ export async function createOrderPhrase(
 
 // == Get All User Order Phrase Sets ==
 export async function getAllOrderPhraseSets(): Promise<OrderPhraseSetData[]> {
-  const res = await fetch(endpoints.intello.orderPhrases(), {
+  const res = await fetch(endpoints.intello.orderPhrases, {
     method: "GET",
     credentials: "include",
   });
@@ -883,7 +883,7 @@ export async function createFillBlank(
     formData.append("files", file);
   }
 
-  const res = await fetch(endpoints.intello.fillBlanks(), {
+  const res = await fetch(endpoints.intello.fillBlanks, {
     method: "POST",
     credentials: "include",
     body: formData,
@@ -899,7 +899,7 @@ export async function createFillBlank(
 
 // == Get All User Fill Blank Sets ==
 export async function getAllFillBlankSets(): Promise<FillBlankSetData[]> {
-  const res = await fetch(endpoints.intello.fillBlanks(), {
+  const res = await fetch(endpoints.intello.fillBlanks, {
     method: "GET",
     credentials: "include",
   });

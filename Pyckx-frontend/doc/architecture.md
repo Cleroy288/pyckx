@@ -110,19 +110,22 @@ All colors use CSS variables that update dynamically:
 
 - Session-based auth with HTTP-only cookies
 - Cookie name: `session_id`
-- Backend: Rust/Actix-Web at `/auth/*` endpoints
+- Backend: Rust/Actix-Web at `/api/auth/*` endpoints
 - `AuthGuard` component protects routes
 - `AuthProvider` manages auth state globally
 
 ## API Layer
 
 ### Endpoints (lib/api/config.ts)
+
+All endpoints use the `/api/{service}/{feature}` pattern:
+
 ```typescript
-endpoints.auth.login()      // POST /auth/login
-endpoints.auth.register()   // POST /auth/register
-endpoints.auth.logout()     // POST /auth/logout
-endpoints.user.me()         // GET /user/me
-endpoints.collection.*      // /app/collection/*
+endpoints.auth.login()       // POST /api/auth/login
+endpoints.auth.logout()      // POST /api/auth/logout
+endpoints.user.me()          // GET  /api/user/me
+endpoints.collection.dvds()  // GET/POST /api/collection/dvds
+endpoints.intello.*          // /api/intello/*
 ```
 
 ### Error Handling
@@ -132,8 +135,10 @@ Frontend extracts and displays user-friendly messages.
 ## Commands
 
 ```bash
-bun install          # Install dependencies
-bun run dev          # Start dev server
-bun run build        # Production build
-bun run lint         # Run ESLint
+bun install              # Install dependencies
+npm run dev              # Standard dev server (Next.js at :3000, backend at :8080)
+npm run dev:prod         # Production-parity dev (backend serves frontend at :8080)
+npm run build:static     # Build for production (exports to backend/static/)
+bun run lint             # Run ESLint
 ```
+

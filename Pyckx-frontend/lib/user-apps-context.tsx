@@ -52,25 +52,32 @@ export function UserAppsProvider({ children }: { children: ReactNode }) {
   const router = useRouter()
   const pathname = usePathname()
   const [isPending, startTransition] = useTransition()
-  
+
   const [userAppIds, setUserAppIds] = useState<string[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  
+
   // Derive currentPage from the actual URL pathname
   const currentPage = useMemo<Page>(() => {
-    // Check if we're on an app page (e.g., /collection, /intello)
-    const appId = pathname?.replace("/", "") || ""
+    console.log("[USER-APPS] Calculating currentPage from pathname:", pathname)
+    // Check if we're on an app page (e.g., /collection, /intello, /collection/, /intello/)
+    // Strip both leading and trailing slashes to handle trailingSlash: true in Next.js export
+    const appId = pathname?.replace(/^\/|\/$/g, "") || ""
+    console.log("[USER-APPS] Extracted appId:", appId)
     const app = availableApps.find(a => a.id === appId)
     if (app) {
+      console.log("[USER-APPS] Found matching app:", app.id, "-> returning { type: 'app', appId:", app.id, "}")
       return { type: "app", appId: app.id }
     }
+    console.log("[USER-APPS] No matching app found -> returning { type: 'dashboard' }")
     return { type: "dashboard" }
   }, [pathname])
 
   // == Fetch user apps from backend // ==
   const refreshApps = useCallback(async () => {
+    console.log("[USER-APPS] refreshApps() called, isAuthenticated:", isAuthenticated)
     if (!isAuthenticated) {
+      console.log("[USER-APPS] Not authenticated, clearing userAppIds")
       setUserAppIds([])
       return
     }
@@ -80,13 +87,15 @@ export function UserAppsProvider({ children }: { children: ReactNode }) {
 
     try {
       const apps = await getUserApps()
+      console.log("[USER-APPS] getUserApps() returned:", apps)
       // Map backend app names to frontend app IDs
       const ids = apps
         .map(app => backendNameToFrontendId(app.name))
         .filter((id): id is string => id !== undefined)
+      console.log("[USER-APPS] Mapped to IDs:", ids)
       setUserAppIds(ids)
     } catch (err) {
-      console.error("Failed to fetch user apps:", err)
+      console.error("[USER-APPS] Failed to fetch user apps:", err)
       setError(err instanceof Error ? err.message : "Failed to load apps")
     } finally {
       setLoading(false)
@@ -95,7 +104,9 @@ export function UserAppsProvider({ children }: { children: ReactNode }) {
 
   // == Load apps on auth change // ==
   useEffect(() => {
+    console.log("[USER-APPS] useEffect triggered, authLoading:", authLoading, "isAuthenticated:", isAuthenticated)
     if (!authLoading) {
+      console.log("[USER-APPS] Auth not loading, calling refreshApps()")
       refreshApps()
     }
   }, [authLoading, isAuthenticated, refreshApps])

@@ -20,7 +20,7 @@ function extractErrorMessage(errorBody: unknown, fallback: string): string {
 
 // == Get User Apps // ==
 export async function getUserApps(): Promise<AppData[]> {
-  const res = await fetch(endpoints.apps.userApps(), {
+  const res = await fetch(endpoints.apps.userApps, {
     method: "GET",
     credentials: "include",
   });
@@ -36,7 +36,7 @@ export async function getUserApps(): Promise<AppData[]> {
 
 // == Add User App // ==
 export async function addUserApp(appName: string): Promise<UserAppSuccessResponse> {
-  const res = await fetch(endpoints.apps.userApps(), {
+  const res = await fetch(endpoints.apps.userApps, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include",
@@ -53,7 +53,7 @@ export async function addUserApp(appName: string): Promise<UserAppSuccessRespons
 
 // == Remove User App // ==
 export async function removeUserApp(appName: string): Promise<void> {
-  const res = await fetch(`${endpoints.apps.userApps()}/${encodeURIComponent(appName)}`, {
+  const res = await fetch(`${endpoints.apps.userApps}/${encodeURIComponent(appName)}`, {
     method: "DELETE",
     credentials: "include",
   });
@@ -66,7 +66,7 @@ export async function removeUserApp(appName: string): Promise<void> {
 
 // == Get All Available Apps // ==
 export async function getAllApps(): Promise<AppData[]> {
-  const res = await fetch(endpoints.apps.list(), {
+  const res = await fetch(endpoints.apps.list, {
     method: "GET",
     credentials: "include",
   });
