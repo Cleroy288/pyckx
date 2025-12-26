@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"constant":["MAX_SUBJECTS","MAX_SUBJECT_LENGTH","VALID_NUM_QUESTIONS"],"fn":["default_language","default_num_questions","parse_level","validate_num_questions","validate_subjects"]};

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["QcmQuestionResponse","QcmSetListResponse","QcmSetResponse","QcmSuccessResponse"]};

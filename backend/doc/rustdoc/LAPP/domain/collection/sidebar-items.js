@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["dvd","item","user_collection"]};

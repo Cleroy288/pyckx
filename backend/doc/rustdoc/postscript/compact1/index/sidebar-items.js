@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["CharStrings","Dictionaries","Index","Names","Strings","Subroutines"]};

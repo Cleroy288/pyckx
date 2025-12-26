@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["collection_ops","dvd_ops","types"]};

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["DocumentType"],"struct":["CustomQuestion","CustomQuestionDocument"]};

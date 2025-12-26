@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["extract_client_key"],"struct":["RateLimitMiddleware","RateLimitMiddlewareService"]};

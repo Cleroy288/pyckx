@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["CharSet"],"struct":["CharSet0","CharSet1","Range1"]};

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["CreateTrueOrFalseResponse","TrueOrFalseSetListResponse","TrueOrFalseSetWithStatementsResponse","TrueOrFalseStatementResponse"]};

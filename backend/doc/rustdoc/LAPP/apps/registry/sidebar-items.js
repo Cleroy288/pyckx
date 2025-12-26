@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"constant":["AVAILABLE_APPS"],"fn":["is_valid_app"]};

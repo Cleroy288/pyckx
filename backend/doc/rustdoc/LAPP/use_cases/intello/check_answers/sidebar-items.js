@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["CheckAnswersOutput","CheckAnswersUseCaseInput","CheckOpenQuestionAnswersUseCase","GradingResultOutput","UserAnswerInput"]};

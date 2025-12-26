@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["create_true_false_handler","list_true_false_sets_handler"]};

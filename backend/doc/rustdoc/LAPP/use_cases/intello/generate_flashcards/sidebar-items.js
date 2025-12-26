@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["GenerateFlashcardsUseCase"],"type":["GenerateFlashcardsOutput"]};

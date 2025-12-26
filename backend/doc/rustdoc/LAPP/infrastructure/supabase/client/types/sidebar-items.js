@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["LoginBody","RegisterBody","RegisterMetadata","SupabaseAuthResponse","SupabaseUserRaw"]};

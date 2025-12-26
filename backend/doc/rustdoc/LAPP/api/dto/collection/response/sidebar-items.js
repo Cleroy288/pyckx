@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["CollectionItemsResponse","CollectionListResponse","CollectionResponse","CollectionSuccessResponse","DeleteResponse","DvdListResponse","DvdResponse","DvdSuccessResponse"]};

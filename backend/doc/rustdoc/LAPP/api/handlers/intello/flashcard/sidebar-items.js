@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["list_flashcards_handler"]};

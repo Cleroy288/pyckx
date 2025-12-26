@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["create_order_phrase_handler","list_order_phrase_sets_handler"]};

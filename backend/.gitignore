@@ -6,3 +6,5 @@
 Dockerfile
 fly.toml
 .dockerignore 
+# Exclude generated Rust documentation
+doc/rustdoc/

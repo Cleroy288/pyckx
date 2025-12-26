@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["constants","document_extractor","open_question_cache","prompt_builder","session"]};

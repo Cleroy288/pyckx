@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["compact1","type2"],"trait":["Tape","Value","Walue"],"type":["Error","Result"]};

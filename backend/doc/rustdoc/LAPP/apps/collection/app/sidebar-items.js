@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"constant":["AVAILABLE_ITEM_TYPES","COLLECTION_APP"],"struct":["CollectionApp"]};

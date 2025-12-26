@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"constant":["INTELLO_APP"],"struct":["IntelloApp"]};

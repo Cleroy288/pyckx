@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["Operator"],"mod":["char_set","encoding","index"],"struct":["FontSet","Header","Offset","Operations"],"type":["GlyphID","OffsetSize","Operand","Operation","StringID"]};

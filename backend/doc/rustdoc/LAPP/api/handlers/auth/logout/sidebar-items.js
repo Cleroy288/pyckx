@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["logout_handler"]};

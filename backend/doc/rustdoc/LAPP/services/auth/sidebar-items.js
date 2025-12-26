@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["login","logout","register","types"]};

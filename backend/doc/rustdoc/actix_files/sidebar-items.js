@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["file_extension_to_mime"],"struct":["Directory","Files","FilesService","HttpRange","NamedFile"]};

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"constant":["MERMAID_DIRECTIVES","MERMAID_THEME_HEADER","MODEL","USER_REQUESTED_EXPANSION_MODELS"],"fn":["sanitize_course_schemas","sanitize_mermaid_code"]};

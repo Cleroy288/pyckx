@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["create_custom_question_handler","create_flashcard_handler","create_open_question_handler"]};

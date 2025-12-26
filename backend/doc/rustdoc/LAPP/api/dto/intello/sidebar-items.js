@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["course","custom_question","fill_blank","flashcard","games","keywords","open_question","order_phrase","qcm","true_false","validation"]};

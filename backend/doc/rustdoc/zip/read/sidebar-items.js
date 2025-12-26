@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["ArchiveOffset"],"fn":["read_zipfile_from_stream","root_dir_common_filter"],"struct":["AesInfo","Config","ZipArchive","ZipFile","ZipFileSeek"],"trait":["HasZipMetadata","RootDirFilter"]};

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["AnswerGrade"],"struct":["CheckAnswersInput","GenerateContentInput","GradingResult","IntelloRepositories","IntelloService","IntelloServiceBuilder","UserAnswer"]};

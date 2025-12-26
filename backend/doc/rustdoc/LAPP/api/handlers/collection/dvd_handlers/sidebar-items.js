@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["add_dvd_handler","delete_dvd_handler","get_dvd_handler","get_user_dvds_handler","update_dvd_handler"]};

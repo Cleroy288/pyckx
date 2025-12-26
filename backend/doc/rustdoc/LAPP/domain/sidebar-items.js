@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["apps","collection","intello","session","user"]};

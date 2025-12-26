@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["create_collection_handler","delete_collection_handler","get_collection_items_handler","get_collections_handler"]};

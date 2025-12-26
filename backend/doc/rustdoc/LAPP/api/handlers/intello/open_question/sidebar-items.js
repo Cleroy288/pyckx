@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["check_open_questions_handler","list_open_questions_handler"]};

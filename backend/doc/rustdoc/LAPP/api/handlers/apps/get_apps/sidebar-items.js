@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["get_all_apps_handler","get_app_handler"]};

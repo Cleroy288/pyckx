@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["get_user_id_from_session"]};

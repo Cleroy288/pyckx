@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"constant":["SESSION_FILE"],"struct":["Session","SessionStore"],"type":["SessionId"]};

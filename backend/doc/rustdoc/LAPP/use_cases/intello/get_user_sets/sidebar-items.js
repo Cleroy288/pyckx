@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["SetType","UserSetsOutput"],"struct":["GetUserSetsUseCase"]};
