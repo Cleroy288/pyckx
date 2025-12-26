@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["app","client","collection","course","dvd","fill_blank","flashcard","keywords","open_question","order_phrase","qcm","true_false","user_app"]};

@@ -18,6 +18,7 @@
 
 mod app;
 mod collection;
+pub mod course;
 mod dvd;
 mod fill_blank;
 mod flashcard;
@@ -39,6 +40,7 @@ pub use dvd::{CreateDvd, DvdRepository, UpdateDvd};
 pub use user_app::UserAppRepository;
 
 // Intello game repositories
+pub use course::CourseRepository;
 pub use fill_blank::FillBlankRepository;
 pub use flashcard::FlashcardRepository;
 pub use keywords::KeywordsRepository;

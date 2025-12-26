@@ -11,6 +11,6 @@ use super::super::game_set::GameSetRepository;
 /// New code should use `GameSetRepository<FillBlankSet>` directly.
 pub trait FillBlankRepository: GameSetRepository<FillBlankSet> {}
 
-/// Blanket implementation: any type implementing GameSetRepository<FillBlankSet>
+/// Blanket implementation: any type implementing `GameSetRepository<FillBlankSet>`
 /// automatically implements FillBlankRepository.
 impl<T: GameSetRepository<FillBlankSet>> FillBlankRepository for T {}

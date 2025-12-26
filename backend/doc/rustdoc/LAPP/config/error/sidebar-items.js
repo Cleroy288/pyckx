@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["ConfigError"],"fn":["optional_env","required_env"],"trait":["EnvVarExt"]};

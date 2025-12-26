@@ -1,8 +1,9 @@
 //! Intello Service module
 //!
-//! Business logic for all Intello app operations (QCM, Open Questions, Flashcards, True/False, Keywords, Fill Blank).
+//! Business logic for all Intello app operations (QCM, Open Questions, Flashcards, True/False, Keywords, Fill Blank, Course/Sessions).
 
-pub mod crud_ops;  // Generic CRUD helpers
+mod course_ops;     // Course and Session operations
+pub mod crud_ops;   // Generic CRUD helpers
 mod fill_blank_ops;
 mod flashcard_ops;
 mod games;

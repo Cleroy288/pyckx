@@ -14,15 +14,7 @@ impl IntelloService {
         crud_ops::get_user_sets(self.flashcard_repo.as_ref(), user_id, "flashcards").await
     }
 
-    /// Get a specific flashcard set by ID
-    #[allow(dead_code)] // Available for future use
-    #[instrument(skip(self), fields(user_id = %user_id, set_id = %set_id))]
-    pub async fn get_flashcard_set(&self, set_id: &str, user_id: &str) -> Result<Option<FlashcardSet>, IntelloError> {
-        crud_ops::get_set(self.flashcard_repo.as_ref(), set_id, user_id).await
-    }
-
     /// Delete a flashcard set with ownership verification
-    #[allow(dead_code)] // Available for future use
     #[instrument(skip(self), fields(user_id = %user_id, set_id = %set_id))]
     pub async fn delete_flashcard_set(&self, set_id: &str, user_id: &str) -> Result<bool, IntelloError> {
         crud_ops::delete_set(self.flashcard_repo.as_ref(), set_id, user_id, "flashcards").await

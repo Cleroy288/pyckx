@@ -13,8 +13,9 @@ AI-powered learning games generated from your documents.
 | **Keywords** | Keyword identification | `POST /keywords/create` | `GET /keywords/list` |
 | **Order Phrase** | Arrange shuffled words | `POST /order-phrase/create` | `GET /order-phrase/list` |
 | **Fill Blank** | Fill in missing words | `POST /fill-blank/create` | `GET /fill-blank/list` |
+| **Courses** | Organize resources + AI generation | `POST /courses` | `GET /courses` |
 
-Base URL: `/app/intello`
+Base URL: `/api/intello`
 
 ---
 
@@ -124,7 +125,6 @@ OrderPhraseWord { id, word, position: u8 }
 
 ### Game Logic
 Users arrange shuffled words into the correct order. Each word has a `position` field indicating its correct placement (0-indexed).
-
 ---
 
 ## Fill Blank
@@ -142,6 +142,131 @@ FillBlankOption { id, text, is_correct: bool }
 
 ### Game Logic
 AI generates phrases with blanks (marked as `___`). Users select the correct word from multiple options to fill in the blank.
+
+---
+
+## Courses & Resources
+
+The course system allows users to organize resources and generate AI-powered courses.
+
+### Data Model
+```rust
+Course { id, user_id, name, description, created_at, updated_at }
+CourseResource { id, course_id, filename, content, token_count, created_at }
+```
+
+### ✅ Implemented Endpoints
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/courses` | `POST` | Create a new course |
+| `/courses` | `GET` | List user's courses |
+| `/courses/{id}/resources` | `POST` | Upload resource to course |
+| `/courses/{id}/resources` | `GET` | Get course resources |
+| `/courses/{id}/sessions` | `POST` | Create study session |
+| `/courses/{id}/sessions` | `GET` | List course sessions |
+| `/generate-course` | `POST` | AI-generate course content |
+
+### Course CRUD
+
+**Create Course:**
+```bash
+POST /api/intello/courses
+{
+  "name": "Mathematics",
+  "description": "Algebra and calculus"
+}
+```
+
+**List Courses:**
+```bash
+GET /api/intello/courses
+# Returns: { "success": true, "courses": [...] }
+```
+
+**Upload Resource:**
+```bash
+POST /api/intello/courses/{id}/resources
+{
+  "filename": "notes.pdf",
+  "content": "...",
+  "token_count": 1500
+}
+```
+
+**Get Resources:**
+```bash
+GET /api/intello/courses/{id}/resources
+# Returns: { "success": true, "resources": [...] }
+```
+
+### Session CRUD
+
+**Create Session:**
+```bash
+POST /api/intello/courses/{id}/sessions
+{
+  "topic": "Introduction to Calculus",
+  "instructions": "Focus on derivatives",
+  "keywords": ["derivative", "limit"],
+  "language": "en"
+}
+```
+
+**List Sessions:**
+```bash
+GET /api/intello/courses/{id}/sessions
+# Returns: { "success": true, "sessions": [...] }
+```
+
+### AI Course Generation
+
+**Generate Course:**
+```bash
+POST /api/intello/generate-course
+{
+  "topic": "Rust Programming",
+  "keywords": ["ownership", "borrowing"],
+  "instructions": "Beginner level",
+  "resource_ids": ["uuid-1", "uuid-2"]  // Fetches from Supabase
+}
+```
+
+**Three-Stage Pipeline:**
+The backend uses a sophisticated 3-stage pipeline to generate high-quality courses:
+
+1.  **Stage 0: Decryption & Knowledge Expansion**
+    *   **Intent Decryption**: Analyzing the user's prompt to understand the core intent, target audience, and pedagogical goals.
+    *   **Knowledge Expansion (Ensemble)**: Querying multiple AI models in parallel to build a comprehensive knowledge base about the topic, supplementing provided documents.
+
+2.  **Stage 1: Core Knowledge Extraction**
+    *   Synthesizing the expanded knowledge and user documents into a coherent "Core Knowledge" summary.
+    *   Defining key concepts and definitions to ensure accuracy.
+
+3.  **Stage 2: Structure Generation**
+    *   **Dynamic Prompt Building**: Using `prompt_builder.rs` as the Single Source of Truth to inject strict JSON schemas for embedded games (QCM, Flashcards, etc.).
+    *   **Course Construction**: Generating the final `GeneratedCourse` structure, including modules, text content, Mermaid diagrams, and verification exercises.
+
+**Output:**
+Returns a `GeneratedCourse` object containing:
+-   `course_metadata`: Title, description, level.
+-   `modules`: Ordered list of modules, each containing content blocks (text, schemas, games).
+
+**Implementation:**
+-   `src/api/handlers/intello/course_generation.rs` - AI generation handler
+-   `src/services/openrouter/simple_course_generation.rs` - Implementation of the 3-stage pipeline
+-   `src/shared/prompt_builder.rs` - SSOT for game schemas and prompts
+
+### ❌ Not Yet Implemented
+
+| Feature | Status |
+|---------|--------|
+| Session Content Storage | Deferred |
+| Session Games | Deferred |
+| Session Q&A | Deferred |
+| Session Synthesis | Deferred |
+
+These require additional repository integration. See `backend/doc/db_shema/course.txt` for the full schema.
 
 ---
 

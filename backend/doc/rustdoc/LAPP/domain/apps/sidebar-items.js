@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["app","app_instance","user_app"]};

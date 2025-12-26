@@ -11,6 +11,6 @@ use super::super::game_set::GameSetRepository;
 /// New code should use `GameSetRepository<FlashcardSet>` directly.
 pub trait FlashcardRepository: GameSetRepository<FlashcardSet> {}
 
-/// Blanket implementation: any type implementing GameSetRepository<FlashcardSet>
+/// Blanket implementation: any type implementing `GameSetRepository<FlashcardSet>`
 /// automatically implements FlashcardRepository.
 impl<T: GameSetRepository<FlashcardSet>> FlashcardRepository for T {}

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["add_dvd","delete_collection","delete_dvd","list_dvds","update_dvd"]};

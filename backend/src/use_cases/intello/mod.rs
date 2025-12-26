@@ -19,6 +19,7 @@ mod generate_order_phrase;
 mod generate_qcm;
 mod generate_true_false;
 mod get_user_sets;
+mod generate_course;
 pub mod shared;
 
 // Shared types (re-exported for ergonomic use)
@@ -54,5 +55,9 @@ pub use generate_qcm::{GenerateQcmInput, GenerateQcmUseCase};
 pub use generate_true_false::{GenerateTrueFalseInput, GenerateTrueFalseUseCase};
 
 // Get User Sets (not yet used by handlers)
+// Get User Sets (not yet used by handlers)
 pub use get_user_sets::GetUserSetsUseCase;
+
+// Generate Course (Unified)
+pub use generate_course::GenerateCourseUseCase;
 

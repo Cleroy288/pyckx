@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["crud_ops","fill_blank_ops","flashcard_ops","games","keywords_ops","open_question_ops","order_phrase_ops","qcm_ops","true_false_ops","types","validation"]};

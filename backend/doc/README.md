@@ -36,7 +36,8 @@ src/
 
 | Doc | Description |
 |-----|-------------|
-| [Architecture](architecture/overview.md) | Layers, request flow, folder structure |
+| [Architecture Overview](./architecture/overview.md) | Layers, request flow, folder structure |
+| [API Documentation (Generated)](./rustdoc/LAPP/index.html) | Requires local server or opening raw file |
 | [Use Cases](architecture/use-cases.md) | Use Cases layer pattern |
 | [Adding Features](architecture/adding-features.md) | Step-by-step templates |
 | [End-to-End Feature](architecture/end-to-end-feature.md) | Complete backend + frontend implementation guide |

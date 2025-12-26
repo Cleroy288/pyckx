@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["create_qcmset_handler","delete_qcmset_handler","get_qcmset_handler","get_user_qcmsets_handler","update_qcmset_handler"]};

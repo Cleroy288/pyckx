@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["ContentBlock"],"struct":["CourseMetadata","CourseModule","DecryptedUserDemand","ExtractedKnowledge","FlashcardPayload","FlashcardSetPayload","GenerateCourseRequest","GenerateCourseResponse","GeneratedCourse","KeyConcept","QcmQuestionPayload","QcmSetPayload","TrueFalseSetPayload","TrueFalseStatementPayload"]};

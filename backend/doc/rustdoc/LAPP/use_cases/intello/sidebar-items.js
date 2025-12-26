@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["check_answers","delete_set","generate_course","generate_fill_blank","generate_flashcards","generate_keywords","generate_open_questions","generate_order_phrase","generate_qcm","generate_true_false","get_user_sets","shared"]};

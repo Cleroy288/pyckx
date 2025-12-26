@@ -33,7 +33,6 @@ pub mod codes {
     pub const SESSION_EXPIRED: &str = "SESSION_EXPIRED";
 
     // == INTELLO ERRORS // ==
-    pub const INTELLO_QCM_SET_NOT_FOUND: &str = "INTELLO_QCM_SET_NOT_FOUND";
     pub const INTELLO_VALIDATION_FAILED: &str = "INTELLO_VALIDATION_FAILED";
     pub const INTELLO_STORAGE_ERROR: &str = "INTELLO_STORAGE_ERROR";
 }
@@ -66,7 +65,6 @@ pub mod messages {
     pub const SESSION_EXPIRED: &str = "Session has expired. Please log in again.";
 
     // == INTELLO ERRORS // ==
-    pub const INTELLO_QCM_SET_NOT_FOUND: &str = "QCM set not found";
     pub const INTELLO_VALIDATION_FAILED: &str = "Invalid QCM set data";
     pub const INTELLO_STORAGE_ERROR: &str = "Failed to access Intello storage";
 }
@@ -98,7 +96,6 @@ pub mod status {
     pub const SESSION_EXPIRED: StatusCode = StatusCode::UNAUTHORIZED;
 
     // == INTELLO ERRORS // ==
-    pub const INTELLO_QCM_SET_NOT_FOUND: StatusCode = StatusCode::NOT_FOUND;
     pub const INTELLO_VALIDATION_FAILED: StatusCode = StatusCode::BAD_REQUEST;
     pub const INTELLO_STORAGE_ERROR: StatusCode = StatusCode::INTERNAL_SERVER_ERROR;
 }

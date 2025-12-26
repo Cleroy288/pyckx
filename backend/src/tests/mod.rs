@@ -6,9 +6,13 @@
 //! - `apps/` - App and user app tests (CRUD, registry)
 //! - `auth/` - Authentication tests (login, register)
 //! - `utils/` - Utility tests (document extractor)
+//! - `openrouter_tests` - OpenRouter service tests (JSON extraction, sanitization, course parsing)
 
 mod apps;
 mod auth;
 mod collection;
 mod intello;
+mod openrouter_tests;
 mod utils;
+mod prompt_builder_tests;
+

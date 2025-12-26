@@ -45,7 +45,7 @@ pub struct AddDvdRequest {
 }
 
 impl AddDvdRequest {
-    /// Parse the year string into a DateTime<Utc>
+    /// Parse the year string into a `DateTime<Utc>`
     pub fn parse_year(&self) -> Result<DateTime<Utc>, String> {
         // Try parsing as full date first (YYYY-MM-DD)
         if let Ok(date) = NaiveDate::parse_from_str(&self.year, "%Y-%m-%d") {
@@ -83,7 +83,7 @@ pub struct UpdateDvdRequest {
 }
 
 impl UpdateDvdRequest {
-    /// Parse the year string into a DateTime<Utc> if present
+    /// Parse the year string into a `DateTime<Utc>` if present
     pub fn parse_year(&self) -> Result<Option<DateTime<Utc>>, String> {
         match &self.year {
             Some(year_str) => {

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["AVAILABLE_MODELS","DEFAULT_MODEL","MODEL_CONFIGS","OPENROUTER_API_URL","TOKEN_SAFETY_BUFFER"],"enum":["AnswerGrade"],"fn":["get_model_context_limit","validate_model","validate_token_count"],"struct":["ChatChoice","ChatMessage","ChatRequest","ChatResponse","GradedAnswer","ModelConfig","OpenRouterService","ResponseMessage"]};

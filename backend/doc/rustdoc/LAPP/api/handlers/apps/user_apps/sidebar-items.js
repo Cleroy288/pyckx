@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["add_user_app_handler","get_user_apps_handler","remove_user_app_handler"]};

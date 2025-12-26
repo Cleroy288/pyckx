@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["init"],"mod":["get_apps","manage_apps","user_apps"]};

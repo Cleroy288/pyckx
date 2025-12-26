@@ -90,9 +90,6 @@ impl AppError {
             }
             Self::Intello(e) => {
                 match e {
-                    IntelloError::QcmSetNotFound { set_id } => {
-                        warn!(error_code = %self.code().as_str(), set_id = %set_id, "QCM set not found");
-                    }
                     IntelloError::GameSetNotFound { game_type, set_id } => {
                         warn!(error_code = %self.code().as_str(), game_type = %game_type, set_id = %set_id, "Game set not found");
                     }
@@ -104,6 +101,15 @@ impl AppError {
                     }
                     IntelloError::ExternalServiceError { service, message } => {
                         error!(error_code = %self.code().as_str(), service = %service, message = %message, "External service error");
+                    }
+                    IntelloError::NotFound => {
+                        warn!(error_code = %self.code().as_str(), "Resource not found");
+                    }
+                    IntelloError::Forbidden => {
+                        warn!(error_code = %self.code().as_str(), "Access forbidden");
+                    }
+                    IntelloError::Conflict(msg) => {
+                        warn!(error_code = %self.code().as_str(), message = %msg, "Resource conflict");
                     }
                 }
             }

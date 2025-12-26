@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["custom_question","enums","fill_blank","flashcard","keywords","open_question","order_phrase","qcm_question","qcm_set","true_false"]};

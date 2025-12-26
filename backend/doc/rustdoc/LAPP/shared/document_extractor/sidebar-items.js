@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["extract_pdf","extract_pptx","extract_text_from_xml","extract_txt","extract_word"],"struct":["ExtractedContent"],"type":["ExtractResult"]};

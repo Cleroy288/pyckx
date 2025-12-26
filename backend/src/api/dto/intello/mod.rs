@@ -11,6 +11,9 @@
 //! - `custom_question.rs` - Custom Question generation DTOs
 //! - `validation.rs` - Shared validation logic
 
+pub mod course;
+
+
 pub mod custom_question;
 pub mod fill_blank;
 pub mod flashcard;

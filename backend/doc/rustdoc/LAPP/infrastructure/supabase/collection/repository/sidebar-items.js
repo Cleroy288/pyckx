@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["CollectionRow","CollectionTypeInfo","CollectionWithTypeRow","InsertCollectionRow","SupabaseCollectionRepository"]};

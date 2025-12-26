@@ -1,6 +1,6 @@
 //! IntelloService struct, constructor, and input/output types
 
-use crate::infrastructure::{FillBlankRepository, FlashcardRepository, KeywordsRepository, OpenQuestionRepository, OrderPhraseRepository, QcmRepository, TrueOrFalseRepository};
+use crate::infrastructure::{CourseRepository, FillBlankRepository, FlashcardRepository, KeywordsRepository, OpenQuestionRepository, OrderPhraseRepository, QcmRepository, TrueOrFalseRepository};
 use crate::services::OpenRouterService;
 use crate::shared::OpenQuestionCache;
 use crate::domain::intello::Level;
@@ -71,6 +71,7 @@ pub struct IntelloRepositories {
     pub keywords_repo: Arc<dyn KeywordsRepository>,
     pub order_phrase_repo: Arc<dyn OrderPhraseRepository>,
     pub fill_blank_repo: Arc<dyn FillBlankRepository>,
+    pub course_repo: Arc<dyn CourseRepository>,
 }
 
 // == INTELLO SERVICE STRUCT ==
@@ -106,8 +107,10 @@ pub struct IntelloService {
     pub(super) order_phrase_repo: Arc<dyn OrderPhraseRepository>,
     // Fill Blank repository
     pub(super) fill_blank_repo: Arc<dyn FillBlankRepository>,
+    // Course Resource repository
+    pub course_repo: Arc<dyn CourseRepository>,
     // AI service for content generation
-    pub(super) openrouter_service: Arc<OpenRouterService>,
+    pub openrouter_service: Arc<OpenRouterService>,
     // Cache for open question source content
     pub(super) open_question_cache: Arc<OpenQuestionCache>,
 }
@@ -129,6 +132,7 @@ impl IntelloService {
             keywords_repo: repos.keywords_repo,
             order_phrase_repo: repos.order_phrase_repo,
             fill_blank_repo: repos.fill_blank_repo,
+            course_repo: repos.course_repo,
             openrouter_service,
             open_question_cache,
         }

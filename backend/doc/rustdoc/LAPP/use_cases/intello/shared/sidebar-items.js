@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["validate_generation_input"],"struct":["GenerateGameInput","GenerateGameOutput"]};

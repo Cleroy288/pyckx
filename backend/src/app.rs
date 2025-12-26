@@ -8,6 +8,7 @@ use crate::infrastructure::{
     SupabaseFillBlankRepository, SupabaseFlashcardRepository, SupabaseKeywordsRepository,
     SupabaseOpenQuestionRepository, SupabaseOrderPhraseRepository, SupabaseQcmRepository,
     SupabaseTrueOrFalseRepository, SupabaseUserAppRepository,
+    SupabaseCourseRepository,
 };
 use crate::services::{AppService, AuthService, CollectionService, IntelloService, OpenRouterService};
 use crate::shared::OpenQuestionCache;
@@ -36,6 +37,7 @@ pub struct App {
     pub collection_service: Arc<CollectionService>,
     pub app_service: Arc<AppService>,
     pub intello_service: Arc<IntelloService>,
+    pub openrouter_service: Arc<OpenRouterService>,  // AI service for course generation
     // Apps
     #[allow(dead_code)] // App metadata, used for future app registry
     pub collection: CollectionApp,
@@ -72,6 +74,7 @@ impl App {
             keywords_repo: Arc::new(SupabaseKeywordsRepository::new(&cfg)),
             order_phrase_repo: Arc::new(SupabaseOrderPhraseRepository::new(&cfg)),
             fill_blank_repo: Arc::new(SupabaseFillBlankRepository::new(&cfg)),
+            course_repo: Arc::new(SupabaseCourseRepository::new(&cfg)),
         };
 
         // Create caches
@@ -90,7 +93,7 @@ impl App {
         let intello_service = Arc::new(
             IntelloService::builder()
                 .with_repositories(intello_repos)
-                .with_openrouter(openrouter_service)
+                .with_openrouter(Arc::clone(&openrouter_service))
                 .with_cache(open_question_cache)
                 .build()
                 .expect("IntelloService must have all dependencies"),
@@ -110,6 +113,7 @@ impl App {
             collection_service,
             app_service,
             intello_service,
+            openrouter_service,
             collection,
             intello,
         })
@@ -128,6 +132,7 @@ impl Clone for App {
             collection_service: Arc::clone(&self.collection_service),
             app_service: Arc::clone(&self.app_service),
             intello_service: Arc::clone(&self.intello_service),
+            openrouter_service: Arc::clone(&self.openrouter_service),
             collection: self.collection.clone(),
             intello: self.intello.clone(),
         }

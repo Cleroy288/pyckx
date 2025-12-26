@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["level_from_db","level_to_db"],"struct":["FillBlankOptionRow","FillBlankQuestionRow","FillBlankSetRow","InsertFillBlankOptionRow","InsertFillBlankQuestionRow","InsertFillBlankSetRow"]};

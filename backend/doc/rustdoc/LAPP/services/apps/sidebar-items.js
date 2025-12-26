@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["app_management","types","user_apps"]};

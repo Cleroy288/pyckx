@@ -101,6 +101,14 @@ impl RateLimitConfig {
             .per_hour(10)
             .per_day(20)
     }
+
+    /// AI generation limits - 1 per minute to prevent abuse
+    pub fn ai_generation() -> Self {
+        Self::new()
+            .per_minute(1)
+            .per_hour(30)
+            .per_day(100)
+    }
 }
 
 // == UNIT TESTS // ==

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["DvdRow","InsertDvdRow","SupabaseDvdRepository","UpdateDvdRow"]};

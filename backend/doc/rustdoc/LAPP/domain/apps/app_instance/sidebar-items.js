@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["AppInstance"],"trait":["AppModule"],"type":["AppId"]};

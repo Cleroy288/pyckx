@@ -14,15 +14,7 @@ impl IntelloService {
         crud_ops::get_user_sets(self.order_phrase_repo.as_ref(), user_id, "order_phrase").await
     }
 
-    /// Get a specific order phrase set by ID
-    #[allow(dead_code)] // Available for future use
-    #[instrument(skip(self), fields(user_id = %user_id, set_id = %set_id))]
-    pub async fn get_order_phrase_set(&self, set_id: &str, user_id: &str) -> Result<Option<OrderPhraseSet>, IntelloError> {
-        crud_ops::get_set(self.order_phrase_repo.as_ref(), set_id, user_id).await
-    }
-
     /// Delete an order phrase set with ownership verification
-    #[allow(dead_code)] // Available for future use
     #[instrument(skip(self), fields(user_id = %user_id, set_id = %set_id))]
     pub async fn delete_order_phrase_set(&self, set_id: &str, user_id: &str) -> Result<bool, IntelloError> {
         crud_ops::delete_set(self.order_phrase_repo.as_ref(), set_id, user_id, "order_phrase").await

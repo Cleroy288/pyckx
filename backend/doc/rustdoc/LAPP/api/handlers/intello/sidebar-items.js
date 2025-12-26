@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["init"],"mod":["ai_generation","course_crud","course_generation","fill_blank","flashcard","games","helpers","keywords","models","open_question","order_phrase","qcm_handlers","true_false"]};

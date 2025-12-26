@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["CheckAnswersResponse","CreateOpenQuestionResponse","GradedAnswerResponse","OpenQuestionResponse","OpenQuestionSetListResponse","OpenQuestionSetResponse"]};

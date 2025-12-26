@@ -7,28 +7,24 @@
 //! # Structure
 //! - `supabase/` - Supabase authentication and database client
 //! - `repository/` - Repository traits (abstractions)
-//! - `json_storage/` - JSON file-based storage implementations
 
-pub mod json_storage;
 pub mod repository;
 pub mod supabase;
 
 // Repository traits
 pub use repository::{
-    AppRepository, CollectionRepository, CreateApp, CreateDvd, DvdRepository, FillBlankRepository,
-    FlashcardRepository, GameSetRepository, KeywordsRepository, OpenQuestionRepository, 
-    OrderPhraseRepository, QcmRepository, TrueOrFalseRepository, UpdateApp, UpdateDvd, UserAppRepository,
+    AppRepository, CollectionRepository, CreateApp, CreateDvd, 
+    DvdRepository, FillBlankRepository, FlashcardRepository, GameSetRepository, 
+    KeywordsRepository, OpenQuestionRepository, OrderPhraseRepository, QcmRepository, 
+    TrueOrFalseRepository, UpdateApp, UpdateDvd, UserAppRepository,
+    CourseRepository,
 };
-
-// JSON storage implementations (legacy, used in tests only)
-#[allow(unused_imports)]
-pub use json_storage::{JsonFlashcardRepository, JsonOpenQuestionRepository, JsonQcmRepository};
 
 // Supabase implementations
 pub use supabase::{
-    SupabaseAppRepository, SupabaseClient, SupabaseCollectionRepository, SupabaseDvdRepository,
-    SupabaseFillBlankRepository, SupabaseFlashcardRepository, SupabaseKeywordsRepository,
-    SupabaseOpenQuestionRepository, SupabaseOrderPhraseRepository, SupabaseQcmRepository,
-    SupabaseTrueOrFalseRepository, SupabaseUserAppRepository,
+    SupabaseAppRepository, SupabaseClient, SupabaseCollectionRepository, 
+    SupabaseDvdRepository, SupabaseFillBlankRepository, 
+    SupabaseFlashcardRepository, SupabaseKeywordsRepository, SupabaseOpenQuestionRepository, 
+    SupabaseOrderPhraseRepository, SupabaseQcmRepository, SupabaseTrueOrFalseRepository, 
+    SupabaseUserAppRepository, SupabaseCourseRepository,
 };
-

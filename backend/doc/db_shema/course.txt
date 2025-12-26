@@ -1,0 +1,258 @@
+-- =============================================================================
+-- COURSE TABLES (10 tables)
+-- =============================================================================
+
+-- == COURSE & RESOURCES ==
+
+CREATE TABLE intello_courses (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+    name VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL DEFAULT '',
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE intello_course_resources (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    course_id UUID NOT NULL REFERENCES intello_courses(id) ON DELETE CASCADE,
+    filename VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    token_count INTEGER NOT NULL DEFAULT 0,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- == STUDY SESSION ==
+
+CREATE TABLE intello_study_sessions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    course_id UUID NOT NULL REFERENCES intello_courses(id) ON DELETE CASCADE,
+    topic VARCHAR(255) NOT NULL,
+    instructions TEXT NOT NULL DEFAULT '',
+    keywords TEXT[] DEFAULT '{}',
+    language VARCHAR(5) DEFAULT 'en',
+    status VARCHAR(20) NOT NULL DEFAULT 'in_progress',
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    completed_at TIMESTAMPTZ
+);
+
+CREATE TABLE intello_session_content (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    session_id UUID NOT NULL REFERENCES intello_study_sessions(id) ON DELETE CASCADE,
+    content_type VARCHAR(50) NOT NULL,
+    title VARCHAR(255),
+    content TEXT NOT NULL,
+    mermaid_code TEXT,
+    order_index INT DEFAULT 0,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE intello_session_resources (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    session_id UUID NOT NULL REFERENCES intello_study_sessions(id) ON DELETE CASCADE,
+    resource_id UUID NOT NULL REFERENCES intello_course_resources(id) ON DELETE CASCADE,
+    UNIQUE(session_id, resource_id)
+);
+
+-- == SESSION GAMES ==
+
+CREATE TABLE intello_session_games (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    session_id UUID NOT NULL REFERENCES intello_study_sessions(id) ON DELETE CASCADE,
+    game_type VARCHAR(50) NOT NULL,
+    game_set_id UUID NOT NULL,
+    errors_count INTEGER NOT NULL DEFAULT 0,
+    total_questions INTEGER NOT NULL DEFAULT 0,
+    completed BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- == Q&A ==
+
+CREATE TABLE intello_session_questions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    session_id UUID NOT NULL REFERENCES intello_study_sessions(id) ON DELETE CASCADE,
+    section_context TEXT NOT NULL,
+    question TEXT NOT NULL,
+    answer TEXT NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- == NOTES ==
+
+CREATE TABLE intello_session_notes (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    session_id UUID NOT NULL REFERENCES intello_study_sessions(id) ON DELETE CASCADE,
+    game_type VARCHAR(50),
+    game_set_id UUID,
+    note TEXT NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- == CONTENT MODIFICATIONS ==
+
+CREATE TABLE intello_content_modifications (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    session_id UUID NOT NULL REFERENCES intello_study_sessions(id) ON DELETE CASCADE,
+    game_type VARCHAR(50) NOT NULL,
+    game_set_id UUID NOT NULL,
+    modification_type VARCHAR(50) NOT NULL,
+    request TEXT,
+    result TEXT NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- == SYNTHESIS ==
+
+CREATE TABLE intello_session_synthesis (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    session_id UUID NOT NULL REFERENCES intello_study_sessions(id) ON DELETE CASCADE,
+    version INTEGER NOT NULL DEFAULT 1,
+    content TEXT NOT NULL,
+    errors_summary JSONB NOT NULL DEFAULT '{}',
+    notes_addressed INTEGER NOT NULL DEFAULT 0,
+    combined_from UUID[] DEFAULT '{}',
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE intello_synthesis_modifications (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    synthesis_id UUID NOT NULL REFERENCES intello_session_synthesis(id) ON DELETE CASCADE,
+    modification_type VARCHAR(50) NOT NULL,
+    request TEXT,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- == INDEXES ==
+
+CREATE INDEX idx_courses_user ON intello_courses(user_id);
+CREATE INDEX idx_resources_course ON intello_course_resources(course_id);
+CREATE INDEX idx_user_resources_user ON intello_user_resources(user_id);
+CREATE INDEX idx_resource_links_course ON intello_course_resource_links(course_id);
+CREATE INDEX idx_resource_links_resource ON intello_course_resource_links(resource_id);
+CREATE INDEX idx_sessions_course ON intello_study_sessions(course_id);
+CREATE INDEX idx_session_resources_session ON intello_session_resources(session_id);
+CREATE INDEX idx_session_games_session ON intello_session_games(session_id);
+CREATE INDEX idx_questions_session ON intello_session_questions(session_id);
+CREATE INDEX idx_notes_session ON intello_session_notes(session_id);
+CREATE INDEX idx_modifications_session ON intello_content_modifications(session_id);
+CREATE INDEX idx_synthesis_session ON intello_session_synthesis(session_id);
+
+-- == RLS POLICIES ==
+
+ALTER TABLE intello_courses ENABLE ROW LEVEL SECURITY;
+ALTER TABLE intello_course_resources ENABLE ROW LEVEL SECURITY;
+ALTER TABLE intello_user_resources ENABLE ROW LEVEL SECURITY;
+ALTER TABLE intello_course_resource_links ENABLE ROW LEVEL SECURITY;
+ALTER TABLE intello_study_sessions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE intello_session_resources ENABLE ROW LEVEL SECURITY;
+ALTER TABLE intello_session_games ENABLE ROW LEVEL SECURITY;
+ALTER TABLE intello_session_questions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE intello_session_notes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE intello_content_modifications ENABLE ROW LEVEL SECURITY;
+ALTER TABLE intello_session_synthesis ENABLE ROW LEVEL SECURITY;
+ALTER TABLE intello_synthesis_modifications ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "users_own_courses" ON intello_courses 
+    FOR ALL USING (auth.uid() = user_id);
+
+CREATE POLICY "users_access_resources" ON intello_course_resources FOR ALL USING (
+    EXISTS (SELECT 1 FROM intello_courses WHERE id = course_id AND user_id = auth.uid())
+);
+
+CREATE POLICY "users_own_user_resources" ON intello_user_resources 
+    FOR ALL USING (user_id::uuid = auth.uid());
+
+CREATE POLICY "users_access_resource_links" ON intello_course_resource_links FOR ALL USING (
+    EXISTS (SELECT 1 FROM intello_courses WHERE id = course_id AND user_id = auth.uid())
+);
+
+CREATE POLICY "users_access_sessions" ON intello_study_sessions FOR ALL USING (
+    EXISTS (SELECT 1 FROM intello_courses WHERE id = course_id AND user_id = auth.uid())
+);
+
+CREATE POLICY "users_access_session_resources" ON intello_session_resources FOR ALL USING (
+    EXISTS (SELECT 1 FROM intello_study_sessions s 
+            JOIN intello_courses c ON s.course_id = c.id 
+            WHERE s.id = session_id AND c.user_id = auth.uid())
+);
+
+CREATE POLICY "users_access_session_games" ON intello_session_games FOR ALL USING (
+    EXISTS (SELECT 1 FROM intello_study_sessions s 
+            JOIN intello_courses c ON s.course_id = c.id 
+            WHERE s.id = session_id AND c.user_id = auth.uid())
+);
+
+CREATE POLICY "users_access_questions" ON intello_session_questions FOR ALL USING (
+    EXISTS (SELECT 1 FROM intello_study_sessions s 
+            JOIN intello_courses c ON s.course_id = c.id 
+            WHERE s.id = session_id AND c.user_id = auth.uid())
+);
+
+CREATE POLICY "users_access_notes" ON intello_session_notes FOR ALL USING (
+    EXISTS (SELECT 1 FROM intello_study_sessions s 
+            JOIN intello_courses c ON s.course_id = c.id 
+            WHERE s.id = session_id AND c.user_id = auth.uid())
+);
+
+CREATE POLICY "users_access_modifications" ON intello_content_modifications FOR ALL USING (
+    EXISTS (SELECT 1 FROM intello_study_sessions s 
+            JOIN intello_courses c ON s.course_id = c.id 
+            WHERE s.id = session_id AND c.user_id = auth.uid())
+);
+
+CREATE POLICY "users_access_synthesis" ON intello_session_synthesis FOR ALL USING (
+    EXISTS (SELECT 1 FROM intello_study_sessions s 
+            JOIN intello_courses c ON s.course_id = c.id 
+            WHERE s.id = session_id AND c.user_id = auth.uid())
+);
+
+CREATE POLICY "users_access_synth_mods" ON intello_synthesis_modifications FOR ALL USING (
+    EXISTS (SELECT 1 FROM intello_session_synthesis sy
+            JOIN intello_study_sessions s ON sy.session_id = s.id
+            JOIN intello_courses c ON s.course_id = c.id 
+            WHERE sy.id = synthesis_id AND c.user_id = auth.uid())
+);
+
+-- == SERVICE ROLE POLICIES (for backend API access) ==
+
+CREATE POLICY "service_role_access_courses" ON intello_courses 
+    FOR ALL TO service_role USING (true);
+
+CREATE POLICY "service_role_access_resources" ON intello_course_resources 
+    FOR ALL TO service_role USING (true);
+
+CREATE POLICY "service_role_access_user_resources" ON intello_user_resources 
+    FOR ALL TO service_role USING (true);
+
+CREATE POLICY "service_role_access_resource_links" ON intello_course_resource_links 
+    FOR ALL TO service_role USING (true);
+
+CREATE POLICY "service_role_access_sessions" ON intello_study_sessions 
+    FOR ALL TO service_role USING (true);
+
+CREATE POLICY "service_role_access_session_resources" ON intello_session_resources 
+    FOR ALL TO service_role USING (true);
+
+CREATE POLICY "service_role_access_session_games" ON intello_session_games 
+    FOR ALL TO service_role USING (true);
+
+CREATE POLICY "service_role_access_questions" ON intello_session_questions 
+    FOR ALL TO service_role USING (true);
+
+CREATE POLICY "service_role_access_notes" ON intello_session_notes 
+    FOR ALL TO service_role USING (true);
+
+CREATE POLICY "service_role_access_modifications" ON intello_content_modifications 
+    FOR ALL TO service_role USING (true);
+
+CREATE POLICY "service_role_access_synthesis" ON intello_session_synthesis 
+    FOR ALL TO service_role USING (true);
+
+CREATE POLICY "service_role_access_synth_mods" ON intello_synthesis_modifications 
+    FOR ALL TO service_role USING (true);
+
+-- Auto-update trigger (uses existing update_updated_at function)
+CREATE TRIGGER update_courses_updated_at BEFORE UPDATE ON intello_courses
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+

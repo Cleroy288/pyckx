@@ -4,29 +4,31 @@
 
 use proptest::prelude::*;
 use std::sync::Arc;
-use tempfile::NamedTempFile;
 
 use crate::api::dto::intello::CreateQcmSetRequest;
 use crate::domain::intello::{Level, QcmQuestion, QcmSet};
 use crate::error::IntelloError;
-use crate::infrastructure::json_storage::{JsonQcmRepository, JsonOpenQuestionRepository, JsonFlashcardRepository};
 use crate::infrastructure::repository::QcmRepository;
 use crate::services::{IntelloRepositories, IntelloService, OpenRouterService};
 use crate::shared::OpenQuestionCache;
-use super::helpers::{StubTrueOrFalseRepository, StubKeywordsRepository, StubOrderPhraseRepository, StubFillBlankRepository};
+use super::helpers::{
+    StubQcmRepository, StubOpenQuestionRepository, StubFlashcardRepository,
+    StubTrueOrFalseRepository, StubKeywordsRepository, StubOrderPhraseRepository, StubFillBlankRepository,
+    StubCourseRepository
+};
 
-/// Create a test IntelloService with temporary files for QCM repos
-fn create_test_intello_service(qcm_temp: &NamedTempFile, ai_qcm_temp: &NamedTempFile) -> IntelloService {
-    // Custom QCM repos using temp files, stub everything else
+/// Create a test IntelloService with stub repositories
+fn create_test_intello_service() -> IntelloService {
     let repos = IntelloRepositories {
-        qcm_repo: Arc::new(JsonQcmRepository::new(qcm_temp.path())),
-        ai_qcm_repo: Arc::new(JsonQcmRepository::new(ai_qcm_temp.path())),
-        open_question_repo: Arc::new(JsonOpenQuestionRepository::new("data/intello/openquestion.json")),
-        flashcard_repo: Arc::new(JsonFlashcardRepository::new("data/intello/flashcard.json")),
+        qcm_repo: Arc::new(StubQcmRepository::new()),
+        ai_qcm_repo: Arc::new(StubQcmRepository::new()),
+        open_question_repo: Arc::new(StubOpenQuestionRepository::new()),
+        flashcard_repo: Arc::new(StubFlashcardRepository::new()),
         true_false_repo: Arc::new(StubTrueOrFalseRepository),
         keywords_repo: Arc::new(StubKeywordsRepository),
         order_phrase_repo: Arc::new(StubOrderPhraseRepository),
         fill_blank_repo: Arc::new(StubFillBlankRepository),
+        course_repo: Arc::new(StubCourseRepository),
     };
     
     IntelloService::builder()
@@ -36,6 +38,7 @@ fn create_test_intello_service(qcm_temp: &NamedTempFile, ai_qcm_temp: &NamedTemp
         .build()
         .expect("Test IntelloService setup should not fail")
 }
+
 
 
 // == GENERATORS ==
@@ -126,9 +129,6 @@ fn arb_qcm_set() -> impl Strategy<Value = QcmSet> {
 /// Strategy for generating arbitrary IntelloError variants
 fn arb_intello_error() -> impl Strategy<Value = IntelloError> {
     prop_oneof![
-        // QcmSetNotFound with arbitrary resource and set_id
-        (arb_non_empty_string(), arb_non_empty_string())
-            .prop_map(|(resource, set_id)| IntelloError::not_found(resource, set_id)),
         // GameSetNotFound with arbitrary game_type and set_id
         (arb_non_empty_string(), arb_non_empty_string())
             .prop_map(|(game_type, set_id)| IntelloError::game_not_found(game_type, set_id)),
@@ -164,7 +164,7 @@ proptest! {
     /// **Feature: architecture-refactor, Property 6: Error to HTTP status code mapping**
     ///
     /// *For any* IntelloError variant, the status_code() method SHALL return:
-    /// - 404 for QcmSetNotFound
+    /// - 404 for GameSetNotFound
     /// - 400 for ValidationFailed
     /// - 500 for StorageError
     ///
@@ -174,9 +174,6 @@ proptest! {
         let status_code = error.status_code();
 
         match &error {
-            IntelloError::QcmSetNotFound { .. } => {
-                prop_assert_eq!(status_code, 404, "QcmSetNotFound should map to 404");
-            }
             IntelloError::GameSetNotFound { .. } => {
                 prop_assert_eq!(status_code, 404, "GameSetNotFound should map to 404");
             }
@@ -200,10 +197,8 @@ proptest! {
     /// **Validates: Requirements 2.3**
     #[test]
     fn prop_repository_persistence_roundtrip(qcm_set in arb_qcm_set()) {
-        // Create a temporary file for the repository
-        let temp_file = NamedTempFile::new()
-            .expect("Failed to create temp file");
-        let repo = JsonQcmRepository::new(temp_file.path());
+        // Create stub repository for testing
+        let repo = StubQcmRepository::new();
 
         // Use tokio runtime to run async operations
         let rt = tokio::runtime::Runtime::new()
@@ -235,12 +230,7 @@ proptest! {
     /// **Validates: Requirements 5.1**
     #[test]
     fn prop_service_validation_rejects_invalid_input(invalid_set in arb_invalid_qcm_set()) {
-        // Create a temporary file for the repository
-        let temp_file = NamedTempFile::new()
-            .expect("Failed to create temp file");
-        let temp_file2 = NamedTempFile::new()
-            .expect("Failed to create temp file 2");
-        let service = create_test_intello_service(&temp_file, &temp_file2);
+        let service = create_test_intello_service();
 
         // Use tokio runtime to run async operations
         let rt = tokio::runtime::Runtime::new()
@@ -407,12 +397,7 @@ proptest! {
         qcm_set in arb_qcm_set(),
         (owner_id, attacker_id) in arb_different_user_ids()
     ) {
-        // Create a temporary file for the repository
-        let temp_file = NamedTempFile::new()
-            .expect("Failed to create temp file");
-        let temp_file2 = NamedTempFile::new()
-            .expect("Failed to create temp file 2");
-        let service = create_test_intello_service(&temp_file, &temp_file2);
+        let service = create_test_intello_service();
 
         // Use tokio runtime to run async operations
         let rt = tokio::runtime::Runtime::new()
@@ -471,12 +456,7 @@ proptest! {
         qcm_set in arb_qcm_set(),
         (owner_id, attacker_id) in arb_different_user_ids()
     ) {
-        // Create a temporary file for the repository
-        let temp_file = NamedTempFile::new()
-            .expect("Failed to create temp file");
-        let temp_file2 = NamedTempFile::new()
-            .expect("Failed to create temp file 2");
-        let service = create_test_intello_service(&temp_file, &temp_file2);
+        let service = create_test_intello_service();
 
         // Use tokio runtime to run async operations
         let rt = tokio::runtime::Runtime::new()

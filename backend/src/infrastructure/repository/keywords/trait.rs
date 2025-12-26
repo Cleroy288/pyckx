@@ -11,6 +11,6 @@ use super::super::game_set::GameSetRepository;
 /// New code should use `GameSetRepository<KeywordSet>` directly.
 pub trait KeywordsRepository: GameSetRepository<KeywordSet> {}
 
-/// Blanket implementation: any type implementing GameSetRepository<KeywordSet>
+/// Blanket implementation: any type implementing `GameSetRepository<KeywordSet>`
 /// automatically implements KeywordsRepository.
 impl<T: GameSetRepository<KeywordSet>> KeywordsRepository for T {}

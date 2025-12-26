@@ -14,15 +14,7 @@ impl IntelloService {
         crud_ops::get_user_sets(self.true_false_repo.as_ref(), user_id, "true_false").await
     }
 
-    /// Get a specific true/false set by ID
-    #[allow(dead_code)] // Available for future use
-    #[instrument(skip(self), fields(user_id = %user_id, set_id = %set_id))]
-    pub async fn get_true_false_set(&self, set_id: &str, user_id: &str) -> Result<Option<TrueOrFalseSet>, IntelloError> {
-        crud_ops::get_set(self.true_false_repo.as_ref(), set_id, user_id).await
-    }
-
     /// Delete a true/false set with ownership verification
-    #[allow(dead_code)] // Available for future use
     #[instrument(skip(self), fields(user_id = %user_id, set_id = %set_id))]
     pub async fn delete_true_false_set(&self, set_id: &str, user_id: &str) -> Result<bool, IntelloError> {
         crud_ops::delete_set(self.true_false_repo.as_ref(), set_id, user_id, "true_false").await

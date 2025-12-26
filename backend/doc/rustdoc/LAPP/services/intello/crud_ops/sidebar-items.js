@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["delete_set","get_set","get_user_sets","validate_set_id","validate_user_id"]};

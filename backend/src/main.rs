@@ -148,9 +148,25 @@ fn init_tracing() {
 
 fn configure_rate_limiter() -> RateLimiter {
     let limiter = RateLimiter::with_default(RateLimitConfig::standard());
+    
+    // Auth - strict limits
     limiter.configure("/api/auth/login", RateLimitConfig::strict());
     limiter.configure("/api/auth/register", RateLimitConfig::strict());
+    
+    // Collection - relaxed limits
     limiter.configure("/api/collection/dvds", RateLimitConfig::relaxed());
+    
+    // AI Generation - 1 per minute to prevent abuse
+    let ai_config = RateLimitConfig::ai_generation();
+    limiter.configure("/api/intello/qcm/generate", ai_config.clone());
+    limiter.configure("/api/intello/open-questions", ai_config.clone());
+    limiter.configure("/api/intello/flashcards", ai_config.clone());
+    limiter.configure("/api/intello/true-false", ai_config.clone());
+    limiter.configure("/api/intello/keywords", ai_config.clone());
+    limiter.configure("/api/intello/order-phrases", ai_config.clone());
+    limiter.configure("/api/intello/fill-blanks", ai_config.clone());
+    limiter.configure("/api/intello/generate-course", ai_config);
+    
     limiter
 }
 

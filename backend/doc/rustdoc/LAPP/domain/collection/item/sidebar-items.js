@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["CollectionItemType"],"trait":["CollectionItem"]};

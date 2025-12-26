@@ -11,6 +11,6 @@ use super::super::game_set::GameSetRepository;
 /// New code should use `GameSetRepository<OrderPhraseSet>` directly.
 pub trait OrderPhraseRepository: GameSetRepository<OrderPhraseSet> {}
 
-/// Blanket implementation: any type implementing GameSetRepository<OrderPhraseSet>
+/// Blanket implementation: any type implementing `GameSetRepository<OrderPhraseSet>`
 /// automatically implements OrderPhraseRepository.
 impl<T: GameSetRepository<OrderPhraseSet>> OrderPhraseRepository for T {}

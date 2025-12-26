@@ -14,15 +14,7 @@ impl IntelloService {
         crud_ops::get_user_sets(self.fill_blank_repo.as_ref(), user_id, "fill_blank").await
     }
 
-    /// Get a specific fill blank set by ID
-    #[allow(dead_code)] // Available for future use
-    #[instrument(skip(self), fields(user_id = %user_id, set_id = %set_id))]
-    pub async fn get_fill_blank_set(&self, set_id: &str, user_id: &str) -> Result<Option<FillBlankSet>, IntelloError> {
-        crud_ops::get_set(self.fill_blank_repo.as_ref(), set_id, user_id).await
-    }
-
     /// Delete a fill blank set with ownership verification
-    #[allow(dead_code)] // Available for future use
     #[instrument(skip(self), fields(user_id = %user_id, set_id = %set_id))]
     pub async fn delete_fill_blank_set(&self, set_id: &str, user_id: &str) -> Result<bool, IntelloError> {
         crud_ops::delete_set(self.fill_blank_repo.as_ref(), set_id, user_id, "fill_blank").await

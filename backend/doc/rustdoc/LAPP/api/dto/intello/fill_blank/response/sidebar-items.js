@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["CreateFillBlankResponse","FillBlankOptionResponse","FillBlankQuestionResponse","FillBlankSetListResponse","FillBlankSetWithQuestionsResponse"]};

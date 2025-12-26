@@ -16,15 +16,6 @@ impl IntelloService {
         Ok(sets)
     }
 
-    /// Get a specific open question set by ID
-    #[allow(dead_code)] // Available for future use
-    #[instrument(skip(self), fields(user_id = %user_id, set_id = %set_id))]
-    pub async fn get_open_question_set(&self, set_id: &str, user_id: &str) -> Result<Option<OpenQuestionSet>, IntelloError> {
-        self.validate_user_id(user_id)?;
-        self.validate_set_id(set_id)?;
-        self.open_question_repo.find_by_id(set_id, user_id).await
-    }
-
     /// Generate AI open questions and store them
     #[instrument(skip(self, input, source_content), fields(user_id = %user_id, name = %input.name))]
     pub async fn generate_ai_open_questions(
@@ -91,7 +82,7 @@ impl IntelloService {
 
         // Get the question set and verify ownership
         let set = self.open_question_repo.find_by_id(&input.set_id, user_id).await?;
-        let set = set.ok_or_else(|| IntelloError::not_found("open_question_set", &input.set_id))?;
+        let set = set.ok_or_else(|| IntelloError::game_not_found("open_question_set", &input.set_id))?;
 
         // Get source content from cache
         let source_content = self.open_question_cache

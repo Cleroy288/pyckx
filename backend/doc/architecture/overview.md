@@ -93,30 +93,46 @@ src/
 │   ├── collection/        # Collection use cases
 │   └── ai/                # Shared AI use cases
 ├── domain/
-│   ├── apps/              # App, UserApp
+│   ├── apps/              # Domain Entities (App, UserApp) - Data Only
 │   ├── collection/        # Dvd, UserCollection
 │   └── intello/           # QcmSet, Flashcard, OpenQuestion, etc.
 ├── infrastructure/
 │   ├── repository/        # Trait definitions
 │   └── supabase/          # Supabase implementations
 ├── error/                 # Domain-specific errors
-│   ├── app.rs             # Main AppError
-│   ├── auth.rs
-│   ├── collection.rs
-│   └── intello.rs
+│   ├── app/               # Main AppError + Response
+│   ├── auth/              # AuthError
+│   ├── collection/        # CollectionError
+│   └── intello/           # IntelloError
 └── shared/
     ├── document_extractor.rs  # PDF, Word, PPTX parsing
-    ├── prompt_builder.rs      # AI prompt generation
+    ├── prompt_builder.rs      # SSOT for Game Schemas & Prompts
     └── open_question_cache.rs # Grading context cache
-```
 
 ## Key Principles
 
 1. **Handlers are thin** - Only HTTP concerns (parse, delegate, respond)
 2. **Services own business logic** - Validation, rules, orchestration
-3. **Repositories are traits** - Enables swappable backends, testing
-4. **Domain is pure** - No I/O, no dependencies
-5. **Errors per domain** - Convert to `AppError` via `From` trait
+3. **Pipelining** - Heavy AI workflows use multi-stage pipelines (e.g., Course Generation)
+4. **Repositories are traits** - Enables swappable backends, testing
+5. **Domain is pure** - No I/O, no dependencies
+6. **Errors per domain** - Convert to `AppError` via `From` trait
+
+## Pipelines
+
+For complex AI workflows (like Course Generation), we use a staged pipeline pattern:
+
+```
+Stage 0: Decryption & Expansion (Parallel AI calls)
+         │
+         ▼
+Stage 1: Core Knowledge Extraction (Synthesis)
+         │
+         ▼
+Stage 2: Structure Generation (Final Output)
+```
+
+This separates concerns (intent vs. knowledge vs. structure) and improves reliability.
 
 ## Dependency Injection
 
@@ -127,21 +143,12 @@ pub struct App {
     // Services wrapped in Arc for cheap cloning
     pub intello_service: Arc<IntelloService>,
     pub collection_service: Arc<CollectionService>,
-    pub app_service: Arc<AppService>,
-    pub auth: AuthService,
     // ...
 }
 
 impl App {
     pub fn new(config: Config) -> Self {
-        // Create repositories (Arc-wrapped)
-        let qcm_repo = Arc::new(SupabaseQcmRepository::new(&cfg));
-        // ... more repos
-        
-        // Create services and wrap in Arc
-        let intello_service = Arc::new(IntelloService::new(qcm_repo, ...));
-        
-        Self { intello_service, ... }
+        // ...
     }
 }
 

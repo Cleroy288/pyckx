@@ -11,10 +11,12 @@
 //! - `SupabaseFlashcardRepository` - Flashcard set database operations
 //! - `SupabaseTrueOrFalseRepository` - True or False set database operations
 //! - `SupabaseKeywordsRepository` - Keywords set database operations
+//! - `SupabaseCourseRepository` - Course, resource, and session management operations
 
 mod app;
 mod client;
 mod collection;
+mod course;
 mod dvd;
 mod fill_blank;
 mod flashcard;
@@ -28,6 +30,7 @@ mod user_app;
 pub use app::SupabaseAppRepository;
 pub use client::SupabaseClient;
 pub use collection::SupabaseCollectionRepository;
+pub use course::SupabaseCourseRepository;
 pub use dvd::SupabaseDvdRepository;
 pub use fill_blank::SupabaseFillBlankRepository;
 pub use flashcard::SupabaseFlashcardRepository;
@@ -37,5 +40,3 @@ pub use order_phrase::SupabaseOrderPhraseRepository;
 pub use qcm::SupabaseQcmRepository;
 pub use true_false::SupabaseTrueOrFalseRepository;
 pub use user_app::SupabaseUserAppRepository;
-
-

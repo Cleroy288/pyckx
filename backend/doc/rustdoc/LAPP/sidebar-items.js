@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["configure_rate_limiter","init_tracing","main","spa_fallback"],"mod":["api","app","apps","config","domain","error","infrastructure","middleware","services","shared","use_cases"]};

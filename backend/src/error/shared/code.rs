@@ -27,7 +27,6 @@ pub enum ErrorCode {
     SessionNotFound,
     SessionExpired,
     // Intello
-    IntelloQcmSetNotFound,
     IntelloGameSetNotFound,  // Generic: works for any game type
     IntelloValidationFailed,
     IntelloStorageError,
@@ -59,7 +58,6 @@ impl ErrorCode {
             Self::SessionNotFound => codes::SESSION_NOT_FOUND,
             Self::SessionExpired => codes::SESSION_EXPIRED,
             // Intello
-            Self::IntelloQcmSetNotFound => codes::INTELLO_QCM_SET_NOT_FOUND,
             Self::IntelloGameSetNotFound => "INTELLO_GAME_SET_NOT_FOUND",
             Self::IntelloValidationFailed => codes::INTELLO_VALIDATION_FAILED,
             Self::IntelloStorageError => codes::INTELLO_STORAGE_ERROR,
@@ -91,7 +89,6 @@ impl ErrorCode {
             Self::SessionNotFound => messages::SESSION_NOT_FOUND,
             Self::SessionExpired => messages::SESSION_EXPIRED,
             // Intello
-            Self::IntelloQcmSetNotFound => messages::INTELLO_QCM_SET_NOT_FOUND,
             Self::IntelloGameSetNotFound => "Game set not found",
             Self::IntelloValidationFailed => messages::INTELLO_VALIDATION_FAILED,
             Self::IntelloStorageError => messages::INTELLO_STORAGE_ERROR,
@@ -123,7 +120,6 @@ impl ErrorCode {
             Self::SessionNotFound => status::SESSION_NOT_FOUND,
             Self::SessionExpired => status::SESSION_EXPIRED,
             // Intello
-            Self::IntelloQcmSetNotFound => status::INTELLO_QCM_SET_NOT_FOUND,
             Self::IntelloGameSetNotFound => StatusCode::NOT_FOUND,
             Self::IntelloValidationFailed => status::INTELLO_VALIDATION_FAILED,
             Self::IntelloStorageError => status::INTELLO_STORAGE_ERROR,

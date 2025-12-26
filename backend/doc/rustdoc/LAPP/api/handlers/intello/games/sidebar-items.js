@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["get_available_games_handler"]};

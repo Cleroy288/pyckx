@@ -27,6 +27,7 @@ pub const GAME_FORMATS: &[GameOutputFormat] = &[
 - Exactly 3 wrong answers (plausible but incorrect)
 - Exactly 1 correct answer
 - An explanation of why the correct answer is right
+- ALL the answers should have the same lenght, the user should not be able to know wich answer is right or false based of the length of the answer.
 
 IMPORTANT: Each question MUST have exactly 4 total answer choices (1 right + 3 wrong)."#,
         json_schema: r#"{
@@ -35,7 +36,7 @@ IMPORTANT: Each question MUST have exactly 4 total answer choices (1 right + 3 w
       "question": "The question text goes here?",
       "wrong_answers": [
         "First incorrect option",
-        "Second incorrect option", 
+        "Second incorrect option",
         "Third incorrect option"
       ],
       "right_answer": "The correct answer",
@@ -213,29 +214,35 @@ pub fn get_game_format(game_id: &str) -> Option<&'static GameOutputFormat> {
 }
 
 /// Convert Level enum to detailed human-readable string with specific guidelines
-fn level_to_string(level: &Level) -> &'static str {
+pub fn level_to_string(level: &Level) -> &'static str {
     match level {
-        Level::Easy => r#"EASY - Beginner Level
+        Level::Easy => {
+            r#"EASY - Beginner Level
    - Use simple, everyday vocabulary (avoid jargon and technical terms)
    - Ask about basic facts, definitions, and simple concepts
    - Questions should be straightforward with obvious correct answers
    - Focus on "what", "who", "when" type questions
    - Answers should be short and direct
-   - Wrong answers should be clearly distinguishable from correct ones"#,
-        Level::Medium => r#"MEDIUM - Intermediate Level
+   - Wrong answers should be clearly distinguishable from correct ones"#
+        }
+        Level::Medium => {
+            r#"MEDIUM - Intermediate Level
    - Use appropriate technical vocabulary with context
    - Ask about relationships, causes, effects, and applications
    - Questions require understanding, not just memorization
    - Include "why", "how", and "explain" type questions
    - Answers may require connecting multiple concepts
-   - Wrong answers should be plausible but distinguishable"#,
-        Level::Hard => r#"HARD - Advanced Level
+   - Wrong answers should be plausible but distinguishable"#
+        }
+        Level::Hard => {
+            r#"HARD - Advanced Level
    - Use precise technical and domain-specific terminology
    - Ask about complex relationships, analysis, and synthesis
    - Questions require deep understanding and critical thinking
    - Include scenario-based, analytical, and evaluation questions
    - Answers require integrating multiple concepts and reasoning
-   - Wrong answers should be sophisticated and require careful analysis to eliminate"#,
+   - Wrong answers should be sophisticated and require careful analysis to eliminate"#
+        }
     }
 }
 
@@ -295,17 +302,17 @@ pub struct GamePromptInput {
 
 /// Build the complete AI prompt from a CustomQuestion
 pub fn build_prompt(custom_question: &CustomQuestion) -> String {
-    let game_format = get_game_format(&custom_question.output_game)
-        .unwrap_or(&GAME_FORMATS[0]); // Default to QCM if not found
-    
+    let game_format = get_game_format(&custom_question.output_game).unwrap_or(&GAME_FORMATS[0]); // Default to QCM if not found
+
     let subjects_list = if custom_question.subjects.is_empty() {
         "General topics from the provided content".to_string()
     } else {
         custom_question.subjects.join(", ")
     };
-    
+
     // Build the documents content section
-    let documents_content = custom_question.documents
+    let documents_content = custom_question
+        .documents
         .iter()
         .enumerate()
         .map(|(i, doc)| {
@@ -456,17 +463,17 @@ pub struct OpenQuestionPromptInput {
 /// 3. Include expected answers and helpful hints for each question
 /// 4. Return the result in a specific JSON format
 pub fn build_open_question_prompt(input: &OpenQuestionPromptInput) -> String {
-    let game_format = get_game_format("open_question")
-        .unwrap_or(&GAME_FORMATS[1]); // Default to open_question format
-    
+    let game_format = get_game_format("open_question").unwrap_or(&GAME_FORMATS[1]); // Default to open_question format
+
     let subjects_list = if input.subjects.is_empty() {
         "General topics from the provided content".to_string()
     } else {
         input.subjects.join(", ")
     };
-    
+
     // Build the documents content section
-    let documents_content = input.documents
+    let documents_content = input
+        .documents
         .iter()
         .enumerate()
         .map(|(i, (filename, content))| {
@@ -662,7 +669,12 @@ pub fn build_flashcard_prompt(input: &FlashcardPromptInput) -> String {
         .iter()
         .enumerate()
         .map(|(i, (filename, content))| {
-            format!("### Document {} - {}\n```\n{}\n```", i + 1, filename, content)
+            format!(
+                "### Document {} - {}\n```\n{}\n```",
+                i + 1,
+                filename,
+                content
+            )
         })
         .collect::<Vec<_>>()
         .join("\n\n");
@@ -939,7 +951,12 @@ pub fn build_true_false_prompt(input: &TrueOrFalsePromptInput) -> String {
         .iter()
         .enumerate()
         .map(|(i, (filename, content))| {
-            format!("### Document {} - {}\n```\n{}\n```", i + 1, filename, content)
+            format!(
+                "### Document {} - {}\n```\n{}\n```",
+                i + 1,
+                filename,
+                content
+            )
         })
         .collect::<Vec<_>>()
         .join("\n\n");
@@ -1093,7 +1110,12 @@ pub fn build_keywords_prompt(input: &KeywordsPromptInput) -> String {
         .iter()
         .enumerate()
         .map(|(i, (filename, content))| {
-            format!("### Document {} - {}\n```\n{}\n```", i + 1, filename, content)
+            format!(
+                "### Document {} - {}\n```\n{}\n```",
+                i + 1,
+                filename,
+                content
+            )
         })
         .collect::<Vec<_>>()
         .join("\n\n");
@@ -1232,7 +1254,12 @@ pub fn build_order_phrase_prompt(input: &OrderPhrasePromptInput) -> String {
         .iter()
         .enumerate()
         .map(|(i, (filename, content))| {
-            format!("### Document {} - {}\n```\n{}\n```", i + 1, filename, content)
+            format!(
+                "### Document {} - {}\n```\n{}\n```",
+                i + 1,
+                filename,
+                content
+            )
         })
         .collect::<Vec<_>>()
         .join("\n\n");
@@ -1387,7 +1414,12 @@ pub fn build_fill_blank_prompt(input: &FillBlankPromptInput) -> String {
         .iter()
         .enumerate()
         .map(|(i, (filename, content))| {
-            format!("### Document {} - {}\n```\n{}\n```", i + 1, filename, content)
+            format!(
+                "### Document {} - {}\n```\n{}\n```",
+                i + 1,
+                filename,
+                content
+            )
         })
         .collect::<Vec<_>>()
         .join("\n\n");
@@ -1506,95 +1538,4 @@ Before outputting, verify:
     )
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use crate::domain::intello::{CustomQuestion, CustomQuestionDocument, DocumentType};
 
-    #[test]
-    fn test_build_prompt_basic() {
-        let question = CustomQuestion {
-            id: "test-id".to_string(),
-            user_id: "user-123".to_string(),
-            name: "History Quiz".to_string(),
-            description: "A quiz about World War II".to_string(),
-            instructions: "Focus on European theater".to_string(),
-            language: "en".to_string(),
-            level: Level::Medium,
-            output_game: "qcm".to_string(),
-            subjects: vec!["History".to_string(), "WWII".to_string()],
-            num_questions: 10,
-            documents: vec![
-                CustomQuestionDocument {
-                    filename: "wwii_notes.txt".to_string(),
-                    doc_type: DocumentType::Text,
-                    content: "World War II began in 1939...".to_string(),
-                    token_count: 100,
-                }
-            ],
-            total_token_count: 100,
-        };
-
-        let prompt = build_prompt(&question);
-        
-        assert!(prompt.contains("History Quiz"));
-        assert!(prompt.contains("A quiz about World War II"));
-        assert!(prompt.contains("Focus on European theater"));
-        assert!(prompt.contains("English"));
-        assert!(prompt.contains("MEDIUM")); // Level is uppercase in prompt
-        assert!(prompt.contains("10"));
-        assert!(prompt.contains("History, WWII"));
-        assert!(prompt.contains("wwii_notes.txt"));
-    }
-
-    #[test]
-    fn test_get_game_format() {
-        let qcm = get_game_format("qcm");
-        assert!(qcm.is_some());
-        assert_eq!(qcm.unwrap().game_id, "qcm");
-
-        let open_question = get_game_format("open_question");
-        assert!(open_question.is_some());
-        assert_eq!(open_question.unwrap().game_id, "open_question");
-        
-        let unknown = get_game_format("unknown_game");
-        assert!(unknown.is_none());
-    }
-
-    #[test]
-    fn test_level_to_string() {
-        assert!(level_to_string(&Level::Easy).contains("EASY"));
-        assert!(level_to_string(&Level::Medium).contains("MEDIUM"));
-        assert!(level_to_string(&Level::Hard).contains("HARD"));
-    }
-
-    #[test]
-    fn test_build_open_question_prompt() {
-        let input = OpenQuestionPromptInput {
-            name: "Science Quiz".to_string(),
-            description: "Open questions about biology".to_string(),
-            instructions: "Focus on cell structure".to_string(),
-            language: "en".to_string(),
-            level: Level::Medium,
-            subjects: vec!["Biology".to_string(), "Cells".to_string()],
-            num_questions: 5,
-            documents: vec![
-                ("biology_notes.txt".to_string(), "Cells are the basic unit of life...".to_string()),
-            ],
-        };
-
-        let prompt = build_open_question_prompt(&input);
-        
-        assert!(prompt.contains("Science Quiz"));
-        assert!(prompt.contains("Open questions about biology"));
-        assert!(prompt.contains("Focus on cell structure"));
-        assert!(prompt.contains("English"));
-        assert!(prompt.contains("Medium"));
-        assert!(prompt.contains("5"));
-        assert!(prompt.contains("Biology, Cells"));
-        assert!(prompt.contains("biology_notes.txt"));
-        assert!(prompt.contains("Open-Ended Questions"));
-        assert!(prompt.contains("expected_answer"));
-        assert!(prompt.contains("hint"));
-    }
-}

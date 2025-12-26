@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["create_fill_blank_handler","list_fill_blank_sets_handler"]};

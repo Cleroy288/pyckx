@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["create_keywords_handler","list_keyword_sets_handler"]};

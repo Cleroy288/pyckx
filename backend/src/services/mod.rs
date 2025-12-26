@@ -23,5 +23,12 @@ pub use intello::{
     AnswerGrade as IntelloAnswerGrade, CheckAnswersInput, GenerateContentInput, GradingResult,
     IntelloRepositories, IntelloService, UserAnswer,
 };
-pub use openrouter::{AnswerGrade, GradedAnswer, OpenRouterService, AVAILABLE_MODELS, DEFAULT_MODEL, validate_model, validate_token_count};
+pub use openrouter::{
+    AnswerGrade, GradedAnswer, OpenRouterService,
+    AVAILABLE_MODELS, DEFAULT_MODEL, validate_model, validate_token_count,
+};
+
+// Utility functions (exposed for tests)
+#[cfg(test)]
+pub use openrouter::{extract_json_from_response, sanitize_json_duplicates};
 

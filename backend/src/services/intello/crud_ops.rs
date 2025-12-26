@@ -40,7 +40,7 @@ pub fn validate_set_id(set_id: &str) -> Result<(), IntelloError> {
 /// Get all sets for a user (generic implementation)
 ///
 /// # Arguments
-/// * `repo` - The repository implementing GameSetRepository<T>
+/// * `repo` - The repository implementing `GameSetRepository<T>`
 /// * `user_id` - The user's ID
 /// * `game_type` - Name of the game type for logging (e.g., "keywords", "flashcards")
 pub async fn get_user_sets<T: Clone + Send + Sync>(
@@ -57,7 +57,7 @@ pub async fn get_user_sets<T: Clone + Send + Sync>(
 /// Get a specific set by ID (generic implementation)
 ///
 /// # Arguments
-/// * `repo` - The repository implementing GameSetRepository<T>
+/// * `repo` - The repository implementing `GameSetRepository<T>`
 /// * `set_id` - The set's ID
 /// * `user_id` - The user's ID (for ownership verification)
 #[allow(dead_code)]
@@ -74,7 +74,7 @@ pub async fn get_set<T: Clone + Send + Sync>(
 /// Delete a set with ownership verification (generic implementation)
 ///
 /// # Arguments
-/// * `repo` - The repository implementing GameSetRepository<T>
+/// * `repo` - The repository implementing `GameSetRepository<T>`
 /// * `set_id` - The set's ID
 /// * `user_id` - The user's ID (for ownership verification)
 /// * `game_type` - Name of the game type for logging (e.g., "keywords", "flashcards")

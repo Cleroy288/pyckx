@@ -11,6 +11,6 @@ use super::super::game_set::GameSetRepository;
 /// New code should use `GameSetRepository<TrueOrFalseSet>` directly.
 pub trait TrueOrFalseRepository: GameSetRepository<TrueOrFalseSet> {}
 
-/// Blanket implementation: any type implementing GameSetRepository<TrueOrFalseSet>
+/// Blanket implementation: any type implementing `GameSetRepository<TrueOrFalseSet>`
 /// automatically implements TrueOrFalseRepository.
 impl<T: GameSetRepository<TrueOrFalseSet>> TrueOrFalseRepository for T {}
