@@ -6,7 +6,7 @@ Where to add code for a new feature.
 
 | What | Where | Purpose |
 |------|-------|---------|
-| **Domain Entity** | `domain/{app}/` | Pure data structs (`MyEntity`) |
+| **Domain Entity** | `services/{app}/domain/` | Pure data structs (`MyEntity`) |
 | **Repository Trait** | `infrastructure/repository/{feature}/` | Database abstraction |
 | **Supabase Impl** | `infrastructure/supabase/{feature}/` | Actual DB calls |
 | **Service Methods** | `services/{app}/{feature}_ops.rs` | Business logic |
@@ -14,9 +14,9 @@ Where to add code for a new feature.
 | **Request DTO** | `api/dto/{app}/{feature}/request.rs` | HTTP request parsing |
 | **Response DTO** | `api/dto/{app}/{feature}/response.rs` | HTTP response format |
 | **Handler** | `api/handlers/{app}/{feature}.rs` | HTTP endpoint |
-| **Wiring** | `app.rs` | Dependency injection |
+| **Wiring** | `app.rs` | DI via `Arc<SupabaseHttpClient>` |
 | **Routes** | `api/handlers/{app}/mod.rs` | Register endpoint |
-| **Error Codes** | `error/shared/code.rs` + `shared/constants/errors.rs` | Error handling |
+| **Error Codes** | `services/{app}/{feature}_error.rs` | Error handling |
 | **Tests** | `tests/{app}/` | Unit/property tests |
 
 ## Architecture Flow
@@ -58,8 +58,8 @@ HTTP Request
 ## Files to Touch for a New Intello Game
 
 ```
-1. domain/intello/my_game.rs          ← Entity
-2. domain/intello/mod.rs              ← Export
+1. services/intello/domain/my_game.rs          ← Entity
+2. services/intello/domain/mod.rs              ← Export
 3. infrastructure/repository/my_game/ ← Trait
 4. infrastructure/supabase/my_game/   ← Impl
 5. services/intello/my_game_ops.rs    ← Business logic

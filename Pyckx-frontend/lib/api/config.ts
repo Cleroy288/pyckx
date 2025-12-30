@@ -30,7 +30,6 @@ export const endpoints = {
   // == Intello: /api/intello ==
   intello: {
     games: "/api/intello/games",
-    models: "/api/intello/models",
     qcm: "/api/intello/qcm",
     qcmById: (id: string) => `/api/intello/qcm/${id}`,
     qcmGenerate: "/api/intello/qcm/generate",
@@ -41,5 +40,17 @@ export const endpoints = {
     keywords: "/api/intello/keywords",
     orderPhrases: "/api/intello/order-phrases",
     fillBlanks: "/api/intello/fill-blanks",
+    // Course & Session CRUD
+    courses: "/api/intello/courses",
+    courseResources: (id: string) => `/api/intello/courses/${id}/resources`,
+    courseSessions: (id: string) => `/api/intello/courses/${id}/sessions`,
+    generateCourse: "/api/intello/generate-course",
+    // User Resource Management
+    resources: "/api/intello/resources",
+    resourceCheck: (filename: string) => `/api/intello/resources/check?filename=${encodeURIComponent(filename)}`,
+    resourceById: (id: string) => `/api/intello/resources/${id}`,
+    courseResourceLink: (courseId: string) => `/api/intello/courses/${courseId}/resources/link`,
+    // Admin
+    adminStats: "/api/intello/admin/stats",
   },
 } as const;

@@ -1,17 +1,18 @@
 //! Application state - Main application struct holding all services
 
-use crate::apps::{CollectionApp, IntelloApp};
-use crate::config::{Config, ConfigError};
-use crate::domain::{AppModule, SessionStore};
-use crate::infrastructure::{
-    SupabaseAppRepository, SupabaseCollectionRepository, SupabaseDvdRepository,
-    SupabaseFillBlankRepository, SupabaseFlashcardRepository, SupabaseKeywordsRepository,
+use crate::services::app_registry::{CollectionApp, IntelloApp};
+use crate::configs::{Config, ConfigError};
+use crate::services::app_registry::registry_domain::AppModule;
+use crate::infra::SessionStore;
+use crate::infra::{
+    SupabaseAiUsageRepository, SupabaseAppRepository, SupabaseCollectionRepository, SupabaseDvdRepository,
+    SupabaseFillBlankRepository, SupabaseFlashcardRepository, SupabaseHttpClient, SupabaseKeywordsRepository,
     SupabaseOpenQuestionRepository, SupabaseOrderPhraseRepository, SupabaseQcmRepository,
     SupabaseTrueOrFalseRepository, SupabaseUserAppRepository,
-    SupabaseCourseRepository,
+    SupabaseCourseRepository, SupabaseStudySessionRepository,
 };
 use crate::services::{AppService, AuthService, CollectionService, IntelloService, OpenRouterService};
-use crate::shared::OpenQuestionCache;
+use crate::services::intello::open_question_cache_service::OpenQuestionCache;
 use std::sync::Arc;
 use tracing::info;
 
@@ -58,23 +59,28 @@ impl App {
         let collection = CollectionApp::new();
         let intello = IntelloApp::new();
 
-        // Create Supabase repositories
-        let collection_repo = Arc::new(SupabaseCollectionRepository::new(&cfg));
-        let dvd_repo = Arc::new(SupabaseDvdRepository::new(&cfg));
-        let app_repository = Arc::new(SupabaseAppRepository::new(&cfg));
-        let user_app_repository = Arc::new(SupabaseUserAppRepository::new(&cfg));
+        /* Create shared Supabase HTTP client (single connection pool) */
+        let supabase_client = Arc::new(SupabaseHttpClient::new(&cfg));
 
-        // Create Supabase repositories for Intello (bundled for cleaner construction)
+        /* Create Supabase repositories (non-Intello) */
+        let collection_repo = Arc::new(SupabaseCollectionRepository::new(Arc::clone(&supabase_client)));
+        let dvd_repo = Arc::new(SupabaseDvdRepository::new(Arc::clone(&supabase_client)));
+        let app_repository = Arc::new(SupabaseAppRepository::new(Arc::clone(&supabase_client)));
+        let user_app_repository = Arc::new(SupabaseUserAppRepository::new(Arc::clone(&supabase_client)));
+
+        /* Create Supabase repositories for Intello (bundled for cleaner construction) */
         let intello_repos = crate::services::IntelloRepositories {
-            qcm_repo: Arc::new(SupabaseQcmRepository::new(&cfg)),
-            ai_qcm_repo: Arc::new(SupabaseQcmRepository::new(&cfg)), // Same table, user_id distinguishes
-            open_question_repo: Arc::new(SupabaseOpenQuestionRepository::new(&cfg)),
-            flashcard_repo: Arc::new(SupabaseFlashcardRepository::new(&cfg)),
-            true_false_repo: Arc::new(SupabaseTrueOrFalseRepository::new(&cfg)),
-            keywords_repo: Arc::new(SupabaseKeywordsRepository::new(&cfg)),
-            order_phrase_repo: Arc::new(SupabaseOrderPhraseRepository::new(&cfg)),
-            fill_blank_repo: Arc::new(SupabaseFillBlankRepository::new(&cfg)),
-            course_repo: Arc::new(SupabaseCourseRepository::new(&cfg)),
+            qcm_repo: Arc::new(SupabaseQcmRepository::new(Arc::clone(&supabase_client))),
+            ai_qcm_repo: Arc::new(SupabaseQcmRepository::new(Arc::clone(&supabase_client))),
+            open_question_repo: Arc::new(SupabaseOpenQuestionRepository::new(Arc::clone(&supabase_client))),
+            flashcard_repo: Arc::new(SupabaseFlashcardRepository::new(Arc::clone(&supabase_client))),
+            true_false_repo: Arc::new(SupabaseTrueOrFalseRepository::new(Arc::clone(&supabase_client))),
+            keywords_repo: Arc::new(SupabaseKeywordsRepository::new(Arc::clone(&supabase_client))),
+            order_phrase_repo: Arc::new(SupabaseOrderPhraseRepository::new(Arc::clone(&supabase_client))),
+            fill_blank_repo: Arc::new(SupabaseFillBlankRepository::new(Arc::clone(&supabase_client))),
+            course_repo: Arc::new(SupabaseCourseRepository::new(Arc::clone(&supabase_client))),
+            ai_usage_repo: Arc::new(SupabaseAiUsageRepository::new(Arc::clone(&supabase_client))),
+            study_session_repo: Arc::new(SupabaseStudySessionRepository::new(Arc::clone(&supabase_client))),
         };
 
         // Create caches

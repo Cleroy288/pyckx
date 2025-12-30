@@ -25,14 +25,31 @@ Pyckx-frontend/
 │   ├── register/page.tsx   # Registration page
 │   └── collection/page.tsx # DVD Collection app
 ├── components/             # React components
-│   ├── ui/                 # shadcn/ui primitives
-│   ├── top-navigation.tsx  # Main navigation bar
-│   ├── app-card.tsx        # App card component
-│   ├── app-grid.tsx        # App grid layout
-│   ├── app-details.tsx     # App details view
-│   ├── auth-guard.tsx      # Auth protection wrapper
-│   ├── grid-background.tsx # Animated background
-│   └── palette-selector.tsx # Color theme picker
+│   ├── ui/                 # shadcn/ui primitives (57 generic components)
+│   ├── intello/            # Intello app components
+│   │   ├── qcm-player.tsx
+│   │   ├── flashcard-player.tsx
+│   │   ├── fill-blank-player.tsx
+│   │   ├── keywords-player.tsx
+│   │   ├── open-question-player.tsx
+│   │   ├── order-phrase-player.tsx
+│   │   ├── true-false-player.tsx
+│   │   ├── custom-question-form.tsx
+│   │   ├── manual-qcm-form.tsx
+│   │   └── mermaid-diagram.tsx
+│   ├── dashboard/          # Dashboard components
+│   │   ├── app-card.tsx
+│   │   ├── app-details.tsx
+│   │   └── app-grid.tsx
+│   ├── auth/               # Auth components
+│   │   └── auth-guard.tsx
+│   ├── layout/             # Layout components
+│   │   ├── top-navigation.tsx
+│   │   ├── grid-background.tsx
+│   │   ├── theme-provider.tsx
+│   │   └── theme-toggle.tsx
+│   └── settings/           # Settings components
+│       └── palette-selector.tsx
 ├── lib/                    # Utilities and logic
 │   ├── api/                # API layer
 │   │   ├── config.ts       # API endpoints

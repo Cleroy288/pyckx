@@ -5,17 +5,19 @@
 use proptest::prelude::*;
 use std::sync::Arc;
 
-use crate::api::dto::intello::CreateQcmSetRequest;
-use crate::domain::intello::{Level, QcmQuestion, QcmSet};
-use crate::error::IntelloError;
-use crate::infrastructure::repository::QcmRepository;
-use crate::services::{IntelloRepositories, IntelloService, OpenRouterService};
-use crate::shared::OpenQuestionCache;
 use super::helpers::{
-    StubQcmRepository, StubOpenQuestionRepository, StubFlashcardRepository,
-    StubTrueOrFalseRepository, StubKeywordsRepository, StubOrderPhraseRepository, StubFillBlankRepository,
-    StubCourseRepository
+    StubAiUsageRepository, StubCourseRepository, StubFillBlankRepository, StubFlashcardRepository,
+    StubKeywordsRepository, StubOpenQuestionRepository, StubOrderPhraseRepository,
+    StubQcmRepository, StubStudySessionRepository, StubTrueOrFalseRepository,
 };
+use crate::services::intello::qcm_question_domain::QcmQuestion;
+use crate::services::intello::qcm_set_domain::QcmSet;
+use crate::services::intello::enums_domain::Level;
+use crate::services::intello::error_domain::IntelloError;
+use crate::http_api::data_transfer_object::intello::CreateQcmSetRequest;
+use crate::infra::database::QcmRepository;
+use crate::services::{IntelloRepositories, IntelloService, OpenRouterService};
+use crate::services::intello::open_question_cache_service::OpenQuestionCache;
 
 /// Create a test IntelloService with stub repositories
 fn create_test_intello_service() -> IntelloService {
@@ -29,17 +31,20 @@ fn create_test_intello_service() -> IntelloService {
         order_phrase_repo: Arc::new(StubOrderPhraseRepository),
         fill_blank_repo: Arc::new(StubFillBlankRepository),
         course_repo: Arc::new(StubCourseRepository),
+        ai_usage_repo: Arc::new(StubAiUsageRepository),
+        study_session_repo: Arc::new(StubStudySessionRepository),
     };
-    
+
     IntelloService::builder()
         .with_repositories(repos)
-        .with_openrouter(Arc::new(OpenRouterService::with_google_key(String::new(), None)))
+        .with_openrouter(Arc::new(OpenRouterService::with_google_key(
+            String::new(),
+            None,
+        )))
         .with_cache(Arc::new(OpenQuestionCache::new()))
         .build()
         .expect("Test IntelloService setup should not fail")
 }
-
-
 
 // == GENERATORS ==
 
@@ -79,13 +84,15 @@ fn arb_qcm_question() -> impl Strategy<Value = QcmQuestion> {
         arb_non_empty_string(),
         arb_non_empty_string(),
     )
-        .prop_map(|(id, question, wrong_answers, right_answer, explanation)| QcmQuestion {
-            id,
-            question,
-            wrong_answers,
-            right_answer,
-            explanation,
-        })
+        .prop_map(
+            |(id, question, wrong_answers, right_answer, explanation)| QcmQuestion {
+                id: id.into(),
+                question,
+                wrong_answers,
+                right_answer,
+                explanation,
+            },
+        )
 }
 
 /// Strategy for generating arbitrary language codes
@@ -112,8 +119,8 @@ fn arb_qcm_set() -> impl Strategy<Value = QcmSet> {
     )
         .prop_map(
             |(id, user_id, name, description, level, subjects, language, questions)| QcmSet {
-                id,
-                user_id,
+                id: id.into(),
+                user_id: user_id.into(),
                 name,
                 description,
                 level,
@@ -136,7 +143,7 @@ fn arb_intello_error() -> impl Strategy<Value = IntelloError> {
         (arb_non_empty_string(), arb_non_empty_string())
             .prop_map(|(field, message)| IntelloError::validation(field, message)),
         // StorageError with arbitrary message
-        arb_non_empty_string().prop_map(|message| IntelloError::storage(message)),
+        arb_non_empty_string().prop_map(IntelloError::storage),
     ]
 }
 
@@ -171,7 +178,7 @@ proptest! {
     /// **Validates: Requirements 6.3**
     #[test]
     fn prop_intello_error_status_code_mapping(error in arb_intello_error()) {
-        let status_code = error.status_code();
+        let status_code = error.status();
 
         match &error {
             IntelloError::GameSetNotFound { .. } => {
@@ -185,6 +192,15 @@ proptest! {
             }
             IntelloError::ExternalServiceError { .. } => {
                 prop_assert_eq!(status_code, 502, "ExternalServiceError should map to 502");
+            }
+            IntelloError::NotFound => {
+                prop_assert_eq!(status_code, 404, "NotFound should map to 404");
+            }
+            IntelloError::Forbidden => {
+                prop_assert_eq!(status_code, 403, "Forbidden should map to 403");
+            }
+            IntelloError::Conflict(_) => {
+                prop_assert_eq!(status_code, 409, "Conflict should map to 409");
             }
         }
     }
@@ -267,7 +283,11 @@ fn arb_qcm_set_with_empty_name() -> impl Strategy<Value = QcmSet> {
         arb_uuid(),
         arb_uuid(),
         // Empty or whitespace-only name
-        prop_oneof![Just(String::new()), Just("   ".to_string()), Just("\t\n".to_string())],
+        prop_oneof![
+            Just(String::new()),
+            Just("   ".to_string()),
+            Just("\t\n".to_string())
+        ],
         arb_non_empty_string(),
         arb_level(),
         prop::collection::vec(arb_subject(), 0..3),
@@ -276,8 +296,8 @@ fn arb_qcm_set_with_empty_name() -> impl Strategy<Value = QcmSet> {
     )
         .prop_map(
             |(id, user_id, name, description, level, subjects, language, questions)| QcmSet {
-                id,
-                user_id,
+                id: id.into(),
+                user_id: user_id.into(),
                 name,
                 description,
                 level,
@@ -295,7 +315,11 @@ fn arb_qcm_set_with_empty_description() -> impl Strategy<Value = QcmSet> {
         arb_uuid(),
         arb_non_empty_string(),
         // Empty or whitespace-only description
-        prop_oneof![Just(String::new()), Just("   ".to_string()), Just("\t\n".to_string())],
+        prop_oneof![
+            Just(String::new()),
+            Just("   ".to_string()),
+            Just("\t\n".to_string())
+        ],
         arb_level(),
         prop::collection::vec(arb_subject(), 0..3),
         arb_language(),
@@ -303,8 +327,8 @@ fn arb_qcm_set_with_empty_description() -> impl Strategy<Value = QcmSet> {
     )
         .prop_map(
             |(id, user_id, name, description, level, subjects, language, questions)| QcmSet {
-                id,
-                user_id,
+                id: id.into(),
+                user_id: user_id.into(),
                 name,
                 description,
                 level,
@@ -325,13 +349,15 @@ fn arb_qcm_question_with_invalid_wrong_answers() -> impl Strategy<Value = QcmQue
         arb_non_empty_string(),
         arb_non_empty_string(),
     )
-        .prop_map(|(id, question, wrong_answers, right_answer, explanation)| QcmQuestion {
-            id,
-            question,
-            wrong_answers,
-            right_answer,
-            explanation,
-        })
+        .prop_map(
+            |(id, question, wrong_answers, right_answer, explanation)| QcmQuestion {
+                id: id.into(),
+                question,
+                wrong_answers,
+                right_answer,
+                explanation,
+            },
+        )
 }
 
 /// Strategy for generating QcmSets with questions that have fewer than 3 wrong answers
@@ -349,8 +375,8 @@ fn arb_qcm_set_with_invalid_questions() -> impl Strategy<Value = QcmSet> {
     )
         .prop_map(
             |(id, user_id, name, description, level, subjects, language, questions)| QcmSet {
-                id,
-                user_id,
+                id: id.into(),
+                user_id: user_id.into(),
                 name,
                 description,
                 level,
@@ -406,7 +432,7 @@ proptest! {
         rt.block_on(async {
             // Create a QcmSet owned by owner_id
             let mut owned_set = qcm_set.clone();
-            owned_set.user_id = owner_id.clone();
+            owned_set.user_id = owner_id.clone().into();
 
             // Insert the set (owned by owner_id)
             let created = service.create_qcm_set(owned_set.clone()).await
@@ -414,7 +440,7 @@ proptest! {
 
             // Now try to update the set with attacker_id (different user)
             let mut attacker_set = created.clone();
-            attacker_set.user_id = attacker_id.clone();
+            attacker_set.user_id = attacker_id.clone().into();
             attacker_set.name = "Hacked name".to_string();
 
             let update_result = service.update_qcm_set(attacker_set).await;
@@ -439,7 +465,7 @@ proptest! {
                 .expect("Original set should still exist");
 
             prop_assert_eq!(original.name, created.name, "Original set should be unchanged");
-            prop_assert_eq!(original.user_id, owner_id, "Owner should remain the same");
+            prop_assert_eq!(original.user_id.as_str(), owner_id, "Owner should remain the same");
 
             Ok(())
         })?;
@@ -465,7 +491,7 @@ proptest! {
         rt.block_on(async {
             // Create a QcmSet owned by owner_id
             let mut owned_set = qcm_set.clone();
-            owned_set.user_id = owner_id.clone();
+            owned_set.user_id = owner_id.clone().into();
 
             // Insert the set (owned by owner_id)
             let created = service.create_qcm_set(owned_set.clone()).await
@@ -493,13 +519,12 @@ proptest! {
                 .expect("Original set should still exist after failed delete attempt");
 
             prop_assert_eq!(original.id, created.id, "Original set should still exist");
-            prop_assert_eq!(original.user_id, owner_id, "Owner should remain the same");
+            prop_assert_eq!(original.user_id.as_str(), owner_id, "Owner should remain the same");
 
             Ok(())
         })?;
     }
 }
-
 
 // == HANDLER VALIDATION PROPERTY TESTS ==
 

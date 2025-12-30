@@ -60,8 +60,8 @@ interface User {
 Protects routes requiring authentication:
 
 ```tsx
-// components/auth-guard.tsx
-import { AuthGuard } from "@/components/auth-guard"
+// components/auth/auth-guard.tsx
+import { AuthGuard } from "@/components/auth/auth-guard"
 
 export default function ProtectedPage() {
   return (

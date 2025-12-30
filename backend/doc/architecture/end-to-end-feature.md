@@ -7,6 +7,7 @@ Complete guide for implementing a new Intello game from database to playable UI.
 ## Overview
 
 Adding a new game requires changes in **3 areas**:
+
 1. **Database** - SQL schema for data persistence
 2. **Backend** - API endpoints and business logic
 3. **Frontend** - UI components and state management
@@ -22,6 +23,7 @@ This guide uses "Order Phrase" as a reference implementation.
 **Location:** `backend/doc/db_shema/<game_name>.txt`
 
 Create tables matching this pattern:
+
 ```sql
 -- Sets table (parent)
 CREATE TABLE intello_<game>_sets (
@@ -81,6 +83,7 @@ pub struct MyGameQuestion {
 ```
 
 **Export in** `domain/intello/mod.rs`:
+
 ```rust
 pub mod my_game;
 pub use my_game::*;
@@ -94,7 +97,7 @@ pub use my_game::*;
 
 ```rust
 use async_trait::async_trait;
-use crate::domain::intello::MyGameSet;
+use crate::apps::intello::domain::MyGameSet;
 use crate::error::IntelloError;
 
 #[async_trait]
@@ -115,19 +118,21 @@ pub trait MyGameRepository: Send + Sync {
 **Location:** `backend/src/infrastructure/supabase/<game>/`
 
 Create:
+
 - `types.rs` - Row structs for Supabase
 - `repository.rs` - Implementation
 - `mod.rs` - Module exports
 
 Key pattern for cascading inserts:
+
 ```rust
 async fn insert(&self, set: &MyGameSet) -> Result<MyGameSet, IntelloError> {
     // 1. Insert set
     self.client.post(&self.sets_endpoint()).json(&row).send().await?;
-    
+
     // 2. Insert questions (child records)
     self.insert_questions(&set.id, &set.questions).await?;
-    
+
     Ok(set.clone())
 }
 ```
@@ -148,12 +153,12 @@ impl IntelloService {
         // 1. Validate
         self.validate_user_id(user_id)?;
         self.validate_generation_input(&input)?;
-        
+
         // 2. Generate with AI
         let questions = self.openrouter_service
             .generate_my_game(&prompt_input, input.model.as_deref())
             .await?;
-        
+
         // 3. Build set
         let set = MyGameSet {
             id: uuid::Uuid::new_v4().to_string(),
@@ -161,11 +166,11 @@ impl IntelloService {
             questions,
             // ...
         };
-        
+
         // 4. Store
         self.my_game_repo.insert(&set).await
     }
-    
+
     pub async fn get_user_my_game_sets(&self, user_id: &str) -> Result<Vec<MyGameSet>, IntelloError> {
         self.my_game_repo.find_by_user(user_id).await
     }
@@ -181,11 +186,13 @@ impl IntelloService {
 **Location:** `backend/src/shared/prompt_builder.rs`
 
 Add game format to `GAME_FORMATS`:
+
 ```rust
 ("my_game", r#"[{"question": "...", "field2": "..."}]"#),
 ```
 
 Add prompt builder function:
+
 ```rust
 pub fn build_my_game_prompt(input: &MyGamePromptInput) -> String {
     // Build prompt with GAME_FORMATS["my_game"]
@@ -220,6 +227,7 @@ impl OpenRouterService {
 **Location:** `backend/src/api/dto/intello/<game>/`
 
 Create:
+
 - `request.rs` - `CreateMyGameRequest`
 - `response.rs` - `MyGameResponse`, `MyGameSetListResponse`
 - `mod.rs` - Exports
@@ -248,6 +256,7 @@ pub async fn list_my_game_handler(...) { ... }
 ```
 
 **Register in** `api/handlers/intello/mod.rs`:
+
 ```rust
 .service(my_game::create_my_game_handler)
 .service(my_game::list_my_game_handler)
@@ -268,7 +277,7 @@ pub struct App {
 impl App {
     pub fn new(config: &Config) -> Self {
         let my_game_repo = Arc::new(SupabaseMyGameRepository::new(config));
-        
+
         let intello_service = IntelloService::new(
             // ... existing repos
             my_game_repo.clone(),
@@ -317,12 +326,12 @@ export interface MyGameSetData {
 // API Functions
 export async function createMyGame(
   input: CreateMyGameInput,
-  files: File[]
+  files: File[],
 ): Promise<CreateMyGameResponse> {
   const formData = new FormData();
   formData.append("metadata", JSON.stringify(input));
-  files.forEach(f => formData.append("files", f));
-  
+  files.forEach((f) => formData.append("files", f));
+
   const res = await fetch(endpoints.intello.myGameCreate(), {
     method: "POST",
     credentials: "include",
@@ -346,6 +355,7 @@ export async function getAllMyGameSets(): Promise<MyGameSetListResponse> {
 **Location:** `app/intello/context.tsx`
 
 Add to `ViewState` type:
+
 ```typescript
 | "create-ai-my-game"
 | "play-my-game"
@@ -353,12 +363,15 @@ Add to `ViewState` type:
 ```
 
 Add state:
+
 ```typescript
 const [myGameSets, setMyGameSets] = useState<MyGameSetData[]>([]);
-const [selectedMyGameSet, setSelectedMyGameSet] = useState<MyGameSetData | null>(null);
+const [selectedMyGameSet, setSelectedMyGameSet] =
+  useState<MyGameSetData | null>(null);
 ```
 
 Add handlers:
+
 ```typescript
 const loadMyGameSets = async () => {
   const response = await getAllMyGameSets();
@@ -377,6 +390,7 @@ const handleSelectMyGameSet = (set: MyGameSetData) => {
 ```
 
 Update `handleNavigateToGame`:
+
 ```typescript
 case "my_game":
   await loadMyGameSets();
@@ -395,15 +409,15 @@ Add to context value object.
 ```tsx
 export function CreateAiMyGameView() {
   const { games, handleBackToHome, handleNavigateToGame } = useIntello();
-  
+
   return (
     <div className="space-y-6 max-w-2xl mx-auto">
       {/* Header */}
-      <CustomQuestionForm 
-        games={games} 
-        onBack={handleBackToHome} 
-        defaultOutputGame="my_game" 
-        onNavigateToGame={handleNavigateToGame} 
+      <CustomQuestionForm
+        games={games}
+        onBack={handleBackToHome}
+        defaultOutputGame="my_game"
+        onNavigateToGame={handleNavigateToGame}
       />
     </div>
   );
@@ -418,8 +432,14 @@ export function CreateAiMyGameView() {
 
 ```tsx
 export function PlayMyGameView() {
-  const { loading, error, myGameSets, handleBackToHome, handleSelectMyGameSet } = useIntello();
-  
+  const {
+    loading,
+    error,
+    myGameSets,
+    handleBackToHome,
+    handleSelectMyGameSet,
+  } = useIntello();
+
   return (
     <div className="space-y-6">
       {/* Header with back button */}
@@ -439,9 +459,9 @@ export function PlayMyGameView() {
 ```tsx
 export function PlayingMyGameView() {
   const { selectedMyGameSet, setView } = useIntello();
-  
+
   if (!selectedMyGameSet) return null;
-  
+
   return (
     <MyGamePlayer
       questions={selectedMyGameSet.questions}
@@ -469,19 +489,19 @@ export function MyGamePlayer({ questions, title, onBack }: MyGamePlayerProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [results, setResults] = useState<boolean[]>([]);
   const [isComplete, setIsComplete] = useState(false);
-  
+
   // Game-specific state and logic
-  
+
   // Initialize on question change
   useEffect(() => {
     // Setup for current question
   }, [currentIndex]);
-  
+
   // Results screen
   if (isComplete) {
     return <ResultsScreen score={score} onBack={onBack} />;
   }
-  
+
   // Game UI
   return (
     <div>
@@ -501,28 +521,35 @@ export function MyGamePlayer({ questions, title, onBack }: MyGamePlayerProps) {
 **Location:** `components/custom-question-form.tsx`
 
 Add import:
+
 ```typescript
 import { createMyGame, type MyGameQuestionData } from "@/lib/api/intello";
 import { MyGamePlayer } from "./my-game-player";
 ```
 
 Add to `onNavigateToGame` type:
+
 ```typescript
 | "my_game"
 ```
 
 Add to `successData.gameType` type:
+
 ```typescript
 | "my_game"
 ```
 
 Add state:
+
 ```typescript
-const [myGameQuestions, setMyGameQuestions] = useState<MyGameQuestionData[] | null>(null);
+const [myGameQuestions, setMyGameQuestions] = useState<
+  MyGameQuestionData[] | null
+>(null);
 const [myGameTitle, setMyGameTitle] = useState("");
 ```
 
 Add handler in `handleSubmit`:
+
 ```typescript
 } else if (outputGame === "my_game") {
   const response = await createMyGame(input, files);
@@ -533,20 +560,29 @@ Add handler in `handleSubmit`:
 ```
 
 Add to `gameTypeLabels`:
+
 ```typescript
 my_game: "My Game Sets",
 ```
 
 Add to `handleBackFromPlayer` reset:
+
 ```typescript
 setMyGameQuestions(null);
 setMyGameTitle("");
 ```
 
 Add player rendering:
+
 ```tsx
 if (myGameQuestions && myGameQuestions.length > 0 && !successData) {
-  return <MyGamePlayer questions={myGameQuestions} title={myGameTitle} onBack={handleBackFromPlayer} />;
+  return (
+    <MyGamePlayer
+      questions={myGameQuestions}
+      title={myGameTitle}
+      onBack={handleBackFromPlayer}
+    />
+  );
 }
 ```
 
@@ -557,6 +593,7 @@ if (myGameQuestions && myGameQuestions.length > 0 && !successData) {
 **Location:** `app/intello/views/home-view.tsx`
 
 Add create button in Create section:
+
 ```tsx
 <Button onClick={() => setView("create-ai-my-game")}>
   <Icon /> AI My Game
@@ -564,6 +601,7 @@ Add create button in Create section:
 ```
 
 Add play button in Play section:
+
 ```tsx
 <Button onClick={handlePlayMyGame}>
   <Icon /> My Game Sets
@@ -575,6 +613,7 @@ Add play button in Play section:
 ### Step 10: Export and Route
 
 **Location:** `app/intello/views/index.ts`
+
 ```typescript
 export { CreateAiMyGameView } from "./create-views";
 export { PlayMyGameView } from "./play-views";
@@ -582,10 +621,17 @@ export { PlayingMyGameView } from "./playing-views";
 ```
 
 **Location:** `app/intello/page.tsx`
+
 ```tsx
-{view === "create-ai-my-game" && <CreateAiMyGameView />}
-{view === "play-my-game" && <PlayMyGameView />}
-{view === "playing-my-game" && <PlayingMyGameView />}
+{
+  view === "create-ai-my-game" && <CreateAiMyGameView />;
+}
+{
+  view === "play-my-game" && <PlayMyGameView />;
+}
+{
+  view === "playing-my-game" && <PlayingMyGameView />;
+}
 ```
 
 ---
@@ -593,11 +639,13 @@ export { PlayingMyGameView } from "./playing-views";
 ## Verification Checklist
 
 ### Backend
+
 - [ ] SQL schema executed in Supabase
 - [ ] `cargo build` passes
 - [ ] Test with curl/Postman
 
 ### Frontend
+
 - [ ] `npm run build` passes
 - [ ] Create button appears on home
 - [ ] Form submits successfully

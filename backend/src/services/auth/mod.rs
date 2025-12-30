@@ -1,10 +1,15 @@
-//! Authentication service module
+//! Auth Service - Authentication and session management
 //!
-//! Handles login, register, and logout flows.
+//! # Architecture
+//! - Domain: `error_domain.rs`, `types_domain.rs`
+//! - Service: `auth_service.rs`
 
-mod login;
-mod logout;
-mod register;
-mod types;
+// Domain modules
+pub mod error_domain;
+pub mod types_domain;
 
-pub use types::AuthService;
+// Service logic
+mod auth_service;
+
+// Re-exports
+pub use types_domain::AuthService;

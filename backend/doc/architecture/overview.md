@@ -71,43 +71,55 @@ Response flows back up
 
 ```
 src/
-├── api/
-│   ├── handlers/          # Route handlers by domain
+├── http_api/                 # HTTP layer
+│   ├── handlers/             # Route handlers by domain
 │   │   ├── auth/
 │   │   ├── apps/
 │   │   ├── collection/
 │   │   └── intello/
-│   └── dto/               # Request/Response types
-│       └── {domain}/
-│           ├── request.rs
-│           ├── response.rs
-│           └── conversion.rs
-├── services/
-│   ├── auth/
-│   ├── apps/
-│   ├── collection/
-│   ├── intello/           # Game business logic
-│   └── openrouter/        # AI API calls
-├── use_cases/             # Application orchestration
-│   ├── intello/           # Intello use cases
-│   ├── collection/        # Collection use cases
-│   └── ai/                # Shared AI use cases
-├── domain/
-│   ├── apps/              # Domain Entities (App, UserApp) - Data Only
-│   ├── collection/        # Dvd, UserCollection
-│   └── intello/           # QcmSet, Flashcard, OpenQuestion, etc.
-├── infrastructure/
-│   ├── repository/        # Trait definitions
-│   └── supabase/          # Supabase implementations
-├── error/                 # Domain-specific errors
-│   ├── app/               # Main AppError + Response
-│   ├── auth/              # AuthError
-│   ├── collection/        # CollectionError
-│   └── intello/           # IntelloError
-└── shared/
-    ├── document_extractor.rs  # PDF, Word, PPTX parsing
-    ├── prompt_builder.rs      # SSOT for Game Schemas & Prompts
-    └── open_question_cache.rs # Grading context cache
+│   ├── data_transfer_object/ # Request/Response types
+│   ├── middlewares/          # Rate limiting, etc.
+│   └── utils/                # Validation & error utilities
+│       ├── validation/        # ValidationError, validate_request()
+│       └── internal/          # InternalError
+├── services/                 # Business logic layer
+├── services/                 # Business logic & Domain layer
+│   ├── app_registry/         # App management & generic domain
+│   │   ├── domain/           # App, AppInstance entities
+│   │   ├── app_error.rs      # Self-contained App errors
+│   │   └── service.rs        # App registry operations
+│   ├── intello/              # Intello service
+│   │   ├── domain/           # Domain entities (QcmSet, Flashcard, etc.)
+│   │   │   ├── intello_ids.rs
+│   │   │   └── intello_error.rs
+│   │   ├── qcm_ops.rs        # Game-specific operations
+│   │   └── ...
+│   ├── collection/           # Collection service
+│   │   ├── domain/           # Domain entities (Collection, DVD)
+│   │   │   └── app.rs        # CollectionApp entity
+│   │   └── collection_error.rs
+│   ├── auth/                 # Auth service & errors
+│   │   └── auth_error.rs
+│   └── openrouter/           # AI API calls
+├── infra/                    # Infrastructure layer
+│   ├── supabase/             # Supabase client & repositories
+│   │   └── error/            # Self-contained Supabase errors
+│   │       └── supabase_error.rs
+│   ├── user/                 # User entity, UserId, session utils
+│   ├── session/              # Session management & errors
+│   │   └── session_error.rs  # Self-contained Session errors
+│   └── database/             # Repository trait definitions
+├── shared/                   # Cross-cutting utilities
+│   ├── constants/            # Global error aggregator, URLs
+│   │   ├── errors/
+│   │   │   └── global.rs     # AppError (wraps all service errors), AppResult
+│   │   └── urls/
+│   │       └── supabase.rs   # Supabase API paths
+│   └── utils/                # Generic utilities (deserializers)
+├── configs/                  # Environment configuration
+└── tests/                    # Integration tests
+```
+
 
 ## Key Principles
 
@@ -116,7 +128,44 @@ src/
 3. **Pipelining** - Heavy AI workflows use multi-stage pipelines (e.g., Course Generation)
 4. **Repositories are traits** - Enables swappable backends, testing
 5. **Domain is pure** - No I/O, no dependencies
-6. **Errors per domain** - Convert to `AppError` via `From` trait
+6. **Errors are decentralized** - Each service owns error codes/messages/statuses, wraps via `AppError`
+
+## Error System
+
+The error system follows a **decentralized architecture** where each service owns its error definitions:
+
+### Service-Level Errors (Self-Contained)
+
+Each error type implements `code()`, `message()`, and `status()` methods:
+
+| Error Type | Location | Errors |
+|------------|----------|--------|
+| `AuthError` | `services/auth/auth_error.rs` | InvalidCredentials, NotAllowed, External |
+| `IntelloError` | `services/intello/domain/intello_error.rs` | GameSetNotFound, ValidationFailed, StorageError, etc. |
+| `AppsError` | `services/app_registry/app_error.rs` | NotFound, AlreadyExists, UserAppAlreadyAdded, UserAppNotFound |
+| `CollectionError` | `services/collection/collection_error.rs` | DvdNotFound, DvdDuplicate, UserNotFound, StorageError |
+| `SupabaseError` | `infra/supabase/error/supabase_error.rs` | Http, Network, Parse, Timeout |
+| `SessionError` | `infra/session/session_error.rs` | NotFound, Expired |
+| `ValidationError` | `http_api/utils/validation/error.rs` | Generic input validation |
+| `InternalError` | `http_api/utils/internal/error.rs` | Generic internal errors |
+
+### Global Error Aggregator
+
+`shared/constants/errors/global.rs` contains `AppError` which wraps all service errors:
+
+```rust
+pub enum AppError {
+    Auth(AuthError),
+    Validation(ValidationError),
+    Collection(CollectionError),
+    Intello(IntelloError),
+    App(AppsError),
+    Session(SessionError),
+    Internal(InternalError),
+}
+```
+
+Service errors convert to `AppError` via `From<ServiceError> for AppError`, and `AppError` implements actix-web's `ResponseError` trait for HTTP responses.
 
 ## Pipelines
 

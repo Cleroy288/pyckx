@@ -1,12 +1,13 @@
 //! DVD lifecycle tests - full CRUD operations
 
 use super::helpers::{create_test_dvd, load_test_config};
-use crate::domain::CollectionItemType;
-use crate::error::CollectionError;
-use crate::infrastructure::{
+use crate::services::collection::collection_domain::CollectionItemType;
+use crate::services::collection::error_domain::CollectionError;
+use crate::infra::{
     CollectionRepository, DvdRepository, SupabaseCollectionRepository, SupabaseDvdRepository,
-    UpdateDvd,
+    SupabaseHttpClient, UpdateDvd,
 };
+use std::sync::Arc;
 
 /// Full DVD lifecycle test with collection
 #[tokio::test]
@@ -28,8 +29,9 @@ async fn test_dvd_full_lifecycle() {
         }
     };
 
-    let collection_repo = SupabaseCollectionRepository::new(&config);
-    let dvd_repo = SupabaseDvdRepository::new(&config);
+    let http_client = Arc::new(SupabaseHttpClient::new(&config));
+    let collection_repo = SupabaseCollectionRepository::new(http_client.clone());
+    let dvd_repo = SupabaseDvdRepository::new(http_client);
 
     let collection = collection_repo
         .get_or_create(&user_id, CollectionItemType::Dvd)
@@ -43,7 +45,10 @@ async fn test_dvd_full_lifecycle() {
     // == 1. ADD DVD ==
     println!("\n=== Step 1: Add DVD ===");
     let create_dvd = create_test_dvd(&test_dvd_name, &user_id, collection.id);
-    let dvd = dvd_repo.insert(&create_dvd).await.expect("Failed to insert DVD");
+    let dvd = dvd_repo
+        .insert(&create_dvd)
+        .await
+        .expect("Failed to insert DVD");
 
     assert!(!dvd.id.is_empty(), "DVD should have an ID");
     assert_eq!(dvd.name, test_dvd_name);
@@ -51,7 +56,7 @@ async fn test_dvd_full_lifecycle() {
     assert_eq!(dvd.user_id, user_id);
     println!("✓ DVD created with ID: {}", dvd.id);
 
-    let dvd_id = dvd.id.clone();
+    let dvd_id = dvd.id.to_string();
 
     // == 2. MODIFY DVD ==
     println!("\n=== Step 2: Modify DVD ===");
@@ -81,7 +86,10 @@ async fn test_dvd_full_lifecycle() {
         .await
         .expect("Failed to find all user DVDs");
 
-    assert!(!all_user_dvds.is_empty(), "User should have at least one DVD");
+    assert!(
+        !all_user_dvds.is_empty(),
+        "User should have at least one DVD"
+    );
     let found_in_all = all_user_dvds.iter().any(|d| d.id == dvd_id);
     assert!(found_in_all, "Our test DVD should be in the user's list");
     println!("✓ Found {} DVDs for user", all_user_dvds.len());
@@ -104,9 +112,15 @@ async fn test_dvd_full_lifecycle() {
         .await
         .expect("Failed to find DVDs by collection");
 
-    assert!(!collection_dvds.is_empty(), "Collection should have at least one DVD");
+    assert!(
+        !collection_dvds.is_empty(),
+        "Collection should have at least one DVD"
+    );
     let found_in_collection = collection_dvds.iter().any(|d| d.id == dvd_id);
-    assert!(found_in_collection, "Our test DVD should be in the collection");
+    assert!(
+        found_in_collection,
+        "Our test DVD should be in the collection"
+    );
     println!("✓ Found {} DVDs in collection", collection_dvds.len());
 
     // == 6. DELETE DVD ==
@@ -121,7 +135,10 @@ async fn test_dvd_full_lifecycle() {
 
     // Verify deletion
     let find_result = dvd_repo.find_by_id(&user_id, &dvd_id).await;
-    assert!(find_result.is_err(), "DVD should not be found after deletion");
+    assert!(
+        find_result.is_err(),
+        "DVD should not be found after deletion"
+    );
     match find_result.unwrap_err() {
         CollectionError::DvdNotFound { .. } => {
             println!("✓ Verified: DVD no longer exists");

@@ -2,8 +2,8 @@
 
 import { ArrowLeft, Brain, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { CustomQuestionForm } from "@/components/custom-question-form"
-import { ManualQcmForm } from "@/components/manual-qcm-form"
+import { CustomQuestionForm } from "@/components/intello/custom-question-form"
+import { ManualQcmForm } from "@/components/intello/manual-qcm-form"
 import { useIntello } from "../context"
 
 // == MANUAL QCM VIEW ==

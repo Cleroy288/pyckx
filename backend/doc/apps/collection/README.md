@@ -67,11 +67,14 @@ POST /app/collection/dvds
 
 ## File Structure
 
-```
 src/
-├── domain/collection/dvd.rs              # DVD entity
-├── infrastructure/repository/dvd.rs      # DvdRepository trait
-├── infrastructure/supabase/dvd/          # Supabase implementation
-├── services/collection.rs                # Business logic
-└── api/handlers/collection/              # HTTP handlers
-```
+├── services/collection/              # Service Layer
+│   ├── dvd_domain.rs                 # DVD Entity
+│   ├── dvd_service.rs                # DVD Business Logic
+│   ├── collection_domain.rs          # Collection Entity
+│   ├── collection_service.rs         # Collection Business Logic
+│   └── error_domain.rs               # Error types
+├── infra/
+│   ├── database/dvd/trait.rs         # Repository Trait
+│   └── supabase/dvd/                 # Supabase Implementation
+└── http_api/handlers/collection/     # HTTP handlers

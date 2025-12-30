@@ -1,8 +1,9 @@
 //! Collection lifecycle tests - CRUD operations
 
 use super::helpers::load_test_config;
-use crate::domain::CollectionItemType;
-use crate::infrastructure::{CollectionRepository, SupabaseCollectionRepository};
+use crate::services::collection::collection_domain::CollectionItemType;
+use crate::infra::{CollectionRepository, SupabaseCollectionRepository, SupabaseHttpClient};
+use std::sync::Arc;
 
 /// Test collection CRUD operations (create, read, exists, delete)
 #[tokio::test]
@@ -24,7 +25,8 @@ async fn test_collection_lifecycle() {
         }
     };
 
-    let collection_repo = SupabaseCollectionRepository::new(&config);
+    let http_client = Arc::new(SupabaseHttpClient::new(&config));
+    let collection_repo = SupabaseCollectionRepository::new(http_client);
 
     // == 1. GET OR CREATE COLLECTION (idempotent) ==
     println!("\n=== Step 1: Get or Create DVD Collection ===");

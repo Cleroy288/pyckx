@@ -70,6 +70,64 @@ DVD items.
 
 ---
 
+## Intello - Courses & Resources
+
+### `intello_courses`
+| Column | Type | Notes |
+|--------|------|-------|
+| id | UUID | PK |
+| user_id | UUID | FK → users |
+| name | VARCHAR(255) | |
+| description | TEXT | |
+| created_at | TIMESTAMPTZ | |
+| updated_at | TIMESTAMPTZ | |
+
+### `intello_user_resources`
+User-owned resources (single source of truth).
+
+| Column | Type | Notes |
+|--------|------|-------|
+| id | UUID | PK |
+| user_id | UUID | FK → users |
+| filename | TEXT | Unique per user |
+| content | TEXT | Full document content |
+| token_count | INTEGER | For AI context limits |
+| created_at | TIMESTAMPTZ | |
+
+### `intello_course_resource_links`
+Junction table linking resources to courses (many-to-many).
+
+| Column | Type | Notes |
+|--------|------|-------|
+| id | UUID | PK |
+| course_id | UUID | FK → intello_courses |
+| resource_id | UUID | FK → intello_user_resources |
+| created_at | TIMESTAMPTZ | |
+
+### `intello_study_sessions`
+| Column | Type | Notes |
+|--------|------|-------|
+| id | UUID | PK |
+| course_id | UUID | FK → intello_courses |
+| topic | VARCHAR(255) | |
+| instructions | TEXT | |
+| keywords | TEXT[] | |
+| language | VARCHAR(5) | en, fr, es, de, nl |
+| status | VARCHAR(20) | in_progress, completed |
+| created_at | TIMESTAMPTZ | |
+| completed_at | TIMESTAMPTZ | |
+
+### `intello_session_resources`
+Links resources used in a specific session.
+
+| Column | Type | Notes |
+|--------|------|-------|
+| id | UUID | PK |
+| session_id | UUID | FK → intello_study_sessions |
+| resource_id | UUID | FK → intello_user_resources |
+
+---
+
 ## Intello - QCM
 
 ### `qcm_sets`
@@ -184,6 +242,26 @@ DVD items.
 
 ---
 
+## Intello - AI Usage Tracking
+
+### `intello_ai_usage_log`
+Tracks token usage and costs for all AI requests.
+
+| Column | Type | Notes |
+|--------|------|-------|
+| id | UUID | PK |
+| user_id | UUID | FK → users |
+| model_id | TEXT | Model used (e.g., gemini-3-flash-preview) |
+| feature_type | TEXT | course_generation, qcm, flashcard, etc. |
+| input_tokens | INTEGER | Tokens sent to model |
+| output_tokens | INTEGER | Tokens received |
+| input_cost_usd | DECIMAL | Cost for input tokens |
+| output_cost_usd | DECIMAL | Cost for output tokens |
+| total_cost_usd | DECIMAL | Total cost |
+| created_at | TIMESTAMPTZ | |
+
+---
+
 ## SQL Files
 
 See [db_shema/](../db_shema/) for full CREATE TABLE statements:
@@ -193,3 +271,5 @@ See [db_shema/](../db_shema/) for full CREATE TABLE statements:
 - `qcm_flashcard_openquestion.txt`
 - `true_false.txt`
 - `keywords.txt`
+- `course.txt`
+- `ai_usage.txt`

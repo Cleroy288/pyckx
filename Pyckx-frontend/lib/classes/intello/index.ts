@@ -58,3 +58,6 @@ export type {
 
 // Validation constants
 export { MAX_SUBJECTS, MAX_SUBJECT_LENGTH } from "./types";
+
+// Course types
+export type { StartSessionInput } from "./course";

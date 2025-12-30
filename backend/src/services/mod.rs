@@ -1,34 +1,20 @@
-//! Services layer - Business logic orchestration.
+//! Services module
 //!
-//! Services coordinate between domain entities and infrastructure.
-//! They contain the core business rules and workflows.
-//!
-//! # Structure
-//! - `auth/` - Authentication service (login, register, logout)
-//! - `apps/` - App and user app management
-//! - `collection/` - Collection service (DVD management)
-//! - `intello/` - Intello service (QCM, Open Questions, Flashcards)
-//! - `openrouter/` - OpenRouter AI service
+//! Business logic layer - service operations for each app
 
-mod apps;
-mod auth;
-mod collection;
-mod intello;
-mod openrouter;
+pub mod app_registry;
+pub mod auth;
+pub mod collection;
+pub mod intello;
+pub mod openrouter;
 
-pub use apps::AppService;
+// Re-export commonly used types
+pub use app_registry::AppService;
 pub use auth::AuthService;
 pub use collection::CollectionService;
-pub use intello::{
-    AnswerGrade as IntelloAnswerGrade, CheckAnswersInput, GenerateContentInput, GradingResult,
-    IntelloRepositories, IntelloService, UserAnswer,
-};
-pub use openrouter::{
-    AnswerGrade, GradedAnswer, OpenRouterService,
-    AVAILABLE_MODELS, DEFAULT_MODEL, validate_model, validate_token_count,
-};
+pub use intello::{CheckAnswersInput, GenerateContentInput, IntelloRepositories, IntelloService, UserAnswer};
+pub use openrouter::{AnswerGrade, GradedAnswer, OpenRouterService};
 
-// Utility functions (exposed for tests)
+// Re-export test utilities
 #[cfg(test)]
 pub use openrouter::{extract_json_from_response, sanitize_json_duplicates};
-

@@ -1,7 +1,5 @@
-//! Intello test module
-//!
-//! Tests for the Intello app including property-based tests and validation.
-
-mod helpers;
-mod property_tests;
-mod qcm_validation;
+pub mod property_tests;
+pub mod helpers;
+pub mod error_tests;
+pub mod crud_tests;
+pub mod open_question_cache_tests;

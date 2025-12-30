@@ -2,17 +2,20 @@
 
 import { useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { GridBackground } from "@/components/grid-background"
-import { TopNavigation } from "@/components/top-navigation"
-import { AuthGuard } from "@/components/auth-guard"
+import { GridBackground } from "@/components/layout/grid-background"
+import { TopNavigation } from "@/components/layout/top-navigation"
+import { AuthGuard } from "@/components/auth/auth-guard"
 import { useUserApps } from "@/lib/user-apps-context"
 import { IntelloProvider, useIntello } from "./context"
 import {
   HomeView,
   CreateQcmView, CreateAiQcmView, CreateAiOpenView, CreateAiFlashcardView, CreateAiTrueOrFalseView, CreateAiKeywordsView, CreateAiOrderPhraseView, CreateAiFillBlankView,
+  CreateCourseView,
   PlayQcmView, PlayOpenView, PlayFlashcardView, PlayTrueOrFalseView, PlayKeywordsView, PlayOrderPhraseView, PlayFillBlankView,
   PlayingQcmView, PlayingOpenView, PlayingFlashcardView, PlayingTrueOrFalseView, PlayingKeywordsView, PlayingOrderPhraseView, PlayingFillBlankView,
-  ResultsView
+  ResultsView,
+  CoursesView, CourseDetailView,
+  CreateSessionView, ViewSessionView
 } from "./views"
 
 // == Main Page Content ==
@@ -55,6 +58,12 @@ function IntelloContent() {
       {view === "playing-order-phrase" && <PlayingOrderPhraseView />}
       {view === "playing-fill-blank" && <PlayingFillBlankView />}
       {view === "results" && <ResultsView />}
+      {/* Course/Session views */}
+      {view === "courses" && <CoursesView />}
+      {view === "course-detail" && <CourseDetailView />}
+      {view === "create-course" && <CreateCourseView />}
+      {view === "create-session" && <CreateSessionView />}
+      {view === "view-session" && <ViewSessionView />}
     </main>
   )
 }

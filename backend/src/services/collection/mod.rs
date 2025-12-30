@@ -1,9 +1,21 @@
-//! Collection Service module
+//! Collection Service Module
+//! 
+//! Service for managing user collections (DVDs, Books, etc.).
 //!
-//! Business logic for user collections (DVDs, etc.).
+//! # Architecture
+//! - Domain entities: `*_domain.rs` files
+//! - Business logic: `*_service.rs` files
 
-mod collection_ops;
-mod dvd_ops;
-mod types;
+// Domain modules
+pub mod app_domain;
+pub mod collection_domain;
+pub mod dvd_domain;
+pub mod error_domain;
+mod types_domain;
 
-pub use types::CollectionService;
+// Service modules
+mod collection_service;
+mod dvd_service;
+
+pub use types_domain::CollectionService;
+

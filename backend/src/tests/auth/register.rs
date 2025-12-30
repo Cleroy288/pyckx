@@ -1,7 +1,8 @@
 //! Register tests
 
-use crate::config::{Config, TestConfig};
-use crate::infrastructure::SupabaseClient;
+use crate::configs::Config;
+use crate::tests::config::TestConfig;
+use crate::infra::SupabaseClient;
 
 #[tokio::test]
 #[ignore] // Run manually: cargo test test_supabase_register -- --ignored

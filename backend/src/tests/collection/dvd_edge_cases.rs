@@ -1,8 +1,9 @@
 //! DVD edge case tests - error handling for non-existent DVDs
 
 use super::helpers::load_test_config;
-use crate::error::CollectionError;
-use crate::infrastructure::{DvdRepository, SupabaseDvdRepository, UpdateDvd};
+use crate::services::collection::error_domain::CollectionError;
+use crate::infra::{DvdRepository, SupabaseDvdRepository, SupabaseHttpClient, UpdateDvd};
+use std::sync::Arc;
 
 /// Test that non-existent DVD returns proper error
 #[tokio::test]
@@ -24,7 +25,8 @@ async fn test_find_nonexistent_dvd() {
         }
     };
 
-    let repo = SupabaseDvdRepository::new(&config);
+    let http_client = Arc::new(SupabaseHttpClient::new(&config));
+    let repo = SupabaseDvdRepository::new(http_client);
     let fake_id = uuid::Uuid::new_v4().to_string();
 
     let result = repo.find_by_id(&user_id, &fake_id).await;
@@ -58,7 +60,8 @@ async fn test_update_nonexistent_dvd() {
         }
     };
 
-    let repo = SupabaseDvdRepository::new(&config);
+    let http_client = Arc::new(SupabaseHttpClient::new(&config));
+    let repo = SupabaseDvdRepository::new(http_client);
     let fake_id = uuid::Uuid::new_v4().to_string();
 
     let update = UpdateDvd::new().with_name("New Name");
@@ -90,7 +93,8 @@ async fn test_delete_nonexistent_dvd() {
         }
     };
 
-    let repo = SupabaseDvdRepository::new(&config);
+    let http_client = Arc::new(SupabaseHttpClient::new(&config));
+    let repo = SupabaseDvdRepository::new(http_client);
     let fake_id = uuid::Uuid::new_v4().to_string();
 
     let result = repo.delete(&user_id, &fake_id).await;

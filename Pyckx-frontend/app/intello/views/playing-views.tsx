@@ -3,12 +3,12 @@
 import { ArrowLeft, ArrowRight, CheckCircle2, XCircle, Trophy } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
-import { OpenQuestionPlayer } from "@/components/open-question-player"
-import { FlashcardPlayer } from "@/components/flashcard-player"
-import { TrueOrFalsePlayer } from "@/components/true-false-player"
-import { KeywordsPlayer } from "@/components/keywords-player"
-import { OrderPhrasePlayer } from "@/components/order-phrase-player"
-import { FillBlankPlayer } from "@/components/fill-blank-player"
+import { OpenQuestionPlayer } from "@/components/intello/open-question-player"
+import { FlashcardPlayer } from "@/components/intello/flashcard-player"
+import { TrueOrFalsePlayer } from "@/components/intello/true-false-player"
+import { KeywordsPlayer } from "@/components/intello/keywords-player"
+import { OrderPhrasePlayer } from "@/components/intello/order-phrase-player"
+import { FillBlankPlayer } from "@/components/intello/fill-blank-player"
 import { useIntello } from "../context"
 
 // == PLAYING QCM VIEW ==

@@ -1,7 +1,7 @@
 "use client"
 
 import { createContext, useContext, useState, useCallback, useMemo, useRef, type ReactNode } from "react"
-import { getAvailableGames, getAllQcmSets, getAllOpenQuestionSets, getAllFlashcardSets, getAllTrueOrFalseSets, getAllKeywordSets, getAllOrderPhraseSets, getAllFillBlankSets, type GameData, type OpenQuestionSetData, type FlashcardSetData, type TrueOrFalseSetData, type KeywordSetData, type OrderPhraseSetData, type FillBlankSetData } from "@/lib/api/intello"
+import { getAvailableGames, getAllQcmSets, getAllOpenQuestionSets, getAllFlashcardSets, getAllTrueOrFalseSets, getAllKeywordSets, getAllOrderPhraseSets, getAllFillBlankSets, listCourses, getResources, listSessions, type GameData, type OpenQuestionSetData, type FlashcardSetData, type TrueOrFalseSetData, type KeywordSetData, type OrderPhraseSetData, type FillBlankSetData, type CourseData, type ResourceData, type SessionData } from "@/lib/api/intello"
 import type { QcmSetData, QcmQuestionData, Level } from "@/lib/classes/intello"
 
 // == Types ==
@@ -11,6 +11,8 @@ export type ViewState =
 	| "play-qcm" | "play-open" | "play-flashcard" | "play-true-false" | "play-keywords" | "play-order-phrase" | "play-fill-blank"
 	| "playing-qcm" | "playing-open" | "playing-flashcard" | "playing-true-false" | "playing-keywords" | "playing-order-phrase" | "playing-fill-blank"
 	| "results"
+	// Course/Session flow
+	| "courses" | "course-detail" | "create-course" | "create-session" | "view-session"
 
 export interface QuizAnswer {
 	questionIndex: number
@@ -97,6 +99,17 @@ interface IntelloContextType {
 	// Helpers
 	getLevelBadgeClass: (level: Level) => string
 	getScoreColor: (percentage: number) => string
+
+	// Course/Session flow
+	courses: CourseData[]
+	selectedCourse: (CourseData & { resources?: ResourceData[] }) | null
+	selectedSession: SessionData | null
+	loadCourses: () => Promise<void>
+	handleSelectCourse: (course: CourseData | null) => void
+	handleSelectSession: (session: SessionData | null) => void
+	handleCreateSession: () => void
+	handleNavigateToCourses: () => void
+	handleNavigateToCreateCourse: () => void
 }
 
 const IntelloContext = createContext<IntelloContextType | null>(null)
@@ -126,6 +139,11 @@ export function IntelloProvider({ children }: { children: ReactNode }) {
 	const [selectedKeywordSet, setSelectedKeywordSet] = useState<KeywordSetData | null>(null)
 	const [selectedOrderPhraseSet, setSelectedOrderPhraseSet] = useState<OrderPhraseSetData | null>(null)
 	const [selectedFillBlankSet, setSelectedFillBlankSet] = useState<FillBlankSetData | null>(null)
+
+	// Course/Session state
+	const [courses, setCourses] = useState<CourseData[]>([])
+	const [selectedCourse, setSelectedCourse] = useState<(CourseData & { resources?: ResourceData[] }) | null>(null)
+	const [selectedSession, setSelectedSession] = useState<SessionData | null>(null)
 
 	// QCM state
 	const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
@@ -451,6 +469,57 @@ export function IntelloProvider({ children }: { children: ReactNode }) {
 		setView("playing-qcm")
 	}, [selectedQcmSet, shuffleAnswers])
 
+	// == Course/Session Handlers ==
+	const loadCourses = useCallback(async () => {
+		setLoading(true)
+		setError(null)
+		try {
+			const data = await listCourses()
+			setCourses(data)
+		} catch (err) {
+			setError(err instanceof Error ? err.message : "Failed to load courses")
+		} finally {
+			setLoading(false)
+		}
+	}, [])
+
+	const handleNavigateToCourses = useCallback(async () => {
+		await loadCourses()
+		setView("courses")
+	}, [loadCourses])
+
+	const handleSelectCourse = useCallback(async (course: CourseData | null) => {
+		if (!course) {
+			setSelectedCourse(null)
+			return
+		}
+		setLoading(true)
+		try {
+			const resources = await getResources(course.id)
+			setSelectedCourse({ ...course, resources })
+			setView("course-detail")
+		} catch (err) {
+			setError(err instanceof Error ? err.message : "Failed to load course")
+		} finally {
+			setLoading(false)
+		}
+	}, [])
+
+	const handleSelectSession = useCallback((session: SessionData | null) => {
+		setSelectedSession(session)
+		if (session) {
+			setView("view-session")
+		}
+	}, [])
+
+	const handleCreateSession = useCallback(() => {
+		setView("create-session")
+	}, [])
+
+	const handleNavigateToCreateCourse = useCallback(() => {
+		setView("create-course")
+	}, [])
+
 	const value: IntelloContextType = {
 		view, setView,
 		loading, error, setError,
@@ -462,6 +531,9 @@ export function IntelloProvider({ children }: { children: ReactNode }) {
 		handleSelectQcmSet, handleSelectOpenSet, handleSelectFlashcardSet, handleSelectTrueOrFalseSet, handleSelectKeywordSet, handleSelectOrderPhraseSet, handleSelectFillBlankSet,
 		handleAnswerSelect, handleNextQuestion, handlePlayAgain, shuffleAnswers,
 		getLevelBadgeClass, getScoreColor,
+		// Course/Session
+		courses, selectedCourse, selectedSession,
+		loadCourses, handleSelectCourse, handleSelectSession, handleCreateSession, handleNavigateToCourses, handleNavigateToCreateCourse,
 	}
 
 	return <IntelloContext.Provider value={value}>{children}</IntelloContext.Provider>

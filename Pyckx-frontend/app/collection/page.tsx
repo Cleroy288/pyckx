@@ -21,9 +21,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { GridBackground } from "@/components/grid-background"
-import { TopNavigation } from "@/components/top-navigation"
-import { AuthGuard } from "@/components/auth-guard"
+import { GridBackground } from "@/components/layout/grid-background"
+import { TopNavigation } from "@/components/layout/top-navigation"
+import { AuthGuard } from "@/components/auth/auth-guard"
 import { useUserApps } from "@/lib/user-apps-context"
 
 // Import from classes

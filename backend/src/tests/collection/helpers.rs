@@ -1,7 +1,7 @@
 //! Collection test helpers
 
-use crate::config::Config;
-use crate::infrastructure::CreateDvd;
+use crate::configs::Config;
+use crate::infra::CreateDvd;
 use chrono::{TimeZone, Utc};
 
 /// Load test configuration from environment

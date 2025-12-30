@@ -1,7 +1,8 @@
 //! Login tests
 
-use crate::config::{Config, TestConfig};
-use crate::infrastructure::SupabaseClient;
+use crate::configs::Config;
+use crate::tests::config::TestConfig;
+use crate::infra::SupabaseClient;
 
 #[tokio::test]
 async fn test_supabase_login_real() {

@@ -3,16 +3,16 @@
 //! # Structure
 //! - `intello/` - Intello app tests (QCM CRUD, validation, ownership, property-based)
 //! - `collection/` - Collection and DVD tests (lifecycle, edge cases)
-//! - `apps/` - App and user app tests (CRUD, registry)
+//! - `app_registry/` - App and user app tests (CRUD, registry)
 //! - `auth/` - Authentication tests (login, register)
 //! - `utils/` - Utility tests (document extractor)
-//! - `openrouter_tests` - OpenRouter service tests (JSON extraction, sanitization, course parsing)
+//! - `openrouter/` - OpenRouter service tests (JSON extraction, sanitization, prompt builder)
+//! - `config/` - Test configuration
 
-mod apps;
+mod app_registry;
 mod auth;
 mod collection;
 mod intello;
-mod openrouter_tests;
+mod openrouter;
 mod utils;
-mod prompt_builder_tests;
-
+pub mod config;

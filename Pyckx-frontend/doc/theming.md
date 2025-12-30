@@ -160,7 +160,7 @@ All colors are applied as CSS custom properties on `:root`:
 
 ## Palette Selector Component
 
-Located at `components/palette-selector.tsx`:
+Located at `components/settings/palette-selector.tsx`:
 - Dropdown with palette list (hover to preview)
 - Color pickers for each customizable color
 - Mode indicator (shows current light/dark)

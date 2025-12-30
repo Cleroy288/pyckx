@@ -22,14 +22,34 @@ cargo test         # Run tests
 
 ```
 src/
-├── api/            # Handlers & DTOs
-├── use_cases/      # Application orchestration (Handler → UseCase → Service)
-├── services/       # Business logic
-├── domain/         # Pure entities
-├── infrastructure/ # Repository traits + Supabase/JSON implementations
-├── error/          # Domain error types
-├── shared/         # Utilities (document extraction, prompts)
-└── config/         # Environment config
+├── http_api/            # HTTP layer
+│   ├── handlers/        # Route handlers
+│   ├── data_transfer_object/  # Request/Response DTOs
+│   ├── middlewares/     # Rate limiting, etc.
+│   └── utils/           # Validation & error utilities
+│       ├── validation/  # ValidationError, validate_request()
+│       └── internal/    # InternalError
+├── services/            # Business logic layer
+├── services/            # Business logic & Domain layer
+│   ├── app_registry/    # App management & generic domain
+│   ├── intello/         # Intello service (games, domain, ops)
+│   │   └── domain/      # Domain entities (QcmSet, Flashcard, etc.)
+│   ├── collection/      # Collection service & domain
+│   │   └── domain/      # Domain entities (App, Collection)
+│   ├── auth/            # Auth service
+│   └── openrouter/      # AI integration
+├── infra/               # Infrastructure layer
+│   ├── supabase/        # Supabase client, repos, errors
+│   ├── user/            # User entity, UserId, session utils
+│   ├── session/         # Session management & errors
+│   └── database/        # Repository traits
+├── shared/              # Cross-cutting utilities
+│   ├── constants/       # Global error aggregator, URLs
+│   │   ├── errors/      # AppError (wraps all errors)
+│   │   └── urls/        # API paths
+│   └── utils/           # Generic utilities (deserializers)
+├── configs/             # Environment configuration
+└── tests/               # Integration tests
 ```
 
 ## Documentation
@@ -37,8 +57,6 @@ src/
 | Doc | Description |
 |-----|-------------|
 | [Architecture Overview](./architecture/overview.md) | Layers, request flow, folder structure |
-| [API Documentation (Generated)](./rustdoc/LAPP/index.html) | Requires local server or opening raw file |
-| [Use Cases](architecture/use-cases.md) | Use Cases layer pattern |
 | [Adding Features](architecture/adding-features.md) | Step-by-step templates |
 | [End-to-End Feature](architecture/end-to-end-feature.md) | Complete backend + frontend implementation guide |
 | [Intello App](apps/intello/README.md) | AI-powered games (QCM, flashcards, etc.) |

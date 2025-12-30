@@ -3,17 +3,12 @@
 // ============================================================================
 
 // Modules
-mod api;
+mod http_api;
 mod app;
-mod apps;
-mod config;
-mod domain;
-mod error;
-mod infrastructure;
-mod middleware;
+mod configs;
+mod infra;
 mod services;
 mod shared;
-mod use_cases;
 
 #[cfg(test)]
 mod tests;
@@ -24,7 +19,7 @@ use actix_files::{Files, NamedFile};
 use actix_multipart::form::MultipartFormConfig;
 use actix_web::{http::header, middleware::Logger, rt::signal, web, App as ActixApp, HttpRequest, HttpServer};
 use app::App;
-use middleware::{RateLimitConfig, RateLimitMiddleware, RateLimiter};
+use http_api::{RateLimitConfig, RateLimitMiddleware, RateLimiter};
 use tracing::{error, info, warn};
 use tracing_subscriber::{fmt, layer::SubscriberExt, util::SubscriberInitExt, EnvFilter};
 
@@ -96,7 +91,7 @@ async fn main() -> std::io::Result<()> {
             .wrap(cors)
             .wrap(RateLimitMiddleware::new(rate_limiter.clone()))
             .wrap(Logger::new("%a \"%r\" %s %b %Dms"))
-            .configure(api::init);
+            .configure(http_api::init);
 
         // Static file serving (production only)
         if serve_frontend {

@@ -1,7 +1,7 @@
 //! Document extractor tests
 
-use crate::shared::extract_txt;
-use crate::shared::document_extractor::ExtractedContent;
+use crate::services::intello::document_extractor_service::extract_txt;
+use crate::services::intello::document_extractor_service::ExtractedContent;
 
 #[test]
 fn test_extract_txt_utf8() {

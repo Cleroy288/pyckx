@@ -18,8 +18,8 @@ Intello is an educational game platform within Pyckx. Users can create quizzes m
 - Upload documents (PDF, Word, PowerPoint, TXT)
 - AI generates multiple choice questions from content
 - Customizable: subjects, difficulty, language, number of questions
-- **Select AI model** for generation (4 free + 5 paid models available)
-- Token limit validation per model (up to 2M context)
+- Uses **Gemini 3 Flash** model for all AI generation
+- Token limit validation (up to 1M context)
 
 ### 3. AI Open Questions
 - Upload documents for AI analysis
@@ -134,36 +134,41 @@ interface CustomQuestionFormProps {
 - Name (required)
 - Description (required)
 - AI Instructions (optional)
-- Language (en, fr, es, de, nl)
-- Difficulty (easy, medium, hard)
-- Number of Questions (5, 10, 15, 20, 25, 30)
-- **AI Model** (selectable: 4 free + 5 paid models with context limits)
-- Subjects (max 3)
-- Documents (required, multiple files)
+### CustomQuestionForm (`components/intello/custom-question-form.tsx`)
 
-### ManualQcmForm (`components/manual-qcm-form.tsx`)
+Form component for AI-generated questions. User provides:
+- **Topic**: What to quiz aboutprompt
+- **Level**: Beginner, Intermediate, Advanced
+- **Game Type**: QCM, Flashcard, Keywords, etc.
+- **AI Model**: OpenRouter model selection
+- **Number of Questions**: 3-20
 
-Form for creating manual QCM sets without AI:
+Handles:
+- Form validation
+- Debounced character count
+- API calls to `/api/intello/qcm/custom`, `/api/intello/flashcard/custom`, etc.
+- Error display (rate limits, validation)
+- Loading states
 
-**Props:**
-```typescript
-interface ManualQcmFormProps {
-  onBack: () => void
-  onSuccess?: (setId: string) => void
-}
-```
+Returns generated set ID on success → navigates to play view.
 
-**Form Fields:**
-- Name (required)
-- Description (required)
-- Language (en, fr, es, de, nl)
-- Difficulty (easy, medium, hard)
-- Subjects (max 3, optional)
+---
 
-**Question Builder:**
-- Dynamic add/remove questions
-- Each question: question text, 1 correct answer, 3 wrong answers, explanation
-- **Validation**: All answers must be unique (case-insensitive)
+### ManualQcmForm (`components/intello/manual-qcm-form.tsx`)
+
+Form for manually creating QCM sets. User provides:
+- **Set name**
+- **Questions list**: Each with question text, 4 options, correct option index
+
+Handles:
+- Dynamic question/option addition/removal
+- Duplicate answer detection (case-insensitive)
+- Validation (min 1 question, max 20, all fields required)
+- API call to `/api/intello/qcm/manual`
+
+Returns created set ID → navigates to play view.
+
+---
 
 ### Player Components
 
@@ -248,11 +253,6 @@ getAllFillBlankSets(): Promise<FillBlankSetListResponse>
 createFillBlank(input, files): Promise<CreateFillBlankResponse>
 ```
 
-### AI Model Functions
-```typescript
-getAvailableModels(): Promise<AvailableModelsResponse>
-```
-
 ## Types
 
 ### Statement/Question Types
@@ -317,7 +317,6 @@ Configured in `lib/api/config.ts`:
 ```typescript
 intello: {
   games: () => "/app/intello/games",
-  models: () => "/app/intello/models",
   qcmSets: () => "/app/intello/qcm",
   customQuestion: () => `${BACKEND}/app/intello/custom-question`,
   openQuestionCreate: () => `${BACKEND}/app/intello/open-question/create`,
@@ -367,26 +366,21 @@ intello: {
 | Word | `.docx` |
 | PowerPoint | `.pptx` |
 
-## AI Models
+## AI Model
 
-### Available Models
+All AI content generation uses **Gemini 3 Flash** (`google/gemini-3-flash-preview`):
 
-| Model | Context Limit | Type |
-|-------|---------------|------|
-| `google/gemini-2.0-flash-exp:free` | 1.05M **(default)** | Free |
-| `kwaipilot/kat-coder-pro:free` | 256K | Free |
-| `mistralai/devstral-2512:free` | 262K | Free |
-| `tngtech/deepseek-r1t2-chimera:free` | 164K | Free |
-| `google/gemini-3-flash-preview` | 1.05M | Paid |
-| `google/gemini-3-pro-preview` | 1.05M | Paid |
-| `openai/gpt-5.2` | 400K | Paid |
-| `amazon/nova-2-lite-v1` | 1M | Paid |
-| `x-ai/grok-4.1-fast` | 2M | Paid |
+| Property | Value |
+|----------|-------|
+| Model | `google/gemini-3-flash-preview` |
+| Display Name | Gemini 3 Flash |
+| Context Limit | 1,048,576 tokens |
+| Input Cost | $0.50 per million tokens |
+| Output Cost | $3.00 per million tokens |
 
 ### Token Limit Validation
 
-- Each model has a maximum context limit
-- A 10K token safety buffer is applied
+- A 10K token safety buffer is applied to the context limit
 - Documents exceeding the limit trigger a validation error
 - Error message: "Document size (X tokens) exceeds the model's context limit"
 
@@ -396,9 +390,8 @@ The form displays errors via toast notifications. Common errors:
 
 | Error | Cause | Solution |
 |-------|-------|----------|
-| Token limit exceeded | Documents too large | Use smaller/fewer files or a model with higher limit |
-| Rate limit (429) | Too many requests | Wait and retry, or add Google API key |
-| Model unavailable | Model offline | Select a different model |
+| Token limit exceeded | Documents too large | Use smaller/fewer files |
+| Rate limit (429) | Too many requests | Wait and retry |
 | AI parsing error | AI returned malformed JSON | Backend auto-sanitizes; retry if persists |
 
-> **Note:** The backend automatically sanitizes AI responses to handle edge cases like duplicate JSON keys. If you see parsing errors, the system will attempt to recover automatically.
+> **Note:** The backend automatically sanitizes AI responses to handle edge cases like duplicate JSON keys.

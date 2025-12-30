@@ -1,12 +1,12 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { GridBackground } from "@/components/grid-background"
-import { TopNavigation } from "@/components/top-navigation"
-import { AppGrid } from "@/components/app-grid"
-import { AppDetails } from "@/components/app-details"
+import { GridBackground } from "@/components/layout/grid-background"
+import { TopNavigation } from "@/components/layout/top-navigation"
+import { AppGrid } from "@/components/dashboard/app-grid"
+import { AppDetails } from "@/components/dashboard/app-details"
 import { useRouter } from "next/navigation"
-import { AuthGuard } from "@/components/auth-guard"
+import { AuthGuard } from "@/components/auth/auth-guard"
 import { availableApps, getAppById, type App } from "@/lib/apps-data"
 import { useUserApps } from "@/lib/user-apps-context"
 

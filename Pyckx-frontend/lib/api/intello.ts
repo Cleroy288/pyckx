@@ -161,30 +161,6 @@ export type Level = "easy" | "medium" | "hard";
 export const VALID_NUM_QUESTIONS = [5, 10, 15, 20, 25, 30] as const;
 export type NumQuestions = typeof VALID_NUM_QUESTIONS[number];
 
-/** AI model string type */
-export type AIModel = string;
-
-/** Response from available models endpoint */
-export interface AvailableModelsResponse {
-  models: string[];
-  default_model: string;
-}
-
-// == Get Available AI Models ==
-export async function getAvailableModels(): Promise<AvailableModelsResponse> {
-  const res = await fetch(endpoints.intello.models, {
-    method: "GET",
-    credentials: "include",
-  });
-
-  if (!res.ok) {
-    const errorBody = await res.json().catch(() => null);
-    throw new Error(extractErrorMessage(errorBody, `Failed to fetch available models (${res.status})`));
-  }
-
-  return await res.json();
-}
-
 /** Input for creating a custom question */
 export interface CreateCustomQuestionInput {
   /** Name of the custom question set */
@@ -203,8 +179,6 @@ export interface CreateCustomQuestionInput {
   subjects: string[];
   /** Number of questions to generate (5, 10, 15, 20, 25, or 30) */
   num_questions: NumQuestions;
-  /** AI model to use (optional - uses default if not specified) */
-  model?: AIModel;
 }
 
 /** A single QCM question */
@@ -288,8 +262,6 @@ export interface CreateOpenQuestionInput {
   level: Level;
   subjects: string[];
   num_questions: NumQuestions;
-  /** AI model to use (optional - uses default if not specified) */
-  model?: AIModel;
 }
 
 /** Response from open question creation */
@@ -437,8 +409,6 @@ export interface CreateFlashcardInput {
   level: Level;
   subjects: string[];
   num_questions: NumQuestions;
-  /** AI model to use (optional - uses default if not specified) */
-  model?: AIModel;
 }
 
 /** Response from flashcard creation */
@@ -537,8 +507,6 @@ export interface CreateTrueOrFalseInput {
   level: Level;
   subjects: string[];
   num_questions: NumQuestions;
-  /** AI model to use (optional - uses default if not specified) */
-  model?: AIModel;
 }
 
 /** Response from true/false creation */
@@ -655,7 +623,6 @@ export interface CreateKeywordsInput {
   level: string;
   subjects: string[];
   num_questions: number;
-  model?: string;
 }
 
 export interface CreateKeywordsResponse {
@@ -754,7 +721,6 @@ export interface CreateOrderPhraseInput {
   level: string;
   subjects: string[];
   num_questions: number;
-  model?: string;
 }
 
 export interface CreateOrderPhraseResponse {
@@ -853,7 +819,6 @@ export interface CreateFillBlankInput {
   level: string;
   subjects: string[];
   num_questions: number;
-  model?: string;
 }
 
 export interface CreateFillBlankResponse {
@@ -911,4 +876,398 @@ export async function getAllFillBlankSets(): Promise<FillBlankSetData[]> {
 
   const data: FillBlankSetListResponse = await res.json();
   return data.sets;
+}
+
+
+// =============================================================================
+// COURSE & SESSION API
+// =============================================================================
+
+// == Course Types ==
+
+export interface CourseData {
+  id: string;
+  user_id: string;
+  name: string;
+  description: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CourseListResponse {
+  success: boolean;
+  courses: CourseData[];
+}
+
+export interface CourseResponse {
+  success: boolean;
+  course: CourseData;
+}
+
+// == Resource Types ==
+
+export interface ResourceData {
+  id: string;
+  course_id: string;
+  filename: string;
+  content: string;
+  token_count: number;
+  created_at: string;
+}
+
+export interface ResourceListResponse {
+  success: boolean;
+  resources: ResourceData[];
+}
+
+export interface ResourceResponse {
+  success: boolean;
+  resource: ResourceData;
+}
+
+// == Session Types ==
+
+export interface SessionData {
+  id: string;
+  course_id: string;
+  topic: string;
+  instructions: string;
+  keywords: string[];
+  language: string;
+  status: string;
+  created_at: string;
+}
+
+export interface SessionListResponse {
+  success: boolean;
+  sessions: SessionData[];
+}
+
+export interface SessionResponse {
+  success: boolean;
+  session: SessionData;
+}
+
+// == Generate Course Types ==
+
+export interface GenerateCourseInput {
+  topic: string;
+  keywords?: string[];
+  instructions?: string;
+  resource_ids?: string[];
+}
+
+export interface GenerateCourseResponse {
+  success: boolean;
+  course: {
+    title: string;
+    emoji: string;
+    metadata: Record<string, unknown>;
+    content: unknown[];
+  };
+}
+
+// == Course CRUD ==
+
+export async function createCourse(name: string, description: string = ""): Promise<CourseData> {
+  const res = await fetch(endpoints.intello.courses, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({ name, description }),
+  });
+
+  if (!res.ok) {
+    const errorBody = await res.json().catch(() => null);
+    throw new Error(extractErrorMessage(errorBody, `Failed to create course (${res.status})`));
+  }
+
+  const data: CourseResponse = await res.json();
+  return data.course;
+}
+
+export async function listCourses(): Promise<CourseData[]> {
+  const res = await fetch(endpoints.intello.courses, {
+    method: "GET",
+    credentials: "include",
+  });
+
+  if (!res.ok) {
+    const errorBody = await res.json().catch(() => null);
+    throw new Error(extractErrorMessage(errorBody, `Failed to list courses (${res.status})`));
+  }
+
+  const data: CourseListResponse = await res.json();
+  return data.courses;
+}
+
+// == Resource CRUD ==
+
+export async function uploadResource(
+  courseId: string,
+  filename: string,
+  content: string,
+  tokenCount: number = 0
+): Promise<ResourceData> {
+  const res = await fetch(endpoints.intello.courseResources(courseId), {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({ filename, content, token_count: tokenCount }),
+  });
+
+  if (!res.ok) {
+    const errorBody = await res.json().catch(() => null);
+    throw new Error(extractErrorMessage(errorBody, `Failed to upload resource (${res.status})`));
+  }
+
+  const data: ResourceResponse = await res.json();
+  return data.resource;
+}
+
+export async function getResources(courseId: string): Promise<ResourceData[]> {
+  const res = await fetch(endpoints.intello.courseResources(courseId), {
+    method: "GET",
+    credentials: "include",
+  });
+
+  if (!res.ok) {
+    const errorBody = await res.json().catch(() => null);
+    throw new Error(extractErrorMessage(errorBody, `Failed to get resources (${res.status})`));
+  }
+
+  const data: ResourceListResponse = await res.json();
+  return data.resources;
+}
+
+// == Session CRUD ==
+
+export async function createSession(
+  courseId: string,
+  topic: string,
+  instructions: string = "",
+  keywords: string[] = [],
+  language: string = "en"
+): Promise<SessionData> {
+  const res = await fetch(endpoints.intello.courseSessions(courseId), {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({ topic, instructions, keywords, language }),
+  });
+
+  if (!res.ok) {
+    const errorBody = await res.json().catch(() => null);
+    throw new Error(extractErrorMessage(errorBody, `Failed to create session (${res.status})`));
+  }
+
+  const data: SessionResponse = await res.json();
+  return data.session;
+}
+
+export async function listSessions(courseId: string): Promise<SessionData[]> {
+  const res = await fetch(endpoints.intello.courseSessions(courseId), {
+    method: "GET",
+    credentials: "include",
+  });
+
+  if (!res.ok) {
+    const errorBody = await res.json().catch(() => null);
+    throw new Error(extractErrorMessage(errorBody, `Failed to list sessions (${res.status})`));
+  }
+
+  const data: SessionListResponse = await res.json();
+  return data.sessions;
+}
+
+// == Generate Course ==
+
+export async function generateCourse(input: GenerateCourseInput): Promise<GenerateCourseResponse> {
+  const res = await fetch(endpoints.intello.generateCourse, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify(input),
+  });
+
+  if (!res.ok) {
+    const errorBody = await res.json().catch(() => null);
+    throw new Error(extractErrorMessage(errorBody, `Failed to generate course (${res.status})`));
+  }
+
+  return await res.json();
+}
+
+// == Backwards Compatibility Aliases ==
+// These match the function names expected by existing views
+
+/** Alias for createSession - used by create-session-view */
+export const startStudySession = createSession;
+
+// == User Resource Management ==
+
+/** Summary of a resource (without content) */
+export interface ResourceSummary {
+  id: string;
+  filename: string;
+  token_count: number;
+  created_at: string;
+}
+
+/** Full user resource (with content) */
+export interface UserResourceFull {
+  id: string;
+  user_id: string;
+  filename: string;
+  content: string;
+  token_count: number;
+  created_at: string;
+}
+
+interface UserResourcesResponse {
+  success: boolean;
+  resources: ResourceSummary[];
+}
+
+interface UserResourceResponse {
+  success: boolean;
+  resource: UserResourceFull;
+}
+
+interface ResourceExistsResponse {
+  success: boolean;
+  exists: boolean;
+}
+
+/** Get all resources for the current user (summaries only) */
+export async function getUserResources(): Promise<ResourceSummary[]> {
+  const res = await fetch(endpoints.intello.resources, {
+    method: "GET",
+    credentials: "include",
+  });
+
+  if (!res.ok) {
+    const errorBody = await res.json().catch(() => null);
+    throw new Error(extractErrorMessage(errorBody, `Failed to fetch resources (${res.status})`));
+  }
+
+  const data: UserResourcesResponse = await res.json();
+  return data.resources;
+}
+
+/** Check if a resource with the given filename already exists */
+export async function checkResourceExists(filename: string): Promise<boolean> {
+  const res = await fetch(endpoints.intello.resourceCheck(filename), {
+    method: "GET",
+    credentials: "include",
+  });
+
+  if (!res.ok) {
+    const errorBody = await res.json().catch(() => null);
+    throw new Error(extractErrorMessage(errorBody, `Failed to check resource (${res.status})`));
+  }
+
+  const data: ResourceExistsResponse = await res.json();
+  return data.exists;
+}
+
+/** Create a new user resource */
+export async function createResource(
+  filename: string,
+  content: string,
+  tokenCount: number
+): Promise<UserResourceFull> {
+  const res = await fetch(endpoints.intello.resources, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({ filename, content, token_count: tokenCount }),
+  });
+
+  if (!res.ok) {
+    const errorBody = await res.json().catch(() => null);
+    throw new Error(extractErrorMessage(errorBody, `Failed to create resource (${res.status})`));
+  }
+
+  const data: UserResourceResponse = await res.json();
+  return data.resource;
+}
+
+/** Get full resource content by ID */
+export async function getResourceContent(resourceId: string): Promise<UserResourceFull> {
+  const res = await fetch(endpoints.intello.resourceById(resourceId), {
+    method: "GET",
+    credentials: "include",
+  });
+
+  if (!res.ok) {
+    const errorBody = await res.json().catch(() => null);
+    throw new Error(extractErrorMessage(errorBody, `Failed to get resource (${res.status})`));
+  }
+
+  const data: UserResourceResponse = await res.json();
+  return data.resource;
+}
+
+/** Link an existing resource to a course */
+export async function linkResourceToCourse(courseId: string, resourceId: string): Promise<void> {
+  const res = await fetch(endpoints.intello.courseResourceLink(courseId), {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({ resource_id: resourceId }),
+  });
+
+  if (!res.ok) {
+    const errorBody = await res.json().catch(() => null);
+    throw new Error(extractErrorMessage(errorBody, `Failed to link resource (${res.status})`));
+  }
+}
+
+// == Admin Statistics // ==
+
+/** Statistics for a feature type */
+export interface FeatureStats {
+  feature_type: string;
+  count: number;
+  total_cost_usd: number;
+  avg_cost_usd: number;
+  total_input_tokens: number;
+  total_output_tokens: number;
+}
+
+/** Statistics for a specific AI model */
+export interface ModelStats {
+  model_id: string;
+  count: number;
+  total_cost_usd: number;
+  avg_cost_usd: number;
+  total_input_tokens: number;
+  total_output_tokens: number;
+}
+
+/** Admin statistics response */
+export interface AdminStatsResponse {
+  total_requests: number;
+  total_cost_usd: number;
+  total_input_tokens: number;
+  total_output_tokens: number;
+  by_feature_type: FeatureStats[];
+  by_model: ModelStats[];
+}
+
+/** Fetch admin statistics (admin only) */
+export async function fetchAdminStats(): Promise<AdminStatsResponse> {
+  const res = await fetch(endpoints.intello.adminStats, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+  });
+
+  if (!res.ok) {
+    const errorBody = await res.json().catch(() => null);
+    throw new Error(extractErrorMessage(errorBody, `Failed to fetch admin stats (${res.status})`));
+  }
+
+  return res.json();
 }

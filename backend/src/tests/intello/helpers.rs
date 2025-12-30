@@ -1,10 +1,17 @@
 //! Intello test helpers
 
-use crate::domain::intello::{FillBlankSet, FlashcardSet, KeywordSet, OpenQuestionSet, OrderPhraseSet, QcmSet, TrueOrFalseSet};
-use crate::error::{AppError, IntelloError};
-use crate::infrastructure::{GameSetRepository, OpenQuestionRepository, QcmRepository};
-use crate::services::{IntelloService, OpenRouterService};
-use crate::shared::OpenQuestionCache;
+use crate::services::intello::ai_usage_domain::{AiUsageLog, CreateAiUsageLog};
+use crate::services::intello::{
+    fill_blank_domain::FillBlankSet, flashcard_domain::FlashcardSet, keywords_domain::KeywordSet, 
+    open_question_domain::OpenQuestionSet, order_phrase_domain::OrderPhraseSet, 
+    qcm_set_domain::QcmSet, true_false_domain::TrueOrFalseSet,
+};
+use crate::shared::AppError;
+use crate::services::intello::types_domain::IntelloService;
+use crate::services::intello::error_domain::IntelloError;
+use crate::infra::{AiUsageRepository, GameSetRepository, OpenQuestionRepository, QcmRepository};
+use crate::services::{OpenRouterService};
+use crate::services::intello::open_question_cache_service::OpenQuestionCache;
 use async_trait::async_trait;
 use std::sync::{Arc, Mutex};
 
@@ -18,7 +25,9 @@ pub struct StubQcmRepository {
 
 impl StubQcmRepository {
     pub fn new() -> Self {
-        Self { sets: Mutex::new(vec![]) }
+        Self {
+            sets: Mutex::new(vec![]),
+        }
     }
 }
 
@@ -35,17 +44,31 @@ impl QcmRepository for StubQcmRepository {
         sets.push(set.clone());
         Ok(set.clone())
     }
-    async fn find_by_id(&self, set_id: &str, user_id: &str) -> Result<Option<QcmSet>, IntelloError> {
+    async fn find_by_id(
+        &self,
+        set_id: &str,
+        user_id: &str,
+    ) -> Result<Option<QcmSet>, IntelloError> {
         let sets = self.sets.lock().unwrap();
-        Ok(sets.iter().find(|s| s.id == set_id && s.user_id == user_id).cloned())
+        Ok(sets
+            .iter()
+            .find(|s| s.id.as_str() == set_id && s.user_id.as_str() == user_id)
+            .cloned())
     }
     async fn find_by_user(&self, user_id: &str) -> Result<Vec<QcmSet>, IntelloError> {
         let sets = self.sets.lock().unwrap();
-        Ok(sets.iter().filter(|s| s.user_id == user_id).cloned().collect())
+        Ok(sets
+            .iter()
+            .filter(|s| s.user_id.as_str() == user_id)
+            .cloned()
+            .collect())
     }
     async fn update(&self, set: &QcmSet) -> Result<bool, IntelloError> {
         let mut sets = self.sets.lock().unwrap();
-        if let Some(existing) = sets.iter_mut().find(|s| s.id == set.id && s.user_id == set.user_id) {
+        if let Some(existing) = sets
+            .iter_mut()
+            .find(|s| s.id == set.id && s.user_id == set.user_id)
+        {
             *existing = set.clone();
             Ok(true)
         } else {
@@ -55,7 +78,7 @@ impl QcmRepository for StubQcmRepository {
     async fn delete(&self, set_id: &str, user_id: &str) -> Result<bool, IntelloError> {
         let mut sets = self.sets.lock().unwrap();
         let len_before = sets.len();
-        sets.retain(|s| !(s.id == set_id && s.user_id == user_id));
+        sets.retain(|s| !(s.id.as_str() == set_id && s.user_id.as_str() == user_id));
         Ok(sets.len() < len_before)
     }
 }
@@ -69,7 +92,9 @@ pub struct StubOpenQuestionRepository {
 
 impl StubOpenQuestionRepository {
     pub fn new() -> Self {
-        Self { sets: Mutex::new(vec![]) }
+        Self {
+            sets: Mutex::new(vec![]),
+        }
     }
 }
 
@@ -86,13 +111,24 @@ impl OpenQuestionRepository for StubOpenQuestionRepository {
         sets.push(set.clone());
         Ok(set.clone())
     }
-    async fn find_by_id(&self, set_id: &str, user_id: &str) -> Result<Option<OpenQuestionSet>, IntelloError> {
+    async fn find_by_id(
+        &self,
+        set_id: &str,
+        user_id: &str,
+    ) -> Result<Option<OpenQuestionSet>, IntelloError> {
         let sets = self.sets.lock().unwrap();
-        Ok(sets.iter().find(|s| s.id == set_id && s.user_id == user_id).cloned())
+        Ok(sets
+            .iter()
+            .find(|s| s.id.as_str() == set_id && s.user_id.as_str() == user_id)
+            .cloned())
     }
     async fn find_by_user(&self, user_id: &str) -> Result<Vec<OpenQuestionSet>, IntelloError> {
         let sets = self.sets.lock().unwrap();
-        Ok(sets.iter().filter(|s| s.user_id == user_id).cloned().collect())
+        Ok(sets
+            .iter()
+            .filter(|s| s.user_id.as_str() == user_id)
+            .cloned()
+            .collect())
     }
 }
 
@@ -105,7 +141,9 @@ pub struct StubFlashcardRepository {
 
 impl StubFlashcardRepository {
     pub fn new() -> Self {
-        Self { sets: Mutex::new(vec![]) }
+        Self {
+            sets: Mutex::new(vec![]),
+        }
     }
 }
 
@@ -122,19 +160,13 @@ impl GameSetRepository<FlashcardSet> for StubFlashcardRepository {
         sets.push(set.clone());
         Ok(set.clone())
     }
-    async fn find_by_id(&self, set_id: &str, user_id: &str) -> Result<Option<FlashcardSet>, IntelloError> {
-        let sets = self.sets.lock().unwrap();
-        Ok(sets.iter().find(|s| s.id == set_id && s.user_id == user_id).cloned())
-    }
     async fn find_by_user(&self, user_id: &str) -> Result<Vec<FlashcardSet>, IntelloError> {
         let sets = self.sets.lock().unwrap();
-        Ok(sets.iter().filter(|s| s.user_id == user_id).cloned().collect())
-    }
-    async fn delete(&self, set_id: &str, user_id: &str) -> Result<bool, IntelloError> {
-        let mut sets = self.sets.lock().unwrap();
-        let len_before = sets.len();
-        sets.retain(|s| !(s.id == set_id && s.user_id == user_id));
-        Ok(sets.len() < len_before)
+        Ok(sets
+            .iter()
+            .filter(|s| s.user_id.as_str() == user_id)
+            .cloned()
+            .collect())
     }
 }
 
@@ -148,14 +180,8 @@ impl GameSetRepository<TrueOrFalseSet> for StubTrueOrFalseRepository {
     async fn insert(&self, set: &TrueOrFalseSet) -> Result<TrueOrFalseSet, IntelloError> {
         Ok(set.clone())
     }
-    async fn find_by_id(&self, _: &str, _: &str) -> Result<Option<TrueOrFalseSet>, IntelloError> {
-        Ok(None)
-    }
     async fn find_by_user(&self, _: &str) -> Result<Vec<TrueOrFalseSet>, IntelloError> {
         Ok(vec![])
-    }
-    async fn delete(&self, _: &str, _: &str) -> Result<bool, IntelloError> {
-        Ok(false)
     }
 }
 
@@ -167,14 +193,8 @@ impl GameSetRepository<KeywordSet> for StubKeywordsRepository {
     async fn insert(&self, set: &KeywordSet) -> Result<KeywordSet, IntelloError> {
         Ok(set.clone())
     }
-    async fn find_by_id(&self, _: &str, _: &str) -> Result<Option<KeywordSet>, IntelloError> {
-        Ok(None)
-    }
     async fn find_by_user(&self, _: &str) -> Result<Vec<KeywordSet>, IntelloError> {
         Ok(vec![])
-    }
-    async fn delete(&self, _: &str, _: &str) -> Result<bool, IntelloError> {
-        Ok(false)
     }
 }
 
@@ -186,14 +206,8 @@ impl GameSetRepository<OrderPhraseSet> for StubOrderPhraseRepository {
     async fn insert(&self, set: &OrderPhraseSet) -> Result<OrderPhraseSet, IntelloError> {
         Ok(set.clone())
     }
-    async fn find_by_id(&self, _: &str, _: &str) -> Result<Option<OrderPhraseSet>, IntelloError> {
-        Ok(None)
-    }
     async fn find_by_user(&self, _: &str) -> Result<Vec<OrderPhraseSet>, IntelloError> {
         Ok(vec![])
-    }
-    async fn delete(&self, _: &str, _: &str) -> Result<bool, IntelloError> {
-        Ok(false)
     }
 }
 
@@ -205,14 +219,8 @@ impl GameSetRepository<FillBlankSet> for StubFillBlankRepository {
     async fn insert(&self, set: &FillBlankSet) -> Result<FillBlankSet, IntelloError> {
         Ok(set.clone())
     }
-    async fn find_by_id(&self, _: &str, _: &str) -> Result<Option<FillBlankSet>, IntelloError> {
-        Ok(None)
-    }
     async fn find_by_user(&self, _: &str) -> Result<Vec<FillBlankSet>, IntelloError> {
         Ok(vec![])
-    }
-    async fn delete(&self, _: &str, _: &str) -> Result<bool, IntelloError> {
-        Ok(false)
     }
 }
 
@@ -221,20 +229,102 @@ impl GameSetRepository<FillBlankSet> for StubFillBlankRepository {
 pub struct StubCourseRepository;
 
 #[async_trait]
-impl crate::infrastructure::CourseRepository for StubCourseRepository {
-    async fn create_course(&self, course: &crate::domain::intello::course::Course) -> Result<crate::domain::intello::course::Course, AppError> {
+impl crate::infra::CourseRepository for StubCourseRepository {
+    async fn create_course(
+        &self,
+        course: &crate::services::intello::course_domain::Course,
+    ) -> Result<crate::services::intello::course_domain::Course, AppError> {
         Ok(course.clone())
     }
-    async fn get_user_courses(&self, _: &str) -> Result<Vec<crate::domain::intello::course::Course>, AppError> {
+    async fn get_user_courses(
+        &self,
+        _: &str,
+    ) -> Result<Vec<crate::services::intello::course_domain::Course>, AppError> {
         Ok(vec![])
     }
-    async fn add_resource(&self, resource: &crate::domain::intello::course::Resource) -> Result<crate::domain::intello::course::Resource, AppError> {
+    async fn get_course_resources(
+        &self,
+        _: &str,
+    ) -> Result<Vec<crate::services::intello::course_domain::UserResource>, AppError> {
+        Ok(vec![])
+    }
+    async fn fetch_resources(
+        &self,
+        _: &[String],
+    ) -> Result<Vec<crate::services::intello::course_domain::UserResource>, AppError> {
+        Ok(vec![])
+    }
+    async fn get_user_resources(
+        &self,
+        _: &str,
+    ) -> Result<Vec<crate::services::intello::course_domain::ResourceSummary>, AppError> {
+        Ok(vec![])
+    }
+    async fn get_resource_by_id(
+        &self,
+        _: &str,
+    ) -> Result<Option<crate::services::intello::course_domain::UserResource>, AppError> {
+        Ok(None)
+    }
+    async fn resource_exists(&self, _: &str, _: &str) -> Result<bool, AppError> {
+        Ok(false)
+    }
+    async fn create_user_resource(
+        &self,
+        resource: &crate::services::intello::course_domain::UserResource,
+    ) -> Result<crate::services::intello::course_domain::UserResource, AppError> {
         Ok(resource.clone())
     }
-    async fn get_course_resources(&self, _: &str) -> Result<Vec<crate::domain::intello::course::Resource>, AppError> {
+    async fn link_resource_to_course(&self, _: &str, _: &str) -> Result<(), AppError> {
+        Ok(())
+    }
+}
+
+// == STUB AI USAGE REPOSITORY ==
+
+pub struct StubAiUsageRepository;
+
+#[async_trait]
+impl AiUsageRepository for StubAiUsageRepository {
+    async fn log_usage(&self, _input: CreateAiUsageLog) -> Result<AiUsageLog, AppError> {
+        Ok(AiUsageLog {
+            id: "test-id".to_string(),
+            user_id: "test-user".to_string(),
+            feature_type: "test".to_string(),
+            model_id: "test-model".to_string(),
+            input_tokens: 0,
+            output_tokens: 0,
+            input_cost_usd: 0.0,
+            output_cost_usd: 0.0,
+            total_cost_usd: 0.0,
+            created_at: chrono::Utc::now().to_rfc3339(),
+        })
+    }
+    async fn get_user_usage(&self, _user_id: &str) -> Result<Vec<AiUsageLog>, AppError> {
         Ok(vec![])
     }
-    async fn fetch_resources(&self, _: &[String]) -> Result<Vec<crate::domain::intello::course::Resource>, AppError> {
+    async fn get_all_usage(&self) -> Result<Vec<AiUsageLog>, AppError> {
+        Ok(vec![])
+    }
+}
+
+// == STUB STUDY SESSION REPOSITORY ==
+
+pub struct StubStudySessionRepository;
+
+#[async_trait]
+impl crate::infra::StudySessionRepository for StubStudySessionRepository {
+    async fn create(
+        &self,
+        session: &crate::services::intello::study_session_domain::StudySession,
+    ) -> Result<crate::services::intello::study_session_domain::StudySession, AppError> {
+        Ok(session.clone())
+    }
+
+    async fn list_by_course(
+        &self,
+        _course_id: &str,
+    ) -> Result<Vec<crate::services::intello::study_session_domain::StudySession>, AppError> {
         Ok(vec![])
     }
 }
@@ -242,8 +332,9 @@ impl crate::infrastructure::CourseRepository for StubCourseRepository {
 // == HELPER FUNCTIONS ==
 
 /// Create a complete stub repository bundle for tests.
-pub fn stub_intello_repositories() -> crate::services::IntelloRepositories {
-    crate::services::IntelloRepositories {
+#[allow(dead_code)]
+pub fn stub_intello_repositories() -> crate::services::intello::types_domain::IntelloRepositories {
+    crate::services::intello::types_domain::IntelloRepositories {
         qcm_repo: Arc::new(StubQcmRepository::new()),
         ai_qcm_repo: Arc::new(StubQcmRepository::new()),
         open_question_repo: Arc::new(StubOpenQuestionRepository::new()),
@@ -253,20 +344,27 @@ pub fn stub_intello_repositories() -> crate::services::IntelloRepositories {
         order_phrase_repo: Arc::new(StubOrderPhraseRepository),
         fill_blank_repo: Arc::new(StubFillBlankRepository),
         course_repo: Arc::new(StubCourseRepository),
+        ai_usage_repo: Arc::new(StubAiUsageRepository),
+        study_session_repo: Arc::new(StubStudySessionRepository),
     }
 }
 
 /// Create a test IntelloService with all required dependencies.
+#[allow(dead_code)]
 pub fn create_test_service() -> IntelloService {
     IntelloService::builder()
         .with_repositories(stub_intello_repositories())
-        .with_openrouter(Arc::new(OpenRouterService::with_google_key(String::new(), None)))
+        .with_openrouter(Arc::new(OpenRouterService::with_google_key(
+            String::new(),
+            None,
+        )))
         .with_cache(Arc::new(OpenQuestionCache::new()))
         .build()
         .expect("Test IntelloService setup should not fail")
 }
 
 /// Get test user ID (using a fixed test user for unit tests)
+#[allow(dead_code)]
 pub fn get_test_user_id() -> String {
     "test-user-intello".to_string()
 }

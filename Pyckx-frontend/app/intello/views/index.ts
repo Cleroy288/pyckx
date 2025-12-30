@@ -1,5 +1,5 @@
 // Views barrel export
-export { HomeView } from "./home-view"
+export { HomeView } from "./home"
 export {
 	CreateQcmView,
 	CreateAiQcmView,
@@ -8,8 +8,9 @@ export {
 	CreateAiTrueOrFalseView,
 	CreateAiKeywordsView,
 	CreateAiOrderPhraseView,
-	CreateAiFillBlankView
-} from "./create-views"
+	CreateAiFillBlankView,
+	CreateCourseView
+} from "./create"
 export {
 	PlayQcmView,
 	PlayOpenView,
@@ -29,3 +30,6 @@ export {
 	PlayingFillBlankView
 } from "./playing-views"
 export { ResultsView } from "./results-view"
+// Course/Session views
+export { CoursesView, CourseDetailView } from "./course"
+export { CreateSessionView, ViewSessionView } from "./session"

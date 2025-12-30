@@ -5,8 +5,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/lib/auth-context";
-import { GridBackground } from "@/components/grid-background";
-import { ThemeToggle } from "@/components/theme-toggle";
+import { GridBackground } from "@/components/layout/grid-background";
+import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
