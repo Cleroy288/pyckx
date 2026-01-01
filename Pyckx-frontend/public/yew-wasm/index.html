@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Pyckx - Yew Test Page</title>
+    <link rel="stylesheet" href="/yew-wasm/styles-73a30a68b3ee46f7.css" integrity="sha384-T/3jFPZEeujE5v0EXe30Kjt/hdrVPZn0ubuwCkOTbdQWkwbn9Dh5QtgPMXj9TPft"/>
+<link rel="modulepreload" href="/yew-wasm/yew-app-9df1a184133a423e.js" crossorigin="anonymous" integrity="sha384-jltDeTqeUMw7MvTWxEQzm/UCNoA3Hjgd2s+QJJZ8HBHTTQ+odTBEhI9ELjIZH6SV"><link rel="preload" href="/yew-wasm/yew-app-9df1a184133a423e_bg.wasm" crossorigin="anonymous" integrity="sha384-/M6khYItQdvWGNNT8Zc1KVhbaz3UL4aOMmIacKdJ9UW/I9FN3tXY2037bmtT9vyh" as="fetch" type="application/wasm"></head>
+<body>
+
+<script type="module">
+import init, * as bindings from '/yew-wasm/yew-app-9df1a184133a423e.js';
+const wasm = await init({ module_or_path: '/yew-wasm/yew-app-9df1a184133a423e_bg.wasm' });
+
+
+window.wasmBindings = bindings;
+
+
+dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
+
+</script></body>
+</html>

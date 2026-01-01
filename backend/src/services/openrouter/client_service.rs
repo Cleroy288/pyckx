@@ -6,7 +6,8 @@ use crate::services::intello::error_domain::IntelloError;
 
 impl OpenRouterService {
     /// Send a chat completion request to OpenRouter with optional model override
-    pub(super) async fn send_chat_request_with_model(
+    /// Send a chat completion request to OpenRouter with optional model override
+    pub async fn send_chat_request_with_model(
         &self,
         prompt: &str,
         model: Option<&str>,

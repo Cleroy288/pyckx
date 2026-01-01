@@ -166,4 +166,60 @@ impl IntelloService {
         info!(course_id = %course_id, resource_id = %resource_id, "Resource linked to course");
         Ok(())
     }
+
+    /// Delete a course and its associated sessions and resources
+    #[instrument(skip(self))]
+    pub async fn delete_course(
+        &self,
+        user_id: &str,
+        course_id: &str,
+    ) -> Result<(), IntelloError> {
+        // 1. Verify course ownership
+        // This is not efficient for many courses but safe for now.
+        // Better validation would be `get_course` which doesn't exist yet on repo.
+        let courses = self.list_user_courses(user_id).await?;
+        if !courses.iter().any(|c| c.id == course_id) {
+            return Err(IntelloError::Forbidden);
+        }
+
+        info!(course_id = %course_id, "Deleting course and cascading data");
+
+        // 2. Delete all study sessions
+        self.study_session_repo
+            .delete_by_course(course_id)
+            .await
+            .map_err(|e| IntelloError::storage(e.to_string()))?;
+        
+        // 3. Get resources to delete later
+        let resources = self
+            .course_repo
+            .get_course_resources(course_id)
+            .await
+            .map_err(|e| IntelloError::storage(e.to_string()))?;
+
+        // 4. Delete resource links
+        self.course_repo
+            .delete_resource_links(course_id)
+            .await
+            .map_err(|e| IntelloError::storage(e.to_string()))?;
+        
+        // 5. Delete actual resources (assuming they are unique to this course context as per request)
+        // Note: In a shared library model, we might check if they are linked elsewhere first.
+        // Here we follow the user instruction "delete the course resources too".
+        for resource in resources {
+            self.course_repo
+                .delete_resource(&resource.id)
+                .await
+                .map_err(|e| IntelloError::storage(e.to_string()))?;
+        }
+
+        // 6. Delete the course itself
+        self.course_repo
+            .delete_course(course_id)
+            .await
+            .map_err(|e| IntelloError::storage(e.to_string()))?;
+
+        info!("Course deleted successfully");
+        Ok(())
+    }
 }

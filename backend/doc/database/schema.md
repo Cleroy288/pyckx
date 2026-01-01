@@ -114,6 +114,9 @@ Junction table linking resources to courses (many-to-many).
 | keywords | TEXT[] | |
 | language | VARCHAR(5) | en, fr, es, de, nl |
 | status | VARCHAR(20) | in_progress, completed |
+| extracted_knowledge | JSONB | Structure concepts (Stage 1) |
+| educational_content | JSONB | Detailed content (Stage 1.5) |
+| expanded_knowledge | TEXT | AI expansion (Stage 0.5) |
 | created_at | TIMESTAMPTZ | |
 | completed_at | TIMESTAMPTZ | |
 

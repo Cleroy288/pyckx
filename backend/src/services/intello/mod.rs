@@ -67,6 +67,8 @@ pub use true_false_domain::TrueOrFalseStatement;
 mod ai_usage_service;
 mod course_service;
 pub mod course_parser_service;
+pub mod learn_mode_domain;
+pub mod learn_mode_service;
 pub mod crud_service;
 pub mod document_extractor_service;
 mod fill_blank_service;

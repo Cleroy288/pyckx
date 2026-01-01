@@ -121,6 +121,9 @@ export function CreateSessionView() {
 					<label htmlFor="topic" className="text-sm font-medium text-foreground">
 						Topic <span className="text-destructive">*</span>
 					</label>
+					<p className="text-xs text-muted-foreground">
+						What would you like to learn? Be specific (e.g., "Introduction to React Hooks", "Rust Ownership and Borrowing")
+					</p>
 					<input
 						id="topic"
 						type="text"
@@ -137,6 +140,9 @@ export function CreateSessionView() {
 					<label htmlFor="instructions" className="text-sm font-medium text-foreground">
 						Instructions (optional)
 					</label>
+					<p className="text-xs text-muted-foreground">
+						Provide any specific focus areas, learning objectives, or teaching style preferences for this session.
+					</p>
 					<textarea
 						id="instructions"
 						value={instructions}
@@ -149,6 +155,9 @@ export function CreateSessionView() {
 				{/* Keywords */}
 				<div className="space-y-2">
 					<label className="text-sm font-medium text-foreground">Keywords (max 5)</label>
+					<p className="text-xs text-muted-foreground">
+						Add key terms or concepts to focus on (e.g., "async", "components", "testing")
+					</p>
 					<div className="flex gap-2">
 						<input
 							type="text"
@@ -192,6 +201,9 @@ export function CreateSessionView() {
 				{/* Language */}
 				<div className="space-y-2">
 					<label htmlFor="language" className="text-sm font-medium text-foreground">Language</label>
+					<p className="text-xs text-muted-foreground">
+						Select the language for the AI-generated content and exercises.
+					</p>
 					<select
 						id="language"
 						value={language}
@@ -211,6 +223,9 @@ export function CreateSessionView() {
 					<label className="text-sm font-medium text-foreground">
 						Select Resources <span className="text-destructive">*</span>
 					</label>
+					<p className="text-xs text-muted-foreground">
+						Choose the learning materials the AI will use to generate your study content and exercises.
+					</p>
 					<div className="space-y-2 p-4 rounded-lg border border-border/50 bg-card/30 max-h-[300px] overflow-y-auto">
 						{isLoadingResources ? (
 							<div className="flex items-center justify-center py-4">

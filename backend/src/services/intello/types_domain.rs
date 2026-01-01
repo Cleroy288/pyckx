@@ -116,7 +116,7 @@ pub struct IntelloService {
     // AI Usage repository for cost tracking
     pub(super) ai_usage_repo: Arc<dyn AiUsageRepository>,
     // Study Session repository
-    pub(super) study_session_repo: Arc<dyn StudySessionRepository>,
+    pub study_session_repo: Arc<dyn StudySessionRepository>,
     // AI service for content generation
     pub openrouter_service: Arc<OpenRouterService>,
     // Cache for open question source content

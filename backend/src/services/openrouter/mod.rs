@@ -30,7 +30,8 @@ mod true_false_service;
 pub(crate) mod utils_service;
 mod verification_service;
 
-// Course generation module
+// Course generation modules
+pub mod course_generation_prompts;
 pub mod course_generation_service;
 
 // Re-export from models_domain (centralized registry)

@@ -327,6 +327,21 @@ impl crate::infra::StudySessionRepository for StubStudySessionRepository {
     ) -> Result<Vec<crate::services::intello::study_session_domain::StudySession>, AppError> {
         Ok(vec![])
     }
+
+    async fn get(
+        &self,
+        _session_id: &str,
+    ) -> Result<crate::services::intello::study_session_domain::StudySession, AppError> {
+        Err(AppError::Internal(crate::http_api::utils::InternalError::new("Not implemented in stub".to_string())))
+    }
+
+    async fn save_session_content(
+        &self,
+        _session_id: &str,
+        _content: &serde_json::Value,
+    ) -> Result<(), AppError> {
+        Ok(())
+    }
 }
 
 // == HELPER FUNCTIONS ==

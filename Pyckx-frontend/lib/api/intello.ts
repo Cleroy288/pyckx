@@ -935,6 +935,7 @@ export interface SessionData {
   keywords: string[];
   language: string;
   status: string;
+  generated_content?: any; // Optional, loaded when fetching detail
   created_at: string;
 }
 
@@ -948,6 +949,21 @@ export interface SessionResponse {
   session: SessionData;
 }
 
+export async function getSession(courseId: string, sessionId: string): Promise<SessionData> {
+  const res = await fetch(`${endpoints.intello.courses}/${courseId}/sessions/${sessionId}`, {
+    method: "GET",
+    credentials: "include",
+  });
+
+  if (!res.ok) {
+    const errorBody = await res.json().catch(() => null);
+    throw new Error(extractErrorMessage(errorBody, `Failed to get session (${res.status})`));
+  }
+
+  const data: SessionResponse = await res.json();
+  return data.session;
+}
+
 // == Generate Course Types ==
 
 export interface GenerateCourseInput {
@@ -955,6 +971,10 @@ export interface GenerateCourseInput {
   keywords?: string[];
   instructions?: string;
   resource_ids?: string[];
+
+  session_id?: string;
+  text_length?: string;
+  exercise_depth?: string;
 }
 
 export interface GenerateCourseResponse {
@@ -1001,19 +1021,36 @@ export async function listCourses(): Promise<CourseData[]> {
   return data.courses;
 }
 
+export async function deleteCourse(courseId: string): Promise<void> {
+  const res = await fetch(endpoints.intello.course(courseId), {
+    method: "DELETE",
+    credentials: "include",
+  });
+
+  if (!res.ok) {
+    const errorBody = await res.json().catch(() => null);
+    throw new Error(extractErrorMessage(errorBody, `Failed to delete course (${res.status})`));
+  }
+}
+
+
 // == Resource CRUD ==
 
 export async function uploadResource(
   courseId: string,
-  filename: string,
-  content: string,
-  tokenCount: number = 0
-): Promise<ResourceData> {
+  files: File | File[]
+): Promise<ResourceData[]> {
+  const formData = new FormData();
+  const fileArray = Array.isArray(files) ? files : [files];
+
+  for (const file of fileArray) {
+    formData.append("files", file);
+  }
+
   const res = await fetch(endpoints.intello.courseResources(courseId), {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
     credentials: "include",
-    body: JSON.stringify({ filename, content, token_count: tokenCount }),
+    body: formData,
   });
 
   if (!res.ok) {
@@ -1021,8 +1058,8 @@ export async function uploadResource(
     throw new Error(extractErrorMessage(errorBody, `Failed to upload resource (${res.status})`));
   }
 
-  const data: ResourceResponse = await res.json();
-  return data.resource;
+  const data: ResourceListResponse = await res.json();
+  return data.resources;
 }
 
 export async function getResources(courseId: string): Promise<ResourceData[]> {
@@ -1078,6 +1115,18 @@ export async function listSessions(courseId: string): Promise<SessionData[]> {
 
   const data: SessionListResponse = await res.json();
   return data.sessions;
+}
+
+export async function deleteSession(courseId: string, sessionId: string): Promise<void> {
+  const res = await fetch(endpoints.intello.courseSession(courseId, sessionId), {
+    method: "DELETE",
+    credentials: "include",
+  });
+
+  if (!res.ok) {
+    const errorBody = await res.json().catch(() => null);
+    throw new Error(extractErrorMessage(errorBody, `Failed to delete session (${res.status})`));
+  }
 }
 
 // == Generate Course ==

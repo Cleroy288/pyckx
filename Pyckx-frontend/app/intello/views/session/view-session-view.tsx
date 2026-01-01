@@ -1,9 +1,9 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { BookOpen, ArrowLeft, Loader2, GraduationCap, Sparkles, RefreshCw, GitBranch, CheckCircle, XCircle, Plus, X, Target, FileText, Tag, HelpCircle } from "lucide-react"
 import { useIntello } from "../../context"
-import { generateCourse } from "@/lib/api/intello"
+import { generateCourse, getSession } from "@/lib/api/intello"
 import ReactMarkdown from "react-markdown"
 import dynamic from "next/dynamic"
 import type { GeneratedCourse, CourseModule, ContentBlock, QcmSetPayload, FlashcardSetPayload, TrueFalseSetPayload } from "@/lib/types/block-protocol"
@@ -464,6 +464,49 @@ export function ViewSessionView() {
 	const [specificTopics, setSpecificTopics] = useState("")
 	const [learningGoals, setLearningGoals] = useState("")
 
+	// Customization state
+	const [textLength, setTextLength] = useState("medium")
+	const [exerciseDepth, setExerciseDepth] = useState("medium")
+
+	const [isFetchingSession, setIsFetchingSession] = useState(false)
+
+	// Check for existing content on load
+	useEffect(() => {
+		let isMounted = true;
+
+		async function checkContent() {
+			if (!selectedSession || !selectedCourse) return;
+
+			// If we already have content in state matching this session, don't re-fetch
+			// (But we don't track session ID in generatedCourse, so maybe safer to fetch)
+
+			setIsFetchingSession(true);
+			try {
+				// Determine if we need to fetch detail.
+				// If selectedSession already has generated_content (populated by context?), use it.
+				// But context usually lists sessions without heavy content.
+				// So always fetch detail.
+
+				const sessionDetail = await getSession(selectedCourse.id, selectedSession.id);
+
+				if (isMounted && sessionDetail.generated_content) {
+					setGeneratedCourse(sessionDetail.generated_content as unknown as GeneratedCourse);
+				} else if (isMounted) {
+					setGeneratedCourse(null);
+				}
+			} catch (err) {
+				console.error("Failed to load session content:", err);
+				// Don't show blocking error, just let user see generation form
+			} finally {
+				if (isMounted) setIsFetchingSession(false);
+			}
+		}
+
+		checkContent();
+
+		return () => { isMounted = false; };
+	}, [selectedSession?.id, selectedCourse?.id]);
+
 	if (!selectedSession || !selectedCourse) {
 		return (
 			<div className="text-center py-12">
@@ -505,6 +548,9 @@ export function ViewSessionView() {
 				topic: selectedSession.topic,
 				keywords: allKeywords.length > 0 ? allKeywords : undefined,
 				instructions: instructionParts.join('\n') || undefined,
+				session_id: selectedSession.id,
+				text_length: textLength,
+				exercise_depth: exerciseDepth,
 			})
 			setGeneratedCourse(result.course as unknown as GeneratedCourse)
 		} catch (err) {
@@ -544,7 +590,12 @@ export function ViewSessionView() {
 			)}
 
 			<div className="min-h-[400px]">
-				{isLoading ? (
+				{isFetchingSession ? (
+					<div className="flex flex-col items-center justify-center py-16 space-y-4">
+						<Loader2 className="h-8 w-8 animate-spin text-primary" />
+						<p className="text-muted-foreground">Checking existing content...</p>
+					</div>
+				) : isLoading ? (
 					<div className="flex flex-col items-center justify-center py-16 space-y-4">
 						<Loader2 className="h-8 w-8 animate-spin text-primary" />
 						<p className="text-muted-foreground">Generating course with quizzes...</p>
@@ -587,6 +638,34 @@ export function ViewSessionView() {
 								<Target className="h-5 w-5 text-amber-500" />
 								Customize Your Course (Optional)
 							</h2>
+
+							{/* Length & Depth Selectors */}
+							<div className="grid grid-cols-2 gap-4 mb-6">
+								<div>
+									<label className="text-sm text-muted-foreground mb-2 block">Content Detail</label>
+									<select
+										value={textLength}
+										onChange={(e) => setTextLength(e.target.value)}
+										className="w-full px-3 py-2 rounded-lg bg-background border border-border/50 focus:border-primary focus:outline-none text-sm appearance-none"
+									>
+										<option value="short">Short (Concise)</option>
+										<option value="medium">Medium (Standard)</option>
+										<option value="long">Long (Detailed)</option>
+									</select>
+								</div>
+								<div>
+									<label className="text-sm text-muted-foreground mb-2 block">Exercise Volume</label>
+									<select
+										value={exerciseDepth}
+										onChange={(e) => setExerciseDepth(e.target.value)}
+										className="w-full px-3 py-2 rounded-lg bg-background border border-border/50 focus:border-primary focus:outline-none text-sm appearance-none"
+									>
+										<option value="short">Short (Quick Check)</option>
+										<option value="medium">Medium (Practice)</option>
+										<option value="long">Long (Intensive)</option>
+									</select>
+								</div>
+							</div>
 
 							{/* Extra Keywords */}
 							<div className="mb-4">

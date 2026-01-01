@@ -1,0 +1,29 @@
+# Rust
+/target
+/debug
+
+# Trunk
+/dist
+/.trunk
+
+# WASM build artifacts
+**/*.wasm
+
+# IDEs
+.idea
+.vscode
+*.swp
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git
+.gitignore
+.dockerignore
+
+# Artifacts
+Dockerfile
+docker-compose.yml

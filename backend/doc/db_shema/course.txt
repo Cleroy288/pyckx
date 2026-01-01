@@ -58,6 +58,9 @@ CREATE TABLE intello_study_sessions (
     keywords TEXT[] DEFAULT '{}',
     language VARCHAR(5) DEFAULT 'en',
     status VARCHAR(20) NOT NULL DEFAULT 'in_progress',
+    extracted_knowledge JSONB,
+    educational_content JSONB,
+    expanded_knowledge TEXT,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     completed_at TIMESTAMPTZ
 );

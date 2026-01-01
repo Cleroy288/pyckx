@@ -42,8 +42,10 @@ export const endpoints = {
     fillBlanks: "/api/intello/fill-blanks",
     // Course & Session CRUD
     courses: "/api/intello/courses",
+    course: (id: string) => `/api/intello/courses/${id}`,
     courseResources: (id: string) => `/api/intello/courses/${id}/resources`,
     courseSessions: (id: string) => `/api/intello/courses/${id}/sessions`,
+    courseSession: (courseId: string, sessionId: string) => `/api/intello/courses/${courseId}/sessions/${sessionId}`,
     generateCourse: "/api/intello/generate-course",
     // User Resource Management
     resources: "/api/intello/resources",

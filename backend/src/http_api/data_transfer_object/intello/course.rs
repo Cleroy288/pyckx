@@ -38,6 +38,9 @@ pub struct GenerateCourseRequest {
     pub resource_ids: Vec<String>,
     #[serde(default)]
     pub resources: String,
+    pub session_id: Option<String>,
+    pub text_length: Option<String>,
+    pub exercise_depth: Option<String>,
 }
 
 #[derive(Debug, Serialize)]
@@ -165,4 +168,35 @@ pub enum ContentBlock {
     QcmSet { data: QcmSetPayload },
     TrueFalseSet { data: TrueFalseSetPayload },
     FlashcardSet { data: FlashcardSetPayload },
+}
+
+// == CORE EDUCATIONAL CONTENT // ==
+
+/// Detailed educational content for a course section
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize, PartialEq)]
+pub struct ContentSection {
+    pub title: String,
+    pub content: String,           // 400-600 words of detailed explanation
+    pub key_points: Vec<String>,   // 3-5 bullet points
+    pub examples: Vec<String>,     // 2-3 real-world examples
+}
+
+/// Detailed educational content for the entire course (Stage 1.5 output)
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize, PartialEq)]
+pub struct DetailedCourseContent {
+    pub title: String,
+    pub introduction: String,      // 200+ words course introduction
+    pub sections: Vec<ContentSection>,
+    pub conclusion: String,        // 100+ words wrap-up
+}
+
+// == FULL GENERATION RESULT // ==
+
+/// Full result of the course generation process, including intermediate artifacts
+#[derive(Debug, Serialize, Deserialize)]
+pub struct CourseGenerationResult {
+    pub course: GeneratedCourse,
+    pub extracted_knowledge: ExtractedKnowledge,
+    pub educational_content: DetailedCourseContent,
+    pub expanded_knowledge: String,
 }

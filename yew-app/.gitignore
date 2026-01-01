@@ -1,0 +1,28 @@
+# Rust
+/target
+/debug
+Cargo.lock
+
+# Trunk
+/dist
+/.trunk
+
+# WASM build artifacts
+**/*.wasm
+**/*.js.map
+**/*.wasm.map
+
+# IDEs
+.idea
+.vscode
+*.swp
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node (if ever used locally)
+node_modules
+npm-debug.log
+yarn-error.log

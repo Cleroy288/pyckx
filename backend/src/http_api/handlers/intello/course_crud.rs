@@ -102,6 +102,8 @@ pub struct Session {
     pub keywords: Vec<String>,
     pub language: String,
     pub status: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub generated_content: Option<serde_json::Value>,
     pub created_at: String,
 }
 
@@ -190,7 +192,37 @@ pub async fn list_courses(app: web::Data<App>, req: HttpRequest) -> Result<HttpR
 }
 
 // =============================================================================
+// HANDLER: Delete Course
+// DELETE /api/intello/courses/{course_id}
+// =============================================================================
+
+pub async fn delete_course(
+    app: web::Data<App>,
+    req: HttpRequest,
+    path: web::Path<String>,
+) -> Result<HttpResponse, AppError> {
+    let user_id = get_user_id_from_session(&app, &req)?;
+    let course_id = path.into_inner();
+
+    info!(user_id = %user_id, course_id = %course_id, "Deleting course via Service");
+
+    app.intello_service
+        .delete_course(&user_id, &course_id)
+        .await?;
+
+    Ok(HttpResponse::Ok().json(serde_json::json!({
+        "success": true,
+        "message": "Course deleted successfully"
+    })))
+}
+
+// =============================================================================
 // HANDLER 3: Upload Resource
+// POST /api/intello/courses/{course_id}/resources
+// =============================================================================
+
+// =============================================================================
+// HANDLER 3: Upload Resource (Multipart)
 // POST /api/intello/courses/{course_id}/resources
 // =============================================================================
 
@@ -198,39 +230,48 @@ pub async fn upload_resource(
     app: web::Data<App>,
     req: HttpRequest,
     path: web::Path<String>,
-    body: web::Json<UploadResourceRequest>,
+    payload: actix_multipart::Multipart,
 ) -> Result<HttpResponse, AppError> {
     let user_id = get_user_id_from_session(&app, &req)?;
     let course_id = path.into_inner();
 
-    info!(user_id = %user_id, course_id = %course_id, filename = %body.filename, "Uploading resource via Service");
+    info!(user_id = %user_id, course_id = %course_id, "Uploading resources via Service (Multipart)");
 
-    // 1. Create user resource
-    let resource = app
-        .intello_service
-        .create_resource(
-            &user_id,
-            body.filename.clone(),
-            body.content.clone(),
-            body.token_count,
-        )
-        .await?;
+    // 1. Parse and extract files
+    let documents = super::helpers::parse_multipart_files_only(payload).await?;
+    let mut created_resources = Vec::new();
 
-    // 2. Link resource to course
-    app.intello_service
-        .link_resource_to_course(&user_id, &course_id, &resource.id)
-        .await?;
+    for (filename, content, token_count) in documents {
+        // 2. Create user resource
+        let resource = app
+            .intello_service
+            .create_resource(
+                &user_id,
+                filename,
+                content,
+                token_count as i32,
+            )
+            .await?;
 
-    Ok(HttpResponse::Created().json(ResourceResponse {
-        success: true,
-        resource: Resource {
+        // 3. Link resource to course
+        app.intello_service
+            .link_resource_to_course(&user_id, &course_id, &resource.id)
+            .await?;
+
+        created_resources.push(Resource {
             id: resource.id,
             user_id: resource.user_id,
             filename: resource.filename,
             content: resource.content,
             token_count: resource.token_count,
             created_at: resource.created_at,
-        },
+        });
+    }
+
+    // Return list of created resources
+    Ok(HttpResponse::Created().json(ResourceListResponse {
+        success: true,
+        resources: created_resources,
     }))
 }
 
@@ -310,6 +351,7 @@ pub async fn create_session(
             keywords: session.keywords,
             language: session.language,
             status: session.status,
+            generated_content: None,
             created_at: session.created_at,
         },
     }))
@@ -345,6 +387,7 @@ pub async fn list_sessions(
             keywords: s.keywords,
             language: s.language,
             status: s.status,
+            generated_content: None, // Keep list lightweight
             created_at: s.created_at,
         })
         .collect();
@@ -353,4 +396,72 @@ pub async fn list_sessions(
         success: true,
         sessions: response_sessions,
     }))
+}
+
+// =============================================================================
+// HANDLER 7: Get Session Details
+// GET /api/intello/courses/{course_id}/sessions/{session_id}
+// =============================================================================
+
+pub async fn get_session(
+    app: web::Data<App>,
+    req: HttpRequest,
+    path: web::Path<(String, String)>,
+) -> Result<HttpResponse, AppError> {
+    let user_id = get_user_id_from_session(&app, &req)?;
+    let (_course_id, session_id) = path.into_inner();
+
+    info!(user_id = %user_id, session_id = %session_id, "Getting session details via Service");
+
+    let session = app
+        .intello_service
+        .get_study_session(&user_id, &session_id)
+        .await?;
+
+    Ok(HttpResponse::Ok().json(SessionResponse {
+        success: true,
+        session: Session {
+            id: session.id,
+            course_id: session.course_id,
+            topic: session.topic,
+            instructions: session.instructions,
+            keywords: session.keywords,
+            language: session.language,
+            status: session.status,
+            generated_content: session.generated_content,
+            created_at: session.created_at,
+        },
+    }))
+}
+
+// =============================================================================
+// HANDLER 8: Delete Session
+// DELETE /api/intello/courses/{course_id}/sessions/{session_id}
+// =============================================================================
+
+pub async fn delete_session(
+    app: web::Data<App>,
+    req: HttpRequest,
+    path: web::Path<(String, String)>,
+) -> Result<HttpResponse, AppError> {
+    let user_id = get_user_id_from_session(&app, &req)?;
+    let (course_id, session_id) = path.into_inner();
+
+    info!(user_id = %user_id, course_id = %course_id, session_id = %session_id, "Deleting session via Service");
+
+    // Verify course ownership
+    let courses = app.intello_service.list_user_courses(&user_id).await?;
+    if !courses.iter().any(|c| c.id == course_id) {
+        return Err(AppError::Intello(crate::services::intello::error_domain::IntelloError::Forbidden));
+    }
+
+    app.intello_service
+        .study_session_repo
+        .delete(&session_id)
+        .await?;
+
+    Ok(HttpResponse::Ok().json(serde_json::json!({
+        "success": true,
+        "message": "Session deleted successfully"
+    })))
 }

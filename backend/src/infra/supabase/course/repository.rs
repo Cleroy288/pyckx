@@ -198,11 +198,28 @@ impl CourseRepository for SupabaseCourseRepository {
             resource_id: resource_id.to_string(),
         };
         let url = self.client.rest_url(TABLE_LINKS);
-        let _: Vec<serde_json::Value> = self
-            .client
-            .post(&url, &link)
-            .await
-            .map_err(Self::map_error)?;
+        self.client.post::<(), _>(&url, &link).await.map_err(Self::map_error)?;
+        Ok(())
+    }
+
+    async fn delete_course(&self, course_id: &str) -> Result<(), AppError> {
+        let query = format!("id=eq.{}", course_id);
+        let url = self.client.rest_url_with_query(TABLE_COURSES, &query);
+        self.client.delete(&url).await.map_err(Self::map_error)?;
+        Ok(())
+    }
+
+    async fn delete_resource_links(&self, course_id: &str) -> Result<(), AppError> {
+        let query = format!("course_id=eq.{}", course_id);
+        let url = self.client.rest_url_with_query(TABLE_LINKS, &query);
+        self.client.delete(&url).await.map_err(Self::map_error)?;
+        Ok(())
+    }
+
+    async fn delete_resource(&self, resource_id: &str) -> Result<(), AppError> {
+        let query = format!("id=eq.{}", resource_id);
+        let url = self.client.rest_url_with_query(TABLE_RESOURCES, &query);
+        self.client.delete(&url).await.map_err(Self::map_error)?;
         Ok(())
     }
 }

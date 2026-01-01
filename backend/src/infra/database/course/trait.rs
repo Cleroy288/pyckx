@@ -39,4 +39,15 @@ pub trait CourseRepository: Send + Sync {
         course_id: &str,
         resource_id: &str,
     ) -> Result<(), AppError>;
+
+    // == Deletion ==
+
+    /// Delete a course by ID
+    async fn delete_course(&self, course_id: &str) -> Result<(), AppError>;
+
+    /// Delete all resource links for a course
+    async fn delete_resource_links(&self, course_id: &str) -> Result<(), AppError>;
+
+    /// Delete a user resource by ID
+    async fn delete_resource(&self, resource_id: &str) -> Result<(), AppError>;
 }

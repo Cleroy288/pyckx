@@ -13,6 +13,10 @@ pub struct StudySession {
     pub keywords: Vec<String>,
     pub language: String,
     pub status: String,
+    pub generated_content: Option<serde_json::Value>,
+    pub extracted_knowledge: Option<serde_json::Value>,
+    pub educational_content: Option<serde_json::Value>,
+    pub expanded_knowledge: Option<String>,
     pub created_at: String,
 }
 

@@ -1,69 +1,202 @@
-/*
- *
- * le mode learn c'est quand un user veut apprendre un truc
- * on dois donc continuer à lui générer des cours tant que il n'a pas 90% de réussite.
- *
- * on doit donc continuer à lui générer des qcm , etc tant que il n'a pas 90% de réussite
- *
- * quand un user fait un cours à la fin on lui propose un mode learn,
- * ça veut dire que on lui laisse le cours affiché et on lui génère une section extra sous la synthèse
- * et donc on lui génère un nouveau text (synthèse à apprendre)
- * et on lui génère des jeux pour apprendre ce text
- * puis une fois terminé le joueur nous envoi ses résultats, si il a plus de 90% on arrête le mode learn
- * sinon on re généère des jeux jusqu'a ce que il atteigne les 90%
- *
- * le jeux pour le mode learn devraient avoir plus d'info que les jeux normaux, le but est que le user apprend
- * vraiment avec ces jeux
- *
- *
- * process :
- * - 1 quand un user clique sur "learn mode" en dessou d'un cours, on récupère le résultat de ses jeux pour ce cours
- * on récupère aussi le sujet de son cours etc ...
- * - 2 on génère un text à apprendre (synthèse)
- * avec des jeux dedans , qcm, frai faux et aussi openquestion
- * les jeux doivent avoir plus de text et explications que les jeux normaux
- * - 3 à la fin on réucpère les résultats du user, on analayse ses erreurs, et si il n'a pas 90%
- * on re généère une synthèse basé sur ses erreurs et on re génère des jeux
- * - 4 une fois que le user à réussi on lui génère une nouvelle synthèse (de fin)
- *
- *
- */
+use super::error_domain::IntelloError;
+use crate::services::OpenRouterService;
+use crate::services::openrouter::models_domain::DEFAULT_MODEL;
+use crate::http_api::data_transfer_object::intello::course::CourseModule;
+use serde::{Deserialize, Serialize};
+use tracing::{error, info};
 
-// used to track user game res
-struct UserGameResult {
-    id: u32,                 // id res
-    user_id: u32,            // user id, UUID
-    game_id: u32,            // game id
-    game_type: String,       // type of game (qcm, fill in the blank, etc)
-    result: u32,             // result in percentage
-    timestamp: u64,          // timestamp of the result
-    game_difficulty: String, // difficulty of the game (easy, medium, hard)
-    game_content: String,    // content of the game (the question, the text, etc)
+// == INPUT TYPES ==
+
+/// Context required by the AI to generate targeted learning content.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct LearnModeDemand {
+    /// The general topic of the course
+    pub topic: String,
+    /// Context or summary of the course to ground the AI
+    pub context: String,
+    /// List of specific concepts the user struggled with
+    pub failed_concepts: Vec<String>,
+    /// Optional score from the previous attempt (0-100)
+    pub previous_score: Option<u32>,
+    /// Language for the generated content
+    pub language: String,
+    
+    // == EXTENDED CONTEXT FROM PERSISTENCE ==
+    
+    /// Structured extracted knowledge (Stage 1)
+    pub extracted_knowledge: Option<serde_json::Value>,
+    /// Expanded AI knowledge text (Stage 0.5)
+    pub expanded_knowledge: Option<String>,
 }
 
-// on reçois les résultats gloabaux des jeux du user pour un cours donné, ainsi on sait un peu déjà ce que le joueur gérère
-// le mieux dans le cours
-struct UserCourseResult {
-    course_id: u32,                            // course id
-    course_subject: String,                    // subject of the course
-    course_keywords: Vec<String>,              // keywords of the course
-    course: String,                            // change later by course object
-    course_games_results: Vec<UserGameResult>, // results of the games for this course
+// == PROMPT BUILDER ==
+
+fn build_learn_mode_prompt(demand: &LearnModeDemand) -> String {
+    let failed_concepts_str = if demand.failed_concepts.is_empty() {
+        "General review of the topic".to_string()
+    } else {
+        demand.failed_concepts.join(", ")
+    };
+
+    let score_context = match demand.previous_score {
+        Some(score) => format!("The student previously scored {}/100.", score),
+        None => "This is the student's first focused attempt on these concepts.".to_string(),
+    };
+
+    let extended_context = if let Some(ref ek) = demand.expanded_knowledge {
+        format!("\nEXTENDED KNOWLEDGE BASE:\n{}\n", ek)
+    } else {
+        String::new()
+    };
+
+    let extracted_context = if let Some(ref ex) = demand.extracted_knowledge {
+        format!("\nSTRUCTURED CONCEPTS:\n{}\n", serde_json::to_string_pretty(ex).unwrap_or_default())
+    } else {
+        String::new()
+    };
+
+    format!(
+        r#"You are an Expert Remedial Tutor.
+Your goal is to help a student master specific concepts they struggled with in a course.
+
+TOPIC: {}
+CONTEXT: {}
+FAILED CONCEPTS: {}
+LANGUAGE: {}
+STUDENT STATUS: {}
+{}
+{}
+
+=== YOUR TASK ===
+Generate a targeted "Micro-Learning Module" to fix these specific gaps.
+The module must contain:
+1. **EXPLANATION (Text)**: Clear, remedial explanations of the failed concepts. Use analogies and simpler terms than the original course if possible.
+2. **VISUALIZATION (Schema)**: A Mermaid diagram specifically illustrating the tricky parts of these concepts.
+3. **PRACTICE (Games)**: New exercises (QCM, True/False, Flashcards) to verify understanding of THESE specific points.
+
+=== OUTPUT FORMAT (JSON) ===
+Ouput a single `CourseModule` JSON object:
+
+{{
+  "title": "Remedial Session: [Key Concept Name]",
+  "blocks": [
+    {{
+      "type": "text",
+      "content": "Detailed remedial explanation..."
+    }},
+    {{
+      "type": "schema",
+      "language": "mermaid",
+      "content": "graph TD..."
+    }},
+    {{
+      "type": "qcm_set",
+      "data": {{ ... }}
+    }},
+    {{
+      "type": "flashcard_set",
+      "data": {{ ... }}
+    }}
+  ]
+}}
+
+RULES:
+- Focus ONLY on the failed concepts.
+- Be encouraging but rigorous.
+- Ensure JSON is valid.
+- NO markdown fences (```json), just raw JSON.
+"#,
+        demand.topic,
+        demand.context,
+        failed_concepts_str,
+        demand.language,
+        score_context,
+        extended_context,
+        extracted_context
+    )
 }
 
-// contenu d'un mode learn
-struct LearnModeContent {
-    synthesis_text: String,    // text to learn
-    games: Vec<LearnModeGame>, // games to play
+// == SERVICE LOGIC ==
+
+/// Generates a Learn Mode module based on the user's demand (failed concepts).
+pub async fn generate_learn_content(
+    service: &OpenRouterService,
+    demand: &LearnModeDemand,
+) -> Result<CourseModule, IntelloError> {
+    info!(
+        "Generating Learn Mode content for topic: '{}', failed concepts: {:?}",
+        demand.topic, demand.failed_concepts
+    );
+
+    let prompt = build_learn_mode_prompt(demand);
+    
+    // Use the default high-intelligence model for this complex task
+    let model = DEFAULT_MODEL;
+
+    let response = service
+        .send_chat_request_with_model(&prompt, Some(model))
+        .await
+        .map_err(|e| IntelloError::external("OpenRouter", e.to_string()))?;
+
+    // Borrowed utility from existing code (would need to import or reimplement, here reusing logic)
+    // Assuming we can parse the content directly or need cleaning (using a simple cleaner here for safety)
+    let cleaned_json = clean_json_markers(&response.content);
+
+    let module: CourseModule = serde_json::from_str(&cleaned_json).map_err(|e| {
+        error!("Failed to parse Learn Mode JSON: {}", e);
+        error!("Raw content: {}", response.content);
+        IntelloError::validation("learn_mode_generation", format!("Invalid JSON: {}", e))
+    })?;
+
+    info!("Successfully generated Learn Mode module: '{}'", module.title);
+
+    Ok(module)
 }
 
-// resultat d'un round de mode learn
-struct LearnModeRoundResult {
-    user_id: u32,                              // user id
-    course_id: u32,                            // course id
-    round_id: u32,                             // round id
-    games_results: Vec<UserGameResult>,        // results of the games in this round
-    overall_result: u32,                       // overall result in percentage
-    timestamp: u64,                            // timestamp of the round completion
-    learn_mode_content: Vec<LearnModeContent>, // content used in this round
+/// Helper to remove markdown code blocks if the AI adds them despite instructions
+fn clean_json_markers(content: &str) -> String {
+    content
+        .trim()
+        .trim_start_matches("```json")
+        .trim_start_matches("```")
+        .trim_end_matches("```")
+        .trim()
+        .to_string()
+}
+
+// == ORCHESTRATION ==
+
+use crate::infra::database::StudySessionRepository;
+use std::sync::Arc;
+
+/// Orchestrates the entire Learn Mode generation process:
+/// 1. Fetches the source session to get context (including extended knowledge).
+/// 2. Builds a comprehensive demand.
+/// 3. Generating the content via AI.
+pub async fn orchestrate_learn_mode_generation(
+    service: &OpenRouterService,
+    repo: &Arc<dyn StudySessionRepository>,
+    session_id: &str,
+    failed_concepts: Vec<String>,
+    previous_score: Option<u32>,
+) -> Result<CourseModule, IntelloError> {
+    // 1. Fetch Session
+    let session = repo
+        .get(session_id)
+        .await
+        .map_err(|e| IntelloError::validation("session_lookup", e.to_string()))?;
+
+    // 2. Build Demand
+    let demand = LearnModeDemand {
+        topic: session.topic,
+        context: session.instructions, // Using instructions as context, or we could use generated summary if available
+        failed_concepts,
+        previous_score,
+        language: session.language,
+        extracted_knowledge: session.extracted_knowledge,
+        expanded_knowledge: session.expanded_knowledge,
+    };
+
+    // 3. Generate Content
+    generate_learn_content(service, &demand).await
 }

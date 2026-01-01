@@ -194,6 +194,9 @@ export function CreateCourseView() {
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel className="text-sm">Course Name</FormLabel>
+										<p className="text-xs text-muted-foreground mb-2">
+											Give your course a clear, descriptive title (e.g., "Introduction to Rust", "Advanced React Patterns")
+										</p>
 										<FormControl>
 											<Input placeholder="e.g. Introduction to Rust" {...field} />
 										</FormControl>
@@ -207,6 +210,9 @@ export function CreateCourseView() {
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel className="text-sm">Description</FormLabel>
+										<p className="text-xs text-muted-foreground mb-2">
+											Describe what you want to learn. Be specific about topics, concepts, or skills you'd like to cover.
+										</p>
 										<FormControl>
 											<Textarea
 												placeholder="Briefly describe what this course is about..."
