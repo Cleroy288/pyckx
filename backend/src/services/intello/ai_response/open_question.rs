@@ -1,14 +1,14 @@
-//! Open Question AI response domain types
+//! Open Question AI response types
 
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
-pub(super) struct OpenQuestionAiResponse {
+pub struct OpenQuestionAiResponse {
     pub questions: Vec<OpenQuestionAiQuestion>,
 }
 
 #[derive(Debug, Deserialize)]
-pub(super) struct OpenQuestionAiQuestion {
+pub struct OpenQuestionAiQuestion {
     pub question: String,
     pub expected_answer: String,
     pub hint: String,

@@ -11,6 +11,7 @@
 //! - `session` - Session management with CSV persistence
 
 pub mod database;
+pub mod openrouter;  // OpenRouter HTTP client
 pub mod supabase;
 pub mod user;
 pub mod session;
@@ -33,7 +34,8 @@ pub use supabase::{
     SupabaseAiUsageRepository, SupabaseAppRepository, SupabaseClient, SupabaseCollectionRepository, 
     SupabaseDvdRepository, SupabaseFillBlankRepository, SupabaseHttpClient,
     SupabaseFlashcardRepository, SupabaseKeywordsRepository, SupabaseOpenQuestionRepository, 
-    SupabaseOrderPhraseRepository, SupabaseQcmRepository, SupabaseStudySessionRepository,
-    SupabaseTrueOrFalseRepository, SupabaseUserAppRepository, SupabaseCourseRepository,
+    SupabaseOrderPhraseRepository, SupabaseQcmRepository, SupabaseSessionRepository,
+    SupabaseStudySessionRepository, SupabaseTrueOrFalseRepository, SupabaseUserAppRepository, 
+    SupabaseCourseRepository,
 };
 

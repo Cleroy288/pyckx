@@ -1,14 +1,14 @@
-//! Flashcard AI response domain types
+//! Flashcard AI response types
 
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
-pub(super) struct FlashcardAiResponse {
+pub struct FlashcardAiResponse {
     pub cards: Vec<FlashcardAiCard>,
 }
 
 #[derive(Debug, Deserialize)]
-pub(super) struct FlashcardAiCard {
+pub struct FlashcardAiCard {
     pub front: String,
     pub back: String,
 }

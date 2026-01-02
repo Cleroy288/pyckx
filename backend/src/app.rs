@@ -8,10 +8,11 @@ use crate::infra::{
     SupabaseAiUsageRepository, SupabaseAppRepository, SupabaseCollectionRepository, SupabaseDvdRepository,
     SupabaseFillBlankRepository, SupabaseFlashcardRepository, SupabaseHttpClient, SupabaseKeywordsRepository,
     SupabaseOpenQuestionRepository, SupabaseOrderPhraseRepository, SupabaseQcmRepository,
-    SupabaseTrueOrFalseRepository, SupabaseUserAppRepository,
+    SupabaseSessionRepository, SupabaseTrueOrFalseRepository, SupabaseUserAppRepository,
     SupabaseCourseRepository, SupabaseStudySessionRepository,
 };
-use crate::services::{AppService, AuthService, CollectionService, IntelloService, OpenRouterService};
+use crate::services::{AppService, AuthService, CollectionService, IntelloService};
+use crate::infra::openrouter::OpenRouterClient;
 use crate::services::intello::open_question_cache_service::OpenQuestionCache;
 use std::sync::Arc;
 use tracing::info;
@@ -38,7 +39,7 @@ pub struct App {
     pub collection_service: Arc<CollectionService>,
     pub app_service: Arc<AppService>,
     pub intello_service: Arc<IntelloService>,
-    pub openrouter_service: Arc<OpenRouterService>,  // AI service for course generation
+    pub openrouter_client: Arc<OpenRouterClient>,  // AI client for course generation
     // Apps
     #[allow(dead_code)] // App metadata, used for future app registry
     pub collection: CollectionApp,
@@ -52,15 +53,24 @@ impl App {
     /// # Returns
     /// - `Ok(App)` if configuration loads successfully
     /// - `Err(ConfigError)` if any required config is missing
-    pub fn new() -> Result<Self, ConfigError> {
+    pub async fn new() -> Result<Self, ConfigError> {
         let cfg = Config::from_env()?;
-        let sessions = SessionStore::new();
+        
+        /* Create shared Supabase HTTP client (single connection pool) */
+        let supabase_client = Arc::new(SupabaseHttpClient::new(&cfg));
+        
+        /* Create session repository and store */
+        let session_repo = Arc::new(SupabaseSessionRepository::new(Arc::clone(&supabase_client)));
+        let sessions = SessionStore::new(session_repo);
+        
+        /* Load existing sessions from Supabase (best-effort) */
+        if let Err(e) = sessions.initialize().await {
+            tracing::warn!(error = %e, "Failed to load sessions from Supabase, continuing with empty store");
+        }
+        
         let auth = AuthService::new(&cfg, sessions);
         let collection = CollectionApp::new();
         let intello = IntelloApp::new();
-
-        /* Create shared Supabase HTTP client (single connection pool) */
-        let supabase_client = Arc::new(SupabaseHttpClient::new(&cfg));
 
         /* Create Supabase repositories (non-Intello) */
         let collection_repo = Arc::new(SupabaseCollectionRepository::new(Arc::clone(&supabase_client)));
@@ -89,17 +99,19 @@ impl App {
         // Create OpenRouter service (use empty string if no API key configured)
         let openrouter_api_key = cfg.openrouter_api_key.clone().unwrap_or_default();
         let google_ai_key = cfg.google_ai_key.clone();
-        let openrouter_service = Arc::new(OpenRouterService::with_google_key(openrouter_api_key, google_ai_key));
 
         // Create services with all dependencies injected (wrapped in Arc for cheap cloning)
         let collection_service = Arc::new(CollectionService::new(collection_repo, dvd_repo));
         let app_service = Arc::new(AppService::new(app_repository, user_app_repository));
         
-        // IntelloService uses builder pattern for cleaner construction
+        // OpenRouter AI client
+        let openrouter_client = Arc::new(OpenRouterClient::with_google_key(openrouter_api_key, google_ai_key));
+
+        // Build Intello service
         let intello_service = Arc::new(
             IntelloService::builder()
                 .with_repositories(intello_repos)
-                .with_openrouter(Arc::clone(&openrouter_service))
+                .with_openrouter(Arc::clone(&openrouter_client))
                 .with_cache(open_question_cache)
                 .build()
                 .expect("IntelloService must have all dependencies"),
@@ -119,7 +131,7 @@ impl App {
             collection_service,
             app_service,
             intello_service,
-            openrouter_service,
+            openrouter_client,
             collection,
             intello,
         })
@@ -138,7 +150,7 @@ impl Clone for App {
             collection_service: Arc::clone(&self.collection_service),
             app_service: Arc::clone(&self.app_service),
             intello_service: Arc::clone(&self.intello_service),
-            openrouter_service: Arc::clone(&self.openrouter_service),
+            openrouter_client: Arc::clone(&self.openrouter_client),
             collection: self.collection.clone(),
             intello: self.intello.clone(),
         }

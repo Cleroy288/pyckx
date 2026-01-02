@@ -7,7 +7,7 @@ use crate::services::intello::ai_usage_domain::feature_type;
 use crate::services::intello::open_question_domain::OpenQuestionSet;
 use crate::services::intello::SetId;
 use crate::services::intello::error_domain::IntelloError;
-use crate::services::openrouter::DEFAULT_MODEL;
+use crate::infra::openrouter::DEFAULT_MODEL;
 use super::prompt_builder_service::{AnswerToGrade, OpenQuestionPromptInput, VerificationPromptInput};
 use tracing::{info, instrument};
 
@@ -56,14 +56,15 @@ impl IntelloService {
                 .collect(),
         };
 
-        // Generate questions via AI
-        let (questions, usage) = self
-            .openrouter_service
-            .generate_open_questions(&prompt_input, None)
-            .await?;
+        // Build prompt and send request
+        let prompt = super::prompt_builder_service::build_open_question_prompt(&prompt_input);
+        let ai_result = self.openrouter_client.send_chat_request(&prompt, None).await?;
+
+        // Parse the response
+        let questions = crate::services::intello::ai_parsing_service::parse_open_question_response(&ai_result.content)?;
 
         // Log AI usage (fire-and-forget)
-        if let Some(usage) = usage {
+        if let Some(usage) = ai_result.usage {
             self.try_log_ai_usage(
                 user_id,
                 DEFAULT_MODEL,
@@ -160,10 +161,12 @@ impl IntelloService {
             answers: answers_to_grade,
         };
 
-        let (grades, _usage) = self
-            .openrouter_service
-            .verify_answers(&verification_input)
-            .await?;
+        // Build prompt and send request for verification
+        let prompt = super::prompt_builder_service::build_verification_prompt(&verification_input);
+        let ai_result = self.openrouter_client.send_chat_request(&prompt, None).await?;
+
+        // Parse the verification response
+        let grades = crate::services::intello::ai_parsing_service::parse_verification_response(&ai_result.content)?;
 
         // Convert to our result type
         let results: Vec<GradingResult> = grades
@@ -171,9 +174,9 @@ impl IntelloService {
             .map(|g| GradingResult {
                 question_id: g.question_id,
                 grade: match g.grade {
-                    crate::services::openrouter::AnswerGrade::Right => AnswerGrade::Right,
-                    crate::services::openrouter::AnswerGrade::Medium => AnswerGrade::Medium,
-                    crate::services::openrouter::AnswerGrade::Error => AnswerGrade::Error,
+                    crate::services::intello::ai_parsing_service::AnswerGrade::Right => AnswerGrade::Right,
+                    crate::services::intello::ai_parsing_service::AnswerGrade::Medium => AnswerGrade::Medium,
+                    crate::services::intello::ai_parsing_service::AnswerGrade::Error => AnswerGrade::Error,
                 },
                 feedback: g.feedback,
             })

@@ -52,7 +52,7 @@ pub fn init(cfg: &mut web::ServiceConfig) {
             .service(fill_blank::create_fill_blank_handler)
             .service(fill_blank::list_fill_blank_sets_handler)
             // Course Generation (AI - Block Protocol)
-            .route("/generate-course", web::post().to(course_generation::generate_course_handler))
+            .route("/generate-course", web::post().to(course_generation::generate_course))
             // Course CRUD (direct Supabase)
             .route("/courses", web::post().to(course_crud::create_course))
             .route("/courses", web::get().to(course_crud::list_courses))

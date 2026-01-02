@@ -13,7 +13,7 @@ use tracing::{debug, warn, instrument};
 
 use crate::http_api::data_transfer_object::intello::course::*;
 use crate::services::intello::error_domain::IntelloError;
-use crate::services::openrouter::utils_service::{extract_json_from_response, sanitize_ai_json};
+use crate::infra::openrouter::{extract_json_from_response, sanitize_ai_json};
 
 // == COURSE PARSER ==
 

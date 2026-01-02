@@ -5,7 +5,7 @@ use tracing::{info, instrument, warn};
 use crate::services::intello::ai_usage_domain::{AiUsageLog, CreateAiUsageLog};
 use crate::services::intello::error_domain::IntelloError;
 use crate::services::intello::IntelloService;
-use crate::services::openrouter::models_domain::calculate_cost;
+use crate::infra::openrouter::calculate_cost;
 
 impl IntelloService {
     /// Log AI usage with automatic cost calculation

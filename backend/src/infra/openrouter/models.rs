@@ -1,11 +1,10 @@
-//! Centralized AI Model Registry
-//!
-//! Single source of truth for all AI models with pricing information.
-//! Used for cost tracking and model validation.
+//! AI Model Registry for OpenRouter
 
 use serde::{Deserialize, Serialize};
 
-// == Model Definition ==
+// ============================================================
+// MODEL DEFINITION
+// ============================================================
 
 /// Complete model definition with pricing
 #[derive(Debug, Clone, Copy)]
@@ -24,11 +23,12 @@ pub struct ModelDefinition {
     pub is_free: bool,
 }
 
-// == Centralized Model Registry ==
+// ============================================================
+// CENTRALIZED MODEL REGISTRY
+// ============================================================
 
 /// All available AI models with pricing
 pub const MODELS: &[ModelDefinition] = &[
-    // Single model for ALL operations - high speed thinking model for agentic workflows
     ModelDefinition {
         id: "google/gemini-3-flash-preview",
         display_name: "Gemini 3 Flash Preview",
@@ -38,19 +38,21 @@ pub const MODELS: &[ModelDefinition] = &[
     },
 ];
 
-// == Default Model ==
-
 /// Default model for ALL operations (course generation, games, etc.)
 pub const DEFAULT_MODEL: &str = "google/gemini-3-flash-preview";
 
-// == Helper Functions ==
+// ============================================================
+// HELPER FUNCTIONS
+// ============================================================
 
 /// Get a model definition by ID
 pub fn get_model(id: &str) -> Option<&'static ModelDefinition> {
     MODELS.iter().find(|m| m.id == id)
 }
 
-// == Cost Calculation ==
+// ============================================================
+// COST CALCULATION
+// ============================================================
 
 /// Result of cost calculation
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -66,7 +68,7 @@ pub struct CostResult {
 /// Calculate cost for an AI request
 pub fn calculate_cost(model_id: &str, input_tokens: u32, output_tokens: u32) -> CostResult {
     let model = get_model(model_id);
-    
+
     let (input_cost, output_cost) = match model {
         Some(m) => {
             let input = (input_tokens as f64 / 1_000_000.0) * m.input_cost_per_million;
@@ -99,16 +101,9 @@ mod tests {
 
     #[test]
     fn test_calculate_cost() {
-        // 1M input + 1M output with gemini-3-flash
         let cost = calculate_cost("google/gemini-3-flash-preview", 1_000_000, 1_000_000);
         assert!((cost.input_cost_usd - 0.50).abs() < 0.001);
         assert!((cost.output_cost_usd - 3.00).abs() < 0.001);
         assert!((cost.total_cost_usd - 3.50).abs() < 0.001);
-    }
-
-    #[test]
-    fn test_free_model_cost() {
-        let cost = calculate_cost("xiaomi/mimo-v2-flash:free", 1_000_000, 1_000_000);
-        assert_eq!(cost.total_cost_usd, 0.0);
     }
 }

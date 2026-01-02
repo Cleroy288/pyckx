@@ -37,7 +37,7 @@ fn create_test_intello_service() -> IntelloService {
 
     IntelloService::builder()
         .with_repositories(repos)
-        .with_openrouter(Arc::new(OpenRouterService::with_google_key(
+        .with_openrouter(Arc::new(crate::infra::openrouter::OpenRouterClient::with_google_key(
             String::new(),
             None,
         )))

@@ -1,19 +1,58 @@
-//! HTTP client for OpenRouter API
+//! OpenRouter HTTP Client for AI API communication
 
-use super::models_domain::DEFAULT_MODEL;
-use super::types_domain::{AiGenerationResult, ChatMessage, ChatRequest, ChatResponse, OpenRouterService, OPENROUTER_API_URL};
+use reqwest::Client;
+
+use super::models::DEFAULT_MODEL;
+use super::types::{
+    AiGenerationResult, ChatMessage, ChatRequest, ChatResponse, OPENROUTER_API_URL,
+};
 use crate::services::intello::error_domain::IntelloError;
 
-impl OpenRouterService {
+// ============================================================
+// CLIENT STRUCT
+// ============================================================
+
+/// HTTP client for OpenRouter API
+#[derive(Clone, Debug)]
+pub struct OpenRouterClient {
+    client: Client,
+    api_key: String,
+    /// Optional Google AI API key for higher rate limits with Gemini models
+    google_ai_key: Option<String>,
+}
+
+impl OpenRouterClient {
+    /// Create a new OpenRouter client
+    #[allow(dead_code)]
+    pub fn new(api_key: String) -> Self {
+        Self {
+            client: Client::new(),
+            api_key,
+            google_ai_key: None,
+        }
+    }
+
+    /// Create a new OpenRouter client with optional Google AI key
+    pub fn with_google_key(api_key: String, google_ai_key: Option<String>) -> Self {
+        Self {
+            client: Client::new(),
+            api_key,
+            google_ai_key,
+        }
+    }
+
+    // ============================================================
+    // SEND CHAT REQUEST
+    // ============================================================
+
     /// Send a chat completion request to OpenRouter with optional model override
-    /// Send a chat completion request to OpenRouter with optional model override
-    pub async fn send_chat_request_with_model(
+    pub async fn send_chat_request(
         &self,
         prompt: &str,
         model: Option<&str>,
     ) -> Result<AiGenerationResult, IntelloError> {
         let model_to_use = model.unwrap_or(DEFAULT_MODEL);
-        
+
         let request = ChatRequest {
             model: model_to_use.to_string(),
             messages: vec![ChatMessage {
@@ -30,14 +69,14 @@ impl OpenRouterService {
             .header("Content-Type", "application/json")
             .header("HTTP-Referer", "http://localhost:8080")
             .header("X-Title", "Pyckx Educational Games");
-        
+
         // Add Google AI API key header if available and using a Google/Gemini model
         if let Some(ref google_key) = self.google_ai_key {
             if model_to_use.starts_with("google/") {
                 request_builder = request_builder.header("X-Google-AI-Key", google_key.as_str());
             }
         }
-        
+
         let response = request_builder
             .json(&request)
             .send()
@@ -53,10 +92,9 @@ impl OpenRouterService {
             ));
         }
 
-        let chat_response: ChatResponse = response
-            .json()
-            .await
-            .map_err(|e| IntelloError::external("OpenRouter", format!("Failed to parse response: {}", e)))?;
+        let chat_response: ChatResponse = response.json().await.map_err(|e| {
+            IntelloError::external("OpenRouter", format!("Failed to parse response: {}", e))
+        })?;
 
         let content = chat_response
             .choices
@@ -65,15 +103,9 @@ impl OpenRouterService {
             .ok_or_else(|| IntelloError::external("OpenRouter", "No response content"))?;
 
         Ok(AiGenerationResult {
-            content,
+           content,
             model: model_to_use.to_string(),
             usage: chat_response.usage,
         })
     }
-
-    /// Send a chat completion request to OpenRouter (uses default model)
-    pub(super) async fn send_chat_request(&self, prompt: &str) -> Result<AiGenerationResult, IntelloError> {
-        self.send_chat_request_with_model(prompt, None).await
-    }
 }
-

@@ -1,21 +1,21 @@
-//! Keywords AI response domain types
+//! Keywords AI response types
 
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
-pub(super) struct KeywordsAiResponse {
+pub struct KeywordsAiResponse {
     pub questions: Vec<KeywordsAiQuestion>,
 }
 
 #[derive(Debug, Deserialize)]
-pub(super) struct KeywordsAiQuestion {
+pub struct KeywordsAiQuestion {
     pub statement: String,
     pub keywords: Vec<KeywordsAiKeyword>,
     pub explanation: String,
 }
 
 #[derive(Debug, Deserialize)]
-pub(super) struct KeywordsAiKeyword {
+pub struct KeywordsAiKeyword {
     pub word: String,
     pub is_correct: bool,
 }

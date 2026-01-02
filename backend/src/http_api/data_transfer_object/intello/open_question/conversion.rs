@@ -5,7 +5,7 @@ use super::response::{
     OpenQuestionSetResponse,
 };
 use crate::services::intello::{Level, OpenQuestion, OpenQuestionSet};
-use crate::services::{AnswerGrade, GradedAnswer};
+use crate::services::intello::ai_parsing_service::{AnswerGrade, GradedAnswer};
 
 impl From<&OpenQuestion> for OpenQuestionResponse {
     fn from(q: &OpenQuestion) -> Self {

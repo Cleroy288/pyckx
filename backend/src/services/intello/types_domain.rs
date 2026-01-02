@@ -6,7 +6,7 @@ use crate::infra::{
     KeywordsRepository, OpenQuestionRepository, OrderPhraseRepository, QcmRepository,
     StudySessionRepository, TrueOrFalseRepository,
 };
-use crate::services::OpenRouterService;
+use crate::infra::openrouter::OpenRouterClient;
 use crate::services::intello::open_question_cache_service::OpenQuestionCache;
 use std::fmt;
 use std::sync::Arc;
@@ -117,8 +117,8 @@ pub struct IntelloService {
     pub(super) ai_usage_repo: Arc<dyn AiUsageRepository>,
     // Study Session repository
     pub study_session_repo: Arc<dyn StudySessionRepository>,
-    // AI service for content generation
-    pub openrouter_service: Arc<OpenRouterService>,
+    // AI HTTP client for content generation
+    pub(super) openrouter_client: Arc<OpenRouterClient>,
     // Cache for open question source content
     pub(super) open_question_cache: Arc<OpenQuestionCache>,
 }
@@ -127,7 +127,7 @@ impl IntelloService {
     /// Create a new IntelloService from a repository bundle.
     pub fn from_repositories(
         repos: IntelloRepositories,
-        openrouter_service: Arc<OpenRouterService>,
+        openrouter_client: Arc<OpenRouterClient>,
         open_question_cache: Arc<OpenQuestionCache>,
     ) -> Self {
         info!("IntelloService initialized with repository bundle and AI service");
@@ -143,7 +143,7 @@ impl IntelloService {
             course_repo: repos.course_repo,
             ai_usage_repo: repos.ai_usage_repo,
             study_session_repo: repos.study_session_repo,
-            openrouter_service,
+            openrouter_client,
             open_question_cache,
         }
     }
@@ -169,7 +169,7 @@ impl IntelloService {
 /// ```
 pub struct IntelloServiceBuilder {
     repos: Option<IntelloRepositories>,
-    openrouter_service: Option<Arc<OpenRouterService>>,
+    openrouter_client: Option<Arc<OpenRouterClient>>,
     open_question_cache: Option<Arc<OpenQuestionCache>>,
 }
 
@@ -178,7 +178,7 @@ impl IntelloServiceBuilder {
     pub fn new() -> Self {
         Self {
             repos: None,
-            openrouter_service: None,
+            openrouter_client: None,
             open_question_cache: None,
         }
     }
@@ -189,9 +189,9 @@ impl IntelloServiceBuilder {
         self
     }
 
-    /// Set the OpenRouter AI service.
-    pub fn with_openrouter(mut self, service: Arc<OpenRouterService>) -> Self {
-        self.openrouter_service = Some(service);
+    /// Set the OpenRouter HTTP client.
+    pub fn with_openrouter(mut self, client: Arc<OpenRouterClient>) -> Self {
+        self.openrouter_client = Some(client);
         self
     }
 
@@ -207,16 +207,16 @@ impl IntelloServiceBuilder {
     /// Returns an error string if any required dependency is missing.
     pub fn build(self) -> Result<IntelloService, &'static str> {
         let repos = self.repos.ok_or("Missing repositories")?;
-        let openrouter_service = self
-            .openrouter_service
-            .ok_or("Missing OpenRouter service")?;
+        let openrouter_client = self
+            .openrouter_client
+            .ok_or("Missing OpenRouter client")?;
         let open_question_cache = self
             .open_question_cache
             .ok_or("Missing OpenQuestion cache")?;
 
         Ok(IntelloService::from_repositories(
             repos,
-            openrouter_service,
+            openrouter_client,
             open_question_cache,
         ))
     }

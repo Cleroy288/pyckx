@@ -5,7 +5,7 @@ use crate::services::intello::ai_usage_domain::feature_type;
 use crate::services::intello::qcm_set_domain::QcmSet;
 use crate::services::intello::SetId;
 use crate::services::intello::error_domain::IntelloError;
-use crate::services::openrouter::DEFAULT_MODEL;
+use crate::infra::openrouter::DEFAULT_MODEL;
 use tracing::{debug, info, instrument, warn};
 
 impl IntelloService {
@@ -105,17 +105,23 @@ impl IntelloService {
             "Generating AI QCM questions"
         );
 
-        // Build CustomQuestion for OpenRouter
+        // Build CustomQuestion and prompt
         let custom_question = self.build_custom_question(user_id, &input);
+        let prompt = crate::services::intello::prompt_builder_service::build_prompt(&custom_question);
 
-        // Generate questions via AI
-        let (questions, usage) = self
-            .openrouter_service
-            .generate_qcm(&custom_question, None)
-            .await?;
+        // Send request to OpenRouter
+        let ai_result = self.openrouter_client.send_chat_request(&prompt, None).await?;
+
+        debug!(
+            response_length = ai_result.content.len(),
+            "Received AI response"
+        );
+
+        // Parse the response
+        let questions = crate::services::intello::ai_parsing_service::parse_qcm_response(&ai_result.content)?;
 
         // Log AI usage (fire-and-forget)
-        if let Some(usage) = usage {
+        if let Some(usage) = ai_result.usage {
             self.try_log_ai_usage(
                 user_id,
                 DEFAULT_MODEL,

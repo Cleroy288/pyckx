@@ -9,6 +9,7 @@
 //! - Storage: `infrastructure/`
 
 // Domain modules
+pub mod ai_response;  // AI response schemas from OpenRouter
 mod app_domain;
 pub mod ai_usage_domain;
 pub mod course_domain;
@@ -64,6 +65,7 @@ pub use order_phrase_domain::{OrderPhraseQuestion, OrderPhraseWord};
 pub use true_false_domain::TrueOrFalseStatement;
 
 // Service modules
+pub mod ai_parsing_service;  // AI response parsing
 mod ai_usage_service;
 mod course_service;
 pub mod course_parser_service;

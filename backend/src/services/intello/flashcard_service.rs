@@ -6,7 +6,7 @@ use crate::services::intello::ai_usage_domain::feature_type;
 use crate::services::intello::flashcard_domain::FlashcardSet;
 use crate::services::intello::SetId;
 use crate::services::intello::error_domain::IntelloError;
-use crate::services::openrouter::DEFAULT_MODEL;
+use crate::infra::openrouter::DEFAULT_MODEL;
 use super::prompt_builder_service::FlashcardPromptInput;
 use tracing::{info, instrument};
 
@@ -48,14 +48,15 @@ impl IntelloService {
                 .collect(),
         };
 
-        // Generate flashcards via AI
-        let (cards, usage) = self
-            .openrouter_service
-            .generate_flashcards(&prompt_input, None)
-            .await?;
+        // Build prompt and send request
+        let prompt = super::prompt_builder_service::build_flashcard_prompt(&prompt_input);
+        let ai_result = self.openrouter_client.send_chat_request(&prompt, None).await?;
+
+        // Parse the response
+        let cards = crate::services::intello::ai_parsing_service::parse_flashcard_response(&ai_result.content)?;
 
         // Log AI usage (fire-and-forget)
-        if let Some(usage) = usage {
+        if let Some(usage) = ai_result.usage {
             self.try_log_ai_usage(
                 user_id,
                 DEFAULT_MODEL,

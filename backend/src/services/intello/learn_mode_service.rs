@@ -1,6 +1,6 @@
 use super::error_domain::IntelloError;
-use crate::services::OpenRouterService;
-use crate::services::openrouter::models_domain::DEFAULT_MODEL;
+use crate::infra::openrouter::OpenRouterClient;
+use crate::infra::openrouter::DEFAULT_MODEL;
 use crate::http_api::data_transfer_object::intello::course::CourseModule;
 use serde::{Deserialize, Serialize};
 use tracing::{error, info};
@@ -120,7 +120,7 @@ RULES:
 
 /// Generates a Learn Mode module based on the user's demand (failed concepts).
 pub async fn generate_learn_content(
-    service: &OpenRouterService,
+    service: &OpenRouterClient,
     demand: &LearnModeDemand,
 ) -> Result<CourseModule, IntelloError> {
     info!(
@@ -134,7 +134,7 @@ pub async fn generate_learn_content(
     let model = DEFAULT_MODEL;
 
     let response = service
-        .send_chat_request_with_model(&prompt, Some(model))
+        .send_chat_request(&prompt, Some(model))
         .await
         .map_err(|e| IntelloError::external("OpenRouter", e.to_string()))?;
 
@@ -174,7 +174,7 @@ use std::sync::Arc;
 /// 2. Builds a comprehensive demand.
 /// 3. Generating the content via AI.
 pub async fn orchestrate_learn_mode_generation(
-    service: &OpenRouterService,
+    service: &OpenRouterClient,
     repo: &Arc<dyn StudySessionRepository>,
     session_id: &str,
     failed_concepts: Vec<String>,

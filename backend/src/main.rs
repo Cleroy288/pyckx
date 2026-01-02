@@ -32,7 +32,7 @@ async fn main() -> std::io::Result<()> {
     init_tracing();
 
     // Initialize application
-    let app = match App::new() {
+    let app = match App::new().await {
         Ok(app) => app,
         Err(e) => {
             error!("Failed to load configuration: {}", e);

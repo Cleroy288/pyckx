@@ -1,16 +1,16 @@
-//! Session management - Server-side session storage with CSV persistence
+//! Session management - Server-side session storage with Supabase persistence
+//!
+//! Sessions are stored in-memory for fast lookup but persisted to Supabase
+//! for durability across server restarts.
 
+use crate::infra::supabase::session::SupabaseSessionRepository;
+use crate::infra::supabase::shared::SupabaseError;
 use crate::infra::user::User;
 use crate::infra::user::UserId;
 use std::collections::HashMap;
-use std::fs::{File, OpenOptions};
-use std::io::{BufRead, BufReader, Write};
-use std::path::Path;
 use std::sync::{Arc, RwLock};
 use tracing::{info, warn};
 use uuid::Uuid;
-
-const SESSION_FILE: &str = "data/sessions.csv";
 
 /// Type alias for session IDs
 pub type SessionId = String;
@@ -32,46 +32,126 @@ impl Session {
     }
 }
 
-/// SessionStore - In-memory + CSV persistence
+/// SessionStore - In-memory + Supabase persistence
 /// Keyed by session_id for fast lookup from cookie
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct SessionStore {
     // session_id -> Session
     by_session: Arc<RwLock<HashMap<SessionId, Session>>>,
     // user_id -> session_id (for lookup by Supabase ID)
     user_to_session: Arc<RwLock<HashMap<UserId, SessionId>>>,
+    // Supabase repository for persistence
+    repository: Arc<SupabaseSessionRepository>,
+}
+
+impl std::fmt::Debug for SessionStore {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("SessionStore")
+            .field("session_count", &self.by_session.read().map(|s| s.len()).unwrap_or(0))
+            .finish()
+    }
 }
 
 impl SessionStore {
-    /// Create new store and load existing sessions from CSV
-    pub fn new() -> Self {
-        let store = Self {
+    /// Create new store with Supabase repository
+    pub fn new(repository: Arc<SupabaseSessionRepository>) -> Self {
+        Self {
             by_session: Arc::new(RwLock::new(HashMap::new())),
             user_to_session: Arc::new(RwLock::new(HashMap::new())),
-        };
-        store.load_from_csv();
-        store
+            repository,
+        }
     }
 
-    /// Insert user with new session, persist to CSV
+    /// Initialize by loading existing sessions from Supabase
+    /// Call this on server startup
+    pub async fn initialize(&self) -> Result<(), SupabaseError> {
+        info!("Loading sessions from Supabase...");
+        
+        match self.repository.get_all().await {
+            Ok(rows) => {
+                let mut sessions = self.by_session.write().unwrap();
+                let mut user_map = self.user_to_session.write().unwrap();
+                
+                for row in rows {
+                    let user = User {
+                        id: row.user_id.into(),
+                        email: row.email,
+                        username: row.username,
+                        role: row.role,
+                        access_token: row.access_token,
+                        refresh_token: row.refresh_token,
+                        expires_at: row.expires_at as u64,
+                    };
+                    
+                    let session = Session {
+                        id: row.session_id.clone(),
+                        user,
+                    };
+                    
+                    user_map.insert(session.user.id.clone(), session.id.clone());
+                    sessions.insert(session.id.clone(), session);
+                }
+                
+                info!(count = sessions.len(), "Sessions loaded from Supabase");
+                Ok(())
+            }
+            Err(e) => {
+                warn!(error = %e, "Failed to load sessions from Supabase, starting fresh");
+                // Don't fail startup if we can't load sessions
+                Ok(())
+            }
+        }
+    }
+
+    /// Insert user with new session, persist to Supabase
     pub fn create_session(&self, user: User) -> SessionId {
         let session = Session::new(user);
-        let session_id = session.id.to_string();
+        let session_id = session.id.clone();
+        let session_for_persist = session.clone();
 
         {
             let mut sessions = self.by_session.write().unwrap();
             let mut user_map = self.user_to_session.write().unwrap();
 
             // Remove old session if user already logged in
-            if let Some(old_session) = user_map.get(&session.user.id) {
-                sessions.remove(old_session);
+            if let Some(old_session_id) = user_map.get(&session.user.id) {
+                let old_id = old_session_id.clone();
+                sessions.remove(&old_id);
+                
+                // Delete old session from Supabase in background
+                let repo: Arc<SupabaseSessionRepository> = Arc::clone(&self.repository);
+                tokio::spawn(async move {
+                    if let Err(e) = repo.delete(&old_id).await {
+                        warn!(error = %e, "Failed to delete old session from Supabase");
+                    }
+                });
             }
 
             user_map.insert(session.user.id.clone(), session_id.clone());
             sessions.insert(session_id.clone(), session);
         }
 
-        self.save_to_csv();
+        // Persist new session to Supabase in background
+        let repo: Arc<SupabaseSessionRepository> = Arc::clone(&self.repository);
+        tokio::spawn(async move {
+            use crate::infra::supabase::session::SessionRow;
+            
+            let row = SessionRow {
+                session_id: session_for_persist.id,
+                user_id: session_for_persist.user.id.to_string(),
+                email: session_for_persist.user.email,
+                username: session_for_persist.user.username,
+                role: session_for_persist.user.role,
+                access_token: session_for_persist.user.access_token,
+                refresh_token: session_for_persist.user.refresh_token,
+                expires_at: session_for_persist.user.expires_at as i64,
+            };
+            
+            if let Err(e) = repo.upsert(row).await {
+                warn!(error = %e, "Failed to persist session to Supabase");
+            }
+        });
+
         info!(session_id = %session_id, "Session created");
         session_id
     }
@@ -97,123 +177,16 @@ impl SessionStore {
         };
 
         if user.is_some() {
-            self.save_to_csv();
+            // Delete from Supabase in background
+            let repo: Arc<SupabaseSessionRepository> = Arc::clone(&self.repository);
+            let sid = session_id.to_string();
+            tokio::spawn(async move {
+                if let Err(e) = repo.delete(&sid).await {
+                    warn!(error = %e, "Failed to delete session from Supabase");
+                }
+            });
             info!(session_id = %session_id, "Session deleted");
         }
         user
-    }
-
-    /// Load sessions from CSV file
-    fn load_from_csv(&self) {
-        let path = Path::new(SESSION_FILE);
-        if !path.exists() {
-            info!("No session file found, starting fresh");
-            return;
-        }
-
-        let file = match File::open(path) {
-            Ok(f) => f,
-            Err(e) => {
-                warn!(error = %e, "Failed to open session file");
-                return;
-            }
-        };
-
-        let reader = BufReader::new(file);
-        let mut sessions = self.by_session.write().unwrap();
-        let mut user_map = self.user_to_session.write().unwrap();
-        let mut count = 0;
-
-        for (i, line) in reader.lines().enumerate() {
-            if i == 0 {
-                continue; // Skip header
-            }
-
-            let line = match line {
-                Ok(l) => l,
-                Err(_) => continue,
-            };
-
-            let parts: Vec<&str> = line.split(',').collect();
-            if parts.len() < 8 {
-                continue;
-            }
-
-            let user = User {
-                id: parts[1].to_string().into(),
-                email: parts[2].to_string(),
-                username: parts[3].to_string(),
-                role: parts[4].to_string(),
-                access_token: parts[5].to_string(),
-                refresh_token: parts[6].to_string(),
-                expires_at: parts[7].parse().unwrap_or(0),
-            };
-
-            let session = Session {
-                id: parts[0].to_string(),
-                user,
-            };
-
-            user_map.insert(session.user.id.clone(), session.id.to_string());
-            sessions.insert(session.id.to_string(), session);
-            count += 1;
-        }
-
-        info!(count = count, "Loaded sessions from CSV");
-    }
-
-    /// Save all sessions to CSV file
-    fn save_to_csv(&self) {
-        if let Err(e) = std::fs::create_dir_all("data") {
-            warn!(error = %e, "Failed to create data directory");
-            return;
-        }
-
-        let file = match OpenOptions::new()
-            .write(true)
-            .create(true)
-            .truncate(true)
-            .open(SESSION_FILE)
-        {
-            Ok(f) => f,
-            Err(e) => {
-                warn!(error = %e, "Failed to open session file for writing");
-                return;
-            }
-        };
-
-        let mut writer = std::io::BufWriter::new(file);
-        let sessions = self.by_session.read().unwrap();
-
-        // Write header
-        let _ = writeln!(
-            writer,
-            "session_id,user_id,email,username,role,access_token,refresh_token,expires_at"
-        );
-
-        // Write each session
-        for session in sessions.values() {
-            let _ = writeln!(
-                writer,
-                "{},{},{},{},{},{},{},{}",
-                session.id,
-                session.user.id,
-                session.user.email,
-                session.user.username,
-                session.user.role,
-                session.user.access_token,
-                session.user.refresh_token,
-                session.user.expires_at
-            );
-        }
-
-        let _ = writer.flush();
-        info!(count = sessions.len(), "Saved sessions to CSV");
-    }
-}
-
-impl Default for SessionStore {
-    fn default() -> Self {
-        Self::new()
     }
 }
