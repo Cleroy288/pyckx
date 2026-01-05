@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback, useRef } from "react"
 import { BookOpen, ArrowLeft, Loader2, GraduationCap, Sparkles, RefreshCw, GitBranch, CheckCircle, XCircle, Plus, X, Target, FileText, Tag, HelpCircle } from "lucide-react"
 import { useIntello } from "../../context"
 import { generateCourse, getSession } from "@/lib/api/intello"
@@ -457,52 +457,81 @@ export function ViewSessionView() {
 	const [isLoading, setIsLoading] = useState(false)
 	const [error, setError] = useState<string | null>(null)
 	const [generatedCourse, setGeneratedCourse] = useState<GeneratedCourse | null>(null)
+	const [isFetchingSession, setIsFetchingSession] = useState(true) // Start true to prevent race
 
-	// Extra input state
-	const [extraKeywords, setExtraKeywords] = useState<string[]>([])
-	const [keywordInput, setKeywordInput] = useState("")
-	const [specificTopics, setSpecificTopics] = useState("")
-	const [learningGoals, setLearningGoals] = useState("")
+	// Ref to prevent duplicate generation requests
+	const hasRequestedGeneration = useRef(false)
+	const currentSessionId = useRef<string | null>(null)
 
-	// Customization state
-	const [textLength, setTextLength] = useState("medium")
-	const [exerciseDepth, setExerciseDepth] = useState("medium")
-
-	const [isFetchingSession, setIsFetchingSession] = useState(false)
-
-	// Check for existing content on load
+	// Check for existing content AND auto-generate if needed - ALL IN ONE EFFECT
 	useEffect(() => {
+		// Reset guard when session changes
+		if (selectedSession?.id !== currentSessionId.current) {
+			hasRequestedGeneration.current = false
+			currentSessionId.current = selectedSession?.id ?? null
+		}
+
+		if (!selectedSession || !selectedCourse) return;
+
+		// Capture values for type safety in async function
+		const session = selectedSession;
+		const course = selectedCourse;
+
 		let isMounted = true;
 
-		async function checkContent() {
-			if (!selectedSession || !selectedCourse) return;
-
-			// If we already have content in state matching this session, don't re-fetch
-			// (But we don't track session ID in generatedCourse, so maybe safer to fetch)
-
+		async function loadAndGenerate() {
 			setIsFetchingSession(true);
+
 			try {
-				// Determine if we need to fetch detail.
-				// If selectedSession already has generated_content (populated by context?), use it.
-				// But context usually lists sessions without heavy content.
-				// So always fetch detail.
+				// Step 1: Check for existing content
+				const sessionDetail = await getSession(course.id, session.id);
 
-				const sessionDetail = await getSession(selectedCourse.id, selectedSession.id);
+				if (!isMounted) return;
 
-				if (isMounted && sessionDetail.generated_content) {
+				if (sessionDetail.generated_content) {
+					// Already has content - use it
 					setGeneratedCourse(sessionDetail.generated_content as unknown as GeneratedCourse);
-				} else if (isMounted) {
-					setGeneratedCourse(null);
+					setIsFetchingSession(false);
+					return;
+				}
+
+				// Step 2: No content - generate (but only once!)
+				if (hasRequestedGeneration.current) {
+					setIsFetchingSession(false);
+					return; // Already requested, don't request again
+				}
+
+				hasRequestedGeneration.current = true;
+				setIsFetchingSession(false);
+				setIsLoading(true);
+				setError(null);
+
+				const result = await generateCourse({
+					topic: session.topic,
+					keywords: session.keywords?.length > 0 ? session.keywords : undefined,
+					instructions: session.instructions || undefined,
+					session_id: session.id,
+					text_length: "medium",
+					exercise_depth: "medium",
+				});
+
+				if (isMounted) {
+					setGeneratedCourse(result.course as unknown as GeneratedCourse);
 				}
 			} catch (err) {
-				console.error("Failed to load session content:", err);
-				// Don't show blocking error, just let user see generation form
+				if (isMounted) {
+					console.error("Failed:", err);
+					setError(err instanceof Error ? err.message : "Failed to generate course");
+				}
 			} finally {
-				if (isMounted) setIsFetchingSession(false);
+				if (isMounted) {
+					setIsLoading(false);
+					setIsFetchingSession(false);
+				}
 			}
 		}
 
-		checkContent();
+		loadAndGenerate();
 
 		return () => { isMounted = false; };
 	}, [selectedSession?.id, selectedCourse?.id]);
@@ -519,38 +548,21 @@ export function ViewSessionView() {
 		handleSelectCourse(selectedCourse)
 	}
 
-	const handleAddKeyword = () => {
-		if (keywordInput.trim() && !extraKeywords.includes(keywordInput.trim())) {
-			setExtraKeywords([...extraKeywords, keywordInput.trim()])
-			setKeywordInput("")
-		}
-	}
-
-	const handleRemoveKeyword = (kw: string) => {
-		setExtraKeywords(extraKeywords.filter(k => k !== kw))
-	}
-
+	// Manual regeneration
 	const handleGenerateCourse = async () => {
+		if (!selectedSession) return;
+
+		hasRequestedGeneration.current = true; // Allow regeneration
 		setIsLoading(true)
 		setError(null)
 		try {
-			// Merge existing + extra keywords
-			const allKeywords = [...(selectedSession.keywords || []), ...extraKeywords]
-
-			// Build instructions from all sources
-			const instructionParts = [
-				selectedSession.instructions,
-				specificTopics && `Focus on these specific topics: ${specificTopics}`,
-				learningGoals && `Learning goals: ${learningGoals}`
-			].filter(Boolean)
-
 			const result = await generateCourse({
 				topic: selectedSession.topic,
-				keywords: allKeywords.length > 0 ? allKeywords : undefined,
-				instructions: instructionParts.join('\n') || undefined,
+				keywords: selectedSession.keywords?.length > 0 ? selectedSession.keywords : undefined,
+				instructions: selectedSession.instructions || undefined,
 				session_id: selectedSession.id,
-				text_length: textLength,
-				exercise_depth: exerciseDepth,
+				text_length: "medium",
+				exercise_depth: "medium",
 			})
 			setGeneratedCourse(result.course as unknown as GeneratedCourse)
 		} catch (err) {
@@ -600,148 +612,7 @@ export function ViewSessionView() {
 						<Loader2 className="h-8 w-8 animate-spin text-primary" />
 						<p className="text-muted-foreground">Generating course with quizzes...</p>
 					</div>
-				) : !generatedCourse ? (
-					<div className="space-y-6">
-						{/* Session Info Card */}
-						<div className="bg-card/50 rounded-2xl border border-border/50 p-6">
-							<h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-								<FileText className="h-5 w-5 text-primary" />
-								Session Information
-							</h2>
-							<div className="grid gap-4">
-								<div>
-									<label className="text-xs text-muted-foreground uppercase tracking-wider">Topic</label>
-									<p className="text-foreground font-medium">{selectedSession.topic}</p>
-								</div>
-								{selectedSession.instructions && (
-									<div>
-										<label className="text-xs text-muted-foreground uppercase tracking-wider">Instructions</label>
-										<p className="text-muted-foreground text-sm">{selectedSession.instructions}</p>
-									</div>
-								)}
-								{selectedSession.keywords?.length > 0 && (
-									<div>
-										<label className="text-xs text-muted-foreground uppercase tracking-wider">Existing Keywords</label>
-										<div className="flex flex-wrap gap-2 mt-1">
-											{selectedSession.keywords.map((kw, i) => (
-												<span key={i} className="px-2 py-1 rounded-full bg-primary/10 text-primary text-xs">{kw}</span>
-											))}
-										</div>
-									</div>
-								)}
-							</div>
-						</div>
-
-						{/* Extra Info Form */}
-						<div className="bg-card/50 rounded-2xl border border-border/50 p-6">
-							<h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
-								<Target className="h-5 w-5 text-amber-500" />
-								Customize Your Course (Optional)
-							</h2>
-
-							{/* Length & Depth Selectors */}
-							<div className="grid grid-cols-2 gap-4 mb-6">
-								<div>
-									<label className="text-sm text-muted-foreground mb-2 block">Content Detail</label>
-									<select
-										value={textLength}
-										onChange={(e) => setTextLength(e.target.value)}
-										className="w-full px-3 py-2 rounded-lg bg-background border border-border/50 focus:border-primary focus:outline-none text-sm appearance-none"
-									>
-										<option value="short">Short (Concise)</option>
-										<option value="medium">Medium (Standard)</option>
-										<option value="long">Long (Detailed)</option>
-									</select>
-								</div>
-								<div>
-									<label className="text-sm text-muted-foreground mb-2 block">Exercise Volume</label>
-									<select
-										value={exerciseDepth}
-										onChange={(e) => setExerciseDepth(e.target.value)}
-										className="w-full px-3 py-2 rounded-lg bg-background border border-border/50 focus:border-primary focus:outline-none text-sm appearance-none"
-									>
-										<option value="short">Short (Quick Check)</option>
-										<option value="medium">Medium (Practice)</option>
-										<option value="long">Long (Intensive)</option>
-									</select>
-								</div>
-							</div>
-
-							{/* Extra Keywords */}
-							<div className="mb-4">
-								<label className="text-sm text-muted-foreground mb-2 flex items-center gap-2">
-									<Tag className="h-4 w-4" />
-									Additional Keywords
-								</label>
-								<div className="flex gap-2">
-									<input
-										type="text"
-										value={keywordInput}
-										onChange={(e) => setKeywordInput(e.target.value)}
-										onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddKeyword())}
-										placeholder="Add a keyword..."
-										className="flex-1 px-3 py-2 rounded-lg bg-background border border-border/50 focus:border-primary focus:outline-none text-sm"
-									/>
-									<button
-										onClick={handleAddKeyword}
-										className="px-3 py-2 rounded-lg bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
-									>
-										<Plus className="h-4 w-4" />
-									</button>
-								</div>
-								{extraKeywords.length > 0 && (
-									<div className="flex flex-wrap gap-2 mt-2">
-										{extraKeywords.map((kw, i) => (
-											<span key={i} className="px-2 py-1 rounded-full bg-amber-500/10 text-amber-500 text-xs flex items-center gap-1">
-												{kw}
-												<button onClick={() => handleRemoveKeyword(kw)} className="hover:text-amber-300">
-													<X className="h-3 w-3" />
-												</button>
-											</span>
-										))}
-									</div>
-								)}
-							</div>
-
-							{/* Specific Topics */}
-							<div className="mb-4">
-								<label className="text-sm text-muted-foreground mb-2 block">
-									Specific Topics to Focus On
-								</label>
-								<textarea
-									value={specificTopics}
-									onChange={(e) => setSpecificTopics(e.target.value)}
-									placeholder="e.g., Focus on practical examples, skip advanced theory..."
-									rows={2}
-									className="w-full px-3 py-2 rounded-lg bg-background border border-border/50 focus:border-primary focus:outline-none text-sm resize-none"
-								/>
-							</div>
-
-							{/* Learning Goals */}
-							<div className="mb-4">
-								<label className="text-sm text-muted-foreground mb-2 block">
-									Your Learning Goals
-								</label>
-								<textarea
-									value={learningGoals}
-									onChange={(e) => setLearningGoals(e.target.value)}
-									placeholder="e.g., Understand basics for job interview, build a project..."
-									rows={2}
-									className="w-full px-3 py-2 rounded-lg bg-background border border-border/50 focus:border-primary focus:outline-none text-sm resize-none"
-								/>
-							</div>
-						</div>
-
-						{/* Generate Button */}
-						<button
-							onClick={handleGenerateCourse}
-							className="w-full py-4 rounded-xl bg-gradient-to-r from-primary to-primary/80 text-primary-foreground font-semibold hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
-						>
-							<Sparkles className="h-5 w-5" />
-							Generate Course
-						</button>
-					</div>
-				) : (
+				) : generatedCourse ? (
 					<div className="bg-card/50 rounded-2xl border border-border/50 p-8 shadow-sm">
 						<div className="space-y-4 pb-8 border-b border-border/40 mb-8">
 							<h1 className="text-4xl font-bold text-foreground">{generatedCourse.course_metadata.title}</h1>
@@ -770,6 +641,10 @@ export function ViewSessionView() {
 								/>
 							</div>
 						)}
+					</div>
+				) : (
+					<div className="flex flex-col items-center justify-center py-16 space-y-4">
+						<p className="text-muted-foreground">No content available</p>
 					</div>
 				)}
 			</div>

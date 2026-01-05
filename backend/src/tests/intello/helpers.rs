@@ -2,15 +2,15 @@
 
 use crate::services::intello::ai_usage_domain::{AiUsageLog, CreateAiUsageLog};
 use crate::services::intello::{
-    fill_blank_domain::FillBlankSet, flashcard_domain::FlashcardSet, keywords_domain::KeywordSet, 
-    open_question_domain::OpenQuestionSet, order_phrase_domain::OrderPhraseSet, 
-    qcm_set_domain::QcmSet, true_false_domain::TrueOrFalseSet,
+    FillBlankSet, FlashcardSet, KeywordSet, 
+    OpenQuestionSet, OrderPhraseSet, 
+    QcmSet, TrueOrFalseSet,
 };
 use crate::shared::AppError;
 use crate::services::intello::types_domain::IntelloService;
 use crate::services::intello::error_domain::IntelloError;
 use crate::infra::{AiUsageRepository, GameSetRepository, OpenQuestionRepository, QcmRepository};
-use crate::services::{OpenRouterService};
+// OpenRouterClient is accessed via create_test_service
 use crate::services::intello::open_question_cache_service::OpenQuestionCache;
 use async_trait::async_trait;
 use std::sync::{Arc, Mutex};
@@ -232,38 +232,38 @@ pub struct StubCourseRepository;
 impl crate::infra::CourseRepository for StubCourseRepository {
     async fn create_course(
         &self,
-        course: &crate::services::intello::course_domain::Course,
-    ) -> Result<crate::services::intello::course_domain::Course, AppError> {
+        course: &crate::services::intello::course::domain::Course,
+    ) -> Result<crate::services::intello::course::domain::Course, AppError> {
         Ok(course.clone())
     }
     async fn get_user_courses(
         &self,
         _: &str,
-    ) -> Result<Vec<crate::services::intello::course_domain::Course>, AppError> {
+    ) -> Result<Vec<crate::services::intello::course::domain::Course>, AppError> {
         Ok(vec![])
     }
     async fn get_course_resources(
         &self,
         _: &str,
-    ) -> Result<Vec<crate::services::intello::course_domain::UserResource>, AppError> {
+    ) -> Result<Vec<crate::services::intello::course::domain::UserResource>, AppError> {
         Ok(vec![])
     }
     async fn fetch_resources(
         &self,
         _: &[String],
-    ) -> Result<Vec<crate::services::intello::course_domain::UserResource>, AppError> {
+    ) -> Result<Vec<crate::services::intello::course::domain::UserResource>, AppError> {
         Ok(vec![])
     }
     async fn get_user_resources(
         &self,
         _: &str,
-    ) -> Result<Vec<crate::services::intello::course_domain::ResourceSummary>, AppError> {
+    ) -> Result<Vec<crate::services::intello::course::domain::ResourceSummary>, AppError> {
         Ok(vec![])
     }
     async fn get_resource_by_id(
         &self,
         _: &str,
-    ) -> Result<Option<crate::services::intello::course_domain::UserResource>, AppError> {
+    ) -> Result<Option<crate::services::intello::course::domain::UserResource>, AppError> {
         Ok(None)
     }
     async fn resource_exists(&self, _: &str, _: &str) -> Result<bool, AppError> {
@@ -271,11 +271,20 @@ impl crate::infra::CourseRepository for StubCourseRepository {
     }
     async fn create_user_resource(
         &self,
-        resource: &crate::services::intello::course_domain::UserResource,
-    ) -> Result<crate::services::intello::course_domain::UserResource, AppError> {
+        resource: &crate::services::intello::course::domain::UserResource,
+    ) -> Result<crate::services::intello::course::domain::UserResource, AppError> {
         Ok(resource.clone())
     }
     async fn link_resource_to_course(&self, _: &str, _: &str) -> Result<(), AppError> {
+        Ok(())
+    }
+    async fn delete_course(&self, _course_id: &str) -> Result<(), AppError> {
+        Ok(())
+    }
+    async fn delete_resource_links(&self, _course_id: &str) -> Result<(), AppError> {
+        Ok(())
+    }
+    async fn delete_resource(&self, _resource_id: &str) -> Result<(), AppError> {
         Ok(())
     }
 }
@@ -340,6 +349,14 @@ impl crate::infra::StudySessionRepository for StubStudySessionRepository {
         _session_id: &str,
         _content: &serde_json::Value,
     ) -> Result<(), AppError> {
+        Ok(())
+    }
+
+    async fn delete_by_course(&self, _course_id: &str) -> Result<(), AppError> {
+        Ok(())
+    }
+
+    async fn delete(&self, _session_id: &str) -> Result<(), AppError> {
         Ok(())
     }
 }

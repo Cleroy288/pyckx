@@ -1,7 +1,7 @@
 //! QCM Repository Trait - Abstraction for QCM set persistence operations
 
 use crate::services::intello::QcmSet;
-use crate::services::intello::error_domain::IntelloError;
+use crate::services::intello::domain::error_domain::IntelloError;
 use async_trait::async_trait;
 
 /// Repository trait for QCM set persistence operations

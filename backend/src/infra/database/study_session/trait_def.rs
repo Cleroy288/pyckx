@@ -1,4 +1,4 @@
-use crate::services::intello::study_session_domain::StudySession;
+use crate::services::intello::study_session::study_session_domain::StudySession;
 use crate::shared::AppError;
 use async_trait::async_trait;
 

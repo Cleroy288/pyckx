@@ -1,0 +1,10 @@
+{
+	"name": "leptos-app",
+	"version": "1.0.0",
+	"description": "Intello Learning Platform - Leptos Frontend",
+	"scripts": {
+		"build": "trunk build --release",
+		"dev": "trunk serve --open"
+	},
+	"devDependencies": {}
+}

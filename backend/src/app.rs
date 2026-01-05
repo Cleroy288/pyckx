@@ -13,7 +13,7 @@ use crate::infra::{
 };
 use crate::services::{AppService, AuthService, CollectionService, IntelloService};
 use crate::infra::openrouter::OpenRouterClient;
-use crate::services::intello::open_question_cache_service::OpenQuestionCache;
+use crate::services::intello::games::open_question::open_question_cache_service::OpenQuestionCache;
 use std::sync::Arc;
 use tracing::info;
 
@@ -55,19 +55,19 @@ impl App {
     /// - `Err(ConfigError)` if any required config is missing
     pub async fn new() -> Result<Self, ConfigError> {
         let cfg = Config::from_env()?;
-        
+
         /* Create shared Supabase HTTP client (single connection pool) */
         let supabase_client = Arc::new(SupabaseHttpClient::new(&cfg));
-        
+
         /* Create session repository and store */
         let session_repo = Arc::new(SupabaseSessionRepository::new(Arc::clone(&supabase_client)));
         let sessions = SessionStore::new(session_repo);
-        
+
         /* Load existing sessions from Supabase (best-effort) */
         if let Err(e) = sessions.initialize().await {
             tracing::warn!(error = %e, "Failed to load sessions from Supabase, continuing with empty store");
         }
-        
+
         let auth = AuthService::new(&cfg, sessions);
         let collection = CollectionApp::new();
         let intello = IntelloApp::new();
@@ -103,7 +103,7 @@ impl App {
         // Create services with all dependencies injected (wrapped in Arc for cheap cloning)
         let collection_service = Arc::new(CollectionService::new(collection_repo, dvd_repo));
         let app_service = Arc::new(AppService::new(app_repository, user_app_repository));
-        
+
         // OpenRouter AI client
         let openrouter_client = Arc::new(OpenRouterClient::with_google_key(openrouter_api_key, google_ai_key));
 
@@ -156,4 +156,3 @@ impl Clone for App {
         }
     }
 }
-

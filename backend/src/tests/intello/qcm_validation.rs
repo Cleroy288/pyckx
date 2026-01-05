@@ -1,7 +1,7 @@
 //! QCM validation tests - input validation rejection tests
 
 use super::helpers::{create_test_service, get_test_user_id};
-use crate::services::intello::{Level, qcm_question_domain::QcmQuestion, qcm_set_domain::QcmSet};
+use crate::services::intello::{Level, QcmQuestion, QcmSet};
 
 // ============================================================================
 // CREATE VALIDATION TESTS (Requirements 5.1)

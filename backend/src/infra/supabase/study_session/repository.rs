@@ -9,7 +9,7 @@ use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 use tracing::info;
 
-use crate::services::intello::study_session_domain::StudySession;
+use crate::services::intello::study_session::study_session_domain::StudySession;
 use crate::shared::AppError;
 use crate::infra::database::StudySessionRepository;
 use crate::infra::supabase::shared::SupabaseHttpClient;
@@ -155,7 +155,7 @@ impl StudySessionRepository for SupabaseStudySessionRepository {
 
     async fn save_session_content(&self, session_id: &str, content: &serde_json::Value) -> Result<(), AppError> {
         let url = self.client.rest_url_with_query(TABLE_SESSIONS, &format!("id=eq.{}", session_id));
-        
+
         #[derive(Serialize)]
         struct UpdateContent<'a> {
             generated_content: &'a serde_json::Value,
@@ -168,20 +168,20 @@ impl StudySessionRepository for SupabaseStudySessionRepository {
         // Try to deserialize content as CourseGenerationResult to extract all fields
         // If it fails (legacy or partial), we just save it as generated_content
         use crate::http_api::data_transfer_object::intello::course::CourseGenerationResult;
-        
+
         let update = if let Ok(full_result) = serde_json::from_value::<CourseGenerationResult>(content.clone()) {
              // Convert intermediate structs to Values for storage
              let _extracted_json = serde_json::to_value(&full_result.extracted_knowledge).ok();
              let _edu_json = serde_json::to_value(&full_result.educational_content).ok();
              let _course_json = serde_json::to_value(&full_result.course).ok();
-             
+
              // We construct a new UpdateContent holding references or owned values converted to references
              // But since we can't sustain references to local variables in the generic structure easily here without complex lifetime handling,
              // let's simplify by using options.
-             
+
              // Actually, the simplest way given `content` is passed as Value is to just construct the JSON body dynamically
              // But to keep type safety, let's redefine the struct or use serde_json::json!
-             
+
              let update_json = serde_json::json!({
                  "generated_content": full_result.course,
                  "extracted_knowledge": full_result.extracted_knowledge,

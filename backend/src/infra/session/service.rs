@@ -103,8 +103,32 @@ impl SessionStore {
         }
     }
 
-    /// Insert user with new session, persist to Supabase
+    /// Get or create session for user
+    /// If user already has a valid session, returns existing session_id
+    /// Otherwise creates a new session
     pub fn create_session(&self, user: User) -> SessionId {
+        // Check if user already has a valid session
+        {
+            let sessions = self.by_session.read().unwrap();
+            let user_map = self.user_to_session.read().unwrap();
+            
+            if let Some(existing_session_id) = user_map.get(&user.id) {
+                if let Some(existing_session) = sessions.get(existing_session_id) {
+                    // Check if session is still valid (not expired)
+                    let now = std::time::SystemTime::now()
+                        .duration_since(std::time::UNIX_EPOCH)
+                        .unwrap()
+                        .as_secs();
+                    
+                    if existing_session.user.expires_at > now {
+                        info!(session_id = %existing_session_id, user_id = %user.id, "Reusing existing valid session");
+                        return existing_session_id.clone();
+                    }
+                }
+            }
+        }
+        
+        // No valid session exists, create new one
         let session = Session::new(user);
         let session_id = session.id.clone();
         let session_for_persist = session.clone();
@@ -113,7 +137,7 @@ impl SessionStore {
             let mut sessions = self.by_session.write().unwrap();
             let mut user_map = self.user_to_session.write().unwrap();
 
-            // Remove old session if user already logged in
+            // Remove old expired session if exists
             if let Some(old_session_id) = user_map.get(&session.user.id) {
                 let old_id = old_session_id.clone();
                 sessions.remove(&old_id);
@@ -152,7 +176,7 @@ impl SessionStore {
             }
         });
 
-        info!(session_id = %session_id, "Session created");
+        info!(session_id = %session_id, "New session created");
         session_id
     }
 

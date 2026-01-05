@@ -2,7 +2,7 @@
 //!
 //! Tests for JSON extraction, sanitization, and course parsing
 
-use crate::services::{
+use crate::infra::openrouter::{
     extract_json_from_response, 
     sanitize_json_duplicates,
 };

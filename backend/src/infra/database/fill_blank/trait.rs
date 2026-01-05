@@ -3,7 +3,7 @@
 //! This trait extends the generic `GameSetRepository` for fill blank-specific operations.
 
 use super::super::game_set::GameSetRepository;
-use crate::services::intello::fill_blank_domain::FillBlankSet;
+use crate::services::intello::FillBlankSet;
 
 /// Repository trait for fill blank set persistence operations.
 ///

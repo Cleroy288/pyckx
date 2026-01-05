@@ -1,4 +1,4 @@
-use crate::services::intello::course_domain::{Course, ResourceSummary, UserResource};
+use crate::services::intello::course::domain::{Course, ResourceSummary, UserResource};
 use crate::shared::AppError;
 use async_trait::async_trait;
 

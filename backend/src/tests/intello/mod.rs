@@ -3,3 +3,4 @@ pub mod helpers;
 pub mod error_tests;
 pub mod crud_tests;
 pub mod open_question_cache_tests;
+pub mod course;

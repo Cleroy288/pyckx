@@ -3,7 +3,7 @@
 //! This trait provides a unified interface for all Intello game set repositories.
 //! Each game type (QCM, Flashcard, Keywords, etc.) implements this trait.
 
-use crate::services::intello::error_domain::IntelloError;
+use crate::services::intello::domain::error_domain::IntelloError;
 use async_trait::async_trait;
 
 /// Generic repository trait for game set persistence operations.

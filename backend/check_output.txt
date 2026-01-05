@@ -1,0 +1,429 @@
+    Blocking waiting for file lock on package cache
+    Checking LAPP v0.1.0 (/Users/charlesleroy/LOCAL/CODING/TRAINING/RUST/LAPP/backend)
+error[E0432]: unresolved import `crate::services::intello::ai_parsing_service`
+ --> src/http_api/data_transfer_object/intello/open_question/conversion.rs:8:31
+  |
+8 | use crate::services::intello::ai_parsing_service::{AnswerGrade, GradedAnswer};
+  |                               ^^^^^^^^^^^^^^^^^^ could not find `ai_parsing_service` in `intello`
+
+error[E0432]: unresolved import `crate::services::intello::qcm_set_domain`
+ --> src/http_api/handlers/intello/qcm_handlers.rs:6:45
+  |
+6 | use crate::services::intello::{QcmQuestion, qcm_set_domain::QcmSet};
+  |                                             ^^^^^^^^^^^^^^ could not find `qcm_set_domain` in `intello`
+
+error[E0432]: unresolved import `crate::services::intello::fill_blank_domain`
+ --> src/infra/database/fill_blank/trait.rs:6:31
+  |
+6 | use crate::services::intello::fill_blank_domain::FillBlankSet;
+  |                               ^^^^^^^^^^^^^^^^^ could not find `fill_blank_domain` in `intello`
+
+error[E0432]: unresolved import `crate::services::intello::flashcard_domain`
+ --> src/infra/database/flashcard/trait.rs:6:31
+  |
+6 | use crate::services::intello::flashcard_domain::FlashcardSet;
+  |                               ^^^^^^^^^^^^^^^^ could not find `flashcard_domain` in `intello`
+
+error[E0432]: unresolved import `crate::services::intello::keywords_domain`
+ --> src/infra/database/keywords/trait.rs:6:31
+  |
+6 | use crate::services::intello::keywords_domain::KeywordSet;
+  |                               ^^^^^^^^^^^^^^^ could not find `keywords_domain` in `intello`
+
+error[E0432]: unresolved import `crate::services::intello::open_question_domain`
+ --> src/infra/database/open_question/trait.rs:3:31
+  |
+3 | use crate::services::intello::open_question_domain::OpenQuestionSet;
+  |                               ^^^^^^^^^^^^^^^^^^^^ could not find `open_question_domain` in `intello`
+
+error[E0432]: unresolved import `crate::services::intello::order_phrase_domain`
+ --> src/infra/database/order_phrase/trait.rs:6:31
+  |
+6 | use crate::services::intello::order_phrase_domain::OrderPhraseSet;
+  |                               ^^^^^^^^^^^^^^^^^^^ could not find `order_phrase_domain` in `intello`
+
+error[E0432]: unresolved import `crate::services::intello::study_session_domain`
+ --> src/infra/database/study_session/trait_def.rs:1:31
+  |
+1 | use crate::services::intello::study_session_domain::StudySession;
+  |                               ^^^^^^^^^^^^^^^^^^^^ could not find `study_session_domain` in `intello`
+
+error[E0432]: unresolved import `crate::services::intello::study_session_domain`
+  --> src/infra/supabase/study_session/repository.rs:12:31
+   |
+12 | use crate::services::intello::study_session_domain::StudySession;
+   |                               ^^^^^^^^^^^^^^^^^^^^ could not find `study_session_domain` in `intello`
+
+error[E0432]: unresolved import `super::crud_service`
+  --> src/services/intello/games/fill_blank/service.rs:11:5
+   |
+11 | use super::crud_service;
+   |     ^^^^^^^^^^^^^^^^^^^ no `crud_service` in `services::intello::games::fill_blank`
+   |
+help: consider importing this module instead
+   |
+11 - use super::crud_service;
+11 + use crate::services::intello::crud_service;
+   |
+
+error[E0432]: unresolved import `super::crud_service`
+  --> src/services/intello/games/flashcard/service.rs:11:5
+   |
+11 | use super::crud_service;
+   |     ^^^^^^^^^^^^^^^^^^^ no `crud_service` in `services::intello::games::flashcard`
+   |
+help: consider importing this module instead
+   |
+11 - use super::crud_service;
+11 + use crate::services::intello::crud_service;
+   |
+
+error[E0432]: unresolved import `super::crud_service`
+  --> src/services/intello/games/keywords/service.rs:11:5
+   |
+11 | use super::crud_service;
+   |     ^^^^^^^^^^^^^^^^^^^ no `crud_service` in `services::intello::games::keywords`
+   |
+help: consider importing this module instead
+   |
+11 - use super::crud_service;
+11 + use crate::services::intello::crud_service;
+   |
+
+error[E0432]: unresolved import `super::crud_service`
+  --> src/services/intello/games/order_phrase/service.rs:11:5
+   |
+11 | use super::crud_service;
+   |     ^^^^^^^^^^^^^^^^^^^ no `crud_service` in `services::intello::games::order_phrase`
+   |
+help: consider importing this module instead
+   |
+11 - use super::crud_service;
+11 + use crate::services::intello::crud_service;
+   |
+
+error[E0432]: unresolved import `super::crud_service`
+  --> src/services/intello/games/true_false/service.rs:11:5
+   |
+11 | use super::crud_service;
+   |     ^^^^^^^^^^^^^^^^^^^ no `crud_service` in `services::intello::games::true_false`
+   |
+help: consider importing this module instead
+   |
+11 - use super::crud_service;
+11 + use crate::services::intello::crud_service;
+   |
+
+error[E0432]: unresolved import `games::fill_blank::FillBlankOption`
+  --> src/services/intello/mod.rs:51:29
+   |
+51 | pub use games::fill_blank::{FillBlankOption, FillBlankQuestion};
+   |                             ^^^^^^^^^^^^^^^
+   |                             |
+   |                             no `FillBlankOption` in `services::intello::games::fill_blank`
+   |                             help: a similar name exists in the module: `FillBlankQuestion`
+   |
+   = help: consider importing this struct instead:
+           crate::services::intello::games::fill_blank::domain::FillBlankOption
+
+error[E0432]: unresolved import `games::keywords::KeywordQuestion`
+  --> src/services/intello/mod.rs:53:36
+   |
+53 | pub use games::keywords::{Keyword, KeywordQuestion};
+   |                                    ^^^^^^^^^^^^^^^ no `KeywordQuestion` in `services::intello::games::keywords`
+   |
+   = help: consider importing this struct instead:
+           crate::services::intello::games::keywords::domain::KeywordQuestion
+
+error[E0432]: unresolved import `games::order_phrase::OrderPhraseWord`
+  --> src/services/intello/mod.rs:55:52
+   |
+55 | pub use games::order_phrase::{OrderPhraseQuestion, OrderPhraseWord};
+   |                                                    ^^^^^^^^^^^^^^^
+   |                                                    |
+   |                                                    no `OrderPhraseWord` in `services::intello::games::order_phrase`
+   |                                                    help: a similar name exists in the module: `OrderPhraseSet`
+   |
+   = help: consider importing this struct instead:
+           crate::services::intello::games::order_phrase::domain::OrderPhraseWord
+
+error[E0432]: unresolved import `crate::services::intello::study_session_domain`
+ --> src/services/intello/study_session_service.rs:4:31
+  |
+4 | use crate::services::intello::study_session_domain::{CreateStudySessionInput, StudySession};
+  |                               ^^^^^^^^^^^^^^^^^^^^ could not find `study_session_domain` in `intello`
+
+error[E0432]: unresolved import `crate::services::intello::qcm_set_domain`
+ --> src/services/intello/validation_service.rs:4:31
+  |
+4 | use crate::services::intello::qcm_set_domain::QcmSet;
+  |                               ^^^^^^^^^^^^^^ could not find `qcm_set_domain` in `intello`
+
+error[E0432]: unresolved import `rand`
+ --> src/services/intello/games/open_question/service.rs:3:5
+  |
+3 | use rand::Rng;
+  |     ^^^^ use of unresolved module or unlinked crate `rand`
+  |
+  = help: if you wanted to use a crate named `rand`, use `cargo add rand` to add it to your `Cargo.toml`
+
+error[E0433]: failed to resolve: could not find `study_session_domain` in `intello`
+   --> src/http_api/handlers/intello/course_crud.rs:332:43
+    |
+332 |     let input = crate::services::intello::study_session_domain::CreateStudySessionInput {
+    |                                           ^^^^^^^^^^^^^^^^^^^^ could not find `study_session_domain` in `intello`
+
+error[E0433]: failed to resolve: could not find `AnswerGrade` in `ai_response`
+  --> src/services/intello/games/open_question/verification/parser.rs:28:56
+   |
+28 |                 crate::services::intello::ai_response::AnswerGrade::Right => AnswerGrade::Right,
+   |                                                        ^^^^^^^^^^^ could not find `AnswerGrade` in `ai_response`
+   |
+help: consider importing one of these enums
+   |
+ 3 + use crate::services::intello::games::shared::AnswerGrade;
+   |
+ 3 + use crate::services::intello::types_domain::AnswerGrade;
+   |
+help: if you import `AnswerGrade`, refer to it directly
+   |
+28 -                 crate::services::intello::ai_response::AnswerGrade::Right => AnswerGrade::Right,
+28 +                 AnswerGrade::Right => AnswerGrade::Right,
+   |
+
+error[E0433]: failed to resolve: could not find `AnswerGrade` in `ai_response`
+  --> src/services/intello/games/open_question/verification/parser.rs:29:56
+   |
+29 |                 crate::services::intello::ai_response::AnswerGrade::Medium => AnswerGrade::Medium,
+   |                                                        ^^^^^^^^^^^ could not find `AnswerGrade` in `ai_response`
+   |
+help: consider importing one of these enums
+   |
+ 3 + use crate::services::intello::games::shared::AnswerGrade;
+   |
+ 3 + use crate::services::intello::types_domain::AnswerGrade;
+   |
+help: if you import `AnswerGrade`, refer to it directly
+   |
+29 -                 crate::services::intello::ai_response::AnswerGrade::Medium => AnswerGrade::Medium,
+29 +                 AnswerGrade::Medium => AnswerGrade::Medium,
+   |
+
+error[E0433]: failed to resolve: could not find `AnswerGrade` in `ai_response`
+  --> src/services/intello/games/open_question/verification/parser.rs:30:56
+   |
+30 |                 crate::services::intello::ai_response::AnswerGrade::Error => AnswerGrade::Error,
+   |                                                        ^^^^^^^^^^^ could not find `AnswerGrade` in `ai_response`
+   |
+help: consider importing one of these enums
+   |
+ 3 + use crate::services::intello::games::shared::AnswerGrade;
+   |
+ 3 + use crate::services::intello::types_domain::AnswerGrade;
+   |
+help: if you import `AnswerGrade`, refer to it directly
+   |
+30 -                 crate::services::intello::ai_response::AnswerGrade::Error => AnswerGrade::Error,
+30 +                 AnswerGrade::Error => AnswerGrade::Error,
+   |
+
+warning: unused imports: `CostResult`, `MODELS`, `ModelDefinition`, and `get_model`
+  --> src/infra/openrouter/mod.rs:13:34
+   |
+13 | pub use models::{calculate_cost, get_model, CostResult, ModelDefinition, DEFAULT_MODEL, MODELS};
+   |                                  ^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^                 ^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused imports: `AiGenerationResult`, `CourseGenerationUsage`, and `Usage`
+  --> src/infra/openrouter/mod.rs:14:17
+   |
+14 | pub use types::{AiGenerationResult, CourseGenerationUsage, Usage};
+   |                 ^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^  ^^^^^
+
+warning: unused imports: `fix_stringified_arrays` and `sanitize_json_duplicates`
+  --> src/infra/openrouter/mod.rs:15:45
+   |
+15 | pub use utils::{extract_json_from_response, fix_stringified_arrays, sanitize_ai_json, sanitize_json_duplicates};
+   |                                             ^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `AVAILABLE_APPS` and `is_valid_app`
+  --> src/services/app_registry/mod.rs:16:40
+   |
+16 | pub use registry_service::{AppService, is_valid_app, AVAILABLE_APPS};
+   |                                        ^^^^^^^^^^^^  ^^^^^^^^^^^^^^
+
+warning: unused imports: `FillBlankAiOption` and `FillBlankAiQuestion`
+  --> src/services/intello/ai_response/mod.rs:15:22
+   |
+15 | pub use fill_blank::{FillBlankAiOption, FillBlankAiQuestion, FillBlankAiResponse};
+   |                      ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `FlashcardAiCard`
+  --> src/services/intello/ai_response/mod.rs:16:21
+   |
+16 | pub use flashcard::{FlashcardAiCard, FlashcardAiResponse};
+   |                     ^^^^^^^^^^^^^^^
+
+warning: unused imports: `KeywordsAiKeyword` and `KeywordsAiQuestion`
+  --> src/services/intello/ai_response/mod.rs:17:20
+   |
+17 | pub use keywords::{KeywordsAiKeyword, KeywordsAiQuestion, KeywordsAiResponse};
+   |                    ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `OpenQuestionAiQuestion`
+  --> src/services/intello/ai_response/mod.rs:18:25
+   |
+18 | pub use open_question::{OpenQuestionAiQuestion, OpenQuestionAiResponse};
+   |                         ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `OrderPhraseAiQuestion` and `OrderPhraseAiWord`
+  --> src/services/intello/ai_response/mod.rs:19:24
+   |
+19 | pub use order_phrase::{OrderPhraseAiQuestion, OrderPhraseAiResponse, OrderPhraseAiWord};
+   |                        ^^^^^^^^^^^^^^^^^^^^^                         ^^^^^^^^^^^^^^^^^
+
+warning: unused import: `QcmAiQuestion`
+  --> src/services/intello/ai_response/mod.rs:20:15
+   |
+20 | pub use qcm::{QcmAiQuestion, QcmAiResponse};
+   |               ^^^^^^^^^^^^^
+
+warning: unused import: `TrueOrFalseAiStatement`
+  --> src/services/intello/ai_response/mod.rs:21:45
+   |
+21 | pub use true_false::{TrueOrFalseAiResponse, TrueOrFalseAiStatement};
+   |                                             ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `GradedAnswerAi`
+  --> src/services/intello/ai_response/mod.rs:22:24
+   |
+22 | pub use verification::{GradedAnswerAi, VerificationAiResponse};
+   |                        ^^^^^^^^^^^^^^
+
+warning: unused import: `ContentBlock`
+  --> src/services/intello/course/mod.rs:16:5
+   |
+16 |     ContentBlock, Course, CourseMetadata, CourseModule, CreateCourseInput, GenerateCourseInput,
+   |     ^^^^^^^^^^^^
+
+warning: unused imports: `CoursePromptInput` and `build_course_prompt`
+  --> src/services/intello/course/mod.rs:20:18
+   |
+20 | pub use prompt::{build_course_prompt, CoursePromptInput};
+   |                  ^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^
+
+warning: unused import: `parser::parse_fill_blank_response`
+ --> src/services/intello/games/fill_blank/mod.rs:7:9
+  |
+7 | pub use parser::parse_fill_blank_response;
+  |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `FillBlankPromptInput` and `build_fill_blank_prompt`
+ --> src/services/intello/games/fill_blank/mod.rs:8:18
+  |
+8 | pub use prompt::{build_fill_blank_prompt, FillBlankPromptInput};
+  |                  ^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `parser::parse_flashcard_response`
+ --> src/services/intello/games/flashcard/mod.rs:7:9
+  |
+7 | pub use parser::parse_flashcard_response;
+  |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `FlashcardPromptInput` and `build_flashcard_prompt`
+ --> src/services/intello/games/flashcard/mod.rs:8:18
+  |
+8 | pub use prompt::{build_flashcard_prompt, FlashcardPromptInput};
+  |                  ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `parser::parse_keywords_response`
+ --> src/services/intello/games/keywords/mod.rs:7:9
+  |
+7 | pub use parser::parse_keywords_response;
+  |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `KeywordsPromptInput` and `build_keywords_prompt`
+ --> src/services/intello/games/keywords/mod.rs:8:18
+  |
+8 | pub use prompt::{build_keywords_prompt, KeywordsPromptInput};
+  |                  ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `parser::parse_verification_response`
+ --> src/services/intello/games/open_question/verification/mod.rs:4:9
+  |
+4 | pub use parser::parse_verification_response;
+  |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `AnswerToGrade`, `VerificationPromptInput`, and `build_verification_prompt`
+ --> src/services/intello/games/open_question/verification/mod.rs:5:18
+  |
+5 | pub use prompt::{build_verification_prompt, AnswerToGrade, VerificationPromptInput};
+  |                  ^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `parser::parse_open_question_response`
+ --> src/services/intello/games/open_question/mod.rs:8:9
+  |
+8 | pub use parser::parse_open_question_response;
+  |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `OpenQuestionPromptInput` and `build_open_question_prompt`
+ --> src/services/intello/games/open_question/mod.rs:9:18
+  |
+9 | pub use prompt::{build_open_question_prompt, OpenQuestionPromptInput};
+  |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `parser::parse_order_phrase_response`
+ --> src/services/intello/games/order_phrase/mod.rs:7:9
+  |
+7 | pub use parser::parse_order_phrase_response;
+  |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `OrderPhrasePromptInput` and `build_order_phrase_prompt`
+ --> src/services/intello/games/order_phrase/mod.rs:8:18
+  |
+8 | pub use prompt::{build_order_phrase_prompt, OrderPhrasePromptInput};
+  |                  ^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `parser::parse_qcm_response`
+ --> src/services/intello/games/qcm/mod.rs:8:9
+  |
+8 | pub use parser::parse_qcm_response;
+  |         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `prompt::build_qcm_prompt`
+ --> src/services/intello/games/qcm/mod.rs:9:9
+  |
+9 | pub use prompt::build_qcm_prompt;
+  |         ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `AnswerGrade` and `GradedAnswer`
+ --> src/services/intello/games/shared/mod.rs:6:17
+  |
+6 | pub use types::{AnswerGrade, GradedAnswer};
+  |                 ^^^^^^^^^^^  ^^^^^^^^^^^^
+
+warning: unused import: `parser::parse_true_false_response`
+ --> src/services/intello/games/true_false/mod.rs:7:9
+  |
+7 | pub use parser::parse_true_false_response;
+  |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `TrueOrFalsePromptInput` and `build_true_false_prompt`
+ --> src/services/intello/games/true_false/mod.rs:8:18
+  |
+8 | pub use prompt::{build_true_false_prompt, TrueOrFalsePromptInput};
+  |                  ^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `CourseMetadata`, `CourseModule`, `CourseParser`, `Course`, `CreateCourseInput`, `GenerateCourseInput`, `GeneratedCourse`, `ResourceSummary`, and `UserResource`
+  --> src/services/intello/mod.rs:74:5
+   |
+74 |     Course, CourseMetadata, CourseModule, CourseParser, CreateCourseInput, GenerateCourseInput,
+   |     ^^^^^^  ^^^^^^^^^^^^^^  ^^^^^^^^^^^^  ^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^
+75 |     GeneratedCourse, ResourceSummary, UserResource,
+   |     ^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^  ^^^^^^^^^^^^
+
+Some errors have detailed explanations: E0432, E0433.
+For more information about an error, try `rustc --explain E0432`.
+warning: `LAPP` (bin "LAPP") generated 32 warnings
+error: could not compile `LAPP` (bin "LAPP") due to 24 previous errors; 32 warnings emitted

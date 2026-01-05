@@ -3,7 +3,7 @@
 //! Create, get, update, delete QCM sets.
 
 use crate::app::App;
-use crate::services::intello::{QcmQuestion, qcm_set_domain::QcmSet};
+use crate::services::intello::{QcmQuestion, QcmSet};
 use crate::services::intello::{QuestionId, SetId};
 use crate::shared::{AppError, AppResult};
 use crate::http_api::data_transfer_object::intello::{

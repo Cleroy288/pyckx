@@ -141,7 +141,7 @@ pub async fn create_course(
 
     info!(user_id = %user_id, name = %body.name, "Creating course via Service");
 
-    let input = crate::services::intello::course_domain::CreateCourseInput {
+    let input = crate::services::intello::course::domain::CreateCourseInput {
         name: body.name.clone(),
         description: body.description.clone(),
     };
@@ -329,7 +329,7 @@ pub async fn create_session(
 
     info!(user_id = %user_id, course_id = %course_id, topic = %body.topic, "Creating session via Service");
 
-    let input = crate::services::intello::study_session_domain::CreateStudySessionInput {
+    let input = crate::services::intello::study_session::study_session_domain::CreateStudySessionInput {
         topic: body.topic.clone(),
         instructions: body.instructions.clone(),
         keywords: body.keywords.clone(),

@@ -1,0 +1,25 @@
+# Rust
+/target
+/debug
+Cargo.lock
+
+# Trunk
+/dist
+/.trunk
+
+# Node/Tailwind
+node_modules/
+package-lock.json
+**/*.wasm
+**/*.js.map
+**/*.wasm.map
+
+# IDEs
+.idea
+.vscode
+*.swp
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db

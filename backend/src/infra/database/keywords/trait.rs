@@ -3,7 +3,7 @@
 //! This trait extends the generic `GameSetRepository` for keywords-specific operations.
 
 use super::super::game_set::GameSetRepository;
-use crate::services::intello::keywords_domain::KeywordSet;
+use crate::services::intello::KeywordSet;
 
 /// Repository trait for keyword set persistence operations.
 ///

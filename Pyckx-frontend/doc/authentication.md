@@ -10,11 +10,23 @@ Pyckx uses session-based authentication with HTTP-only cookies managed by the Ru
 
 ## Session Management
 
+### Storage
+- **Persistence:** Stored in Supabase `sessions` table (migrated from CSV).
+- **Caching:** In-memory `HashMap` for fast lookup on every request.
+- **Lifetime:** Sessions persist across server restarts.
+
 ### Cookie
 - Name: `session_id`
+- Value: UUIDv4
 - Type: HTTP-only (not accessible via JavaScript)
+- Security: `Secure` (prod), `SameSite::Lax`
 - Set by backend on successful login
 - Cleared on logout
+
+### Session Behavior
+- **Single Session:** One valid session per user.
+- **Reuse:** Login reuses existing valid session if available (prevents session proliferation).
+- **Invalidation:** Logout clears session from both memory and Supabase.
 
 ### Credentials
 All API requests include `credentials: "include"` to send cookies.

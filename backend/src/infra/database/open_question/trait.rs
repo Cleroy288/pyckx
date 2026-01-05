@@ -1,7 +1,7 @@
 //! Open Question Repository Trait - Abstraction for open question set persistence
 
-use crate::services::intello::open_question_domain::OpenQuestionSet;
-use crate::services::intello::error_domain::IntelloError;
+use crate::services::intello::OpenQuestionSet;
+use crate::services::intello::domain::error_domain::IntelloError;
 use async_trait::async_trait;
 
 /// Repository trait for open question set persistence operations

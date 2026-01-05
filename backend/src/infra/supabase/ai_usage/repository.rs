@@ -13,7 +13,7 @@ use std::sync::Arc;
 use tracing::info;
 use uuid::Uuid;
 
-use crate::services::intello::ai_usage_domain::{AiUsageLog, CreateAiUsageLog};
+use crate::services::intello::ai_usage::ai_usage_domain::{AiUsageLog, CreateAiUsageLog};
 use crate::shared::AppError;
 use crate::infra::database::AiUsageRepository;
 use crate::infra::supabase::shared::{SupabaseError, SupabaseHttpClient};

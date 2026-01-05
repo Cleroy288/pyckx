@@ -12,11 +12,11 @@ mod true_false;
 mod verification;
 
 // Re-export all types
-pub use fill_blank::{FillBlankAiOption, FillBlankAiQuestion, FillBlankAiResponse};
-pub use flashcard::{FlashcardAiCard, FlashcardAiResponse};
-pub use keywords::{KeywordsAiKeyword, KeywordsAiQuestion, KeywordsAiResponse};
-pub use open_question::{OpenQuestionAiQuestion, OpenQuestionAiResponse};
-pub use order_phrase::{OrderPhraseAiQuestion, OrderPhraseAiResponse, OrderPhraseAiWord};
-pub use qcm::{QcmAiQuestion, QcmAiResponse};
-pub use true_false::{TrueOrFalseAiResponse, TrueOrFalseAiStatement};
-pub use verification::{GradedAnswerAi, VerificationAiResponse};
+pub use fill_blank::FillBlankAiResponse;
+pub use flashcard::FlashcardAiResponse;
+pub use keywords::KeywordsAiResponse;
+pub use open_question::OpenQuestionAiResponse;
+pub use order_phrase::OrderPhraseAiResponse;
+pub use qcm::QcmAiResponse;
+pub use true_false::TrueOrFalseAiResponse;
+pub use verification::VerificationAiResponse;

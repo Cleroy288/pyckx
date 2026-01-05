@@ -11,7 +11,7 @@ use async_trait::async_trait;
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 
-use crate::services::intello::course_domain::{Course, ResourceSummary, UserResource};
+use crate::services::intello::course::domain::{Course, ResourceSummary, UserResource};
 use crate::shared::AppError;
 use crate::infra::database::course::CourseRepository;
 use crate::infra::supabase::shared::{SupabaseError, SupabaseHttpClient};

@@ -1,0 +1,10 @@
+/* --- Icon Component --- */
+.icon {
+	/* Layout */
+	flex-shrink: 0;
+
+	/* Box Model */
+	width: 1.5rem;
+	/* 24px */
+	height: 1.5rem;
+}

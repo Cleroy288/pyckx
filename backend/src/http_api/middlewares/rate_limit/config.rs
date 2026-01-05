@@ -79,26 +79,17 @@ impl RateLimitConfig {
 
     /// Standard limits for normal API endpoints
     pub fn standard() -> Self {
-        Self::new()
-            .per_second(10)
-            .per_minute(100)
-            .per_hour(1000)
+        Self::new().per_second(10).per_minute(100).per_hour(1000)
     }
 
     /// Relaxed limits for read-heavy endpoints
     pub fn relaxed() -> Self {
-        Self::new()
-            .per_second(30)
-            .per_minute(300)
-            .per_hour(5000)
+        Self::new().per_second(30).per_minute(300).per_hour(5000)
     }
 
     /// AI generation limits - 1 per minute to prevent abuse
     pub fn ai_generation() -> Self {
-        Self::new()
-            .per_minute(1)
-            .per_hour(30)
-            .per_day(100)
+        Self::new().per_minute(10).per_hour(30).per_day(100)
     }
 }
 

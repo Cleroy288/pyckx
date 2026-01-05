@@ -1,0 +1,19 @@
+# Rust
+/target
+/debug
+
+# Trunk
+/dist
+/.trunk
+
+# Git
+.git
+.gitignore
+.dockerignore
+
+# IDE
+.idea
+.vscode
+
+# OS
+.DS_Store

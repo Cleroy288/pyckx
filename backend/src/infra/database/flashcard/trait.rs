@@ -3,7 +3,7 @@
 //! This trait extends the generic `GameSetRepository` for flashcard-specific operations.
 
 use super::super::game_set::GameSetRepository;
-use crate::services::intello::flashcard_domain::FlashcardSet;
+use crate::services::intello::FlashcardSet;
 
 /// Repository trait for flashcard set persistence operations.
 ///

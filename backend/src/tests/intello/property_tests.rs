@@ -10,13 +10,13 @@ use super::helpers::{
     StubKeywordsRepository, StubOpenQuestionRepository, StubOrderPhraseRepository,
     StubQcmRepository, StubStudySessionRepository, StubTrueOrFalseRepository,
 };
-use crate::services::intello::qcm_question_domain::QcmQuestion;
-use crate::services::intello::qcm_set_domain::QcmSet;
+use crate::services::intello::QcmQuestion;
+use crate::services::intello::QcmSet;
 use crate::services::intello::enums_domain::Level;
 use crate::services::intello::error_domain::IntelloError;
 use crate::http_api::data_transfer_object::intello::CreateQcmSetRequest;
 use crate::infra::database::QcmRepository;
-use crate::services::{IntelloRepositories, IntelloService, OpenRouterService};
+use crate::services::intello::{IntelloRepositories, IntelloService};
 use crate::services::intello::open_question_cache_service::OpenQuestionCache;
 
 /// Create a test IntelloService with stub repositories

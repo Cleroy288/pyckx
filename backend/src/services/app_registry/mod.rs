@@ -13,7 +13,7 @@ mod registry_service;
 
 // Re-exports
 pub use error_domain::AppError as AppsError;
-pub use registry_service::{AppService, is_valid_app, AVAILABLE_APPS};
+pub use registry_service::AppService;
 
 // Re-export app types from their modules (kept for compatibility if needed, else remove)
 pub use crate::services::collection::app_domain::CollectionApp;

@@ -10,6 +10,5 @@ mod utils;
 
 // Re-export public API
 pub use client::OpenRouterClient;
-pub use models::{calculate_cost, get_model, CostResult, ModelDefinition, DEFAULT_MODEL, MODELS};
-pub use types::{AiGenerationResult, CourseGenerationUsage, Usage};
-pub use utils::{extract_json_from_response, fix_stringified_arrays, sanitize_ai_json, sanitize_json_duplicates};
+pub use models::{calculate_cost, DEFAULT_MODEL};
+pub use utils::{extract_json_from_response, sanitize_ai_json};

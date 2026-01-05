@@ -1,6 +1,6 @@
 //! AI Usage Repository - Trait definition
 
-use crate::services::intello::ai_usage_domain::{AiUsageLog, CreateAiUsageLog};
+use crate::services::intello::ai_usage::ai_usage_domain::{AiUsageLog, CreateAiUsageLog};
 use crate::shared::AppError;
 use async_trait::async_trait;
 

@@ -3,7 +3,7 @@
 //! This trait extends the generic `GameSetRepository` for order phrase-specific operations.
 
 use super::super::game_set::GameSetRepository;
-use crate::services::intello::order_phrase_domain::OrderPhraseSet;
+use crate::services::intello::OrderPhraseSet;
 
 /// Repository trait for order phrase set persistence operations.
 ///

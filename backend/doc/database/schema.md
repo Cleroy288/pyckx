@@ -17,6 +17,21 @@ Extended user data.
 | name | TEXT | |
 | created_at | TIMESTAMP | |
 
+### `sessions`
+User sessions (migrated from CSV persistence).
+
+| Column | Type | Notes |
+|--------|------|-------|
+| session_id | UUID | PK, unique |
+| user_id | UUID | FK → users, unique constraint (one session/user) |
+| email | TEXT | |
+| username | TEXT | |
+| role | TEXT | |
+| access_token | TEXT | Supabase JWT |
+| refresh_token | TEXT | |
+| expires_at | BIGINT | Unix timestamp |
+| created_at | TIMESTAMPTZ | |
+
 ---
 
 ## Apps

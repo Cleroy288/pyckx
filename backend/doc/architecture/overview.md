@@ -106,7 +106,8 @@ src/
 │   │   └── error/            # Self-contained Supabase errors
 │   │       └── supabase_error.rs
 │   ├── user/                 # User entity, UserId, session utils
-│   ├── session/              # Session management & errors
+│   ├── session/              # Session management (Supabase persistence)
+│   │   ├── service.rs        # SessionStore (in-memory + async Supabase sync)
 │   │   └── session_error.rs  # Self-contained Session errors
 │   └── database/             # Repository trait definitions
 ├── shared/                   # Cross-cutting utilities
