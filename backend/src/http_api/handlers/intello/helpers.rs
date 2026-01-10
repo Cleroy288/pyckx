@@ -1,8 +1,10 @@
 //! Helper functions for intello handlers
 
+use crate::services::intello::document_extractor::{
+    extract_pdf, extract_pptx, extract_txt, extract_word,
+};
 use crate::services::intello::DocumentType;
 use crate::shared::{AppError, AppResult};
-use crate::services::intello::document_extractor::{extract_pdf, extract_pptx, extract_txt, extract_word};
 use actix_multipart::Multipart;
 use futures_util::StreamExt;
 

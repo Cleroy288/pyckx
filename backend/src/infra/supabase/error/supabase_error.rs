@@ -29,7 +29,9 @@ impl SupabaseError {
             return Self::Network(err);
         }
         if err.is_decode() {
-            return Self::Parse { body: String::new() };
+            return Self::Parse {
+                body: String::new(),
+            };
         }
         if let Some(s) = err.status() {
             return Self::Http {

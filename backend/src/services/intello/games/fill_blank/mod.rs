@@ -3,4 +3,4 @@ pub mod parser;
 pub mod prompt;
 pub mod service;
 
-pub use domain::{FillBlankQuestion, FillBlankSet, FillBlankOption};
+pub use domain::{FillBlankOption, FillBlankQuestion, FillBlankSet};

@@ -9,10 +9,7 @@ fn test_builds_prompt_without_resources() {
 
 #[test]
 fn test_builds_prompt_with_resources() {
-    let prompt = build_ideas_extraction_prompt(
-        "Learn databases",
-        Some("Chapter 1: SQL Basics"),
-    );
+    let prompt = build_ideas_extraction_prompt("Learn databases", Some("Chapter 1: SQL Basics"));
     assert!(prompt.contains("Learn databases"));
     assert!(prompt.contains("Source Materials"));
     assert!(prompt.contains("Chapter 1: SQL Basics"));

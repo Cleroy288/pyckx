@@ -28,15 +28,13 @@ pub struct ModelDefinition {
 // ============================================================
 
 /// All available AI models with pricing
-pub const MODELS: &[ModelDefinition] = &[
-    ModelDefinition {
-        id: "google/gemini-3-flash-preview",
-        display_name: "Gemini 3 Flash Preview",
-        input_cost_per_million: 0.50,
-        output_cost_per_million: 3.00,
-        is_free: false,
-    },
-];
+pub const MODELS: &[ModelDefinition] = &[ModelDefinition {
+    id: "google/gemini-3-flash-preview",
+    display_name: "Gemini 3 Flash Preview",
+    input_cost_per_million: 0.50,
+    output_cost_per_million: 3.00,
+    is_free: false,
+}];
 
 /// Default model for ALL operations (course generation, games, etc.)
 pub const DEFAULT_MODEL: &str = "google/gemini-3-flash-preview";

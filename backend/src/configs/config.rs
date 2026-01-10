@@ -79,9 +79,13 @@ impl Config {
                 .unwrap_or(false),
             static_dir: std::env::var("STATIC_DIR").unwrap_or_else(|_| "./static".to_string()),
             // OpenRouter API key (optional)
-            openrouter_api_key: std::env::var("OPENROUTER_API_KEY").ok().filter(|s| !s.is_empty()),
+            openrouter_api_key: std::env::var("OPENROUTER_API_KEY")
+                .ok()
+                .filter(|s| !s.is_empty()),
             // Google AI API key for Gemini models (optional, for higher rate limits)
-            google_ai_key: std::env::var("GOOGLE_AI_KEY").ok().filter(|s| !s.is_empty()),
+            google_ai_key: std::env::var("GOOGLE_AI_KEY")
+                .ok()
+                .filter(|s| !s.is_empty()),
         };
 
         info!(

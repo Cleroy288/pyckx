@@ -1,19 +1,20 @@
 //! Application state - Main application struct holding all services
 
-use crate::services::app_registry::{CollectionApp, IntelloApp};
 use crate::configs::{Config, ConfigError};
-use crate::services::app_registry::registry_domain::AppModule;
+use crate::infra::openrouter::OpenRouterClient;
 use crate::infra::SessionStore;
 use crate::infra::{
-    SupabaseAiUsageRepository, SupabaseAppRepository, SupabaseCollectionRepository, SupabaseDvdRepository,
-    SupabaseFillBlankRepository, SupabaseFlashcardRepository, SupabaseHttpClient, SupabaseKeywordsRepository,
+    SupabaseAiUsageRepository, SupabaseAppRepository, SupabaseCollectionRepository,
+    SupabaseCourseRepository, SupabaseDvdRepository, SupabaseFillBlankRepository,
+    SupabaseFlashcardRepository, SupabaseHttpClient, SupabaseKeywordsRepository,
     SupabaseOpenQuestionRepository, SupabaseOrderPhraseRepository, SupabaseQcmRepository,
-    SupabaseSessionRepository, SupabaseTrueOrFalseRepository, SupabaseUserAppRepository,
-    SupabaseCourseRepository, SupabaseStudySessionRepository,
+    SupabaseSessionRepository, SupabaseStudySessionRepository, SupabaseTrueOrFalseRepository,
+    SupabaseUserAppRepository,
 };
-use crate::services::{AppService, AuthService, CollectionService, IntelloService};
-use crate::infra::openrouter::OpenRouterClient;
+use crate::services::app_registry::registry_domain::AppModule;
+use crate::services::app_registry::{CollectionApp, IntelloApp};
 use crate::services::intello::games::open_question::open_question_cache_service::OpenQuestionCache;
+use crate::services::{AppService, AuthService, CollectionService, IntelloService};
 use std::sync::Arc;
 use tracing::info;
 
@@ -39,7 +40,7 @@ pub struct App {
     pub collection_service: Arc<CollectionService>,
     pub app_service: Arc<AppService>,
     pub intello_service: Arc<IntelloService>,
-    pub openrouter_client: Arc<OpenRouterClient>,  // AI client for course generation
+    pub openrouter_client: Arc<OpenRouterClient>, // AI client for course generation
     // Apps
     #[allow(dead_code)] // App metadata, used for future app registry
     pub collection: CollectionApp,
@@ -73,24 +74,41 @@ impl App {
         let intello = IntelloApp::new();
 
         /* Create Supabase repositories (non-Intello) */
-        let collection_repo = Arc::new(SupabaseCollectionRepository::new(Arc::clone(&supabase_client)));
+        let collection_repo = Arc::new(SupabaseCollectionRepository::new(Arc::clone(
+            &supabase_client,
+        )));
         let dvd_repo = Arc::new(SupabaseDvdRepository::new(Arc::clone(&supabase_client)));
         let app_repository = Arc::new(SupabaseAppRepository::new(Arc::clone(&supabase_client)));
-        let user_app_repository = Arc::new(SupabaseUserAppRepository::new(Arc::clone(&supabase_client)));
+        let user_app_repository =
+            Arc::new(SupabaseUserAppRepository::new(Arc::clone(&supabase_client)));
 
         /* Create Supabase repositories for Intello (bundled for cleaner construction) */
         let intello_repos = crate::services::IntelloRepositories {
             qcm_repo: Arc::new(SupabaseQcmRepository::new(Arc::clone(&supabase_client))),
             ai_qcm_repo: Arc::new(SupabaseQcmRepository::new(Arc::clone(&supabase_client))),
-            open_question_repo: Arc::new(SupabaseOpenQuestionRepository::new(Arc::clone(&supabase_client))),
-            flashcard_repo: Arc::new(SupabaseFlashcardRepository::new(Arc::clone(&supabase_client))),
-            true_false_repo: Arc::new(SupabaseTrueOrFalseRepository::new(Arc::clone(&supabase_client))),
-            keywords_repo: Arc::new(SupabaseKeywordsRepository::new(Arc::clone(&supabase_client))),
-            order_phrase_repo: Arc::new(SupabaseOrderPhraseRepository::new(Arc::clone(&supabase_client))),
-            fill_blank_repo: Arc::new(SupabaseFillBlankRepository::new(Arc::clone(&supabase_client))),
+            open_question_repo: Arc::new(SupabaseOpenQuestionRepository::new(Arc::clone(
+                &supabase_client,
+            ))),
+            flashcard_repo: Arc::new(SupabaseFlashcardRepository::new(Arc::clone(
+                &supabase_client,
+            ))),
+            true_false_repo: Arc::new(SupabaseTrueOrFalseRepository::new(Arc::clone(
+                &supabase_client,
+            ))),
+            keywords_repo: Arc::new(SupabaseKeywordsRepository::new(Arc::clone(
+                &supabase_client,
+            ))),
+            order_phrase_repo: Arc::new(SupabaseOrderPhraseRepository::new(Arc::clone(
+                &supabase_client,
+            ))),
+            fill_blank_repo: Arc::new(SupabaseFillBlankRepository::new(Arc::clone(
+                &supabase_client,
+            ))),
             course_repo: Arc::new(SupabaseCourseRepository::new(Arc::clone(&supabase_client))),
             ai_usage_repo: Arc::new(SupabaseAiUsageRepository::new(Arc::clone(&supabase_client))),
-            study_session_repo: Arc::new(SupabaseStudySessionRepository::new(Arc::clone(&supabase_client))),
+            study_session_repo: Arc::new(SupabaseStudySessionRepository::new(Arc::clone(
+                &supabase_client,
+            ))),
         };
 
         // Create caches
@@ -105,7 +123,10 @@ impl App {
         let app_service = Arc::new(AppService::new(app_repository, user_app_repository));
 
         // OpenRouter AI client
-        let openrouter_client = Arc::new(OpenRouterClient::with_google_key(openrouter_api_key, google_ai_key));
+        let openrouter_client = Arc::new(OpenRouterClient::with_google_key(
+            openrouter_api_key,
+            google_ai_key,
+        ));
 
         // Build Intello service
         let intello_service = Arc::new(

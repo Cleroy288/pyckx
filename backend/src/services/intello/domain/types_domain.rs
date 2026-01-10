@@ -1,13 +1,13 @@
 //! IntelloService struct, constructor, and input/output types
 
-use crate::services::intello::Level;
+use crate::infra::openrouter::OpenRouterClient;
 use crate::infra::{
     AiUsageRepository, CourseRepository, FillBlankRepository, FlashcardRepository,
     KeywordsRepository, OpenQuestionRepository, OrderPhraseRepository, QcmRepository,
     StudySessionRepository, TrueOrFalseRepository,
 };
-use crate::infra::openrouter::OpenRouterClient;
 use crate::services::intello::games::open_question::open_question_cache_service::OpenQuestionCache;
+use crate::services::intello::Level;
 use std::fmt;
 use std::sync::Arc;
 use tracing::info;
@@ -234,9 +234,7 @@ impl IntelloServiceBuilder {
     /// Returns an error string if any required dependency is missing.
     pub fn build(self) -> Result<IntelloService, &'static str> {
         let repos = self.repos.ok_or("Missing repositories")?;
-        let openrouter_client = self
-            .openrouter_client
-            .ok_or("Missing OpenRouter client")?;
+        let openrouter_client = self.openrouter_client.ok_or("Missing OpenRouter client")?;
         let open_question_cache = self
             .open_question_cache
             .ok_or("Missing OpenQuestion cache")?;

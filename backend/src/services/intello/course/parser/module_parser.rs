@@ -11,9 +11,7 @@ pub fn parse_modules(root: &Value) -> Result<Vec<CourseModule>, IntelloError> {
     let modules_array = root
         .get("modules")
         .and_then(|v| v.as_array())
-        .ok_or_else(|| {
-            IntelloError::validation("structure", "Missing or invalid modules array")
-        })?;
+        .ok_or_else(|| IntelloError::validation("structure", "Missing or invalid modules array"))?;
 
     let mut parsed_modules = Vec::new();
 
@@ -49,9 +47,12 @@ pub fn parse_module(value: &Value, index: usize) -> Result<CourseModule, Intello
         .unwrap_or("Untitled Module")
         .to_string();
 
-    let blocks_array = value.get("blocks").and_then(|v| v.as_array()).ok_or_else(|| {
-        IntelloError::validation("module", format!("Module {} missing blocks array", index))
-    })?;
+    let blocks_array = value
+        .get("blocks")
+        .and_then(|v| v.as_array())
+        .ok_or_else(|| {
+            IntelloError::validation("module", format!("Module {} missing blocks array", index))
+        })?;
 
     let mut parsed_blocks = Vec::new();
 

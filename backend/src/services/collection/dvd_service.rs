@@ -3,11 +3,11 @@
 //! CRUD operations for DVDs within a collection.
 
 use super::CollectionService;
+use crate::infra::{CreateDvd, UpdateDvd};
 use crate::services::collection::collection_domain::CollectionItemType;
 use crate::services::collection::dvd_domain::Dvd;
-use crate::shared::AppResult;
 use crate::services::collection::error_domain::CollectionError;
-use crate::infra::{CreateDvd, UpdateDvd};
+use crate::shared::AppResult;
 use chrono::{DateTime, Utc};
 use tracing::{info, instrument};
 

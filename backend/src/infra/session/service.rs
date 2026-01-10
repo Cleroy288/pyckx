@@ -47,7 +47,10 @@ pub struct SessionStore {
 impl std::fmt::Debug for SessionStore {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.debug_struct("SessionStore")
-            .field("session_count", &self.by_session.read().map(|s| s.len()).unwrap_or(0))
+            .field(
+                "session_count",
+                &self.by_session.read().map(|s| s.len()).unwrap_or(0),
+            )
             .finish()
     }
 }
@@ -66,12 +69,12 @@ impl SessionStore {
     /// Call this on server startup
     pub async fn initialize(&self) -> Result<(), SupabaseError> {
         info!("Loading sessions from Supabase...");
-        
+
         match self.repository.get_all().await {
             Ok(rows) => {
                 let mut sessions = self.by_session.write().unwrap();
                 let mut user_map = self.user_to_session.write().unwrap();
-                
+
                 for row in rows {
                     let user = User {
                         id: row.user_id.into(),
@@ -82,16 +85,16 @@ impl SessionStore {
                         refresh_token: row.refresh_token,
                         expires_at: row.expires_at as u64,
                     };
-                    
+
                     let session = Session {
                         id: row.session_id.clone(),
                         user,
                     };
-                    
+
                     user_map.insert(session.user.id.clone(), session.id.clone());
                     sessions.insert(session.id.clone(), session);
                 }
-                
+
                 info!(count = sessions.len(), "Sessions loaded from Supabase");
                 Ok(())
             }
@@ -111,7 +114,7 @@ impl SessionStore {
         {
             let sessions = self.by_session.read().unwrap();
             let user_map = self.user_to_session.read().unwrap();
-            
+
             if let Some(existing_session_id) = user_map.get(&user.id) {
                 if let Some(existing_session) = sessions.get(existing_session_id) {
                     // Check if session is still valid (not expired)
@@ -119,7 +122,7 @@ impl SessionStore {
                         .duration_since(std::time::UNIX_EPOCH)
                         .unwrap()
                         .as_secs();
-                    
+
                     if existing_session.user.expires_at > now {
                         info!(session_id = %existing_session_id, user_id = %user.id, "Reusing existing valid session");
                         return existing_session_id.clone();
@@ -127,7 +130,7 @@ impl SessionStore {
                 }
             }
         }
-        
+
         // No valid session exists, create new one
         let session = Session::new(user);
         let session_id = session.id.clone();
@@ -141,7 +144,7 @@ impl SessionStore {
             if let Some(old_session_id) = user_map.get(&session.user.id) {
                 let old_id = old_session_id.clone();
                 sessions.remove(&old_id);
-                
+
                 // Delete old session from Supabase in background
                 let repo: Arc<SupabaseSessionRepository> = Arc::clone(&self.repository);
                 tokio::spawn(async move {
@@ -159,7 +162,7 @@ impl SessionStore {
         let repo: Arc<SupabaseSessionRepository> = Arc::clone(&self.repository);
         tokio::spawn(async move {
             use crate::infra::supabase::session::SessionRow;
-            
+
             let row = SessionRow {
                 session_id: session_for_persist.id,
                 user_id: session_for_persist.user.id.to_string(),
@@ -170,7 +173,7 @@ impl SessionStore {
                 refresh_token: session_for_persist.user.refresh_token,
                 expires_at: session_for_persist.user.expires_at as i64,
             };
-            
+
             if let Err(e) = repo.upsert(row).await {
                 warn!(error = %e, "Failed to persist session to Supabase");
             }

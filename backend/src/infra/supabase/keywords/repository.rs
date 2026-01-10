@@ -8,10 +8,10 @@
  */
 
 use super::types::{level_from_db, level_to_db, KeywordQuestionRow, KeywordRow, KeywordSetRow};
-use crate::services::intello::{Keyword, KeywordQuestion, KeywordSet};
-use crate::services::intello::error_domain::IntelloError;
 use crate::infra::database::GameSetRepository;
 use crate::infra::supabase::shared::{SupabaseError, SupabaseHttpClient};
+use crate::services::intello::error_domain::IntelloError;
+use crate::services::intello::{Keyword, KeywordQuestion, KeywordSet};
 use async_trait::async_trait;
 use std::sync::Arc;
 use tracing::{info, instrument};

@@ -7,10 +7,10 @@
  * Tables: dvds
  */
 
-use crate::services::collection::dvd_domain::Dvd;
-use crate::services::collection::error_domain::CollectionError;
 use crate::infra::database::{CreateDvd, DvdRepository, UpdateDvd};
 use crate::infra::supabase::shared::{SupabaseError, SupabaseHttpClient};
+use crate::services::collection::dvd_domain::Dvd;
+use crate::services::collection::error_domain::CollectionError;
 use async_trait::async_trait;
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;

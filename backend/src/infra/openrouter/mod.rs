@@ -6,7 +6,7 @@
 mod client;
 mod models;
 mod types;
-mod utils;
+pub mod utils;
 
 // Re-export public API
 pub use client::OpenRouterClient;

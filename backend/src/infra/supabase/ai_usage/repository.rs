@@ -13,10 +13,10 @@ use std::sync::Arc;
 use tracing::info;
 use uuid::Uuid;
 
-use crate::services::intello::ai_usage::ai_usage_domain::{AiUsageLog, CreateAiUsageLog};
-use crate::shared::AppError;
 use crate::infra::database::AiUsageRepository;
 use crate::infra::supabase::shared::{SupabaseError, SupabaseHttpClient};
+use crate::services::intello::ai_usage::ai_usage_domain::{AiUsageLog, CreateAiUsageLog};
+use crate::shared::AppError;
 
 /* ============================================================================
  * CONSTANTS
@@ -158,10 +158,11 @@ impl AiUsageRepository for SupabaseAiUsageRepository {
             .await
             .map_err(Self::map_error)?;
 
-        let row = created
-            .into_iter()
-            .next()
-            .ok_or_else(|| AppError::Internal(crate::http_api::utils::InternalError::new("No usage returned".to_string())))?;
+        let row = created.into_iter().next().ok_or_else(|| {
+            AppError::Internal(crate::http_api::utils::InternalError::new(
+                "No usage returned".to_string(),
+            ))
+        })?;
 
         info!(
             model = %row.model_id,

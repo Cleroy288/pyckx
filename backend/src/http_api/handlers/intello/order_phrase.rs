@@ -1,13 +1,13 @@
 //! Order Phrase handlers - API endpoints for Order Phrase game
 
 use super::helpers::parse_multipart;
+use crate::app::App;
 use crate::http_api::data_transfer_object::intello::{
     CreateOrderPhraseRequest, CreateOrderPhraseResponse, OrderPhraseQuestionResponse,
     OrderPhraseSetListResponse, OrderPhraseSetWithQuestionsResponse, OrderPhraseWordResponse,
 };
-use crate::app::App;
-use crate::shared::{AppError, AppResult};
 use crate::infra::user::get_user_id_from_session;
+use crate::shared::{AppError, AppResult};
 use actix_multipart::Multipart;
 use actix_web::{get, post, web, HttpRequest, HttpResponse};
 use tracing::instrument;
@@ -43,7 +43,10 @@ pub async fn create_order_phrase_handler(
     };
 
     // Call service directly
-    let order_phrase_set = app.intello_service.generate_ai_order_phrases(&user_id, service_input).await?;
+    let order_phrase_set = app
+        .intello_service
+        .generate_ai_order_phrases(&user_id, service_input)
+        .await?;
 
     // Build response
     let question_responses: Vec<OrderPhraseQuestionResponse> = order_phrase_set

@@ -1,8 +1,8 @@
 //! Login handler
 
+use crate::app::App;
 use crate::http_api::data_transfer_object::{AuthResponse, LoginRequest};
 use crate::http_api::utils::validation::validate_request;
-use crate::app::App;
 use crate::shared::AppResult;
 use actix_web::cookie::{Cookie, SameSite};
 use actix_web::{post, web, HttpResponse};

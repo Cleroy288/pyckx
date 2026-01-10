@@ -13,7 +13,12 @@ pub trait DvdRepository: Send + Sync {
     async fn find_all(&self, user_id: &str) -> Result<Vec<Dvd>, CollectionError>;
     #[allow(dead_code)]
     async fn find_by_collection(&self, collection_id: i32) -> Result<Vec<Dvd>, CollectionError>;
-    async fn update(&self, user_id: &str, dvd_id: &str, update: &UpdateDvd) -> Result<Dvd, CollectionError>;
+    async fn update(
+        &self,
+        user_id: &str,
+        dvd_id: &str,
+        update: &UpdateDvd,
+    ) -> Result<Dvd, CollectionError>;
     async fn delete(&self, user_id: &str, dvd_id: &str) -> Result<bool, CollectionError>;
     async fn exists_by_name(&self, user_id: &str, name: &str) -> Result<bool, CollectionError>;
     async fn delete_by_collection(&self, collection_id: i32) -> Result<usize, CollectionError>;

@@ -1,12 +1,12 @@
 //! DVD lifecycle tests - full CRUD operations
 
 use super::helpers::{create_test_dvd, load_test_config};
-use crate::services::collection::collection_domain::CollectionItemType;
-use crate::services::collection::error_domain::CollectionError;
 use crate::infra::{
     CollectionRepository, DvdRepository, SupabaseCollectionRepository, SupabaseDvdRepository,
     SupabaseHttpClient, UpdateDvd,
 };
+use crate::services::collection::collection_domain::CollectionItemType;
+use crate::services::collection::error_domain::CollectionError;
 use std::sync::Arc;
 
 /// Full DVD lifecycle test with collection

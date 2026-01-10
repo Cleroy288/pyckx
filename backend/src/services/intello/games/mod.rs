@@ -8,4 +8,3 @@ pub mod shared;
 pub mod true_false;
 
 pub mod service; // Generic games operations
-

@@ -8,9 +8,9 @@ use crate::services::intello::error_domain::IntelloError;
 use crate::services::intello::types_domain::{GenerateContentInput, IntelloService};
 use crate::services::intello::SetId;
 
-use crate::services::intello::crud::crud_service;
 use super::domain::FlashcardSet;
 use super::prompt::{build_flashcard_prompt, FlashcardPromptInput};
+use crate::services::intello::crud::crud_service;
 
 impl IntelloService {
     // ** get_user_flashcard_sets **
@@ -44,7 +44,10 @@ impl IntelloService {
         // Step 1: Validate user ID and generation input
         self.validate_user_id(user_id)?;
         self.validate_generation_input(&input)?;
-        info!(num_questions = input.num_questions, "Generating AI flashcards");
+        info!(
+            num_questions = input.num_questions,
+            "Generating AI flashcards"
+        );
 
         // Step 2: Build prompt input from generation parameters
         let prompt_input = FlashcardPromptInput {
@@ -64,7 +67,10 @@ impl IntelloService {
 
         // Step 3: Build prompt and send request to AI service
         let prompt = build_flashcard_prompt(&prompt_input);
-        let ai_result = self.openrouter_client.send_chat_request(&prompt, None).await?;
+        let ai_result = self
+            .openrouter_client
+            .send_chat_request(&prompt, None)
+            .await?;
 
         // Step 4: Parse AI response into flashcards
         let cards = super::parser::parse_flashcard_response(&ai_result.content)?;

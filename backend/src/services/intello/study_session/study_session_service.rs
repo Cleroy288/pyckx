@@ -1,8 +1,10 @@
 //! Study session operations
 
-use crate::services::intello::types_domain::IntelloService;
-use crate::services::intello::study_session::study_session_domain::{CreateStudySessionInput, StudySession};
 use crate::services::intello::error_domain::IntelloError;
+use crate::services::intello::study_session::study_session_domain::{
+    CreateStudySessionInput, StudySession,
+};
+use crate::services::intello::types_domain::IntelloService;
 use tracing::{info, instrument};
 use uuid::Uuid;
 

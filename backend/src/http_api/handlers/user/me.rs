@@ -1,8 +1,8 @@
 //! Current user handler
 
 use super::helpers::extract_session_id;
-use crate::http_api::data_transfer_object::UserResponse;
 use crate::app::App;
+use crate::http_api::data_transfer_object::UserResponse;
 use actix_web::{get, web, HttpRequest, HttpResponse, Responder};
 
 /// GET /user/me - Get current user from session

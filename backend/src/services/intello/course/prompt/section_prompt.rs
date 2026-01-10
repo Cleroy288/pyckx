@@ -138,4 +138,3 @@ Respond with ONLY valid JSON:
         resources_section = resources_section
     )
 }
-

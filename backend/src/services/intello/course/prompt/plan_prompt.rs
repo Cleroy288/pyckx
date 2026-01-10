@@ -73,4 +73,3 @@ Respond with ONLY valid JSON:
         section_count = section_count
     )
 }
-

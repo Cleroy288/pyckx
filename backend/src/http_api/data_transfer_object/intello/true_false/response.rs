@@ -40,4 +40,3 @@ pub struct TrueOrFalseSetWithStatementsResponse {
     pub subjects: Vec<String>,
     pub statements: Vec<TrueOrFalseStatementResponse>,
 }
-

@@ -3,4 +3,4 @@ pub mod parser;
 pub mod prompt;
 pub mod service;
 
-pub use domain::{Keyword, KeywordSet, KeywordQuestion};
+pub use domain::{Keyword, KeywordQuestion, KeywordSet};

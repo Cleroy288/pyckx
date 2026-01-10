@@ -141,7 +141,8 @@ impl SupabaseHttpClient {
         T: DeserializeOwned,
         B: Serialize,
     {
-        self.request_with_retry(Method::PATCH, url, Some(body)).await
+        self.request_with_retry(Method::PATCH, url, Some(body))
+            .await
     }
 
     /*

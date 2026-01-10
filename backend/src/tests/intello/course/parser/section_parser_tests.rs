@@ -1,4 +1,3 @@
-use crate::http_api::data_transfer_object::intello::course::{ContentBlock, QcmSetPayload, QcmQuestionPayload};
 use crate::services::intello::course::parser::section_parser::parse_generated_section;
 
 #[test]
@@ -18,14 +17,15 @@ fn test_parses_valid_section() {
                 "question": "What is X?",
                 "right_answer": "Correct",
                 "wrong_answers": ["Wrong1", "Wrong2", "Wrong3"],
-                "explanation": "Because..."
+                "explanation": "Because this is the correct answer for the question."
             }]
         }
     }"#;
 
     let section = parse_generated_section(json).unwrap();
     assert_eq!(section.title, "Introduction");
-    assert!(section.qcm_set.is_some());
+    // qcm_set is now required (not Option), verify it has questions
+    assert!(!section.qcm_set.questions.is_empty());
 }
 
 #[test]

@@ -8,9 +8,9 @@ use crate::services::intello::error_domain::IntelloError;
 use crate::services::intello::types_domain::{GenerateContentInput, IntelloService};
 use crate::services::intello::SetId;
 
-use crate::services::intello::crud::crud_service;
 use super::domain::TrueOrFalseSet;
 use super::prompt::{build_true_false_prompt, TrueOrFalsePromptInput};
+use crate::services::intello::crud::crud_service;
 
 impl IntelloService {
     // ** get_user_true_false_sets **
@@ -44,7 +44,10 @@ impl IntelloService {
         // Step 1: Validate user ID and generation input
         self.validate_user_id(user_id)?;
         self.validate_generation_input(&input)?;
-        info!(num_statements = input.num_questions, "Generating AI true/false statements");
+        info!(
+            num_statements = input.num_questions,
+            "Generating AI true/false statements"
+        );
 
         // Step 2: Build prompt input from generation parameters
         let prompt_input = TrueOrFalsePromptInput {
@@ -64,7 +67,10 @@ impl IntelloService {
 
         // Step 3: Build prompt and send request to AI service
         let prompt = build_true_false_prompt(&prompt_input);
-        let ai_result = self.openrouter_client.send_chat_request(&prompt, None).await?;
+        let ai_result = self
+            .openrouter_client
+            .send_chat_request(&prompt, None)
+            .await?;
 
         // Step 4: Parse AI response into true/false statements
         let statements = super::parser::parse_true_false_response(&ai_result.content)?;
@@ -80,7 +86,10 @@ impl IntelloService {
             )
             .await;
         }
-        info!(generated = statements.len(), "AI true/false statements generated");
+        info!(
+            generated = statements.len(),
+            "AI true/false statements generated"
+        );
 
         // Step 6: Build and store the true/false set
         let true_false_set = TrueOrFalseSet {

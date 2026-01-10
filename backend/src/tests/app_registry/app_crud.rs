@@ -1,8 +1,8 @@
 //! App CRUD tests - create, read, update, delete operations
 
 use super::helpers::load_test_config;
-use crate::shared::AppError;
 use crate::infra::{AppRepository, CreateApp, SupabaseAppRepository, SupabaseHttpClient};
+use crate::shared::AppError;
 use std::sync::Arc;
 
 /// Test app CRUD operations
@@ -19,10 +19,7 @@ async fn test_app_crud_lifecycle() {
 
     let http_client = Arc::new(SupabaseHttpClient::new(&config));
     let repo = SupabaseAppRepository::new(http_client.clone());
-    let test_app_name = format!(
-        "test_app_{}",
-        &uuid::Uuid::new_v4().to_string()[..8]
-    );
+    let test_app_name = format!("test_app_{}", &uuid::Uuid::new_v4().to_string()[..8]);
 
     // == 1. GET ALL APPS ==
     println!("\n=== Step 1: Get All Apps ===");
@@ -54,14 +51,8 @@ async fn test_app_crud_lifecycle() {
         .update(&test_app_name, &update)
         .await
         .expect("Failed to update app");
-    assert_eq!(
-        updated.description,
-        Some("Updated description".to_string())
-    );
-    println!(
-        "✓ App updated: {}",
-        updated.description.unwrap_or_default()
-    );
+    assert_eq!(updated.description, Some("Updated description".to_string()));
+    println!("✓ App updated: {}", updated.description.unwrap_or_default());
 
     // == 5. DELETE APP ==
     println!("\n=== Step 5: Delete App ===");

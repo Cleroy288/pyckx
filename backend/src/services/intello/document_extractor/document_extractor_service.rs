@@ -3,9 +3,11 @@
 //! Contains document extraction functions for various file formats
 // ==> This file provides the main service functions for extracting text from documents
 
-use crate::services::intello::document_extractor::document_extractor_domain::{ExtractResult, ExtractedContent};
-use crate::services::intello::error_domain::IntelloError;
+use crate::services::intello::document_extractor::document_extractor_domain::{
+    ExtractResult, ExtractedContent,
+};
 use crate::services::intello::document_extractor::document_extractor_utils::extract_text_from_xml;
+use crate::services::intello::error_domain::IntelloError;
 
 // ** extract_txt **
 // Extracts text content from a .txt file

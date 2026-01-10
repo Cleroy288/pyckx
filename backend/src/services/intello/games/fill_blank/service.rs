@@ -8,9 +8,9 @@ use crate::services::intello::error_domain::IntelloError;
 use crate::services::intello::types_domain::{GenerateContentInput, IntelloService};
 use crate::services::intello::SetId;
 
-use crate::services::intello::crud::crud_service;
 use super::domain::FillBlankSet;
 use super::prompt::{build_fill_blank_prompt, FillBlankPromptInput};
+use crate::services::intello::crud::crud_service;
 
 impl IntelloService {
     // ** get_user_fill_blank_sets **
@@ -44,7 +44,10 @@ impl IntelloService {
         // Step 1: Validate user ID and generation input
         self.validate_user_id(user_id)?;
         self.validate_generation_input(&input)?;
-        info!(num_questions = input.num_questions, "Generating AI fill blank questions");
+        info!(
+            num_questions = input.num_questions,
+            "Generating AI fill blank questions"
+        );
 
         // Step 2: Build prompt input from generation parameters
         let prompt_input = FillBlankPromptInput {
@@ -64,7 +67,10 @@ impl IntelloService {
 
         // Step 3: Build prompt and send request to AI service
         let prompt = build_fill_blank_prompt(&prompt_input);
-        let ai_result = self.openrouter_client.send_chat_request(&prompt, None).await?;
+        let ai_result = self
+            .openrouter_client
+            .send_chat_request(&prompt, None)
+            .await?;
 
         // Step 4: Parse AI response into fill-in-the-blank questions
         let questions = super::parser::parse_fill_blank_response(&ai_result.content)?;
@@ -80,7 +86,10 @@ impl IntelloService {
             )
             .await;
         }
-        info!(generated = questions.len(), "AI fill blank questions generated");
+        info!(
+            generated = questions.len(),
+            "AI fill blank questions generated"
+        );
 
         // Step 6: Build and store the fill-in-the-blank set
         let fill_blank_set = FillBlankSet {

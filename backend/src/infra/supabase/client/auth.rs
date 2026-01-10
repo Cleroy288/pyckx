@@ -2,9 +2,11 @@
 
 use super::types::{LoginBody, RegisterBody, RegisterMetadata, SupabaseAuthResponse};
 use crate::configs::Config;
-use crate::infra::User;
 use crate::infra::supabase::SupabaseError;
-use crate::shared::constants::urls::supabase::{SUPABASE_AUTH_PATH, SUPABASE_LOGOUT_PATH, SUPABASE_SIGNUP_PATH};
+use crate::infra::User;
+use crate::shared::constants::urls::supabase::{
+    SUPABASE_AUTH_PATH, SUPABASE_LOGOUT_PATH, SUPABASE_SIGNUP_PATH,
+};
 use reqwest::Client;
 use std::fmt;
 use tracing::{debug, info, instrument, warn};
@@ -44,7 +46,6 @@ impl SupabaseClient {
         info!(user_id = %parsed.user.id, "Login successful");
         Ok(parsed.into())
     }
-
 
     /// Register a new user with profile data
     #[allow(dead_code)] // Registration route is disabled but kept for future use

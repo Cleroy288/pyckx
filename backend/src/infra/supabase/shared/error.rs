@@ -59,7 +59,10 @@ impl SupabaseError {
 
     /* Create HTTP error from status and body */
     pub fn http(status: u16, body: impl Into<String>) -> Self {
-        Self::Http { status, body: body.into() }
+        Self::Http {
+            status,
+            body: body.into(),
+        }
     }
 
     /* Create network error */

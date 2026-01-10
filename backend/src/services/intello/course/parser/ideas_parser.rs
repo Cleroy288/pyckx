@@ -14,16 +14,23 @@ pub fn parse_extracted_ideas(ai_response: &str) -> Result<ExtractedIdeas, Intell
     let sanitized = sanitize_ai_json(&extracted);
 
     // Step 2: Parse JSON into struct
-    let ideas: ExtractedIdeas = serde_json::from_str(&sanitized)
-        .map_err(|e| IntelloError::validation("ideas_json", format!("Failed to parse ideas JSON: {}", e)))?;
+    let ideas: ExtractedIdeas = serde_json::from_str(&sanitized).map_err(|e| {
+        IntelloError::validation("ideas_json", format!("Failed to parse ideas JSON: {}", e))
+    })?;
 
     // Step 2: Validate required fields are not empty
     if ideas.core_intent.is_empty() {
-        return Err(IntelloError::validation("core_intent", "core_intent cannot be empty"));
+        return Err(IntelloError::validation(
+            "core_intent",
+            "core_intent cannot be empty",
+        ));
     }
 
     if ideas.target_level.is_empty() {
-        return Err(IntelloError::validation("target_level", "target_level cannot be empty"));
+        return Err(IntelloError::validation(
+            "target_level",
+            "target_level cannot be empty",
+        ));
     }
 
     // Step 3: Return parsed ideas

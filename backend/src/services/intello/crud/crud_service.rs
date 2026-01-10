@@ -17,8 +17,8 @@
 //! }
 //! ```
 
-use crate::services::intello::error_domain::IntelloError;
 use crate::infra::GameSetRepository;
+use crate::services::intello::error_domain::IntelloError;
 use tracing::info;
 
 // ** validate_user_id **
@@ -30,9 +30,12 @@ use tracing::info;
 pub fn validate_user_id(user_id: &str) -> Result<(), IntelloError> {
     // Step 1: Check if user ID is empty or whitespace-only
     if user_id.trim().is_empty() {
-        return Err(IntelloError::validation("user_id", "User ID cannot be empty"));
+        return Err(IntelloError::validation(
+            "user_id",
+            "User ID cannot be empty",
+        ));
     }
-    
+
     // Step 2: Return success
     Ok(())
 }

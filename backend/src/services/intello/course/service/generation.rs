@@ -31,11 +31,16 @@ impl IntelloService {
         let ideas = self
             .extract_user_demand_ideas(user_id, &input.topic, Some(&input.resources))
             .await?;
-        info!(mandatory_topics = ideas.mandatory_topics.len(), "Ideas extracted");
+        info!(
+            mandatory_topics = ideas.mandatory_topics.len(),
+            "Ideas extracted"
+        );
 
         // Step 2: Generate course plan
         let section_count = section_count.unwrap_or(4);
-        let plan = self.generate_course_plan(user_id, &ideas, section_count).await?;
+        let plan = self
+            .generate_course_plan(user_id, &ideas, section_count)
+            .await?;
         info!(sections = plan.sections.len(), title = %plan.title, "Course plan generated");
 
         // Step 3: Generate each section (concurrent HTTP calls to AI)
@@ -48,15 +53,26 @@ impl IntelloService {
             info!(section_order = section.order, "Section generated");
             sections.push(section);
         }
-        info!(sections_generated = sections.len(), "All sections generated");
+        info!(
+            sections_generated = sections.len(),
+            "All sections generated"
+        );
 
         // Step 4: Generate synthesis
-        let synthesis = self.generate_course_synthesis(user_id, &plan, &sections).await?;
-        info!(qcm_questions = synthesis.final_qcm.questions.len(), "Synthesis generated");
+        let synthesis = self
+            .generate_course_synthesis(user_id, &plan, &sections)
+            .await?;
+        info!(
+            qcm_questions = synthesis.final_qcm.questions.len(),
+            "Synthesis generated"
+        );
 
         // Step 5: Assemble final course
         let course = assemble_complete_course(&plan, sections, synthesis)?;
-        info!(modules = course.modules.len(), "Course assembled successfully");
+        info!(
+            modules = course.modules.len(),
+            "Course assembled successfully"
+        );
 
         // Step 6: Save to session if session_id provided
         if let Some(ref session_id) = input.session_id {
@@ -66,7 +82,7 @@ impl IntelloService {
                 .map_err(|e| IntelloError::validation("json_serialize", e.to_string()))?;
 
             self.study_session_repo
-                .save_session_content(session_id,  &course_json)
+                .save_session_content(session_id, &course_json)
                 .await
                 .map_err(|e| IntelloError::storage(e.to_string()))?;
         }

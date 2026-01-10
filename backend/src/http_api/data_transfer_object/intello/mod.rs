@@ -43,8 +43,7 @@ pub use open_question::{
 
 // Re-export Flashcard types
 pub use flashcard::{
-    CreateFlashcardRequest, CreateFlashcardResponse, FlashcardResponse,
-    FlashcardSetListResponse,
+    CreateFlashcardRequest, CreateFlashcardResponse, FlashcardResponse, FlashcardSetListResponse,
 };
 
 // Re-export True or False types
@@ -55,8 +54,8 @@ pub use true_false::{
 
 // Re-export Keywords types
 pub use keywords::{
-    CreateKeywordsRequest, CreateKeywordsResponse, KeywordQuestionResponse,
-    KeywordResponse, KeywordSetListResponse, KeywordSetWithQuestionsResponse,
+    CreateKeywordsRequest, CreateKeywordsResponse, KeywordQuestionResponse, KeywordResponse,
+    KeywordSetListResponse, KeywordSetWithQuestionsResponse,
 };
 
 // Re-export Order Phrase types
@@ -73,5 +72,3 @@ pub use fill_blank::{
 
 // Re-export Custom Question types
 pub use custom_question::{CreateCustomQuestionRequest, CustomQuestionResponse};
-
-

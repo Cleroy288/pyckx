@@ -1,9 +1,9 @@
 //! Open Question Request DTOs
 
-use crate::services::intello::Level;
 use crate::http_api::data_transfer_object::intello::validation::{
     default_language, default_num_questions, parse_level,
 };
+use crate::services::intello::Level;
 use serde::Deserialize;
 
 /// Request to create open questions (metadata only, files sent separately)

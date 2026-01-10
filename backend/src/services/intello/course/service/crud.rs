@@ -45,11 +45,7 @@ impl IntelloService {
 
     /// Delete a course and its associated sessions and resources
     #[instrument(skip(self))]
-    pub async fn delete_course(
-        &self,
-        user_id: &str,
-        course_id: &str,
-    ) -> Result<(), IntelloError> {
+    pub async fn delete_course(&self, user_id: &str, course_id: &str) -> Result<(), IntelloError> {
         // 1. Verify course ownership
         let courses = self.list_user_courses(user_id).await?;
         if !courses.iter().any(|c| c.id == course_id) {

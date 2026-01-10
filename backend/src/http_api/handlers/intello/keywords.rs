@@ -1,13 +1,13 @@
 //! Keywords handlers - API endpoints for Keywords game
 
 use super::helpers::parse_multipart;
+use crate::app::App;
 use crate::http_api::data_transfer_object::intello::{
     CreateKeywordsRequest, CreateKeywordsResponse, KeywordQuestionResponse, KeywordResponse,
     KeywordSetListResponse, KeywordSetWithQuestionsResponse,
 };
-use crate::app::App;
-use crate::shared::{AppError, AppResult};
 use crate::infra::user::get_user_id_from_session;
+use crate::shared::{AppError, AppResult};
 use actix_multipart::Multipart;
 use actix_web::{get, post, web, HttpRequest, HttpResponse};
 use tracing::instrument;
@@ -43,7 +43,10 @@ pub async fn create_keywords_handler(
     };
 
     // Call service directly
-    let keyword_set = app.intello_service.generate_ai_keywords(&user_id, service_input).await?;
+    let keyword_set = app
+        .intello_service
+        .generate_ai_keywords(&user_id, service_input)
+        .await?;
 
     // Build response
     let question_responses: Vec<KeywordQuestionResponse> = keyword_set

@@ -6,12 +6,15 @@ use crate::services::intello::course::domain::{CoursePlan, ParsedSection};
 // @ course_plan : Original CoursePlan
 // @ parsed_sections : All generated sections
 // @ returns : Formatted prompt string for AI
-pub fn build_synthesis_prompt(course_plan: &CoursePlan, parsed_sections: &[ParsedSection]) -> String {
+pub fn build_synthesis_prompt(
+    course_plan: &CoursePlan,
+    parsed_sections: &[ParsedSection],
+) -> String {
     // Step 1: Build sections summary
     let sections_summary = parsed_sections
         .iter()
-        .map(|s| format!("**Section {}**: {} - Key concepts: {}", 
-            s.order, 
+        .map(|s| format!("**Section {}**: {} - Key concepts: {}",
+            s.order,
             s.title,
             s.content_blocks
                 .iter()
@@ -118,4 +121,3 @@ Respond with ONLY valid JSON:
         topics = topics_str
     )
 }
-

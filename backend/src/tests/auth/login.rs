@@ -1,8 +1,8 @@
 //! Login tests
 
 use crate::configs::Config;
-use crate::tests::config::TestConfig;
 use crate::infra::SupabaseClient;
+use crate::tests::config::TestConfig;
 
 #[tokio::test]
 async fn test_supabase_login_real() {
@@ -19,7 +19,10 @@ async fn test_supabase_login_real() {
             println!("User authenticated successfully");
             println!("==============================");
 
-            assert!(!response.access_token.is_empty(), "Access token should not be empty");
+            assert!(
+                !response.access_token.is_empty(),
+                "Access token should not be empty"
+            );
         }
         Err(err) => panic!("Supabase login failed: {:?}", err),
     }

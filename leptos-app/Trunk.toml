@@ -1,0 +1,7 @@
+[build]
+# Output to backend's static folder
+dist = "../backend/static"
+
+[watch]
+# Files to watch for changes
+watch = ["src", "index.html", "style.css"]

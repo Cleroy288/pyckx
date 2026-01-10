@@ -245,12 +245,7 @@ pub async fn upload_resource(
         // 2. Create user resource
         let resource = app
             .intello_service
-            .create_resource(
-                &user_id,
-                filename,
-                content,
-                token_count as i32,
-            )
+            .create_resource(&user_id, filename, content, token_count as i32)
             .await?;
 
         // 3. Link resource to course
@@ -329,12 +324,13 @@ pub async fn create_session(
 
     info!(user_id = %user_id, course_id = %course_id, topic = %body.topic, "Creating session via Service");
 
-    let input = crate::services::intello::study_session::study_session_domain::CreateStudySessionInput {
-        topic: body.topic.clone(),
-        instructions: body.instructions.clone(),
-        keywords: body.keywords.clone(),
-        language: body.language.clone(),
-    };
+    let input =
+        crate::services::intello::study_session::study_session_domain::CreateStudySessionInput {
+            topic: body.topic.clone(),
+            instructions: body.instructions.clone(),
+            keywords: body.keywords.clone(),
+            language: body.language.clone(),
+        };
 
     let session = app
         .intello_service
@@ -452,7 +448,9 @@ pub async fn delete_session(
     // Verify course ownership
     let courses = app.intello_service.list_user_courses(&user_id).await?;
     if !courses.iter().any(|c| c.id == course_id) {
-        return Err(AppError::Intello(crate::services::intello::error_domain::IntelloError::Forbidden));
+        return Err(AppError::Intello(
+            crate::services::intello::error_domain::IntelloError::Forbidden,
+        ));
     }
 
     app.intello_service

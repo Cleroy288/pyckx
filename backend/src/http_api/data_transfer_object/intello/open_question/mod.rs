@@ -1,11 +1,11 @@
 //! Open Question DTOs - Request/Response types for open question endpoints
 
+mod conversion;
 mod request;
 mod response;
-mod conversion;
 
-pub use request::{CreateOpenQuestionRequest, CheckAnswersRequest};
+pub use request::{CheckAnswersRequest, CreateOpenQuestionRequest};
 pub use response::{
-    OpenQuestionResponse, OpenQuestionSetListResponse,
-    CreateOpenQuestionResponse, GradedAnswerResponse, CheckAnswersResponse
+    CheckAnswersResponse, CreateOpenQuestionResponse, GradedAnswerResponse, OpenQuestionResponse,
+    OpenQuestionSetListResponse,
 };

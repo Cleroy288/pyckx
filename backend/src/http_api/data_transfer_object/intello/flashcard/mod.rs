@@ -5,6 +5,4 @@ pub mod request;
 pub mod response;
 
 pub use request::CreateFlashcardRequest;
-pub use response::{
-    CreateFlashcardResponse, FlashcardResponse, FlashcardSetListResponse,
-};
+pub use response::{CreateFlashcardResponse, FlashcardResponse, FlashcardSetListResponse};

@@ -4,8 +4,8 @@ use super::response::{
     GradedAnswerResponse, OpenQuestionResponse, OpenQuestionSetListResponse,
     OpenQuestionSetResponse,
 };
-use crate::services::intello::{Level, OpenQuestion, OpenQuestionSet};
 use crate::services::intello::games::shared::types::{AnswerGrade, GradedAnswer};
+use crate::services::intello::{Level, OpenQuestion, OpenQuestionSet};
 
 impl From<&OpenQuestion> for OpenQuestionResponse {
     fn from(q: &OpenQuestion) -> Self {

@@ -8,10 +8,10 @@
  */
 
 use super::types::{AppRow, InsertAppRow, UpdateAppRow};
-use crate::services::app_registry::registry_domain::App as AppEntity;
-use crate::shared::AppError;
 use crate::infra::database::{AppRepository, CreateApp, UpdateApp};
 use crate::infra::supabase::shared::{SupabaseError, SupabaseHttpClient};
+use crate::services::app_registry::registry_domain::App as AppEntity;
+use crate::shared::AppError;
 use async_trait::async_trait;
 use serde::Deserialize;
 use std::sync::Arc;
@@ -77,7 +77,9 @@ impl AppRepository for SupabaseAppRepository {
      */
     #[instrument(skip(self))]
     async fn find_all(&self) -> Result<Vec<AppEntity>, AppError> {
-        let url = self.client.rest_url_with_query(TABLE_APPS, "order=name.asc");
+        let url = self
+            .client
+            .rest_url_with_query(TABLE_APPS, "order=name.asc");
         debug!(url = %url, "Finding all apps");
 
         let rows: Vec<AppRow> = self.client.get(&url).await.map_err(Self::map_error)?;
@@ -107,10 +109,11 @@ impl AppRepository for SupabaseAppRepository {
 
         let rows: Vec<AppRow> = self.client.get(&url).await.map_err(Self::map_error)?;
 
-        let row = rows
-            .into_iter()
-            .next()
-            .ok_or_else(|| AppError::App(crate::services::app_registry::AppsError::NotFound(name.to_string())))?;
+        let row = rows.into_iter().next().ok_or_else(|| {
+            AppError::App(crate::services::app_registry::AppsError::NotFound(
+                name.to_string(),
+            ))
+        })?;
 
         AppEntity::try_from(row)
     }
@@ -127,19 +130,26 @@ impl AppRepository for SupabaseAppRepository {
     #[instrument(skip(self, app),fields(name = %app.name))]
     async fn insert(&self, app: &CreateApp) -> Result<AppEntity, AppError> {
         if self.exists(&app.name).await? {
-            return Err(AppError::App(crate::services::app_registry::AppsError::AlreadyExists(app.name.clone())));
+            return Err(AppError::App(
+                crate::services::app_registry::AppsError::AlreadyExists(app.name.clone()),
+            ));
         }
 
         let row = InsertAppRow::from(app);
         let url = self.client.rest_url(TABLE_APPS);
         debug!(url = %url, "Inserting app");
 
-        let rows: Vec<AppRow> = self.client.post(&url, &row).await.map_err(Self::map_error)?;
+        let rows: Vec<AppRow> = self
+            .client
+            .post(&url, &row)
+            .await
+            .map_err(Self::map_error)?;
 
-        let app_row = rows
-            .into_iter()
-            .next()
-            .ok_or_else(|| AppError::Internal(crate::http_api::utils::InternalError::new("No row returned".to_string())))?;
+        let app_row = rows.into_iter().next().ok_or_else(|| {
+            AppError::Internal(crate::http_api::utils::InternalError::new(
+                "No row returned".to_string(),
+            ))
+        })?;
 
         let created = AppEntity::try_from(app_row)?;
         info!(app_id = created.id, "App created");
@@ -164,12 +174,17 @@ impl AppRepository for SupabaseAppRepository {
         let url = self.client.rest_url_with_query(TABLE_APPS, &query);
         debug!(url = %url, "Updating app");
 
-        let rows: Vec<AppRow> = self.client.patch(&url, &row).await.map_err(Self::map_error)?;
+        let rows: Vec<AppRow> = self
+            .client
+            .patch(&url, &row)
+            .await
+            .map_err(Self::map_error)?;
 
-        let app_row = rows
-            .into_iter()
-            .next()
-            .ok_or_else(|| AppError::App(crate::services::app_registry::AppsError::NotFound(name.to_string())))?;
+        let app_row = rows.into_iter().next().ok_or_else(|| {
+            AppError::App(crate::services::app_registry::AppsError::NotFound(
+                name.to_string(),
+            ))
+        })?;
 
         let updated = AppEntity::try_from(app_row)?;
         info!(app_id = updated.id, "App updated");

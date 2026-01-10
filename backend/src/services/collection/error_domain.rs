@@ -51,7 +51,9 @@ impl CollectionError {
 
     /// Create a DvdNotFound error
     pub fn dvd_not_found(dvd_id: impl Into<String>) -> Self {
-        Self::DvdNotFound { dvd_id: dvd_id.into() }
+        Self::DvdNotFound {
+            dvd_id: dvd_id.into(),
+        }
     }
 
     /// Create a DvdDuplicate error
@@ -62,12 +64,16 @@ impl CollectionError {
     /// Create a UserNotFound error
     #[allow(dead_code)]
     pub fn user_not_found(user_id: impl Into<String>) -> Self {
-        Self::UserNotFound { user_id: user_id.into() }
+        Self::UserNotFound {
+            user_id: user_id.into(),
+        }
     }
 
     /// Create a StorageError
     pub fn storage_error(message: impl Into<String>) -> Self {
-        Self::StorageError { message: message.into() }
+        Self::StorageError {
+            message: message.into(),
+        }
     }
 }
 
@@ -83,5 +89,3 @@ impl fmt::Display for CollectionError {
 }
 
 impl std::error::Error for CollectionError {}
-
-

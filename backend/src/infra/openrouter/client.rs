@@ -103,7 +103,7 @@ impl OpenRouterClient {
             .ok_or_else(|| IntelloError::external("OpenRouter", "No response content"))?;
 
         Ok(AiGenerationResult {
-           content,
+            content,
             model: model_to_use.to_string(),
             usage: chat_response.usage,
         })

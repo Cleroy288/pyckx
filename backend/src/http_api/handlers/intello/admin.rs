@@ -8,8 +8,8 @@ use std::collections::HashMap;
 use std::env;
 use tracing::info;
 
-use crate::http_api::data_transfer_object::intello::admin::{AdminStatsResponse, FeatureStats};
 use crate::app::App;
+use crate::http_api::data_transfer_object::intello::admin::{AdminStatsResponse, FeatureStats};
 
 /// Get admin email from environment variable
 fn get_admin_email() -> String {
@@ -80,7 +80,9 @@ pub async fn get_admin_stats(app: Data<App>, req: HttpRequest) -> impl Responder
     // Group by feature type
     let mut by_feature: HashMap<String, (i64, f64, i64, i64)> = HashMap::new();
     for log in &usage_logs {
-        let entry = by_feature.entry(log.feature_type.clone()).or_insert((0, 0.0, 0, 0));
+        let entry = by_feature
+            .entry(log.feature_type.clone())
+            .or_insert((0, 0.0, 0, 0));
         entry.0 += 1;
         entry.1 += log.total_cost_usd;
         entry.2 += log.input_tokens as i64;
@@ -89,44 +91,61 @@ pub async fn get_admin_stats(app: Data<App>, req: HttpRequest) -> impl Responder
 
     let mut by_feature_type: Vec<FeatureStats> = by_feature
         .into_iter()
-        .map(|(feature_type, (count, total_cost, input_tokens, output_tokens))| {
-            FeatureStats {
+        .map(
+            |(feature_type, (count, total_cost, input_tokens, output_tokens))| FeatureStats {
                 feature_type,
                 count,
                 total_cost_usd: total_cost,
-                avg_cost_usd: if count > 0 { total_cost / count as f64 } else { 0.0 },
+                avg_cost_usd: if count > 0 {
+                    total_cost / count as f64
+                } else {
+                    0.0
+                },
                 total_input_tokens: input_tokens,
                 total_output_tokens: output_tokens,
-            }
-        })
+            },
+        )
         .collect();
 
     // Sort by total cost descending
-    by_feature_type.sort_by(|a, b| b.total_cost_usd.partial_cmp(&a.total_cost_usd).unwrap_or(std::cmp::Ordering::Equal));
+    by_feature_type.sort_by(|a, b| {
+        b.total_cost_usd
+            .partial_cmp(&a.total_cost_usd)
+            .unwrap_or(std::cmp::Ordering::Equal)
+    });
 
     // Group by model
     let mut by_model_map: HashMap<String, (i64, f64, i64, i64)> = HashMap::new();
     for log in &usage_logs {
-        let entry = by_model_map.entry(log.model_id.clone()).or_insert((0, 0.0, 0, 0));
+        let entry = by_model_map
+            .entry(log.model_id.clone())
+            .or_insert((0, 0.0, 0, 0));
         entry.0 += 1;
         entry.1 += log.total_cost_usd;
         entry.2 += log.input_tokens as i64;
         entry.3 += log.output_tokens as i64;
     }
 
-    let mut by_model: Vec<crate::http_api::data_transfer_object::intello::admin::ModelStats> = by_model_map
-        .into_iter()
-        .map(|(model_id, (count, total_cost, input_tokens, output_tokens))| {
-            crate::http_api::data_transfer_object::intello::admin::ModelStats {
-                model_id,
-                count,
-                total_cost_usd: total_cost,
-                avg_cost_usd: if count > 0 { total_cost / count as f64 } else { 0.0 },
-                total_input_tokens: input_tokens,
-                total_output_tokens: output_tokens,
-            }
-        })
-        .collect();
+    let mut by_model: Vec<crate::http_api::data_transfer_object::intello::admin::ModelStats> =
+        by_model_map
+            .into_iter()
+            .map(
+                |(model_id, (count, total_cost, input_tokens, output_tokens))| {
+                    crate::http_api::data_transfer_object::intello::admin::ModelStats {
+                        model_id,
+                        count,
+                        total_cost_usd: total_cost,
+                        avg_cost_usd: if count > 0 {
+                            total_cost / count as f64
+                        } else {
+                            0.0
+                        },
+                        total_input_tokens: input_tokens,
+                        total_output_tokens: output_tokens,
+                    }
+                },
+            )
+            .collect();
 
     // Sort by count descending (most used first)
     by_model.sort_by(|a, b| b.count.cmp(&a.count));

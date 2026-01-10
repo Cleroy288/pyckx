@@ -1,14 +1,10 @@
-
 // ** build_ideas_extraction_prompt **
 // ==> Builds AI prompt for extracting user demand ideas
 //
 // @ user_topic : User's raw topic/request
 // @ resources_content : Optional source documents
 // @ returns : Formatted prompt string for AI
-pub fn build_ideas_extraction_prompt(
-    user_topic: &str,
-    resources_content: Option<&str>,
-) -> String {
+pub fn build_ideas_extraction_prompt(user_topic: &str, resources_content: Option<&str>) -> String {
     // Step 1: Build resources section if provided
     let resources_section = if let Some(resources) = resources_content {
         format!("\n\n## Source Materials\n\n{}", resources)
@@ -61,4 +57,3 @@ Respond with ONLY valid JSON:
         resources_section = resources_section
     )
 }
-

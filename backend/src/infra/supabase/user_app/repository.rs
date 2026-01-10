@@ -8,10 +8,10 @@
  */
 
 use super::types::{InsertUserAppRow, UserAppRow};
-use crate::services::app_registry::registry_domain::UserApp;
-use crate::shared::AppError;
 use crate::infra::database::UserAppRepository;
 use crate::infra::supabase::shared::{SupabaseError, SupabaseHttpClient};
+use crate::services::app_registry::registry_domain::UserApp;
+use crate::shared::AppError;
 use async_trait::async_trait;
 use serde::Deserialize;
 use std::sync::Arc;
@@ -65,10 +65,12 @@ impl UserAppRepository for SupabaseUserAppRepository {
     #[instrument(skip(self), fields(user_id = %user_id, app_id = %app_id))]
     async fn add_app(&self, user_id: &str, app_id: i32) -> Result<UserApp, AppError> {
         if self.has_app(user_id, app_id).await? {
-            return Err(AppError::App(crate::services::app_registry::AppsError::UserAppAlreadyAdded {
-                user_id: user_id.to_string(),
-                app_name: format!("app_id:{}", app_id),
-            }));
+            return Err(AppError::App(
+                crate::services::app_registry::AppsError::UserAppAlreadyAdded {
+                    user_id: user_id.to_string(),
+                    app_name: format!("app_id:{}", app_id),
+                },
+            ));
         }
 
         let row = InsertUserAppRow {
@@ -78,11 +80,16 @@ impl UserAppRepository for SupabaseUserAppRepository {
         let url = self.client.rest_url(TABLE_USER_APPS);
         debug!(url = %url, "Adding user app");
 
-        let rows: Vec<UserAppRow> = self.client.post(&url, &row).await.map_err(Self::map_error)?;
-        let user_app_row = rows
-            .into_iter()
-            .next()
-            .ok_or_else(|| AppError::Internal(crate::http_api::utils::InternalError::new("No row returned".to_string())))?;
+        let rows: Vec<UserAppRow> = self
+            .client
+            .post(&url, &row)
+            .await
+            .map_err(Self::map_error)?;
+        let user_app_row = rows.into_iter().next().ok_or_else(|| {
+            AppError::Internal(crate::http_api::utils::InternalError::new(
+                "No row returned".to_string(),
+            ))
+        })?;
 
         let user_app = UserApp::try_from(user_app_row)?;
         info!(user_app_id = user_app.id, "User app added");

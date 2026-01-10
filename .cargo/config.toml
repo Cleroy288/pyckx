@@ -1,0 +1,11 @@
+# Cargo config for faster builds
+# Note: zld is no longer maintained. Apple's default linker (Xcode 15+) is fast.
+# If you want to try lld: brew install llvm && use path below
+
+[build]
+# Faster incremental builds
+incremental = true
+
+# Uncomment to use lld from LLVM (optional, requires: brew install llvm)
+# [target.aarch64-apple-darwin]
+# rustflags = ["-C", "link-arg=-fuse-ld=/opt/homebrew/opt/llvm/bin/ld.lld"]

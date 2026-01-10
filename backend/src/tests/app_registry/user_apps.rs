@@ -1,10 +1,11 @@
 //! User apps tests - add/remove apps for users
 
 use super::helpers::load_test_config;
-use crate::shared::AppError;
 use crate::infra::{
-    AppRepository, CreateApp, SupabaseAppRepository, SupabaseHttpClient, SupabaseUserAppRepository, UserAppRepository,
+    AppRepository, CreateApp, SupabaseAppRepository, SupabaseHttpClient, SupabaseUserAppRepository,
+    UserAppRepository,
 };
+use crate::shared::AppError;
 use std::sync::Arc;
 
 /// Test user app operations (using app_id)
@@ -31,10 +32,7 @@ async fn test_user_app_lifecycle() {
     let app_repo = SupabaseAppRepository::new(http_client.clone());
     let user_app_repo = SupabaseUserAppRepository::new(http_client);
 
-    let test_app_name = format!(
-        "test_user_app_{}",
-        &uuid::Uuid::new_v4().to_string()[..8]
-    );
+    let test_app_name = format!("test_user_app_{}", &uuid::Uuid::new_v4().to_string()[..8]);
     let create = CreateApp::new(&test_app_name, Some("Test user app".to_string()));
     let app = app_repo
         .insert(&create)

@@ -1,6 +1,6 @@
 use crate::services::intello::course::domain::{ParsedSection, SectionPlan};
-use crate::services::intello::course::prompt::build_section_prompt;
 use crate::services::intello::course::parser::parse_generated_section;
+use crate::services::intello::course::prompt::build_section_prompt;
 use crate::services::intello::error_domain::IntelloError;
 use crate::services::intello::IntelloService;
 use tracing::{info, instrument};
@@ -33,27 +33,35 @@ impl IntelloService {
             .openrouter_client
             .send_chat_request(&prompt, None)
             .await?;
-        
+
         // Step 2b: Track AI usage
         if let Some(usage) = &ai_result.usage {
             self.try_log_ai_usage(
-                user_id, 
-                &ai_result.model, 
-                "course_section_generation", 
-                usage.prompt_tokens, 
-                usage.completion_tokens
-            ).await;
+                user_id,
+                &ai_result.model,
+                "course_section_generation",
+                usage.prompt_tokens,
+                usage.completion_tokens,
+            )
+            .await;
         }
 
-        info!(response_len = ai_result.content.len(), "AI response received");
+        info!(
+            response_len = ai_result.content.len(),
+            "AI response received"
+        );
 
         // Step 3: Parse AI response
         let mut section = parse_generated_section(&ai_result.content)?;
-        
+
         // Step 4: Set order from plan
         section.order = section_plan.order;
-        
-        info!(blocks = section.content_blocks.len(), qcm_questions = section.qcm_set.questions.len(), "Section generated");
+
+        info!(
+            blocks = section.content_blocks.len(),
+            qcm_questions = section.qcm_set.questions.len(),
+            "Section generated"
+        );
 
         // Step 5: Return parsed section
         Ok(section)

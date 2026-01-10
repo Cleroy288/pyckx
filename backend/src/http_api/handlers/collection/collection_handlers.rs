@@ -2,14 +2,14 @@
 //!
 //! Create, get, delete collection operations.
 
+use crate::app::App;
 use crate::http_api::data_transfer_object::{
     CollectionItemsResponse, CollectionListResponse, CollectionSuccessResponse,
     CreateCollectionRequest, DeleteResponse,
 };
-use crate::app::App;
+use crate::infra::user::get_user_id_from_session;
 use crate::services::collection::collection_domain::CollectionItemType;
 use crate::shared::{AppError, AppResult};
-use crate::infra::user::get_user_id_from_session;
 use actix_web::{delete, get, post, web, HttpRequest, HttpResponse};
 use tracing::instrument;
 
@@ -41,7 +41,10 @@ pub async fn create_collection_handler(
 /// Get all collections for the current user.
 #[get("")]
 #[instrument(skip(app, req))]
-pub async fn get_collections_handler(app: web::Data<App>, req: HttpRequest) -> AppResult<HttpResponse> {
+pub async fn get_collections_handler(
+    app: web::Data<App>,
+    req: HttpRequest,
+) -> AppResult<HttpResponse> {
     let user_id = get_user_id_from_session(&app, &req)?;
     let collections = app
         .collection_service

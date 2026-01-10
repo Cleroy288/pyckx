@@ -27,7 +27,12 @@ impl TryFrom<UserAppRow> for UserApp {
 
         let created_at = match row.created_at {
             Some(ts) => DateTime::parse_from_rfc3339(&ts)
-                .map_err(|e| AppError::Internal(crate::http_api::utils::InternalError::new(format!("Invalid created_at: {}", e))))?
+                .map_err(|e| {
+                    AppError::Internal(crate::http_api::utils::InternalError::new(format!(
+                        "Invalid created_at: {}",
+                        e
+                    )))
+                })?
                 .with_timezone(&Utc),
             None => Utc::now(),
         };

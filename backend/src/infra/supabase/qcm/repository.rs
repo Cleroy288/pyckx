@@ -12,10 +12,10 @@
 use super::types::{
     level_from_db, level_to_db, InsertQcmQuestionRow, QcmQuestionRow, QcmSetRow, UpdateQcmSetRow,
 };
-use crate::services::intello::{QcmQuestion, QcmSet};
-use crate::services::intello::error_domain::IntelloError;
 use crate::infra::database::QcmRepository;
 use crate::infra::supabase::shared::{SupabaseError, SupabaseHttpClient};
+use crate::services::intello::error_domain::IntelloError;
+use crate::services::intello::{QcmQuestion, QcmSet};
 use async_trait::async_trait;
 use std::sync::Arc;
 use tracing::{debug, info, instrument};

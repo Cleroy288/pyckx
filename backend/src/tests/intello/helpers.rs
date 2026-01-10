@@ -1,17 +1,15 @@
 //! Intello test helpers
 
-use crate::services::intello::ai_usage_domain::{AiUsageLog, CreateAiUsageLog};
+use crate::infra::{AiUsageRepository, GameSetRepository, OpenQuestionRepository, QcmRepository};
+use crate::services::intello::ai_usage::ai_usage_domain::{AiUsageLog, CreateAiUsageLog};
+use crate::services::intello::error_domain::IntelloError;
+use crate::services::intello::types_domain::IntelloService;
 use crate::services::intello::{
-    FillBlankSet, FlashcardSet, KeywordSet, 
-    OpenQuestionSet, OrderPhraseSet, 
-    QcmSet, TrueOrFalseSet,
+    FillBlankSet, FlashcardSet, KeywordSet, OpenQuestionSet, OrderPhraseSet, QcmSet, TrueOrFalseSet,
 };
 use crate::shared::AppError;
-use crate::services::intello::types_domain::IntelloService;
-use crate::services::intello::error_domain::IntelloError;
-use crate::infra::{AiUsageRepository, GameSetRepository, OpenQuestionRepository, QcmRepository};
 // OpenRouterClient is accessed via create_test_service
-use crate::services::intello::open_question_cache_service::OpenQuestionCache;
+use crate::services::intello::games::open_question::open_question_cache_service::OpenQuestionCache;
 use async_trait::async_trait;
 use std::sync::{Arc, Mutex};
 
@@ -325,23 +323,30 @@ pub struct StubStudySessionRepository;
 impl crate::infra::StudySessionRepository for StubStudySessionRepository {
     async fn create(
         &self,
-        session: &crate::services::intello::study_session_domain::StudySession,
-    ) -> Result<crate::services::intello::study_session_domain::StudySession, AppError> {
+        session: &crate::services::intello::study_session::study_session_domain::StudySession,
+    ) -> Result<crate::services::intello::study_session::study_session_domain::StudySession, AppError>
+    {
         Ok(session.clone())
     }
 
     async fn list_by_course(
         &self,
         _course_id: &str,
-    ) -> Result<Vec<crate::services::intello::study_session_domain::StudySession>, AppError> {
+    ) -> Result<
+        Vec<crate::services::intello::study_session::study_session_domain::StudySession>,
+        AppError,
+    > {
         Ok(vec![])
     }
 
     async fn get(
         &self,
         _session_id: &str,
-    ) -> Result<crate::services::intello::study_session_domain::StudySession, AppError> {
-        Err(AppError::Internal(crate::http_api::utils::InternalError::new("Not implemented in stub".to_string())))
+    ) -> Result<crate::services::intello::study_session::study_session_domain::StudySession, AppError>
+    {
+        Err(AppError::Internal(
+            crate::http_api::utils::InternalError::new("Not implemented in stub".to_string()),
+        ))
     }
 
     async fn save_session_content(
@@ -386,10 +391,9 @@ pub fn stub_intello_repositories() -> crate::services::intello::types_domain::In
 pub fn create_test_service() -> IntelloService {
     IntelloService::builder()
         .with_repositories(stub_intello_repositories())
-        .with_openrouter(Arc::new(crate::infra::openrouter::OpenRouterClient::with_google_key(
-            String::new(),
-            None,
-        )))
+        .with_openrouter(Arc::new(
+            crate::infra::openrouter::OpenRouterClient::with_google_key(String::new(), None),
+        ))
         .with_cache(Arc::new(OpenQuestionCache::new()))
         .build()
         .expect("Test IntelloService setup should not fail")

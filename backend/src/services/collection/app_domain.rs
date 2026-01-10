@@ -1,7 +1,7 @@
 //! CollectionApp - App instance for managing collections
 
-use crate::services::app_registry::registry_domain::{AppInstance, AppModule};
 use super::collection_domain::CollectionItemType;
+use crate::services::app_registry::registry_domain::{AppInstance, AppModule};
 
 // == COLLECTION APP METADATA // ==
 
@@ -60,5 +60,3 @@ impl AppModule for CollectionApp {
 }
 
 // == UNIT TESTS // ==
-
-

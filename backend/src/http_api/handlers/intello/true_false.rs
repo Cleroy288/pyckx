@@ -1,13 +1,13 @@
 //! True or False handlers - API endpoints for True/False game
 
 use super::helpers::parse_multipart;
+use crate::app::App;
 use crate::http_api::data_transfer_object::intello::{
     CreateTrueOrFalseRequest, CreateTrueOrFalseResponse, TrueOrFalseSetListResponse,
     TrueOrFalseSetWithStatementsResponse, TrueOrFalseStatementResponse,
 };
-use crate::app::App;
-use crate::shared::{AppError, AppResult};
 use crate::infra::user::get_user_id_from_session;
+use crate::shared::{AppError, AppResult};
 use actix_multipart::Multipart;
 use actix_web::{get, post, web, HttpRequest, HttpResponse};
 use tracing::instrument;
@@ -43,7 +43,10 @@ pub async fn create_true_false_handler(
     };
 
     // Call service directly
-    let true_false_set = app.intello_service.generate_ai_true_false(&user_id, service_input).await?;
+    let true_false_set = app
+        .intello_service
+        .generate_ai_true_false(&user_id, service_input)
+        .await?;
 
     // Build response
     let statement_responses: Vec<TrueOrFalseStatementResponse> = true_false_set

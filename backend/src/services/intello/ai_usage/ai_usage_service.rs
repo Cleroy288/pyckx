@@ -3,9 +3,9 @@
 use tracing::{info, instrument, warn};
 
 use super::ai_usage_domain::{AiUsageLog, CreateAiUsageLog};
+use crate::infra::openrouter::calculate_cost;
 use crate::services::intello::error_domain::IntelloError;
 use crate::services::intello::IntelloService;
-use crate::infra::openrouter::calculate_cost;
 
 impl IntelloService {
     // ** log_ai_usage **

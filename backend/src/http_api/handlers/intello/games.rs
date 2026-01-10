@@ -1,7 +1,7 @@
 //! Games handler
 
-use crate::http_api::data_transfer_object::intello::{AvailableGamesResponse, GameResponse};
 use crate::app::App;
+use crate::http_api::data_transfer_object::intello::{AvailableGamesResponse, GameResponse};
 use actix_web::{get, web, HttpResponse};
 use tracing::instrument;
 

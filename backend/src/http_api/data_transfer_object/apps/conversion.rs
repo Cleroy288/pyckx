@@ -1,7 +1,9 @@
 //! Apps DTO Conversions
 
+use super::response::{
+    AppListResponse, AppResponse, AppSuccessResponse, UserAppResponse, UserAppSuccessResponse,
+};
 use crate::services::app_registry::registry_domain::{App as AppEntity, UserApp};
-use super::response::{AppResponse, AppListResponse, UserAppResponse, AppSuccessResponse, UserAppSuccessResponse};
 
 impl From<AppEntity> for AppResponse {
     fn from(app: AppEntity) -> Self {

@@ -1,8 +1,8 @@
 //! DVD edge case tests - error handling for non-existent DVDs
 
 use super::helpers::load_test_config;
-use crate::services::collection::error_domain::CollectionError;
 use crate::infra::{DvdRepository, SupabaseDvdRepository, SupabaseHttpClient, UpdateDvd};
+use crate::services::collection::error_domain::CollectionError;
 use std::sync::Arc;
 
 /// Test that non-existent DVD returns proper error
@@ -100,5 +100,8 @@ async fn test_delete_nonexistent_dvd() {
     let result = repo.delete(&user_id, &fake_id).await;
 
     assert!(result.is_ok(), "Delete should not error");
-    assert!(!result.unwrap(), "Delete should return false for non-existent DVD");
+    assert!(
+        !result.unwrap(),
+        "Delete should return false for non-existent DVD"
+    );
 }

@@ -8,9 +8,9 @@ use crate::services::intello::error_domain::IntelloError;
 use crate::services::intello::types_domain::{GenerateContentInput, IntelloService};
 use crate::services::intello::SetId;
 
-use crate::services::intello::crud::crud_service;
 use super::domain::KeywordSet;
 use super::prompt::{build_keywords_prompt, KeywordsPromptInput};
+use crate::services::intello::crud::crud_service;
 
 impl IntelloService {
     // ** get_user_keyword_sets **
@@ -44,7 +44,10 @@ impl IntelloService {
         // Step 1: Validate user ID and generation input
         self.validate_user_id(user_id)?;
         self.validate_generation_input(&input)?;
-        info!(num_questions = input.num_questions, "Generating AI keyword questions");
+        info!(
+            num_questions = input.num_questions,
+            "Generating AI keyword questions"
+        );
 
         // Step 2: Build prompt input from generation parameters
         let prompt_input = KeywordsPromptInput {
@@ -64,7 +67,10 @@ impl IntelloService {
 
         // Step 3: Build prompt and send request to AI service
         let prompt = build_keywords_prompt(&prompt_input);
-        let ai_result = self.openrouter_client.send_chat_request(&prompt, None).await?;
+        let ai_result = self
+            .openrouter_client
+            .send_chat_request(&prompt, None)
+            .await?;
 
         // Step 4: Parse AI response into keyword questions
         let questions = super::parser::parse_keywords_response(&ai_result.content)?;
@@ -80,7 +86,10 @@ impl IntelloService {
             )
             .await;
         }
-        info!(generated = questions.len(), "AI keyword questions generated");
+        info!(
+            generated = questions.len(),
+            "AI keyword questions generated"
+        );
 
         // Step 6: Build and store the keyword set
         let keyword_set = KeywordSet {

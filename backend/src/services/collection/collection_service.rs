@@ -28,7 +28,10 @@ impl CollectionService {
         item_type: CollectionItemType,
     ) -> AppResult<bool> {
         // First, find the collection to get its ID
-        let collection = self.collection_repo.find_by_type(user_id, item_type).await?;
+        let collection = self
+            .collection_repo
+            .find_by_type(user_id, item_type)
+            .await?;
 
         if let Some(coll) = collection {
             // Delete all items in the collection first (only DVDs supported)
@@ -60,7 +63,10 @@ impl CollectionService {
         user_id: &str,
         item_type: CollectionItemType,
     ) -> AppResult<UserCollection> {
-        let collection = self.collection_repo.get_or_create(user_id, item_type).await?;
+        let collection = self
+            .collection_repo
+            .get_or_create(user_id, item_type)
+            .await?;
         Ok(collection)
     }
 }

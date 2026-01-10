@@ -1,7 +1,7 @@
-use crate::services::intello::error_domain::IntelloError;
+use crate::http_api::data_transfer_object::intello::course::CourseModule;
 use crate::infra::openrouter::OpenRouterClient;
 use crate::infra::openrouter::DEFAULT_MODEL;
-use crate::http_api::data_transfer_object::intello::course::CourseModule;
+use crate::services::intello::error_domain::IntelloError;
 use serde::{Deserialize, Serialize};
 use tracing::{error, info};
 
@@ -22,7 +22,6 @@ pub struct LearnModeDemand {
     pub language: String,
 
     // == EXTENDED CONTEXT FROM PERSISTENCE ==
-
     /// Structured extracted knowledge (Stage 1)
     pub extracted_knowledge: Option<serde_json::Value>,
     /// Expanded AI knowledge text (Stage 0.5)
@@ -50,7 +49,10 @@ fn build_learn_mode_prompt(demand: &LearnModeDemand) -> String {
     };
 
     let extracted_context = if let Some(ref ex) = demand.extracted_knowledge {
-        format!("\nSTRUCTURED CONCEPTS:\n{}\n", serde_json::to_string_pretty(ex).unwrap_or_default())
+        format!(
+            "\nSTRUCTURED CONCEPTS:\n{}\n",
+            serde_json::to_string_pretty(ex).unwrap_or_default()
+        )
     } else {
         String::new()
     };
@@ -148,7 +150,10 @@ pub async fn generate_learn_content(
         IntelloError::validation("learn_mode_generation", format!("Invalid JSON: {}", e))
     })?;
 
-    info!("Successfully generated Learn Mode module: '{}'", module.title);
+    info!(
+        "Successfully generated Learn Mode module: '{}'",
+        module.title
+    );
 
     Ok(module)
 }

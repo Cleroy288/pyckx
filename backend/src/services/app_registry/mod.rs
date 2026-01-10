@@ -5,11 +5,11 @@
 //! - Service: `registry_service.rs`
 
 // Domain modules
-pub mod registry_domain;
 pub mod error_domain;
+pub mod registry_domain;
 
 // Service logic
-mod registry_service;
+pub mod registry_service;
 
 // Re-exports
 pub use error_domain::AppError as AppsError;

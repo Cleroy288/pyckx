@@ -27,11 +27,11 @@ where
     D: Deserializer<'de>,
 {
     let value = Value::deserialize(deserializer)?;
-    
+
     match value {
         // Standard case: already a string
         Value::String(s) => Ok(s),
-        
+
         // LLM split text into array - join with markdown paragraph breaks
         Value::Array(arr) => {
             let joined = arr
@@ -41,18 +41,17 @@ where
                 .join("\n\n");
             Ok(joined)
         }
-        
+
         // Graceful degradation: stringify numbers and bools
         Value::Number(n) => Ok(n.to_string()),
         Value::Bool(b) => Ok(b.to_string()),
-        
+
         // Null becomes empty string
         Value::Null => Ok(String::new()),
-        
+
         // Objects are unexpected but stringify for debugging
         Value::Object(_) => Err(serde::de::Error::custom(
-            "Expected String or Array of Strings, got Object"
+            "Expected String or Array of Strings, got Object",
         )),
     }
 }
-

@@ -1,7 +1,7 @@
 //! Get apps handlers
 
-use crate::http_api::data_transfer_object::{AppListResponse, AppResponse};
 use crate::app::App;
+use crate::http_api::data_transfer_object::{AppListResponse, AppResponse};
 use crate::shared::AppResult;
 use actix_web::{get, web, HttpResponse};
 use tracing::instrument;
@@ -19,7 +19,10 @@ pub async fn get_all_apps_handler(app: web::Data<App>) -> AppResult<HttpResponse
 /// Get app by name
 #[get("/{name}")]
 #[instrument(skip(app), fields(name = %path.as_str()))]
-pub async fn get_app_handler(app: web::Data<App>, path: web::Path<String>) -> AppResult<HttpResponse> {
+pub async fn get_app_handler(
+    app: web::Data<App>,
+    path: web::Path<String>,
+) -> AppResult<HttpResponse> {
     let name = path.into_inner();
     let app_entity = app.app_service.get_app(&name).await?;
     Ok(HttpResponse::Ok().json(AppResponse::from(app_entity)))

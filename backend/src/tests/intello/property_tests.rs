@@ -10,14 +10,14 @@ use super::helpers::{
     StubKeywordsRepository, StubOpenQuestionRepository, StubOrderPhraseRepository,
     StubQcmRepository, StubStudySessionRepository, StubTrueOrFalseRepository,
 };
-use crate::services::intello::QcmQuestion;
-use crate::services::intello::QcmSet;
-use crate::services::intello::enums_domain::Level;
-use crate::services::intello::error_domain::IntelloError;
 use crate::http_api::data_transfer_object::intello::CreateQcmSetRequest;
 use crate::infra::database::QcmRepository;
+use crate::services::intello::error_domain::IntelloError;
+use crate::services::intello::games::open_question::open_question_cache_service::OpenQuestionCache;
+use crate::services::intello::Level;
+use crate::services::intello::QcmQuestion;
+use crate::services::intello::QcmSet;
 use crate::services::intello::{IntelloRepositories, IntelloService};
-use crate::services::intello::open_question_cache_service::OpenQuestionCache;
 
 /// Create a test IntelloService with stub repositories
 fn create_test_intello_service() -> IntelloService {
@@ -37,10 +37,9 @@ fn create_test_intello_service() -> IntelloService {
 
     IntelloService::builder()
         .with_repositories(repos)
-        .with_openrouter(Arc::new(crate::infra::openrouter::OpenRouterClient::with_google_key(
-            String::new(),
-            None,
-        )))
+        .with_openrouter(Arc::new(
+            crate::infra::openrouter::OpenRouterClient::with_google_key(String::new(), None),
+        ))
         .with_cache(Arc::new(OpenQuestionCache::new()))
         .build()
         .expect("Test IntelloService setup should not fail")
@@ -118,7 +117,16 @@ fn arb_qcm_set() -> impl Strategy<Value = QcmSet> {
         prop::collection::vec(arb_qcm_question(), 0..5),
     )
         .prop_map(
-            |(id, user_id, name, description, level, subjects, language, questions)| QcmSet {
+            |(id, user_id, name, description, level, subjects, language, questions): (
+                String,
+                String,
+                String,
+                String,
+                Level,
+                Vec<String>,
+                String,
+                Vec<QcmQuestion>,
+            )| QcmSet {
                 id: id.into(),
                 user_id: user_id.into(),
                 name,
@@ -295,7 +303,16 @@ fn arb_qcm_set_with_empty_name() -> impl Strategy<Value = QcmSet> {
         prop::collection::vec(arb_qcm_question(), 0..3),
     )
         .prop_map(
-            |(id, user_id, name, description, level, subjects, language, questions)| QcmSet {
+            |(id, user_id, name, description, level, subjects, language, questions): (
+                String,
+                String,
+                String,
+                String,
+                Level,
+                Vec<String>,
+                String,
+                Vec<QcmQuestion>,
+            )| QcmSet {
                 id: id.into(),
                 user_id: user_id.into(),
                 name,
@@ -326,7 +343,16 @@ fn arb_qcm_set_with_empty_description() -> impl Strategy<Value = QcmSet> {
         prop::collection::vec(arb_qcm_question(), 0..3),
     )
         .prop_map(
-            |(id, user_id, name, description, level, subjects, language, questions)| QcmSet {
+            |(id, user_id, name, description, level, subjects, language, questions): (
+                String,
+                String,
+                String,
+                String,
+                Level,
+                Vec<String>,
+                String,
+                Vec<QcmQuestion>,
+            )| QcmSet {
                 id: id.into(),
                 user_id: user_id.into(),
                 name,
@@ -374,7 +400,16 @@ fn arb_qcm_set_with_invalid_questions() -> impl Strategy<Value = QcmSet> {
         prop::collection::vec(arb_qcm_question_with_invalid_wrong_answers(), 1..3),
     )
         .prop_map(
-            |(id, user_id, name, description, level, subjects, language, questions)| QcmSet {
+            |(id, user_id, name, description, level, subjects, language, questions): (
+                String,
+                String,
+                String,
+                String,
+                Level,
+                Vec<String>,
+                String,
+                Vec<QcmQuestion>,
+            )| QcmSet {
                 id: id.into(),
                 user_id: user_id.into(),
                 name,

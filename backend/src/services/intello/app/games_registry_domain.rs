@@ -16,7 +16,11 @@ pub struct GameInstance {
 
 impl GameInstance {
     pub const fn new(id: &'static str, name: &'static str, description: &'static str) -> Self {
-        Self { id, name, description }
+        Self {
+            id,
+            name,
+            description,
+        }
     }
 }
 

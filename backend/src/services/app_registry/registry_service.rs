@@ -2,9 +2,9 @@
 //!
 //! Handles app CRUD operations, user app management, and registry validation.
 
-use crate::services::app_registry::registry_domain::{App, UserApp, AppInstance};
-use crate::services::app_registry::error_domain::AppError as AppsError;
 use crate::infra::{AppRepository, CreateApp, UpdateApp, UserAppRepository};
+use crate::services::app_registry::error_domain::AppError as AppsError;
+use crate::services::app_registry::registry_domain::{App, AppInstance, UserApp};
 use crate::shared::{AppError, AppResult};
 use std::fmt;
 use std::sync::Arc;
@@ -72,11 +72,7 @@ impl AppService {
 
     /// Create a new app
     #[instrument(skip(self), fields(name = %name))]
-    pub async fn create_app(
-        &self,
-        name: &str,
-        description: Option<String>,
-    ) -> AppResult<App> {
+    pub async fn create_app(&self, name: &str, description: Option<String>) -> AppResult<App> {
         let create = CreateApp::new(name, description);
         let app = self.app_repo.insert(&create).await?;
         info!(app_id = app.id, "App created");
@@ -85,11 +81,7 @@ impl AppService {
 
     /// Update an existing app
     #[instrument(skip(self), fields(name = %name))]
-    pub async fn update_app(
-        &self,
-        name: &str,
-        new_description: Option<String>,
-    ) -> AppResult<App> {
+    pub async fn update_app(&self, name: &str, new_description: Option<String>) -> AppResult<App> {
         let mut update = UpdateApp::new();
         if let Some(desc) = new_description {
             update = update.with_description(desc);

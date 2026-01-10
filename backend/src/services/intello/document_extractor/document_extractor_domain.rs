@@ -3,8 +3,8 @@
 //! Contains domain structures for document extraction functionality
 // ==> This file defines the core data structures used in document extraction
 
-use serde::{Deserialize, Serialize};
 use crate::services::intello::error_domain::IntelloError;
+use serde::{Deserialize, Serialize};
 
 // ** ExtractedContent **
 // Represents extracted content from a document with metadata
@@ -29,7 +29,10 @@ impl ExtractedContent {
     pub fn new(content: String) -> Self {
         // Rough token estimation: ~4 characters per token (common for English)
         let token_count = (content.len() as f64 / 4.0).ceil() as u32;
-        Self { content, token_count }
+        Self {
+            content,
+            token_count,
+        }
     }
 }
 

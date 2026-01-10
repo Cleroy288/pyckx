@@ -4,7 +4,7 @@
 
 mod admin;
 mod ai_generation;
-mod course_crud;       // Course & Resource CRUD (direct Supabase)
+mod course_crud; // Course & Resource CRUD (direct Supabase)
 mod course_generation; // AI course generation (no repository)
 mod fill_blank;
 mod flashcard;
@@ -14,7 +14,7 @@ mod keywords;
 mod open_question;
 mod order_phrase;
 mod qcm_handlers;
-mod resource_handlers;  // NEW: User resource management
+mod resource_handlers; // NEW: User resource management
 mod true_false;
 
 use actix_web::web;
@@ -52,24 +52,63 @@ pub fn init(cfg: &mut web::ServiceConfig) {
             .service(fill_blank::create_fill_blank_handler)
             .service(fill_blank::list_fill_blank_sets_handler)
             // Course Generation (AI - Block Protocol)
-            .route("/generate-course", web::post().to(course_generation::generate_course))
+            .route(
+                "/generate-course",
+                web::post().to(course_generation::generate_course),
+            )
             // Course CRUD (direct Supabase)
             .route("/courses", web::post().to(course_crud::create_course))
             .route("/courses", web::get().to(course_crud::list_courses))
-            .route("/courses/{id}", web::delete().to(course_crud::delete_course))
-            .route("/courses/{id}/resources", web::post().to(course_crud::upload_resource))
-            .route("/courses/{id}/resources", web::get().to(course_crud::get_resources))
+            .route(
+                "/courses/{id}",
+                web::delete().to(course_crud::delete_course),
+            )
+            .route(
+                "/courses/{id}/resources",
+                web::post().to(course_crud::upload_resource),
+            )
+            .route(
+                "/courses/{id}/resources",
+                web::get().to(course_crud::get_resources),
+            )
             // Session CRUD (direct Supabase)
-            .route("/courses/{id}/sessions", web::post().to(course_crud::create_session))
-            .route("/courses/{id}/sessions", web::get().to(course_crud::list_sessions))
-            .route("/courses/{course_id}/sessions/{session_id}", web::get().to(course_crud::get_session))
-            .route("/courses/{course_id}/sessions/{session_id}", web::delete().to(course_crud::delete_session))
+            .route(
+                "/courses/{id}/sessions",
+                web::post().to(course_crud::create_session),
+            )
+            .route(
+                "/courses/{id}/sessions",
+                web::get().to(course_crud::list_sessions),
+            )
+            .route(
+                "/courses/{course_id}/sessions/{session_id}",
+                web::get().to(course_crud::get_session),
+            )
+            .route(
+                "/courses/{course_id}/sessions/{session_id}",
+                web::delete().to(course_crud::delete_session),
+            )
             // User Resource Management
-            .route("/resources", web::get().to(resource_handlers::list_user_resources))
-            .route("/resources/check", web::get().to(resource_handlers::check_resource_exists))
-            .route("/resources", web::post().to(resource_handlers::create_user_resource))
-            .route("/resources/{id}", web::get().to(resource_handlers::get_resource_content))
-            .route("/courses/{id}/resources/link", web::post().to(resource_handlers::link_resource))
+            .route(
+                "/resources",
+                web::get().to(resource_handlers::list_user_resources),
+            )
+            .route(
+                "/resources/check",
+                web::get().to(resource_handlers::check_resource_exists),
+            )
+            .route(
+                "/resources",
+                web::post().to(resource_handlers::create_user_resource),
+            )
+            .route(
+                "/resources/{id}",
+                web::get().to(resource_handlers::get_resource_content),
+            )
+            .route(
+                "/courses/{id}/resources/link",
+                web::post().to(resource_handlers::link_resource),
+            )
             // Admin
             .service(admin::get_admin_stats),
     );

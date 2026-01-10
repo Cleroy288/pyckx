@@ -5,6 +5,6 @@ mod response;
 
 pub use request::CreateKeywordsRequest;
 pub use response::{
-    CreateKeywordsResponse, KeywordQuestionResponse, KeywordResponse,
-    KeywordSetListResponse, KeywordSetWithQuestionsResponse,
+    CreateKeywordsResponse, KeywordQuestionResponse, KeywordResponse, KeywordSetListResponse,
+    KeywordSetWithQuestionsResponse,
 };

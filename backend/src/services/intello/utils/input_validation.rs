@@ -4,8 +4,8 @@
 //! These functions ensure data integrity before business logic execution.
 
 use crate::services::intello::domain::types_domain::{GenerateContentInput, IntelloService};
-use crate::services::intello::QcmSet;
 use crate::services::intello::error_domain::IntelloError;
+use crate::services::intello::QcmSet;
 
 impl IntelloService {
     // ** validate_user_id **

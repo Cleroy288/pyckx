@@ -1,8 +1,8 @@
 pub mod block_parsers;
 // pub mod course_parser;
+pub mod ideas_parser;
 pub mod metadata_parser;
 pub mod module_parser;
-pub mod ideas_parser;
 pub mod plan_parser;
 pub mod section_parser;
 pub mod synthesis_parser;

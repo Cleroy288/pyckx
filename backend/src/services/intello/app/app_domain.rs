@@ -27,9 +27,7 @@ pub struct IntelloApp {
 
 impl IntelloApp {
     pub fn new() -> Self {
-        Self {
-            info: INTELLO_APP,
-        }
+        Self { info: INTELLO_APP }
     }
 }
 

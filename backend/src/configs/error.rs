@@ -32,7 +32,11 @@ impl fmt::Display for ConfigError {
             Self::MissingEnvVar { var_name } => {
                 write!(f, "Missing required environment variable: {}", var_name)
             }
-            Self::InvalidValue { var_name, expected, actual } => {
+            Self::InvalidValue {
+                var_name,
+                expected,
+                actual,
+            } => {
                 write!(
                     f,
                     "Invalid value for {}: expected {}, got '{}'",
@@ -74,7 +78,9 @@ mod tests {
 
     #[test]
     fn test_missing_env_var_error_display() {
-        let err = ConfigError::MissingEnvVar { var_name: "TEST_VAR" };
+        let err = ConfigError::MissingEnvVar {
+            var_name: "TEST_VAR",
+        };
         assert_eq!(
             err.to_string(),
             "Missing required environment variable: TEST_VAR"

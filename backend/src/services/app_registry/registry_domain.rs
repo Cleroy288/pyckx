@@ -26,7 +26,11 @@ pub struct AppInstance {
 impl AppInstance {
     /// Create a new app instance
     pub const fn new(id: AppId, name: &'static str, description: &'static str) -> Self {
-        Self { id, name, description }
+        Self {
+            id,
+            name,
+            description,
+        }
     }
 }
 
@@ -34,13 +38,13 @@ impl AppInstance {
 pub trait AppModule: Send + Sync {
     /// Get app metadata
     fn info(&self) -> &AppInstance;
-    
+
     /// Get the app ID
     #[allow(dead_code)]
     fn id(&self) -> AppId {
         self.info().id
     }
-    
+
     /// Get the app name
     fn name(&self) -> &'static str {
         self.info().name
@@ -106,5 +110,3 @@ impl UserApp {
         }
     }
 }
-
-

@@ -1,5 +1,5 @@
 //! DVD Domain - Entities for DVD management
-//! 
+//!
 //! This module contains the domain entities for the DVD collection system.
 
 use chrono::{DateTime, Utc};

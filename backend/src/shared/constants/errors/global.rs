@@ -3,13 +3,13 @@
 //! This is the main error type that all service errors convert to.
 //! It implements actix-web's ResponseError for HTTP responses.
 
-use crate::services::app_registry::error_domain::AppError as AppsError;
-use crate::services::intello::error_domain::IntelloError;
+use crate::http_api::utils::{InternalError, ValidationError};
 use crate::infra::session::SessionError;
 use crate::infra::supabase::SupabaseError;
-use crate::services::collection::error_domain::CollectionError;
+use crate::services::app_registry::error_domain::AppError as AppsError;
 use crate::services::auth::error_domain::AuthError;
-use crate::http_api::utils::{InternalError, ValidationError};
+use crate::services::collection::error_domain::CollectionError;
+use crate::services::intello::error_domain::IntelloError;
 use actix_web::http::StatusCode;
 use actix_web::{HttpResponse, ResponseError};
 use serde::Serialize;

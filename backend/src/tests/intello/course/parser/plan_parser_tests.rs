@@ -35,7 +35,7 @@ fn test_rejects_empty_sections() {
 
 #[test]
 fn test_rejects_section_without_concepts() {
-    let json =  r#"{
+    let json = r#"{
         "title": "Course",
         "subtitle": "Description",
         "sections": [{

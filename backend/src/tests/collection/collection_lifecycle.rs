@@ -1,8 +1,8 @@
 //! Collection lifecycle tests - CRUD operations
 
 use super::helpers::load_test_config;
-use crate::services::collection::collection_domain::CollectionItemType;
 use crate::infra::{CollectionRepository, SupabaseCollectionRepository, SupabaseHttpClient};
+use crate::services::collection::collection_domain::CollectionItemType;
 use std::sync::Arc;
 
 /// Test collection CRUD operations (create, read, exists, delete)
@@ -47,7 +47,10 @@ async fn test_collection_lifecycle() {
         .await
         .expect("Failed to get_or_create");
 
-    assert_eq!(same_collection.id, collection.id, "Should return same collection");
+    assert_eq!(
+        same_collection.id, collection.id,
+        "Should return same collection"
+    );
     println!("✓ get_or_create returned existing collection");
 
     // == 3. FIND BY USER ==
@@ -57,7 +60,10 @@ async fn test_collection_lifecycle() {
         .await
         .expect("Failed to find collections");
 
-    assert!(!collections.is_empty(), "Should have at least one collection");
+    assert!(
+        !collections.is_empty(),
+        "Should have at least one collection"
+    );
     println!("✓ Found {} collections", collections.len());
 
     // == 4. CHECK EXISTS ==

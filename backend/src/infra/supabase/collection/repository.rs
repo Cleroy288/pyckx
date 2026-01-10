@@ -7,10 +7,10 @@
  * Tables: user_collections, collection_types
  */
 
-use crate::services::collection::collection_domain::{CollectionItemType, UserCollection};
-use crate::services::collection::error_domain::CollectionError;
 use crate::infra::database::CollectionRepository;
 use crate::infra::supabase::shared::{SupabaseError, SupabaseHttpClient};
+use crate::services::collection::collection_domain::{CollectionItemType, UserCollection};
+use crate::services::collection::error_domain::CollectionError;
 use async_trait::async_trait;
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
@@ -145,16 +145,15 @@ impl SupabaseCollectionRepository {
         item_type: CollectionItemType,
     ) -> Result<i32, CollectionError> {
         let query = format!("name=eq.{}", item_type);
-        let url = self.client.rest_url_with_query(TABLE_COLLECTION_TYPES, &query);
+        let url = self
+            .client
+            .rest_url_with_query(TABLE_COLLECTION_TYPES, &query);
 
         let rows: Vec<CollectionTypeRow> = self.client.get(&url).await.map_err(Self::map_error)?;
 
-        rows.into_iter()
-            .next()
-            .map(|row| row.id)
-            .ok_or_else(|| {
-                CollectionError::storage_error(format!("Collection type not found: {}", item_type))
-            })
+        rows.into_iter().next().map(|row| row.id).ok_or_else(|| {
+            CollectionError::storage_error(format!("Collection type not found: {}", item_type))
+        })
     }
 }
 
@@ -192,12 +191,13 @@ impl CollectionRepository for SupabaseCollectionRepository {
                 info!(collection_id = collection.id, "Collection created");
                 Ok(collection)
             }
-            Err(SupabaseError::Http { status: 409, body: _ }) => {
-                Err(CollectionError::storage_error(format!(
-                    "Collection already exists for user {} and type {}",
-                    user_id, collection_type
-                )))
-            }
+            Err(SupabaseError::Http {
+                status: 409,
+                body: _,
+            }) => Err(CollectionError::storage_error(format!(
+                "Collection already exists for user {} and type {}",
+                user_id, collection_type
+            ))),
             Err(e) => Err(Self::map_error(e)),
         }
     }

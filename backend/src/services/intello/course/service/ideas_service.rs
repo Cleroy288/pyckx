@@ -1,6 +1,6 @@
 use crate::services::intello::course::domain::ExtractedIdeas;
-use crate::services::intello::course::prompt::build_ideas_extraction_prompt;
 use crate::services::intello::course::parser::parse_extracted_ideas;
+use crate::services::intello::course::prompt::build_ideas_extraction_prompt;
 use crate::services::intello::error_domain::IntelloError;
 use crate::services::intello::IntelloService;
 use tracing::{info, instrument};
@@ -31,26 +31,32 @@ impl IntelloService {
             .openrouter_client
             .send_chat_request(&prompt, None)
             .await?;
-        
+
         // Step 2b: Track AI usage
         if let Some(usage) = &ai_result.usage {
             self.try_log_ai_usage(
-                user_id, 
-                &ai_result.model, 
-                "course_ideas_extraction", 
-                usage.prompt_tokens, 
-                usage.completion_tokens
-            ).await;
+                user_id,
+                &ai_result.model,
+                "course_ideas_extraction",
+                usage.prompt_tokens,
+                usage.completion_tokens,
+            )
+            .await;
         }
 
-        info!(response_len = ai_result.content.len(), "AI response received");
+        info!(
+            response_len = ai_result.content.len(),
+            "AI response received"
+        );
 
         // Step 3: Parse AI response
         let ideas = parse_extracted_ideas(&ai_result.content)?;
-        info!(mandatory_topics = ideas.mandatory_topics.len(), "Ideas extracted");
+        info!(
+            mandatory_topics = ideas.mandatory_topics.len(),
+            "Ideas extracted"
+        );
 
         // Step 4: Return extracted ideas
         Ok(ideas)
     }
 }
-

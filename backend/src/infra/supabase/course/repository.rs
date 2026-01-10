@@ -11,10 +11,10 @@ use async_trait::async_trait;
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 
-use crate::services::intello::course::domain::{Course, ResourceSummary, UserResource};
-use crate::shared::AppError;
 use crate::infra::database::course::CourseRepository;
 use crate::infra::supabase::shared::{SupabaseError, SupabaseHttpClient};
+use crate::services::intello::course::domain::{Course, ResourceSummary, UserResource};
+use crate::shared::AppError;
 
 const TABLE_COURSES: &str = "intello_courses";
 const TABLE_RESOURCES: &str = "intello_user_resources";
@@ -70,10 +70,11 @@ impl CourseRepository for SupabaseCourseRepository {
             .post(&url, course)
             .await
             .map_err(Self::map_error)?;
-        created
-            .into_iter()
-            .next()
-            .ok_or_else(|| AppError::Internal(crate::http_api::utils::InternalError::new("No course returned".to_string())))
+        created.into_iter().next().ok_or_else(|| {
+            AppError::Internal(crate::http_api::utils::InternalError::new(
+                "No course returned".to_string(),
+            ))
+        })
     }
 
     async fn get_user_courses(&self, user_id: &str) -> Result<Vec<Course>, AppError> {
@@ -173,10 +174,11 @@ impl CourseRepository for SupabaseCourseRepository {
             .post(&url, &row)
             .await
             .map_err(Self::map_error)?;
-        let row = created
-            .into_iter()
-            .next()
-            .ok_or_else(|| AppError::Internal(crate::http_api::utils::InternalError::new("No resource returned".to_string())))?;
+        let row = created.into_iter().next().ok_or_else(|| {
+            AppError::Internal(crate::http_api::utils::InternalError::new(
+                "No resource returned".to_string(),
+            ))
+        })?;
         Ok(UserResource {
             id: row.id,
             user_id: row.user_id,
@@ -198,7 +200,10 @@ impl CourseRepository for SupabaseCourseRepository {
             resource_id: resource_id.to_string(),
         };
         let url = self.client.rest_url(TABLE_LINKS);
-        self.client.post::<(), _>(&url, &link).await.map_err(Self::map_error)?;
+        self.client
+            .post::<(), _>(&url, &link)
+            .await
+            .map_err(Self::map_error)?;
         Ok(())
     }
 

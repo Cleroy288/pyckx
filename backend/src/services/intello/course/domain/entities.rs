@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 /// Course entity
-/// 
+///
 /// A course is a container for learning resources and study sessions.
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Course {

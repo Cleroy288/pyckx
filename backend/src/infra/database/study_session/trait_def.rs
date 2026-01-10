@@ -14,7 +14,11 @@ pub trait StudySessionRepository: Send + Sync {
     async fn get(&self, session_id: &str) -> Result<StudySession, AppError>;
 
     /// Save generated content to a session
-    async fn save_session_content(&self, session_id: &str, content: &serde_json::Value) -> Result<(), AppError>;
+    async fn save_session_content(
+        &self,
+        session_id: &str,
+        content: &serde_json::Value,
+    ) -> Result<(), AppError>;
 
     /// Delete all sessions for a course
     async fn delete_by_course(&self, course_id: &str) -> Result<(), AppError>;

@@ -52,7 +52,7 @@ impl SupabaseSessionRepository {
     pub async fn get_all(&self) -> Result<Vec<SessionRow>, SupabaseError> {
         let url = self.client.rest_url_with_query(TABLE, "select=*");
         debug!(url = %url, "Loading all sessions from Supabase");
-        
+
         match self.client.get::<Vec<SessionRow>>(&url).await {
             Ok(sessions) => {
                 info!(count = sessions.len(), "Loaded sessions from Supabase");
@@ -67,10 +67,9 @@ impl SupabaseSessionRepository {
 
     /// Insert or update a session (upsert on session_id)
     pub async fn upsert(&self, session: SessionRow) -> Result<(), SupabaseError> {
-        let url = self.client.rest_url_with_query(
-            TABLE,
-            "on_conflict=session_id"
-        );
+        let url = self
+            .client
+            .rest_url_with_query(TABLE, "on_conflict=session_id");
         debug!(session_id = %session.session_id, "Upserting session to Supabase");
 
         let body = InsertSession {
@@ -91,10 +90,9 @@ impl SupabaseSessionRepository {
 
     /// Delete a session by session_id
     pub async fn delete(&self, session_id: &str) -> Result<(), SupabaseError> {
-        let url = self.client.rest_url_with_query(
-            TABLE,
-            &format!("session_id=eq.{}", session_id)
-        );
+        let url = self
+            .client
+            .rest_url_with_query(TABLE, &format!("session_id=eq.{}", session_id));
         debug!(session_id = %session_id, "Deleting session from Supabase");
 
         self.client.delete(&url).await?;
@@ -104,10 +102,9 @@ impl SupabaseSessionRepository {
 
     /// Delete all sessions for a user (cleanup old sessions)
     pub async fn delete_by_user_id(&self, user_id: &str) -> Result<(), SupabaseError> {
-        let url = self.client.rest_url_with_query(
-            TABLE,
-            &format!("user_id=eq.{}", user_id)
-        );
+        let url = self
+            .client
+            .rest_url_with_query(TABLE, &format!("user_id=eq.{}", user_id));
         debug!(user_id = %user_id, "Deleting user sessions from Supabase");
 
         self.client.delete(&url).await?;

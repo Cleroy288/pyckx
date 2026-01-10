@@ -75,9 +75,9 @@ impl IntelloError {
     // @ set_id : The set ID that was not found
     // @ returns : IntelloError::GameSetNotFound variant
     pub fn game_not_found(game_type: impl Into<String>, set_id: impl Into<String>) -> Self {
-        Self::GameSetNotFound { 
-            game_type: game_type.into(), 
-            set_id: set_id.into() 
+        Self::GameSetNotFound {
+            game_type: game_type.into(),
+            set_id: set_id.into(),
         }
     }
 
@@ -88,7 +88,10 @@ impl IntelloError {
     // @ message : Validation error message
     // @ returns : IntelloError::ValidationFailed variant
     pub fn validation(field: impl Into<String>, message: impl Into<String>) -> Self {
-        Self::ValidationFailed { field: field.into(), message: message.into() }
+        Self::ValidationFailed {
+            field: field.into(),
+            message: message.into(),
+        }
     }
 
     // ** storage **
@@ -97,7 +100,9 @@ impl IntelloError {
     // @ message : Error message describing the storage failure
     // @ returns : IntelloError::StorageError variant
     pub fn storage(message: impl Into<String>) -> Self {
-        Self::StorageError { message: message.into() }
+        Self::StorageError {
+            message: message.into(),
+        }
     }
 
     // ** external **
@@ -107,7 +112,10 @@ impl IntelloError {
     // @ message : Error message from the external service
     // @ returns : IntelloError::ExternalServiceError variant
     pub fn external(service: impl Into<String>, message: impl Into<String>) -> Self {
-        Self::ExternalServiceError { service: service.into(), message: message.into() }
+        Self::ExternalServiceError {
+            service: service.into(),
+            message: message.into(),
+        }
     }
 }
 
@@ -117,9 +125,13 @@ impl fmt::Display for IntelloError {
             Self::GameSetNotFound { game_type, set_id } => {
                 write!(f, "{} set not found: {}", game_type, set_id)
             }
-            Self::ValidationFailed { field, message } => write!(f, "Validation failed on '{}': {}", field, message),
+            Self::ValidationFailed { field, message } => {
+                write!(f, "Validation failed on '{}': {}", field, message)
+            }
             Self::StorageError { message } => write!(f, "Storage error: {}", message),
-            Self::ExternalServiceError { service, message } => write!(f, "External service '{}' error: {}", service, message),
+            Self::ExternalServiceError { service, message } => {
+                write!(f, "External service '{}' error: {}", service, message)
+            }
             Self::NotFound => write!(f, "Resource not found"),
             Self::Forbidden => write!(f, "Access forbidden"),
             Self::Conflict(msg) => write!(f, "Conflict: {}", msg),
@@ -128,5 +140,3 @@ impl fmt::Display for IntelloError {
 }
 
 impl std::error::Error for IntelloError {}
-
-

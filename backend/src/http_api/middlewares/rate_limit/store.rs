@@ -194,7 +194,6 @@ impl Default for RateLimiter {
     }
 }
 
-
 // == UNIT TESTS // ==
 
 #[cfg(test)]
@@ -299,10 +298,7 @@ mod tests {
     #[test]
     fn test_multiple_windows() {
         let limiter = RateLimiter::new();
-        limiter.configure(
-            "/test",
-            RateLimitConfig::new().per_second(10).per_minute(5),
-        );
+        limiter.configure("/test", RateLimitConfig::new().per_second(10).per_minute(5));
 
         // Should hit minute limit before second limit
         for _ in 0..5 {

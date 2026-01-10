@@ -4,8 +4,8 @@
 
 use super::types_domain::AuthService;
 use crate::infra::User;
-use crate::shared::{AppError, AppResult};
 use crate::services::auth::error_domain::AuthError;
+use crate::shared::{AppError, AppResult};
 use tracing::{info, instrument};
 
 impl AuthService {

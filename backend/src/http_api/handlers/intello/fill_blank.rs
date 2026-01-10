@@ -1,13 +1,13 @@
 //! Fill Blank handlers - API endpoints for Fill Blank game
 
 use super::helpers::parse_multipart;
+use crate::app::App;
 use crate::http_api::data_transfer_object::intello::{
     CreateFillBlankRequest, CreateFillBlankResponse, FillBlankOptionResponse,
     FillBlankQuestionResponse, FillBlankSetListResponse, FillBlankSetWithQuestionsResponse,
 };
-use crate::app::App;
-use crate::shared::{AppError, AppResult};
 use crate::infra::user::get_user_id_from_session;
+use crate::shared::{AppError, AppResult};
 use actix_multipart::Multipart;
 use actix_web::{get, post, web, HttpRequest, HttpResponse};
 use tracing::instrument;
@@ -43,7 +43,10 @@ pub async fn create_fill_blank_handler(
     };
 
     // Call service directly
-    let fill_blank_set = app.intello_service.generate_ai_fill_blank(&user_id, service_input).await?;
+    let fill_blank_set = app
+        .intello_service
+        .generate_ai_fill_blank(&user_id, service_input)
+        .await?;
 
     // Build response
     let question_responses: Vec<FillBlankQuestionResponse> = fill_blank_set

@@ -3,8 +3,6 @@
 //! Contains utility functions for document extraction
 // ==> This file provides helper functions used across multiple extraction operations
 
-
-
 // ** extract_text_from_xml **
 // Extracts text content from XML by finding all <a:t> tags
 // ==> Simple XML parser that extracts text between <a:t> and </a:t> tags

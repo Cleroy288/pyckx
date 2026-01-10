@@ -1,8 +1,8 @@
 //! App repository types - Row structs for database operations
 
+use crate::infra::database::{CreateApp, UpdateApp};
 use crate::services::app_registry::registry_domain::App as AppEntity;
 use crate::shared::AppError;
-use crate::infra::database::{CreateApp, UpdateApp};
 use serde::{Deserialize, Serialize};
 
 // ============================================================================
@@ -61,11 +61,21 @@ impl TryFrom<AppRow> for AppEntity {
         use chrono::DateTime;
 
         let created_at = DateTime::parse_from_rfc3339(&row.created_at)
-            .map_err(|e| AppError::Internal(crate::http_api::utils::InternalError::new(format!("Invalid created_at: {}", e))))?
+            .map_err(|e| {
+                AppError::Internal(crate::http_api::utils::InternalError::new(format!(
+                    "Invalid created_at: {}",
+                    e
+                )))
+            })?
             .with_timezone(&chrono::Utc);
 
         let updated_at = DateTime::parse_from_rfc3339(&row.updated_at)
-            .map_err(|e| AppError::Internal(crate::http_api::utils::InternalError::new(format!("Invalid updated_at: {}", e))))?
+            .map_err(|e| {
+                AppError::Internal(crate::http_api::utils::InternalError::new(format!(
+                    "Invalid updated_at: {}",
+                    e
+                )))
+            })?
             .with_timezone(&chrono::Utc);
 
         Ok(AppEntity {
