@@ -3,3 +3,8 @@
 .vscode
 .ignore
 WARP.md
+target
+.cursor
+.zed
+Cargo.lock
+notes
