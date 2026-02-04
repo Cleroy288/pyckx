@@ -1,0 +1,54 @@
+/* ============================================
+   Home Page Styles
+   White background with purple primary color palette
+   ============================================ */
+
+/* ============================================
+   Home Card
+   ============================================ */
+/* Size constraints to be applied to the Card component container */
+.home_card {
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* ============================================
+   Greeting
+   ============================================ */
+.greeting {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: 2rem;
+    letter-spacing: -0.02em;
+}
+
+.username {
+    background: linear-gradient(135deg, var(--color-primary) 0%, #4b0082 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ============================================
+   User Info
+   ============================================ */
+.user_info {
+    background: var(--color-secondary);
+    border: 1px solid rgba(128, 0, 128, 0.1);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.user_info p {
+    color: var(--color-text-secondary);
+    font-size: 0.95rem;
+    margin: 0.5rem 0;
+}
+
+.user_info strong {
+    color: var(--color-primary);
+}

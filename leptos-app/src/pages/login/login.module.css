@@ -1,0 +1,73 @@
+/* ============================================
+   Login Page Styles
+   White background with purple primary color
+   ============================================ */
+
+/* ============================================
+   Login Card
+   ============================================ */
+/* Size constraints to be applied to the Card component container */
+.login_card {
+    width: 100%;
+    max-width: 420px;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* ============================================
+   Title
+   ============================================ */
+.login_title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    text-align: center;
+    margin-bottom: 2rem;
+    letter-spacing: -0.02em;
+}
+
+/* ============================================
+   Error Message
+   ============================================ */
+.error_message {
+    background: rgba(255, 77, 79, 0.1);
+    border: 1px solid rgba(255, 77, 79, 0.3);
+    color: var(--color-error);
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-sm);
+    margin-bottom: 1.5rem;
+    font-size: 0.875rem;
+    text-align: center;
+}
+
+/* ============================================
+   Form Styles
+   ============================================ */
+.login_form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.submit_button {
+    margin-top: 0.5rem;
+    width: 100%;
+}
+
+/* ============================================
+   Back Link
+   ============================================ */
+.back_link {
+    text-align: center;
+    margin-top: 1.5rem;
+}
+
+.back_link a {
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    font-size: 0.875rem;
+    transition: color var(--transition-fast);
+}
+
+.back_link a:hover {
+    color: var(--color-primary);
+}

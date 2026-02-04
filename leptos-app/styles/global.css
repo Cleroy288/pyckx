@@ -1,0 +1,122 @@
+/* ============================================
+   GLOBAL DESIGN TOKENS
+   ============================================ */
+:root {
+    /* background color */
+    --color-background: #ffffff;
+    /* principal app color */
+    --color-primary: #800080;
+    --color-secondary: #f0e6f0;
+    --color-tertiary: #e6f0f0;
+    --color-quaternary: #f0f0e6;
+    --color-quinary: #e6e6f0;
+    --color-senary: #f0e6e6;
+    /* transparency values */
+    --transparency-low: 0.1;
+    --transparency-medium: 0.15;
+    --transparency-high: 0.9;
+    /* text colors */
+    --color-text-primary: #333333;
+    --color-text-secondary: #666666;
+    /* error, success, warning, info color */
+    --color-error: #ff4d4f;
+    --color-success: #52c41a;
+    --color-warning: #faad14;
+    --color-info: #1890ff;
+    /* principal font family */
+    --principal-font-family:
+        -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+        sans-serif;
+    /* logo font family (old tech) */
+    --logo-font-family: "VT323", var(--principal-font-family);
+
+    /* ============================================
+       BORDER RADIUS
+       ============================================ */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+    --radius-xl: 24px;
+
+    /* ============================================
+       SHADOWS (purple-tinted for brand consistency)
+       ============================================ */
+    --shadow-sm: 0 2px 10px rgba(128, 0, 128, 0.15);
+    --shadow-md: 0 4px 20px rgba(128, 0, 128, 0.2);
+    --shadow-lg: 0 8px 30px rgba(128, 0, 128, 0.25);
+    --shadow-xl: 0 12px 40px rgba(128, 0, 128, 0.3);
+
+    /* ============================================
+       TRANSITIONS
+       ============================================ */
+    --transition-fast: 0.2s ease;
+    --transition-base: 0.3s ease;
+    --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: 0.4s ease;
+
+    /* ============================================
+       GLASSMORPHISM
+       ============================================ */
+    --glass-bg: rgba(255, 255, 255, 0.5);
+    --glass-bg-hover: rgba(255, 255, 255, 0.6);
+    --glass-blur: blur(20px);
+    --glass-border: 1px solid rgba(128, 0, 128, 0.12);
+    --glass-border-hover: 1px solid rgba(128, 0, 128, 0.2);
+}
+
+/* ============================================
+   GLOBAL ANIMATIONS
+   ============================================ */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ============================================
+   CSS RESET / BASE STYLES
+   ============================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: auto;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    html {
+        scroll-behavior: smooth;
+    }
+}
+
+body {
+    font-family: var(--principal-font-family);
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+    min-height: 100vh;
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+/* Page container - centered content with full viewport height */
+.page-container {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    z-index: 1;
+    background: var(--color-background);
+}
