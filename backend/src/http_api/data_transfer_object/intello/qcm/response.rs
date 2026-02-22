@@ -58,3 +58,33 @@ impl QcmSuccessResponse {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_qcm_success_deleted_is_success() {
+        // arrange / act
+        let resp = QcmSuccessResponse::deleted();
+
+        // assert
+        assert!(resp.success);
+        assert_eq!(
+            resp.message,
+            "QCM set deleted successfully"
+        );
+        assert!(resp.set.is_none());
+    }
+
+    #[test]
+    fn test_qcm_success_not_found_is_failure() {
+        // arrange / act
+        let resp = QcmSuccessResponse::not_found();
+
+        // assert
+        assert!(!resp.success);
+        assert_eq!(resp.message, "QCM set not found");
+        assert!(resp.set.is_none());
+    }
+}

@@ -1,0 +1,27 @@
+/* Section Header Component Styles */
+.section_header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.section_title {
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    font-weight: 800;
+    color: var(--color-text-primary);
+    margin-bottom: 1rem;
+    letter-spacing: -0.03em;
+}
+
+.section_subtitle {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: var(--color-text-secondary);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+    .section_header {
+        margin-bottom: 3rem;
+    }
+}

@@ -5,4 +5,6 @@ mod request;
 mod response;
 
 pub use request::{CreateQcmSetRequest, UpdateQcmSetRequest};
-pub use response::{QcmQuestionResponse, QcmSetListResponse, QcmSetResponse, QcmSuccessResponse};
+pub use response::{
+    QcmQuestionResponse, QcmSetListResponse, QcmSetResponse, QcmSuccessResponse,
+};

@@ -121,3 +121,92 @@ Respond with ONLY valid JSON:
         topics = topics_str
     )
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::http_api::data_transfer_object::intello::course::{
+        ContentBlock, QcmQuestionPayload, QcmSetPayload,
+    };
+
+    /// Helper to build test CoursePlan
+    fn test_plan() -> CoursePlan {
+        CoursePlan {
+            title: "Test Course".into(),
+            subtitle: "A test".into(),
+            sections: vec![],
+        }
+    }
+
+    /// Helper to build test ParsedSection
+    fn test_section() -> ParsedSection {
+        ParsedSection {
+            order: 1,
+            title: "Section 1".into(),
+            content_blocks: vec![
+                ContentBlock::Subtitle {
+                    content: "Intro".into(),
+                },
+            ],
+            qcm_set: QcmSetPayload {
+                name: "Q".into(),
+                description: "d".into(),
+                level: "easy".into(),
+                subjects: vec!["topic1".into()],
+                questions: vec![QcmQuestionPayload {
+                    question: "Q?".into(),
+                    right_answer: "A".into(),
+                    wrong_answers: vec![
+                        "B".into(),
+                        "C".into(),
+                        "D".into(),
+                    ],
+                    explanation: "E".into(),
+                }],
+            },
+        }
+    }
+
+    #[test]
+    fn test_build_synthesis_prompt_contains_title() {
+        // arrange
+        let plan = test_plan();
+        let sections = vec![test_section()];
+
+        // act
+        let result =
+            build_synthesis_prompt(&plan, &sections);
+
+        // assert
+        assert!(result.contains("Test Course"));
+    }
+
+    #[test]
+    fn test_build_synthesis_prompt_contains_section_info() {
+        // arrange
+        let plan = test_plan();
+        let sections = vec![test_section()];
+
+        // act
+        let result =
+            build_synthesis_prompt(&plan, &sections);
+
+        // assert
+        assert!(result.contains("Section 1"));
+        assert!(result.contains("topic1"));
+    }
+
+    #[test]
+    fn test_build_synthesis_prompt_empty_sections() {
+        // arrange
+        let plan = test_plan();
+        let sections: Vec<ParsedSection> = vec![];
+
+        // act
+        let result =
+            build_synthesis_prompt(&plan, &sections);
+
+        // assert
+        assert!(result.contains("Test Course"));
+    }
+}

@@ -1,83 +1,77 @@
-//! TopBar - Transparent top navigation bar components
-//! 
-//! Provides two TopBar variants:
-//! - VitrineTopBar: For public pages (vitrine, login) with full navigation
-//! - HomeTopBar: For authenticated home page with minimal navigation
+//! TopBar - Transparent top navigation bar
+//!
+//! Two variants:
+//! - VitrineTopBar: public pages (logo + nav + login)
+//! - HomeTopBar: authenticated pages (logo + nav + logout)
 
-use crate::api;
+use super::page_nav::PageNav;
+use crate::components::ui::icon::Icon;
+use crate::state::hooks::use_logout;
+use crate::state::palette_provider::use_palette;
 use crate::state::use_auth;
 use leptos::prelude::*;
-use leptos::task::spawn_local;
 use leptos_router::components::A;
-use leptos_router::hooks::use_navigate;
 
-// Import the top_bar CSS module from the same folder
-stylance::import_crate_style!(top_bar_style, "src/components/top_bar/top_bar.module.css");
+stylance::import_crate_style!(
+    style,
+    "src/components/top_bar/top_bar.module.css"
+);
 
-// ** VitrineTopBar **
-// ==> TopBar for public pages: Logo + Services + Pricing + Login/Logout
-// @returns: Full navigation bar for vitrine and login pages
+/// TopBar for public pages
 #[component]
 pub fn VitrineTopBar() -> impl IntoView {
     let auth = use_auth();
-    let navigate = use_navigate();
-    let navigate_to = RwSignal::new(Option::<String>::None);
-
-    // Effect to handle navigation (must be in sync context)
-    Effect::new(move |_| {
-        if let Some(path) = navigate_to.get() {
-            navigate(&path, Default::default());
-            navigate_to.set(None);
-        }
-    });
-
-    // Handle logout
-    let on_logout = move |ev: leptos::ev::MouseEvent| {
-        ev.prevent_default();
-        auth.is_loading.set(true);
-
-        spawn_local(async move {
-            match api::logout().await {
-                Ok(()) => {
-                    auth.clear_user();
-                    auth.is_loading.set(false);
-                    navigate_to.set(Some("/".to_string()));
-                }
-                Err(e) => {
-                    web_sys::console::warn_1(&format!("Logout failed: {}", e).into());
-                    auth.set_error(format!("Logout failed: {}", e));
-                    auth.clear_user();
-                    auth.is_loading.set(false);
-                }
-            }
-        });
-    };
+    let on_logout = use_logout();
 
     view! {
-        <nav class=top_bar_style::top_bar>
-            <div class=top_bar_style::nav_content>
-                <A href="/" attr:class=top_bar_style::nav_logo>"PYCKX"</A>
-                <div class=top_bar_style::nav_links>
-                    <a href="#services" class=top_bar_style::nav_link>"Services"</a>
-                    <a href="#pricing" class=top_bar_style::nav_link>"Pricing"</a>
-
-                    // Show Login or Logout based on auth state
+        <nav class=style::top_bar>
+            <div class=style::nav_content>
+                <A
+                    href=move || {
+                        if auth.user.get().is_some() {
+                            "/home".to_string()
+                        } else {
+                            "/".to_string()
+                        }
+                    }
+                    attr:class=style::nav_logo
+                >"PYCKX"</A>
+                <div class=style::nav_links>
+                    <a
+                        href="#services"
+                        class=style::nav_link
+                    >"Services"</a>
+                    <a
+                        href="#pricing"
+                        class=style::nav_link
+                    >"Pricing"</a>
                     <Show
-                        when=move || auth.user.get().is_some()
+                        when=move || {
+                            auth.user.get().is_some()
+                        }
                         fallback=move || view! {
-                            <A href="/login" attr:class=top_bar_style::nav_link_primary>"Login"</A>
+                            <A
+                                href="/login"
+                                attr:class=style::nav_link_primary
+                            >"Login"</A>
                         }
                     >
-                        <A href="/home" attr:class=top_bar_style::nav_link>
-                            {move || auth.user.get().map(|u| u.username).unwrap_or_default()}
+                        <A
+                            href="/home"
+                            attr:class=style::nav_link
+                        >
+                            {move || {
+                                auth.user
+                                    .get()
+                                    .map(|u| u.username)
+                                    .unwrap_or_default()
+                            }}
                         </A>
                         <a
                             href="#"
-                            class=top_bar_style::nav_link_primary
-                            on:click=on_logout
-                        >
-                            "Logout"
-                        </a>
+                            class=style::nav_link_primary
+                            on:click=on_logout.clone()
+                        >"Logout"</a>
                     </Show>
                 </div>
             </div>
@@ -85,58 +79,45 @@ pub fn VitrineTopBar() -> impl IntoView {
     }
 }
 
-// ** HomeTopBar **
-// ==> Simplified TopBar for authenticated home page: Logo + Profile + Logout
-// @returns: Minimal navigation bar for home page
+/// Dark mode toggle button for the top bar
 #[component]
-pub fn HomeTopBar() -> impl IntoView {
-    let auth = use_auth();
-    let navigate = use_navigate();
-    let navigate_to = RwSignal::new(Option::<String>::None);
-
-    // Effect to handle navigation (must be in sync context)
-    Effect::new(move |_| {
-        if let Some(path) = navigate_to.get() {
-            navigate(&path, Default::default());
-            navigate_to.set(None);
-        }
-    });
-
-    // Handle logout
-    let on_logout = move |ev: leptos::ev::MouseEvent| {
-        ev.prevent_default();
-        auth.is_loading.set(true);
-
-        spawn_local(async move {
-            match api::logout().await {
-                Ok(()) => {
-                    auth.clear_user();
-                    auth.is_loading.set(false);
-                    navigate_to.set(Some("/".to_string()));
-                }
-                Err(e) => {
-                    web_sys::console::warn_1(&format!("Logout failed: {}", e).into());
-                    auth.set_error(format!("Logout failed: {}", e));
-                    auth.clear_user();
-                    auth.is_loading.set(false);
-                }
-            }
-        });
+fn DarkModeBtn() -> impl IntoView {
+    let palette = use_palette();
+    let icon_name = move || {
+        if palette.is_dark() { "Sun" } else { "Moon" }
     };
 
     view! {
-        <nav class=top_bar_style::top_bar>
-            <div class=top_bar_style::nav_content>
-                <A href="/" attr:class=top_bar_style::nav_logo>"PYCKX"</A>
-                <div class=top_bar_style::nav_links>
-                    <A href="/profile" attr:class=top_bar_style::nav_link>"Profile"</A>
+        <button
+            class=style::nav_icon_btn
+            on:click=move |_| palette.toggle_dark()
+            aria-label="Toggle dark mode"
+        >
+            <Icon icon_name=icon_name() />
+        </button>
+    }
+}
+
+/// TopBar for authenticated pages
+#[component]
+pub fn HomeTopBar() -> impl IntoView {
+    let on_logout = use_logout();
+
+    view! {
+        <nav class=style::top_bar>
+            <div class=style::nav_content>
+                <A
+                    href="/home"
+                    attr:class=style::nav_logo
+                >"PYCKX"</A>
+                <PageNav />
+                <div class=style::nav_links>
+                    <DarkModeBtn />
                     <a
                         href="#"
-                        class=top_bar_style::nav_link_primary
+                        class=style::nav_link_primary
                         on:click=on_logout
-                    >
-                        "Logout"
-                    </a>
+                    >"Logout"</a>
                 </div>
             </div>
         </nav>

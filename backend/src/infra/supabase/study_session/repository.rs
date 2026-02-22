@@ -90,7 +90,10 @@ impl SupabaseStudySessionRepository {
 
 #[async_trait]
 impl StudySessionRepository for SupabaseStudySessionRepository {
-    async fn create(&self, session: &StudySession) -> Result<StudySession, AppError> {
+    async fn create(
+        &self,
+        session: &StudySession,
+    ) -> Result<StudySession, AppError> {
         let row = InsertSessionRow {
             id: session.id.clone(),
             course_id: session.course_id.clone(),
@@ -106,9 +109,12 @@ impl StudySessionRepository for SupabaseStudySessionRepository {
         };
 
         let url = self.client.rest_url(TABLE_SESSIONS);
-        let rows: Vec<SessionRow> = self.client.post(&url, &row).await.map_err(|e| {
-            AppError::Internal(crate::http_api::utils::InternalError::new(e.to_string()))
-        })?;
+        let rows: Vec<SessionRow> =
+            self.client.post(&url, &row).await.map_err(|err| {
+                AppError::Internal(crate::http_api::utils::InternalError::new(
+                    err.to_string(),
+                ))
+            })?;
 
         let created = rows.into_iter().next().ok_or_else(|| {
             AppError::Internal(crate::http_api::utils::InternalError::new(
@@ -120,13 +126,19 @@ impl StudySessionRepository for SupabaseStudySessionRepository {
         Ok(Self::row_to_domain(created))
     }
 
-    async fn list_by_course(&self, course_id: &str) -> Result<Vec<StudySession>, AppError> {
+    async fn list_by_course(
+        &self,
+        course_id: &str,
+    ) -> Result<Vec<StudySession>, AppError> {
         let query = format!("course_id=eq.{}&order=created_at.desc", course_id);
         let url = self.client.rest_url_with_query(TABLE_SESSIONS, &query);
 
-        let rows: Vec<SessionRow> = self.client.get(&url).await.map_err(|e| {
-            AppError::Internal(crate::http_api::utils::InternalError::new(e.to_string()))
-        })?;
+        let rows: Vec<SessionRow> =
+            self.client.get(&url).await.map_err(|err| {
+                AppError::Internal(crate::http_api::utils::InternalError::new(
+                    err.to_string(),
+                ))
+            })?;
 
         Ok(rows.into_iter().map(Self::row_to_domain).collect())
     }
@@ -135,9 +147,12 @@ impl StudySessionRepository for SupabaseStudySessionRepository {
         let query = format!("id=eq.{}", session_id);
         let url = self.client.rest_url_with_query(TABLE_SESSIONS, &query);
 
-        let rows: Vec<SessionRow> = self.client.get(&url).await.map_err(|e| {
-            AppError::Internal(crate::http_api::utils::InternalError::new(e.to_string()))
-        })?;
+        let rows: Vec<SessionRow> =
+            self.client.get(&url).await.map_err(|err| {
+                AppError::Internal(crate::http_api::utils::InternalError::new(
+                    err.to_string(),
+                ))
+            })?;
 
         let session = rows.into_iter().next().ok_or_else(|| {
             AppError::Internal(crate::http_api::utils::InternalError::new(
@@ -153,10 +168,12 @@ impl StudySessionRepository for SupabaseStudySessionRepository {
         session_id: &str,
         content: &serde_json::Value,
     ) -> Result<(), AppError> {
-        let url = self
-            .client
-            .rest_url_with_query(TABLE_SESSIONS, &format!("id=eq.{}", session_id));
+        let url = self.client.rest_url_with_query(
+            TABLE_SESSIONS,
+            &format!("id=eq.{}", session_id),
+        );
 
+        #[allow(dead_code)]
         #[derive(Serialize)]
         struct UpdateContent<'a> {
             generated_content: &'a serde_json::Value,
@@ -174,8 +191,10 @@ impl StudySessionRepository for SupabaseStudySessionRepository {
             serde_json::from_value::<CourseGenerationResult>(content.clone())
         {
             // Convert intermediate structs to Values for storage
-            let _extracted_json = serde_json::to_value(&full_result.extracted_knowledge).ok();
-            let _edu_json = serde_json::to_value(&full_result.educational_content).ok();
+            let _extracted_json =
+                serde_json::to_value(&full_result.extracted_knowledge).ok();
+            let _edu_json =
+                serde_json::to_value(&full_result.educational_content).ok();
             let _course_json = serde_json::to_value(&full_result.course).ok();
 
             // We construct a new UpdateContent holding references or owned values converted to references
@@ -204,8 +223,10 @@ impl StudySessionRepository for SupabaseStudySessionRepository {
         self.client
             .patch::<serde_json::Value, _>(&url, &update)
             .await
-            .map_err(|e| {
-                AppError::Internal(crate::http_api::utils::InternalError::new(e.to_string()))
+            .map_err(|err| {
+                AppError::Internal(crate::http_api::utils::InternalError::new(
+                    err.to_string(),
+                ))
             })?;
 
         info!(session_id = %session_id, "Saved generated content and artifacts to session");
@@ -216,8 +237,10 @@ impl StudySessionRepository for SupabaseStudySessionRepository {
         let query = format!("course_id=eq.{}", course_id);
         let url = self.client.rest_url_with_query(TABLE_SESSIONS, &query);
 
-        self.client.delete(&url).await.map_err(|e| {
-            AppError::Internal(crate::http_api::utils::InternalError::new(e.to_string()))
+        self.client.delete(&url).await.map_err(|err| {
+            AppError::Internal(crate::http_api::utils::InternalError::new(
+                err.to_string(),
+            ))
         })?;
 
         info!(course_id = %course_id, "Deleted all study sessions for course");
@@ -228,8 +251,10 @@ impl StudySessionRepository for SupabaseStudySessionRepository {
         let query = format!("id=eq.{}", session_id);
         let url = self.client.rest_url_with_query(TABLE_SESSIONS, &query);
 
-        self.client.delete(&url).await.map_err(|e| {
-            AppError::Internal(crate::http_api::utils::InternalError::new(e.to_string()))
+        self.client.delete(&url).await.map_err(|err| {
+            AppError::Internal(crate::http_api::utils::InternalError::new(
+                err.to_string(),
+            ))
         })?;
 
         info!(session_id = %session_id, "Deleted study session");

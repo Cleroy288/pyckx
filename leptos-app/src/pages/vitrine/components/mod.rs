@@ -1,7 +1,5 @@
 // ** Components Module **
-// ==> Exports all vitrine page components
-// @SectionHeader: Section header with title and subtitle
+// ==> Vitrine page components
 
+#[allow(dead_code)]
 mod section_header;
-
-pub use section_header::SectionHeader;

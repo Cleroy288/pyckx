@@ -6,7 +6,10 @@ use crate::services::intello::course::domain::ExtractedIdeas;
 // @ ideas : ExtractedIdeas from Stage 1
 // @ section_count : Desired number of sections
 // @ returns : Formatted prompt string for AI
-pub fn build_course_plan_prompt(ideas: &ExtractedIdeas, section_count: u8) -> String {
+pub fn build_course_plan_prompt(
+    ideas: &ExtractedIdeas,
+    section_count: u8,
+) -> String {
     // Step 1: Format mandatory topics
     let mandatory_topics_str = ideas.mandatory_topics.join(", ");
 
@@ -72,4 +75,57 @@ Respond with ONLY valid JSON:
         suggested_topics = suggested_topics_str,
         section_count = section_count
     )
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// Helper to build test ExtractedIdeas
+    fn test_ideas() -> ExtractedIdeas {
+        ExtractedIdeas {
+            core_intent: "Learn Rust".into(),
+            target_level: "beginner".into(),
+            mandatory_topics: vec!["ownership".into()],
+            suggested_topics: vec!["lifetimes".into()],
+            constraints: vec![],
+        }
+    }
+
+    #[test]
+    fn test_build_plan_prompt_contains_intent() {
+        // arrange
+        let ideas = test_ideas();
+
+        // act
+        let result = build_course_plan_prompt(&ideas, 3);
+
+        // assert
+        assert!(result.contains("Learn Rust"));
+    }
+
+    #[test]
+    fn test_build_plan_prompt_contains_section_count() {
+        // arrange
+        let ideas = test_ideas();
+
+        // act
+        let result = build_course_plan_prompt(&ideas, 5);
+
+        // assert
+        assert!(result.contains("5 sections"));
+    }
+
+    #[test]
+    fn test_build_plan_prompt_contains_topics() {
+        // arrange
+        let ideas = test_ideas();
+
+        // act
+        let result = build_course_plan_prompt(&ideas, 3);
+
+        // assert
+        assert!(result.contains("ownership"));
+        assert!(result.contains("lifetimes"));
+    }
 }

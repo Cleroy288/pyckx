@@ -3,9 +3,13 @@
 use tracing::{info, instrument};
 
 use crate::infra::openrouter::DEFAULT_MODEL;
-use crate::services::intello::ai_usage::ai_usage_domain::feature_type;
+use crate::services::intello::ai_usage::ai_usage_domain::{
+    feature_type, AiUsageInput,
+};
 use crate::services::intello::error_domain::IntelloError;
-use crate::services::intello::types_domain::{GenerateContentInput, IntelloService};
+use crate::services::intello::types_domain::{
+    GenerateContentInput, IntelloService,
+};
 use crate::services::intello::SetId;
 
 use super::domain::OrderPhraseSet;
@@ -25,7 +29,12 @@ impl IntelloService {
         user_id: &str,
     ) -> Result<Vec<OrderPhraseSet>, IntelloError> {
         // Step 1: Query repository for all user order phrase sets
-        crud_service::get_user_sets(self.order_phrase_repo.as_ref(), user_id, "order_phrase").await
+        crud_service::get_user_sets(
+            self.order_phrase_repo.as_ref(),
+            user_id,
+            "order_phrase",
+        )
+        .await
     }
 
     // ** generate_ai_order_phrases **
@@ -61,7 +70,9 @@ impl IntelloService {
             documents: input
                 .documents
                 .iter()
-                .map(|(filename, content, _)| (filename.clone(), content.clone()))
+                .map(|(filename, content, _)| {
+                    (filename.clone(), content.clone())
+                })
                 .collect(),
         };
 
@@ -73,17 +84,18 @@ impl IntelloService {
             .await?;
 
         // Step 4: Parse AI response into order phrase questions
-        let questions = super::parser::parse_order_phrase_response(&ai_result.content)?;
+        let questions =
+            super::parser::parse_order_phrase_response(&ai_result.content)?;
 
         // Step 5: Log AI usage (fire-and-forget)
         if let Some(usage) = ai_result.usage {
-            self.try_log_ai_usage(
+            self.try_log_ai_usage(AiUsageInput {
                 user_id,
-                DEFAULT_MODEL,
-                feature_type::ORDER_PHRASE,
-                usage.prompt_tokens,
-                usage.completion_tokens,
-            )
+                model_id: DEFAULT_MODEL,
+                feature_type: feature_type::ORDER_PHRASE,
+                input_tokens: usage.prompt_tokens,
+                output_tokens: usage.completion_tokens,
+            })
             .await;
         }
         info!(

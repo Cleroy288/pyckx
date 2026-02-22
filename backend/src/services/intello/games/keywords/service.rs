@@ -3,9 +3,13 @@
 use tracing::{info, instrument};
 
 use crate::infra::openrouter::DEFAULT_MODEL;
-use crate::services::intello::ai_usage::ai_usage_domain::feature_type;
+use crate::services::intello::ai_usage::ai_usage_domain::{
+    feature_type, AiUsageInput,
+};
 use crate::services::intello::error_domain::IntelloError;
-use crate::services::intello::types_domain::{GenerateContentInput, IntelloService};
+use crate::services::intello::types_domain::{
+    GenerateContentInput, IntelloService,
+};
 use crate::services::intello::SetId;
 
 use super::domain::KeywordSet;
@@ -25,7 +29,12 @@ impl IntelloService {
         user_id: &str,
     ) -> Result<Vec<KeywordSet>, IntelloError> {
         // Step 1: Query repository for all user keyword sets
-        crud_service::get_user_sets(self.keywords_repo.as_ref(), user_id, "keywords").await
+        crud_service::get_user_sets(
+            self.keywords_repo.as_ref(),
+            user_id,
+            "keywords",
+        )
+        .await
     }
 
     // ** generate_ai_keywords **
@@ -61,7 +70,9 @@ impl IntelloService {
             documents: input
                 .documents
                 .iter()
-                .map(|(filename, content, _)| (filename.clone(), content.clone()))
+                .map(|(filename, content, _)| {
+                    (filename.clone(), content.clone())
+                })
                 .collect(),
         };
 
@@ -73,17 +84,18 @@ impl IntelloService {
             .await?;
 
         // Step 4: Parse AI response into keyword questions
-        let questions = super::parser::parse_keywords_response(&ai_result.content)?;
+        let questions =
+            super::parser::parse_keywords_response(&ai_result.content)?;
 
         // Step 5: Log AI usage (fire-and-forget)
         if let Some(usage) = ai_result.usage {
-            self.try_log_ai_usage(
+            self.try_log_ai_usage(AiUsageInput {
                 user_id,
-                DEFAULT_MODEL,
-                feature_type::KEYWORDS,
-                usage.prompt_tokens,
-                usage.completion_tokens,
-            )
+                model_id: DEFAULT_MODEL,
+                feature_type: feature_type::KEYWORDS,
+                input_tokens: usage.prompt_tokens,
+                output_tokens: usage.completion_tokens,
+            })
             .await;
         }
         info!(

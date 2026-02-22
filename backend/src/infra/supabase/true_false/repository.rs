@@ -9,7 +9,9 @@
  * - intello_true_false_statements: Individual statements
  */
 
-use super::types::{level_from_db, level_to_db, TrueOrFalseSetRow, TrueOrFalseStatementRow};
+use super::types::{
+    level_from_db, level_to_db, TrueOrFalseSetRow, TrueOrFalseStatementRow,
+};
 use crate::infra::database::GameSetRepository;
 use crate::infra::supabase::shared::{SupabaseError, SupabaseHttpClient};
 use crate::services::intello::error_domain::IntelloError;
@@ -48,9 +50,10 @@ impl SupabaseTrueOrFalseRepository {
         &self,
         set_id: &str,
     ) -> Result<Vec<TrueOrFalseStatement>, IntelloError> {
-        let url = self
-            .client
-            .rest_url_with_query(TABLE_STATEMENTS, &format!("set_id=eq.{}", set_id));
+        let url = self.client.rest_url_with_query(
+            TABLE_STATEMENTS,
+            &format!("set_id=eq.{}", set_id),
+        );
         debug!(url = %url, "Getting true/false statements");
 
         let rows: Vec<TrueOrFalseStatementRow> =
@@ -69,7 +72,10 @@ impl SupabaseTrueOrFalseRepository {
         Ok(statements)
     }
 
-    async fn row_to_domain(&self, row: TrueOrFalseSetRow) -> Result<TrueOrFalseSet, IntelloError> {
+    async fn row_to_domain(
+        &self,
+        row: TrueOrFalseSetRow,
+    ) -> Result<TrueOrFalseSet, IntelloError> {
         let statements = self.get_statements(&row.id).await?;
 
         Ok(TrueOrFalseSet {
@@ -89,7 +95,10 @@ impl SupabaseTrueOrFalseRepository {
 impl GameSetRepository<TrueOrFalseSet> for SupabaseTrueOrFalseRepository {
     /* CREATE */
     #[instrument(skip(self, set), fields(set_id = %set.id))]
-    async fn insert(&self, set: &TrueOrFalseSet) -> Result<TrueOrFalseSet, IntelloError> {
+    async fn insert(
+        &self,
+        set: &TrueOrFalseSet,
+    ) -> Result<TrueOrFalseSet, IntelloError> {
         let payload = serde_json::json!({
             "p_set": {
                 "id": set.id,
@@ -121,12 +130,16 @@ impl GameSetRepository<TrueOrFalseSet> for SupabaseTrueOrFalseRepository {
 
     /* READ: By user */
     #[instrument(skip(self), fields(user_id = %user_id))]
-    async fn find_by_user(&self, user_id: &str) -> Result<Vec<TrueOrFalseSet>, IntelloError> {
+    async fn find_by_user(
+        &self,
+        user_id: &str,
+    ) -> Result<Vec<TrueOrFalseSet>, IntelloError> {
         let query = format!("user_id=eq.{}", user_id);
         let url = self.client.rest_url_with_query(TABLE_SETS, &query);
         debug!(url = %url, "Finding true/false sets by user");
 
-        let rows: Vec<TrueOrFalseSetRow> = self.client.get(&url).await.map_err(Self::map_error)?;
+        let rows: Vec<TrueOrFalseSetRow> =
+            self.client.get(&url).await.map_err(Self::map_error)?;
 
         let mut sets = Vec::with_capacity(rows.len());
         for row in rows {

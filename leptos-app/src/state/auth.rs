@@ -85,6 +85,92 @@ pub fn AuthProvider(children: Children) -> impl IntoView {
 
 /// Hook to get auth state from context
 pub fn use_auth() -> AuthState {
-    use_context::<AuthState>().expect("AuthState not found in context. Wrap your app with AuthProvider.")
+    use_context::<AuthState>().expect(
+        "AuthState not found. Wrap with AuthProvider.",
+    )
+}
+
+/// Redirects to /login if not authenticated.
+/// Returns the auth state for further use.
+pub fn use_auth_guard() -> AuthState {
+    let auth = use_auth();
+    let nav = leptos_router::hooks::use_navigate();
+    Effect::new(move |_| {
+        if !auth.is_checking_session.get()
+            && !auth.is_authenticated()
+        {
+            nav("/login", Default::default());
+        }
+    });
+    auth
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::domain::auth_types::AuthResponse;
+
+    /// Factory for test AuthResponse
+    fn test_user() -> AuthResponse {
+        AuthResponse {
+            username: "alice".into(),
+            email: "alice@test.com".into(),
+            role: "user".into(),
+        }
+    }
+
+    #[test]
+    fn test_new_not_authenticated() {
+        let state = AuthState::new();
+        assert!(!state.is_authenticated());
+    }
+
+    #[test]
+    fn test_set_user_makes_authenticated() {
+        let state = AuthState::new();
+        state.set_user(test_user());
+        assert!(state.is_authenticated());
+    }
+
+    #[test]
+    fn test_set_user_clears_error() {
+        let state = AuthState::new();
+        state.set_error("oops".into());
+        state.set_user(test_user());
+        assert!(state.error.get().is_none());
+    }
+
+    #[test]
+    fn test_clear_user_removes_auth() {
+        let state = AuthState::new();
+        state.set_user(test_user());
+        state.clear_user();
+        assert!(!state.is_authenticated());
+    }
+
+    #[test]
+    fn test_set_error_stores_message() {
+        let state = AuthState::new();
+        state.set_error("fail".into());
+        assert_eq!(
+            state.error.get(),
+            Some("fail".to_string()),
+        );
+    }
+
+    #[test]
+    fn test_clear_error_removes_message() {
+        let state = AuthState::new();
+        state.set_error("fail".into());
+        state.clear_error();
+        assert!(state.error.get().is_none());
+    }
+
+    #[test]
+    fn test_default_same_as_new() {
+        let state = AuthState::default();
+        assert!(!state.is_authenticated());
+        assert!(state.error.get().is_none());
+    }
 }
 

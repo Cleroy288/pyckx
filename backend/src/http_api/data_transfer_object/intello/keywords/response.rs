@@ -59,3 +59,43 @@ pub struct KeywordSetWithQuestionsResponse {
     pub subjects: Vec<String>,
     pub questions: Vec<KeywordQuestionResponse>,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::services::intello::OptionId;
+
+    #[test]
+    fn test_keyword_response_from_correct() {
+        // arrange
+        let kw = Keyword {
+            id: OptionId::from_string("kw-1".into()),
+            word: "gravity".into(),
+            is_correct: true,
+        };
+
+        // act
+        let resp = KeywordResponse::from(&kw);
+
+        // assert
+        assert_eq!(resp.id, "kw-1");
+        assert_eq!(resp.word, "gravity");
+        assert!(resp.is_correct);
+    }
+
+    #[test]
+    fn test_keyword_response_from_incorrect() {
+        // arrange
+        let kw = Keyword {
+            id: OptionId::from_string("kw-2".into()),
+            word: "banana".into(),
+            is_correct: false,
+        };
+
+        // act
+        let resp = KeywordResponse::from(&kw);
+
+        // assert
+        assert!(!resp.is_correct);
+    }
+}

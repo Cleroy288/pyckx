@@ -1,0 +1,136 @@
+/* ============================================
+   Modal — Overlay Dialog
+   ============================================
+   Full-screen backdrop with centered dialog.
+   Banner-style header with grid overlay.
+   ============================================ */
+
+/* ── Backdrop ────────────────────────────────
+   Dark semi-transparent overlay. Click to
+   close the modal.                            */
+.backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.6);
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* ── Dialog box ──────────────────────────────
+   Centered panel with straight edges,
+   opaque background, vertical scroll.         */
+.modal {
+    position: relative;
+    width: 90%;
+    max-width: 500px;
+    max-height: 85vh;
+    overflow-y: auto;
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: 0;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
+    animation: slideUp 0.25s ease;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* ── Header row ──────────────────────────────
+   Banner-style: grid overlay, gradient title,
+   close button above the grid.                */
+.header {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    background: var(--glass-bg);
+    border-bottom: 1px solid color-mix(
+        in srgb, var(--primary) 15%, transparent
+    );
+}
+
+/* Grid-line overlay behind title */
+.header::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background-image: var(--grid-overlay-image);
+    background-size: var(--grid-overlay-size);
+    opacity: 0.6;
+}
+
+/* ── Title — gradient text ───────────────  */
+.title {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    background: linear-gradient(
+        135deg,
+        var(--color-primary) 0%,
+        color-mix(
+            in srgb, var(--primary) 70%, black
+        ) 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ── Close button ────────────────────────────
+   Absolute top-right so title stays centered.
+   Above grid overlay.                         */
+.close_btn {
+    position: absolute;
+    right: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    background: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: 0;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: color var(--transition-fast),
+        border-color var(--transition-fast);
+}
+
+.close_btn:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+/* ── Body ────────────────────────────────────
+   No padding — children handle spacing.       */
+.body {
+    padding: 0;
+}

@@ -4,7 +4,8 @@
 
 use crate::app::App;
 use crate::http_api::data_transfer_object::intello::{
-    CheckAnswersRequest, CheckAnswersResponse, GradedAnswerResponse, OpenQuestionSetListResponse,
+    CheckAnswersRequest, CheckAnswersResponse, GradedAnswerResponse,
+    OpenQuestionSetListResponse,
 };
 use crate::infra::user::get_user_id_from_session;
 use crate::services::{CheckAnswersInput, UserAnswer};

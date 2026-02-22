@@ -10,7 +10,9 @@ use tracing::instrument;
 /// List all available apps
 #[get("")]
 #[instrument(skip(app))]
-pub async fn get_all_apps_handler(app: web::Data<App>) -> AppResult<HttpResponse> {
+pub async fn get_all_apps_handler(
+    app: web::Data<App>,
+) -> AppResult<HttpResponse> {
     let apps = app.app_service.get_all_apps().await?;
     Ok(HttpResponse::Ok().json(AppListResponse::from_apps(apps)))
 }

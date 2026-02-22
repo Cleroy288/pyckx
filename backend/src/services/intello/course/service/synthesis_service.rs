@@ -1,4 +1,7 @@
-use crate::services::intello::course::domain::{CoursePlan, ParsedSection, ParsedSynthesis};
+use crate::services::intello::ai_usage::ai_usage_domain::AiUsageInput;
+use crate::services::intello::course::domain::{
+    CoursePlan, ParsedSection, ParsedSynthesis,
+};
 use crate::services::intello::course::parser::parse_generated_synthesis;
 use crate::services::intello::course::prompt::build_synthesis_prompt;
 use crate::services::intello::error_domain::IntelloError;
@@ -37,13 +40,13 @@ impl IntelloService {
 
         // Step 2b: Track AI usage
         if let Some(usage) = &ai_result.usage {
-            self.try_log_ai_usage(
+            self.try_log_ai_usage(AiUsageInput {
                 user_id,
-                &ai_result.model,
-                "course_synthesis_generation",
-                usage.prompt_tokens,
-                usage.completion_tokens,
-            )
+                model_id: &ai_result.model,
+                feature_type: "course_synthesis_generation",
+                input_tokens: usage.prompt_tokens,
+                output_tokens: usage.completion_tokens,
+            })
             .await;
         }
 

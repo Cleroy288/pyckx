@@ -12,6 +12,9 @@ use std::fmt;
 use std::sync::Arc;
 use tracing::info;
 
+/// List of documents: (filename, content, token_count)
+pub type DocumentList = Vec<(String, String, u32)>;
+
 // == INPUT TYPES FOR AI GENERATION ==
 
 // ** GenerateContentInput **
@@ -34,7 +37,7 @@ pub struct GenerateContentInput {
     pub level: Level,
     pub subjects: Vec<String>,
     pub num_questions: u8,
-    pub documents: Vec<(String, String, u32)>,
+    pub documents: DocumentList,
 }
 
 // ** CheckAnswersInput **
@@ -157,7 +160,9 @@ impl IntelloService {
         openrouter_client: Arc<OpenRouterClient>,
         open_question_cache: Arc<OpenQuestionCache>,
     ) -> Self {
-        info!("IntelloService initialized with repository bundle and AI service");
+        info!(
+            "IntelloService initialized with repository bundle and AI service"
+        );
         Self {
             qcm_repo: repos.qcm_repo,
             ai_qcm_repo: repos.ai_qcm_repo,
@@ -234,7 +239,8 @@ impl IntelloServiceBuilder {
     /// Returns an error string if any required dependency is missing.
     pub fn build(self) -> Result<IntelloService, &'static str> {
         let repos = self.repos.ok_or("Missing repositories")?;
-        let openrouter_client = self.openrouter_client.ok_or("Missing OpenRouter client")?;
+        let openrouter_client =
+            self.openrouter_client.ok_or("Missing OpenRouter client")?;
         let open_question_cache = self
             .open_question_cache
             .ok_or("Missing OpenQuestion cache")?;
@@ -264,5 +270,53 @@ impl fmt::Debug for IntelloService {
 impl fmt::Display for IntelloService {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "IntelloService")
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_builder_new_has_no_fields_set() {
+        // arrange / act
+        let builder = IntelloServiceBuilder::new();
+
+        // assert
+        assert!(builder.repos.is_none());
+        assert!(builder.openrouter_client.is_none());
+        assert!(builder.open_question_cache.is_none());
+    }
+
+    #[test]
+    fn test_builder_default_same_as_new() {
+        // arrange / act
+        let builder = IntelloServiceBuilder::default();
+
+        // assert
+        assert!(builder.repos.is_none());
+        assert!(builder.openrouter_client.is_none());
+        assert!(builder.open_question_cache.is_none());
+    }
+
+    #[test]
+    fn test_builder_build_without_repos_returns_error() {
+        // arrange
+        let builder = IntelloServiceBuilder::new();
+
+        // act
+        let result = builder.build();
+
+        // assert
+        assert_eq!(result.unwrap_err(), "Missing repositories");
+    }
+
+    #[test]
+    fn test_service_builder_returns_builder() {
+        // arrange / act
+        let builder = IntelloService::builder();
+
+        // assert
+        assert!(builder.repos.is_none());
     }
 }

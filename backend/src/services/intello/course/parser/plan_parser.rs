@@ -8,14 +8,19 @@ use crate::services::intello::error_domain::IntelloError;
 // @ ai_response : Raw AI response (may contain markdown or extra text)
 // @ returns : CoursePlan if parsing succeeds
 // @ errors : ValidationFailed if JSON is invalid or sections are empty
-pub fn parse_course_plan(ai_response: &str) -> Result<CoursePlan, IntelloError> {
+pub fn parse_course_plan(
+    ai_response: &str,
+) -> Result<CoursePlan, IntelloError> {
     // Step 1: Extract JSON from AI response
     let extracted = extract_json_from_response(ai_response);
     let sanitized = sanitize_ai_json(&extracted);
 
     // Step 2: Parse JSON into struct
-    let plan: CoursePlan = serde_json::from_str(&sanitized).map_err(|e| {
-        IntelloError::validation("plan_json", format!("Failed to parse plan JSON: {}", e))
+    let plan: CoursePlan = serde_json::from_str(&sanitized).map_err(|err| {
+        IntelloError::validation(
+            "plan_json",
+            format!("Failed to parse plan JSON: {}", err),
+        )
     })?;
 
     // Step 2: Validate course plan structure
@@ -59,4 +64,122 @@ pub fn parse_course_plan(ai_response: &str) -> Result<CoursePlan, IntelloError> 
 
     // Step 4: Return validated plan
     Ok(plan)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// Helper to build valid course plan JSON
+    fn valid_plan_json() -> String {
+        serde_json::json!({
+            "title": "Rust Fundamentals",
+            "subtitle": "Learn the basics of Rust",
+            "sections": [{
+                "order": 1,
+                "title": "Ownership",
+                "key_concepts": ["move", "borrow", "copy"],
+                "qcm_count": 3
+            }]
+        })
+        .to_string()
+    }
+
+    #[test]
+    fn test_parse_plan_valid_returns_ok() {
+        // arrange
+        let json = valid_plan_json();
+
+        // act
+        let result = parse_course_plan(&json);
+
+        // assert
+        assert!(result.is_ok());
+        assert_eq!(result.unwrap().title, "Rust Fundamentals");
+    }
+
+    #[test]
+    fn test_parse_plan_invalid_json_returns_error() {
+        // arrange / act
+        let result = parse_course_plan("not json");
+
+        // assert
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_parse_plan_empty_title_returns_error() {
+        // arrange
+        let json = serde_json::json!({
+            "title": "",
+            "subtitle": "desc",
+            "sections": [{
+                "order": 1,
+                "title": "S1",
+                "key_concepts": ["c1"],
+                "qcm_count": 3
+            }]
+        })
+        .to_string();
+
+        // act
+        let result = parse_course_plan(&json);
+
+        // assert
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_parse_plan_empty_sections_returns_error() {
+        // arrange
+        let json = serde_json::json!({
+            "title": "Title",
+            "subtitle": "desc",
+            "sections": []
+        })
+        .to_string();
+
+        // act
+        let result = parse_course_plan(&json);
+
+        // assert
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_parse_plan_section_zero_qcm_returns_error() {
+        // arrange
+        let json = serde_json::json!({
+            "title": "Title",
+            "subtitle": "desc",
+            "sections": [{
+                "order": 1,
+                "title": "S1",
+                "key_concepts": ["c1"],
+                "qcm_count": 0
+            }]
+        })
+        .to_string();
+
+        // act
+        let result = parse_course_plan(&json);
+
+        // assert
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_parse_plan_markdown_wrapped_returns_ok() {
+        // arrange
+        let json = format!(
+            "```json\n{}\n```",
+            valid_plan_json()
+        );
+
+        // act
+        let result = parse_course_plan(&json);
+
+        // assert
+        assert!(result.is_ok());
+    }
 }

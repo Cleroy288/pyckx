@@ -55,6 +55,7 @@ pub use games::true_false::TrueOrFalseSet;
 
 // Re-export QCM types
 pub use games::qcm::QcmQuestion;
+pub use games::qcm::QuickQcmInput;
 
 // Re-export question/option types
 pub use games::fill_blank::{FillBlankOption, FillBlankQuestion};
@@ -71,7 +72,8 @@ pub mod crud;
 pub mod study_session;
 
 pub use domain::types_domain::{
-    CheckAnswersInput, GenerateContentInput, IntelloRepositories, IntelloService, UserAnswer,
+    CheckAnswersInput, GenerateContentInput, IntelloRepositories,
+    IntelloService, UserAnswer,
 };
 
 // Re-export course module types for backward compatibility

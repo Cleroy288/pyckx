@@ -1,0 +1,8 @@
+/* FillBlankPlayer — local-only styles */
+
+.options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+}

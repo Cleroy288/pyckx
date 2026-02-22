@@ -8,16 +8,22 @@ use crate::shared::{AppError, AppResult};
 use actix_multipart::Multipart;
 use futures_util::StreamExt;
 
+/// List of extracted documents: (filename, content, token_count)
+type DocumentList = Vec<(String, String, u32)>;
+
 /// Parse multipart form data with metadata and file uploads
 /// Returns (metadata, documents) where documents is Vec<(filename, content, token_count)>
+#[allow(clippy::excessive_nesting)]
 pub async fn parse_multipart<T: serde::de::DeserializeOwned>(
     mut payload: Multipart,
-) -> AppResult<(T, Vec<(String, String, u32)>)> {
+) -> AppResult<(T, DocumentList)> {
     let mut metadata: Option<T> = None;
-    let mut documents: Vec<(String, String, u32)> = Vec::new();
+    let mut documents: DocumentList = Vec::new();
 
     while let Some(field) = payload.next().await {
-        let mut field = field.map_err(|e| AppError::validation("multipart", e.to_string()))?;
+        let mut field = field.map_err(|err| {
+            AppError::validation("multipart", err.to_string())
+        })?;
 
         let content_disposition = match field.content_disposition() {
             Some(cd) => cd,
@@ -29,14 +35,15 @@ pub async fn parse_multipart<T: serde::de::DeserializeOwned>(
             "metadata" => {
                 let mut bytes = Vec::new();
                 while let Some(chunk) = field.next().await {
-                    let chunk =
-                        chunk.map_err(|e| AppError::validation("metadata", e.to_string()))?;
+                    let chunk = chunk.map_err(|err| {
+                        AppError::validation("metadata", err.to_string())
+                    })?;
                     bytes.extend_from_slice(&chunk);
                 }
-                metadata = Some(
-                    serde_json::from_slice(&bytes)
-                        .map_err(|e| AppError::validation("metadata", e.to_string()))?,
-                );
+                metadata =
+                    Some(serde_json::from_slice(&bytes).map_err(|err| {
+                        AppError::validation("metadata", err.to_string())
+                    })?);
             }
             "files" => {
                 let filename = content_disposition
@@ -50,7 +57,9 @@ pub async fn parse_multipart<T: serde::de::DeserializeOwned>(
                 // Read file bytes
                 let mut bytes = Vec::new();
                 while let Some(chunk) = field.next().await {
-                    let chunk = chunk.map_err(|e| AppError::validation("files", e.to_string()))?;
+                    let chunk = chunk.map_err(|err| {
+                        AppError::validation("files", err.to_string())
+                    })?;
                     bytes.extend_from_slice(&chunk);
                 }
 
@@ -59,17 +68,24 @@ pub async fn parse_multipart<T: serde::de::DeserializeOwned>(
                     DocumentType::Text => extract_txt(&bytes, &filename)?,
                     DocumentType::Pdf => extract_pdf(&bytes, &filename)?,
                     DocumentType::Word => extract_word(&bytes, &filename)?,
-                    DocumentType::PowerPoint => extract_pptx(&bytes, &filename)?,
+                    DocumentType::PowerPoint => {
+                        extract_pptx(&bytes, &filename)?
+                    }
                 };
 
-                documents.push((filename, extracted.content, extracted.token_count));
+                documents.push((
+                    filename,
+                    extracted.content,
+                    extracted.token_count,
+                ));
             }
             _ => {}
         }
     }
 
-    let metadata = metadata
-        .ok_or_else(|| AppError::validation("metadata", "Missing metadata field in request"))?;
+    let metadata = metadata.ok_or_else(|| {
+        AppError::validation("metadata", "Missing metadata field in request")
+    })?;
 
     Ok((metadata, documents))
 }
@@ -99,14 +115,16 @@ pub fn get_document_type(filename: &str) -> AppResult<DocumentType> {
 /// Returns documents as Vec<(filename, content, token_count)>
 ///
 /// TODO: Uncomment when course upload endpoint is implemented
-#[allow(dead_code)]
+#[allow(dead_code, clippy::excessive_nesting)]
 pub async fn parse_multipart_files_only(
     mut payload: Multipart,
-) -> AppResult<Vec<(String, String, u32)>> {
-    let mut documents: Vec<(String, String, u32)> = Vec::new();
+) -> AppResult<DocumentList> {
+    let mut documents: DocumentList = Vec::new();
 
     while let Some(field) = payload.next().await {
-        let mut field = field.map_err(|e| AppError::validation("multipart", e.to_string()))?;
+        let mut field = field.map_err(|err| {
+            AppError::validation("multipart", err.to_string())
+        })?;
 
         let content_disposition = match field.content_disposition() {
             Some(cd) => cd,
@@ -126,7 +144,9 @@ pub async fn parse_multipart_files_only(
             // Read file bytes
             let mut bytes = Vec::new();
             while let Some(chunk) = field.next().await {
-                let chunk = chunk.map_err(|e| AppError::validation("files", e.to_string()))?;
+                let chunk = chunk.map_err(|err| {
+                    AppError::validation("files", err.to_string())
+                })?;
                 bytes.extend_from_slice(&chunk);
             }
 
@@ -138,7 +158,11 @@ pub async fn parse_multipart_files_only(
                 DocumentType::PowerPoint => extract_pptx(&bytes, &filename)?,
             };
 
-            documents.push((filename, extracted.content, extracted.token_count));
+            documents.push((
+                filename,
+                extracted.content,
+                extracted.token_count,
+            ));
         }
     }
 

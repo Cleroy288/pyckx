@@ -1,69 +1,82 @@
-//! Home Page Component - Protected page showing user greeting
+//! Home Page — Dashboard with dynamic app sections
 
+use crate::components::dashboard::{
+    AppStore, MyApps, PalettePicker, WelcomeHeader,
+};
 use crate::components::top_bar::HomeTopBar;
-use crate::components::ui::card::{Card, CardVariant};
-use crate::state::use_auth;
+use crate::components::ui::page_layout::PageLayout;
+use crate::components::ui::section_divider::SectionDivider;
+use crate::state::use_auth_guard;
 use leptos::prelude::*;
-use leptos_router::hooks::use_navigate;
 
-stylance::import_crate_style!(home_style, "src/pages/home/home.module.css");
+stylance::import_crate_style!(
+    style,
+    "src/pages/home/home.module.css"
+);
 
 #[component]
 pub fn HomePage() -> impl IntoView {
-    let auth = use_auth();
-    let navigate = use_navigate();
+    let auth = use_auth_guard();
 
-    // Effect to handle navigation (must be in sync context)
-    // Only redirect to login if:
-    // 1. We're done checking the session (is_checking_session is false)
-    // 2. AND the user is not authenticated
-    Effect::new(move |_| {
-        let is_checking = auth.is_checking_session.get();
-        let has_user = auth.user.get().is_some();
-
-        // Only redirect if we're done checking and there's no user
-        if !is_checking && !has_user {
-            navigate("/login", Default::default());
-        }
+    let username = Signal::derive(move || {
+        auth.user.with(|u| {
+            u.as_ref()
+                .map(|a| a.username.clone())
+                .unwrap_or_default()
+        })
     });
 
     view! {
         <>
             <HomeTopBar />
-            <div class="page-container">
-                <Card variant=CardVariant::Solid class=home_style::home_card.to_string()>
-                    // Show loading while checking session
+            <PageLayout>
+                <Show
+                    when=move || {
+                        !auth.is_checking_session.get()
+                    }
+                    fallback=|| view! {
+                        <div class=style::loading>
+                            "Checking session..."
+                        </div>
+                    }
+                >
                     <Show
-                        when=move || !auth.is_checking_session.get()
-                        fallback=|| view! { <p>"Checking session..."</p> }
-                    >
-                        // Show content only when authenticated
-                        <Show
-                            when=move || auth.user.get().is_some()
-                            fallback=|| view! { <p>"Redirecting to login..."</p> }
-                        >
-                            <h1 class=home_style::greeting>
-                                "Hello: "
-                                <span class=home_style::username>
-                                    {move || auth.user.get().map(|u| u.username).unwrap_or_default()}
-                                </span>
-                            </h1>
-
-                            <div class=home_style::user_info>
-                                <p>
-                                    <strong>"Email: "</strong>
-                                    {move || auth.user.get().map(|u| u.email).unwrap_or_default()}
-                                </p>
-                                <p>
-                                    <strong>"Role: "</strong>
-                                    {move || auth.user.get().map(|u| u.role).unwrap_or_default()}
-                                </p>
+                        when=move || {
+                            auth.user
+                                .with(|u| u.is_some())
+                        }
+                        fallback=|| view! {
+                            <div class=style::loading>
+                                "Redirecting to login..."
                             </div>
-                        </Show>
+                        }
+                    >
+                        <WelcomeHeader
+                            username=username
+                        />
+                        <SectionDivider label="My Apps" />
+                        <div class=style::section_gap_sm>
+                            <MyApps />
+                        </div>
+                        <div class=style::section_gap_lg>
+                            <SectionDivider
+                                label="Pyckx Apps"
+                            />
+                        </div>
+                        <div class=style::section_gap_sm>
+                            <AppStore />
+                        </div>
+                        <div class=style::section_gap_lg>
+                            <SectionDivider
+                                label="Theme"
+                            />
+                        </div>
+                        <div class=style::section_gap_sm>
+                            <PalettePicker />
+                        </div>
                     </Show>
-                </Card>
-            </div>
+                </Show>
+            </PageLayout>
         </>
     }
 }
-

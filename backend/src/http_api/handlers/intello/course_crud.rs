@@ -22,6 +22,7 @@ pub struct CreateCourseRequest {
     pub description: String,
 }
 
+#[allow(dead_code)]
 #[derive(Debug, Deserialize)]
 pub struct UploadResourceRequest {
     pub filename: String,
@@ -70,6 +71,7 @@ pub struct ResourceListResponse {
     pub resources: Vec<Resource>,
 }
 
+#[allow(dead_code)]
 #[derive(Debug, Serialize)]
 pub struct ResourceResponse {
     pub success: bool,
@@ -166,7 +168,10 @@ pub async fn create_course(
 // GET /api/intello/courses
 // =============================================================================
 
-pub async fn list_courses(app: web::Data<App>, req: HttpRequest) -> Result<HttpResponse, AppError> {
+pub async fn list_courses(
+    app: web::Data<App>,
+    req: HttpRequest,
+) -> Result<HttpResponse, AppError> {
     let user_id = get_user_id_from_session(&app, &req)?;
 
     info!(user_id = %user_id, "Listing courses via Service");

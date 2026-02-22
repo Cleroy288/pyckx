@@ -140,9 +140,9 @@ pub async fn check_resource_exists(
     query: web::Query<std::collections::HashMap<String, String>>,
 ) -> Result<HttpResponse, AppError> {
     let user_id = get_user_id_from_session(&app, &req)?;
-    let filename = query
-        .get("filename")
-        .ok_or_else(|| AppError::validation("filename", "Missing filename parameter"))?;
+    let filename = query.get("filename").ok_or_else(|| {
+        AppError::validation("filename", "Missing filename parameter")
+    })?;
 
     info!(user_id = %user_id, filename = %filename, "Checking resource existence");
 

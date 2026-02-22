@@ -52,26 +52,26 @@ impl AppError {
     /// Get the error code string
     pub fn code(&self) -> &'static str {
         match self {
-            Self::Auth(e) => e.code(),
-            Self::Validation(e) => e.code(),
-            Self::Collection(e) => e.code(),
-            Self::Intello(e) => e.code(),
-            Self::App(e) => e.code(),
-            Self::Session(e) => e.code(),
-            Self::Internal(e) => e.code(),
+            Self::Auth(err) => err.code(),
+            Self::Validation(err) => err.code(),
+            Self::Collection(err) => err.code(),
+            Self::Intello(err) => err.code(),
+            Self::App(err) => err.code(),
+            Self::Session(err) => err.code(),
+            Self::Internal(err) => err.code(),
         }
     }
 
     /// Get the user-friendly message
     pub fn message(&self) -> &'static str {
         match self {
-            Self::Auth(e) => e.message(),
-            Self::Validation(e) => e.message(),
-            Self::Collection(e) => e.message(),
-            Self::Intello(e) => e.message(),
-            Self::App(e) => e.message(),
-            Self::Session(e) => e.message(),
-            Self::Internal(e) => e.message(),
+            Self::Auth(err) => err.message(),
+            Self::Validation(err) => err.message(),
+            Self::Collection(err) => err.message(),
+            Self::Intello(err) => err.message(),
+            Self::App(err) => err.message(),
+            Self::Session(err) => err.message(),
+            Self::Internal(err) => err.message(),
         }
     }
 
@@ -83,41 +83,41 @@ impl AppError {
     /// Automatic logging based on error type
     fn log(&self) {
         match self {
-            Self::Auth(e) => {
-                warn!(error_code = %self.code(), error = %e, "Authentication error");
+            Self::Auth(err) => {
+                warn!(error_code = %self.code(), error = %err, "Authentication error");
             }
-            Self::Validation(e) => {
-                warn!(error_code = %self.code(), field = %e.field, message = %e.message, "Validation error");
+            Self::Validation(err) => {
+                warn!(error_code = %self.code(), field = %err.field, message = %err.message, "Validation error");
             }
-            Self::Collection(e) => {
-                warn!(error_code = %self.code(), error = %e, "Collection error");
+            Self::Collection(err) => {
+                warn!(error_code = %self.code(), error = %err, "Collection error");
             }
-            Self::Intello(e) => {
-                warn!(error_code = %self.code(), error = %e, "Intello error");
+            Self::Intello(err) => {
+                warn!(error_code = %self.code(), error = %err, "Intello error");
             }
-            Self::App(e) => {
-                warn!(error_code = %self.code(), error = %e, "App error");
+            Self::App(err) => {
+                warn!(error_code = %self.code(), error = %err, "App error");
             }
-            Self::Session(e) => {
-                warn!(error_code = %self.code(), error = %e, "Session error");
+            Self::Session(err) => {
+                warn!(error_code = %self.code(), error = %err, "Session error");
             }
-            Self::Internal(e) => {
-                error!(error_code = %self.code(), message = %e.0, "Internal error");
+            Self::Internal(err) => {
+                error!(error_code = %self.code(), message = %err.0, "Internal error");
             }
         }
     }
 }
 
 impl fmt::Display for AppError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, fmt: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            Self::Auth(e) => write!(f, "{}", e),
-            Self::Validation(e) => write!(f, "{}", e),
-            Self::Collection(e) => write!(f, "{}", e),
-            Self::Intello(e) => write!(f, "{}", e),
-            Self::App(e) => write!(f, "{}", e),
-            Self::Session(e) => write!(f, "{}", e),
-            Self::Internal(e) => write!(f, "{}", e),
+            Self::Auth(err) => write!(fmt, "{}", err),
+            Self::Validation(err) => write!(fmt, "{}", err),
+            Self::Collection(err) => write!(fmt, "{}", err),
+            Self::Intello(err) => write!(fmt, "{}", err),
+            Self::App(err) => write!(fmt, "{}", err),
+            Self::Session(err) => write!(fmt, "{}", err),
+            Self::Internal(err) => write!(fmt, "{}", err),
         }
     }
 }
@@ -125,13 +125,13 @@ impl fmt::Display for AppError {
 impl std::error::Error for AppError {
     fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
         match self {
-            Self::Auth(e) => Some(e),
-            Self::Validation(e) => Some(e),
-            Self::Collection(e) => Some(e),
-            Self::Intello(e) => Some(e),
-            Self::App(e) => Some(e),
-            Self::Session(e) => Some(e),
-            Self::Internal(e) => Some(e),
+            Self::Auth(err) => Some(err),
+            Self::Validation(err) => Some(err),
+            Self::Collection(err) => Some(err),
+            Self::Intello(err) => Some(err),
+            Self::App(err) => Some(err),
+            Self::Session(err) => Some(err),
+            Self::Internal(err) => Some(err),
         }
     }
 }
@@ -139,13 +139,13 @@ impl std::error::Error for AppError {
 impl ResponseError for AppError {
     fn status_code(&self) -> StatusCode {
         match self {
-            Self::Auth(e) => e.status(),
-            Self::Validation(e) => e.status(),
-            Self::Collection(e) => e.status(),
-            Self::Intello(e) => e.status(),
-            Self::App(e) => e.status(),
-            Self::Session(e) => e.status(),
-            Self::Internal(e) => e.status(),
+            Self::Auth(err) => err.status(),
+            Self::Validation(err) => err.status(),
+            Self::Collection(err) => err.status(),
+            Self::Intello(err) => err.status(),
+            Self::App(err) => err.status(),
+            Self::Session(err) => err.status(),
+            Self::Internal(err) => err.status(),
         }
     }
 
@@ -155,7 +155,7 @@ impl ResponseError for AppError {
             code: self.code(),
             message: self.message(),
             field: match self {
-                Self::Validation(e) => Some(e.field),
+                Self::Validation(err) => Some(err.field),
                 _ => None,
             },
         })
@@ -212,5 +212,203 @@ impl From<ValidationError> for AppError {
 impl From<InternalError> for AppError {
     fn from(err: InternalError) -> Self {
         Self::Internal(err)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    // -- code() delegation tests --
+
+    #[test]
+    fn test_code_delegates_to_intello() {
+        // arrange
+        let err = AppError::Intello(
+            IntelloError::NotFound,
+        );
+
+        // act / assert
+        assert_eq!(err.code(), "INTELLO_NOT_FOUND");
+    }
+
+    #[test]
+    fn test_code_delegates_to_collection() {
+        // arrange
+        let err = AppError::Collection(
+            CollectionError::DvdNotFound {
+                dvd_id: "d1".into(),
+            },
+        );
+
+        // act / assert
+        assert_eq!(err.code(), "COLLECTION_DVD_NOT_FOUND");
+    }
+
+    #[test]
+    fn test_code_delegates_to_auth() {
+        // arrange
+        let err =
+            AppError::Auth(AuthError::InvalidCredentials);
+
+        // act / assert
+        assert_eq!(err.code(), "AUTH_INVALID_CREDENTIALS");
+    }
+
+    #[test]
+    fn test_code_delegates_to_session() {
+        // arrange
+        let err =
+            AppError::Session(SessionError::NotFound);
+
+        // act / assert
+        assert_eq!(err.code(), "SESSION_NOT_FOUND");
+    }
+
+    // -- message() delegation tests --
+
+    #[test]
+    fn test_message_delegates_to_inner() {
+        // arrange
+        let err = AppError::Intello(
+            IntelloError::Forbidden,
+        );
+
+        // act / assert
+        assert_eq!(err.message(), "Access forbidden");
+    }
+
+    // -- validation() helper test --
+
+    #[test]
+    fn test_validation_creates_validation_error() {
+        // arrange / act
+        let err =
+            AppError::validation("email", "is required");
+
+        // assert
+        assert_eq!(err.code(), "VALIDATION_FAILED");
+        assert_eq!(err.message(), "Invalid input data");
+    }
+
+    // -- From conversion tests --
+
+    #[test]
+    fn test_from_auth_error() {
+        // arrange
+        let auth = AuthError::NotAllowed;
+
+        // act
+        let err: AppError = auth.into();
+
+        // assert
+        assert!(matches!(err, AppError::Auth(_)));
+        assert_eq!(err.code(), "AUTH_NOT_ALLOWED");
+    }
+
+    #[test]
+    fn test_from_collection_error() {
+        // arrange
+        let col = CollectionError::DvdNotFound {
+            dvd_id: "x".into(),
+        };
+
+        // act
+        let err: AppError = col.into();
+
+        // assert
+        assert!(matches!(err, AppError::Collection(_)));
+    }
+
+    #[test]
+    fn test_from_intello_error() {
+        // arrange
+        let intello = IntelloError::Forbidden;
+
+        // act
+        let err: AppError = intello.into();
+
+        // assert
+        assert!(matches!(err, AppError::Intello(_)));
+    }
+
+    #[test]
+    fn test_from_apps_error() {
+        // arrange
+        let app =
+            AppsError::NotFound("intello".into());
+
+        // act
+        let err: AppError = app.into();
+
+        // assert
+        assert!(matches!(err, AppError::App(_)));
+    }
+
+    #[test]
+    fn test_from_session_error() {
+        // arrange
+        let session = SessionError::Expired;
+
+        // act
+        let err: AppError = session.into();
+
+        // assert
+        assert!(matches!(err, AppError::Session(_)));
+    }
+
+    #[test]
+    fn test_from_validation_error() {
+        // arrange
+        let val = ValidationError::new("f", "msg");
+
+        // act
+        let err: AppError = val.into();
+
+        // assert
+        assert!(matches!(err, AppError::Validation(_)));
+    }
+
+    #[test]
+    fn test_from_internal_error() {
+        // arrange
+        let internal = InternalError::new("boom");
+
+        // act
+        let err: AppError = internal.into();
+
+        // assert
+        assert!(matches!(err, AppError::Internal(_)));
+    }
+
+    // -- Display delegation --
+
+    #[test]
+    fn test_display_delegates_to_inner() {
+        // arrange
+        let err = AppError::Intello(
+            IntelloError::NotFound,
+        );
+
+        // act / assert
+        assert_eq!(
+            err.to_string(),
+            "Resource not found"
+        );
+    }
+
+    // -- ResponseError status_code --
+
+    #[test]
+    fn test_status_code_delegates_to_inner() {
+        // arrange
+        let err =
+            AppError::Auth(AuthError::InvalidCredentials);
+
+        // act / assert
+        assert_eq!(
+            err.status_code(),
+            StatusCode::UNAUTHORIZED
+        );
     }
 }

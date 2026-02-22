@@ -3,7 +3,9 @@
 //! Contains validation functions for user inputs, IDs, and data structures.
 //! These functions ensure data integrity before business logic execution.
 
-use crate::services::intello::domain::types_domain::{GenerateContentInput, IntelloService};
+use crate::services::intello::domain::types_domain::{
+    GenerateContentInput, IntelloService,
+};
 use crate::services::intello::error_domain::IntelloError;
 use crate::services::intello::QcmSet;
 
@@ -14,10 +16,16 @@ impl IntelloService {
     // @ user_id : The user ID to validate
     // @ returns : Ok(()) if valid
     // @ errors : ValidationFailed if user_id is empty
-    pub(crate) fn validate_user_id(&self, user_id: &str) -> Result<(), IntelloError> {
+    pub(crate) fn validate_user_id(
+        &self,
+        user_id: &str,
+    ) -> Result<(), IntelloError> {
         // Step 1: Check if user ID is empty
         if user_id.is_empty() {
-            return Err(IntelloError::validation("user_id", "User ID is required"));
+            return Err(IntelloError::validation(
+                "user_id",
+                "User ID is required",
+            ));
         }
         // Step 2: Return success
         Ok(())
@@ -29,7 +37,10 @@ impl IntelloService {
     // @ set_id : The set ID to validate
     // @ returns : Ok(()) if valid
     // @ errors : ValidationFailed if set_id is empty
-    pub(crate) fn validate_set_id(&self, set_id: &str) -> Result<(), IntelloError> {
+    pub(crate) fn validate_set_id(
+        &self,
+        set_id: &str,
+    ) -> Result<(), IntelloError> {
         // Step 1: Check if set ID is empty
         if set_id.is_empty() {
             return Err(IntelloError::validation("id", "Set ID is required"));
@@ -44,7 +55,10 @@ impl IntelloService {
     // @ qcm_set : The QCM set to validate
     // @ returns : Ok(()) if all validations pass
     // @ errors : ValidationFailed if any field is invalid
-    pub(crate) fn validate_qcm_set(&self, qcm_set: &QcmSet) -> Result<(), IntelloError> {
+    pub(crate) fn validate_qcm_set(
+        &self,
+        qcm_set: &QcmSet,
+    ) -> Result<(), IntelloError> {
         // Step 1: Validate user ID and set ID
         self.validate_user_id(&qcm_set.user_id)?;
         self.validate_set_id(&qcm_set.id)?;
@@ -77,7 +91,10 @@ impl IntelloService {
             if question.wrong_answers.len() != 3 {
                 return Err(IntelloError::validation(
                     "questions",
-                    format!("Question {} must have exactly 3 wrong answers", i + 1),
+                    format!(
+                        "Question {} must have exactly 3 wrong answers",
+                        i + 1
+                    ),
                 ));
             }
             if question.right_answer.trim().is_empty() {
@@ -122,7 +139,8 @@ impl IntelloService {
         }
 
         // Step 3: Validate total token count limit (800k)
-        let total_tokens: u32 = input.documents.iter().map(|(_, _, tokens)| tokens).sum();
+        let total_tokens: u32 =
+            input.documents.iter().map(|(_, _, tokens)| tokens).sum();
         if total_tokens > 800_000 {
             return Err(IntelloError::validation(
                 "documents",

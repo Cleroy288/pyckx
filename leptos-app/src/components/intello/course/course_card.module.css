@@ -1,0 +1,41 @@
+.card {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.25rem;
+    border: 1px solid var(--color-border);
+    border-radius: 0;
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin: 0;
+}
+
+.desc {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.4;
+}
+
+.date {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+}
+
+.actions {
+    display: flex;
+    gap: 0.5rem;
+}

@@ -15,7 +15,11 @@ pub struct GameInstance {
 }
 
 impl GameInstance {
-    pub const fn new(id: &'static str, name: &'static str, description: &'static str) -> Self {
+    pub const fn new(
+        id: &'static str,
+        name: &'static str,
+        description: &'static str,
+    ) -> Self {
         Self {
             id,
             name,
@@ -64,3 +68,86 @@ pub const AVAILABLE_GAMES: &[GameInstance] = &[
         "Answer open-ended questions with your own written responses",
     ),
 ];
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_game_instance_new_stores_fields() {
+        // arrange / act
+        let game = GameInstance::new("qcm", "QCM", "desc");
+
+        // assert
+        assert_eq!(game.id, "qcm");
+        assert_eq!(game.name, "QCM");
+        assert_eq!(game.description, "desc");
+    }
+
+    #[test]
+    fn test_available_games_not_empty() {
+        // arrange / act / assert
+        assert!(!AVAILABLE_GAMES.is_empty());
+    }
+
+    #[test]
+    fn test_available_games_contains_qcm() {
+        // arrange / act
+        let found = AVAILABLE_GAMES.iter().any(|g| g.id == "qcm");
+
+        // assert
+        assert!(found);
+    }
+
+    #[test]
+    fn test_available_games_contains_flashcard() {
+        // arrange / act
+        let found =
+            AVAILABLE_GAMES.iter().any(|g| g.id == "flashcard");
+
+        // assert
+        assert!(found);
+    }
+
+    #[test]
+    fn test_available_games_all_have_nonempty_ids() {
+        for game in AVAILABLE_GAMES {
+            assert!(
+                !game.id.is_empty(),
+                "Game has empty id: {:?}",
+                game
+            );
+        }
+    }
+
+    #[test]
+    fn test_available_games_all_have_nonempty_names() {
+        for game in AVAILABLE_GAMES {
+            assert!(
+                !game.name.is_empty(),
+                "Game has empty name: {:?}",
+                game
+            );
+        }
+    }
+
+    #[test]
+    fn test_available_games_unique_ids() {
+        // arrange
+        let ids: Vec<&str> =
+            AVAILABLE_GAMES.iter().map(|g| g.id).collect();
+        let unique_count = {
+            let mut set = std::collections::HashSet::new();
+            ids.iter().filter(|id| set.insert(**id)).count()
+        };
+
+        // assert
+        assert_eq!(ids.len(), unique_count);
+    }
+
+    #[test]
+    fn test_available_games_count() {
+        // arrange / act / assert
+        assert_eq!(AVAILABLE_GAMES.len(), 7);
+    }
+}

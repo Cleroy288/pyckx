@@ -22,6 +22,7 @@ pub mod keywords;
 pub mod open_question;
 pub mod order_phrase;
 pub mod qcm;
+pub mod quick_qcm;
 pub mod true_false;
 pub mod validation;
 
@@ -30,8 +31,8 @@ pub use games::{AvailableGamesResponse, GameResponse};
 
 // Re-export QCM types
 pub use qcm::{
-    CreateQcmSetRequest, QcmQuestionResponse, QcmSetListResponse, QcmSetResponse,
-    QcmSuccessResponse, UpdateQcmSetRequest,
+    CreateQcmSetRequest, QcmQuestionResponse, QcmSetListResponse,
+    QcmSetResponse, QcmSuccessResponse, UpdateQcmSetRequest,
 };
 
 // Re-export Open Question types
@@ -43,32 +44,41 @@ pub use open_question::{
 
 // Re-export Flashcard types
 pub use flashcard::{
-    CreateFlashcardRequest, CreateFlashcardResponse, FlashcardResponse, FlashcardSetListResponse,
+    CreateFlashcardRequest, CreateFlashcardResponse, FlashcardResponse,
+    FlashcardSetListResponse,
 };
 
 // Re-export True or False types
 pub use true_false::{
-    CreateTrueOrFalseRequest, CreateTrueOrFalseResponse, TrueOrFalseSetListResponse,
-    TrueOrFalseSetWithStatementsResponse, TrueOrFalseStatementResponse,
+    CreateTrueOrFalseRequest, CreateTrueOrFalseResponse,
+    TrueOrFalseSetListResponse, TrueOrFalseSetWithStatementsResponse,
+    TrueOrFalseStatementResponse,
 };
 
 // Re-export Keywords types
 pub use keywords::{
-    CreateKeywordsRequest, CreateKeywordsResponse, KeywordQuestionResponse, KeywordResponse,
-    KeywordSetListResponse, KeywordSetWithQuestionsResponse,
+    CreateKeywordsRequest, CreateKeywordsResponse, KeywordQuestionResponse,
+    KeywordResponse, KeywordSetListResponse, KeywordSetWithQuestionsResponse,
 };
 
 // Re-export Order Phrase types
 pub use order_phrase::{
-    CreateOrderPhraseRequest, CreateOrderPhraseResponse, OrderPhraseQuestionResponse,
-    OrderPhraseSetListResponse, OrderPhraseSetWithQuestionsResponse, OrderPhraseWordResponse,
+    CreateOrderPhraseRequest, CreateOrderPhraseResponse,
+    OrderPhraseQuestionResponse, OrderPhraseSetListResponse,
+    OrderPhraseSetWithQuestionsResponse, OrderPhraseWordResponse,
 };
 
 // Re-export Fill Blank types
 pub use fill_blank::{
     CreateFillBlankRequest, CreateFillBlankResponse, FillBlankOptionResponse,
-    FillBlankQuestionResponse, FillBlankSetListResponse, FillBlankSetWithQuestionsResponse,
+    FillBlankQuestionResponse, FillBlankSetListResponse,
+    FillBlankSetWithQuestionsResponse,
 };
 
 // Re-export Custom Question types
-pub use custom_question::{CreateCustomQuestionRequest, CustomQuestionResponse};
+pub use custom_question::{
+    CreateCustomQuestionRequest, CustomQuestionResponse,
+};
+
+// Re-export Quick QCM types
+pub use quick_qcm::{QuickQcmRequest, QuickQcmResponse};

@@ -8,6 +8,6 @@ mod response;
 
 pub use request::{AddDvdRequest, CreateCollectionRequest, UpdateDvdRequest};
 pub use response::{
-    CollectionItemsResponse, CollectionListResponse, CollectionSuccessResponse, DeleteResponse,
-    DvdListResponse, DvdResponse, DvdSuccessResponse,
+    CollectionItemsResponse, CollectionListResponse, CollectionSuccessResponse,
+    DeleteResponse, DvdListResponse, DvdResponse, DvdSuccessResponse,
 };

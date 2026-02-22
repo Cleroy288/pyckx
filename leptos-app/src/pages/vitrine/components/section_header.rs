@@ -3,7 +3,7 @@
 
 use leptos::prelude::*;
 
-stylance::import_crate_style!(vitrine_style, "src/pages/vitrine/vitrine.module.css");
+stylance::import_crate_style!(style, "src/pages/vitrine/components/section_header.module.css");
 
 #[component]
 pub fn SectionHeader(
@@ -11,10 +11,10 @@ pub fn SectionHeader(
     #[prop(optional)] subtitle: Option<String>,
 ) -> impl IntoView {
     view! {
-        <div class=vitrine_style::section_header>
-            <h2 class=vitrine_style::section_title>{title}</h2>
+        <div class=style::section_header>
+            <h2 class=style::section_title>{title}</h2>
             {subtitle.map(|s| view! {
-                <p class=vitrine_style::section_subtitle>{s}</p>
+                <p class=style::section_subtitle>{s}</p>
             })}
         </div>
     }

@@ -63,3 +63,44 @@ impl SuccessResponse {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_success_response_deleted_message() {
+        // arrange / act
+        let resp = SuccessResponse::deleted("App");
+
+        // assert
+        assert_eq!(resp.message, "App deleted successfully");
+    }
+
+    #[test]
+    fn test_success_response_deleted_success_flag() {
+        // arrange / act
+        let resp = SuccessResponse::deleted("User");
+
+        // assert
+        assert!(resp.success);
+    }
+
+    #[test]
+    fn test_success_response_removed_message() {
+        // arrange / act
+        let resp = SuccessResponse::removed("DVD");
+
+        // assert
+        assert_eq!(resp.message, "DVD removed successfully");
+    }
+
+    #[test]
+    fn test_success_response_removed_success_flag() {
+        // arrange / act
+        let resp = SuccessResponse::removed("Item");
+
+        // assert
+        assert!(resp.success);
+    }
+}

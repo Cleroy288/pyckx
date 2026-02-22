@@ -1,7 +1,9 @@
 //! Actix-web middleware implementation
 
 use super::store::RateLimiter;
-use actix_web::dev::{forward_ready, Service, ServiceRequest, ServiceResponse, Transform};
+use actix_web::dev::{
+    forward_ready, Service, ServiceRequest, ServiceResponse, Transform,
+};
 use actix_web::Error;
 use std::future::{ready, Future, Ready};
 use std::pin::Pin;
@@ -25,7 +27,8 @@ impl RateLimitMiddleware {
 
 impl<S, B> Transform<S, ServiceRequest> for RateLimitMiddleware
 where
-    S: Service<ServiceRequest, Response = ServiceResponse<B>, Error = Error> + 'static,
+    S: Service<ServiceRequest, Response = ServiceResponse<B>, Error = Error>
+        + 'static,
     S::Future: 'static,
     B: 'static,
 {
@@ -52,13 +55,15 @@ pub struct RateLimitMiddlewareService<S> {
 
 impl<S, B> Service<ServiceRequest> for RateLimitMiddlewareService<S>
 where
-    S: Service<ServiceRequest, Response = ServiceResponse<B>, Error = Error> + 'static,
+    S: Service<ServiceRequest, Response = ServiceResponse<B>, Error = Error>
+        + 'static,
     S::Future: 'static,
     B: 'static,
 {
     type Response = ServiceResponse<B>;
     type Error = Error;
-    type Future = Pin<Box<dyn Future<Output = Result<Self::Response, Self::Error>>>>;
+    type Future =
+        Pin<Box<dyn Future<Output = Result<Self::Response, Self::Error>>>>;
 
     forward_ready!(service);
 
@@ -72,15 +77,15 @@ where
             let path = req.path().to_string();
 
             // Check rate limit
-            if let Err(e) = limiter.check(&path, &client_key) {
+            if let Err(err) = limiter.check(&path, &client_key) {
                 warn!(
                     client = %client_key,
                     path = %path,
-                    window = %e.window,
-                    limit = %e.limit,
+                    window = %err.window,
+                    limit = %err.limit,
                     "Rate limit exceeded"
                 );
-                return Err(e.into());
+                return Err(err.into());
             }
 
             debug!(client = %client_key, path = %path, "Rate limit check passed");

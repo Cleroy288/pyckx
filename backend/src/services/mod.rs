@@ -12,5 +12,6 @@ pub use app_registry::AppService;
 pub use auth::AuthService;
 pub use collection::CollectionService;
 pub use intello::{
-    CheckAnswersInput, GenerateContentInput, IntelloRepositories, IntelloService, UserAnswer,
+    CheckAnswersInput, GenerateContentInput, IntelloRepositories,
+    IntelloService, UserAnswer,
 };

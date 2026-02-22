@@ -26,14 +26,15 @@ pub async fn create_collection_handler(
     let user_id = get_user_id_from_session(&app, &req)?;
     let item_type = body
         .parse_type()
-        .map_err(|e| AppError::validation("item_type", e))?;
+        .map_err(|err| AppError::validation("item_type", err))?;
 
     let collection = app
         .collection_service
         .add_collection(&user_id, item_type)
         .await?;
 
-    Ok(HttpResponse::Created().json(CollectionSuccessResponse::created(collection)))
+    Ok(HttpResponse::Created()
+        .json(CollectionSuccessResponse::created(collection)))
 }
 
 /// GET /app/collection
@@ -51,7 +52,8 @@ pub async fn get_collections_handler(
         .get_user_collections(&user_id)
         .await?;
 
-    Ok(HttpResponse::Ok().json(CollectionListResponse::from_collections(collections)))
+    Ok(HttpResponse::Ok()
+        .json(CollectionListResponse::from_collections(collections)))
 }
 
 /// GET /app/collection/{type}
@@ -66,9 +68,14 @@ pub async fn get_collection_items_handler(
 ) -> AppResult<HttpResponse> {
     let user_id = get_user_id_from_session(&app, &req)?;
     let item_type_str = path.into_inner();
-    let _item_type = CollectionItemType::from_str(&item_type_str).ok_or_else(|| {
-        AppError::validation("item_type", format!("Invalid type: {}", item_type_str))
-    })?;
+    let _item_type = item_type_str
+        .parse::<CollectionItemType>()
+        .map_err(|_| {
+            AppError::validation(
+                "item_type",
+                format!("Invalid type: {}", item_type_str),
+            )
+        })?;
 
     // Currently only DVDs are supported
     let dvds = app.collection_service.get_collection_dvds(&user_id).await?;
@@ -88,9 +95,14 @@ pub async fn delete_collection_handler(
 ) -> AppResult<HttpResponse> {
     let user_id = get_user_id_from_session(&app, &req)?;
     let item_type_str = path.into_inner();
-    let item_type = CollectionItemType::from_str(&item_type_str).ok_or_else(|| {
-        AppError::validation("item_type", format!("Invalid type: {}", item_type_str))
-    })?;
+    let item_type = item_type_str
+        .parse::<CollectionItemType>()
+        .map_err(|_| {
+            AppError::validation(
+                "item_type",
+                format!("Invalid type: {}", item_type_str),
+            )
+        })?;
 
     app.collection_service
         .delete_collection(&user_id, item_type)

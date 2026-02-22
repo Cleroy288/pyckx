@@ -1,0 +1,25 @@
+/* ============================================
+   DVD Form Styles
+   ============================================
+   Vertical form layout inside the modal.
+   No padding — inputs edge-to-edge.
+   Full-width submit button at bottom.
+   ============================================ */
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Input fields stacked with spacing */
+.inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Full-width submit button, edge-to-edge */
+.submit {
+    width: 100%;
+}

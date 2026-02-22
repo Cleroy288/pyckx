@@ -20,7 +20,11 @@ pub trait AppRepository: Send + Sync {
     async fn insert(&self, app: &CreateApp) -> Result<AppEntity, AppError>;
 
     /// Update an existing app
-    async fn update(&self, name: &str, update: &UpdateApp) -> Result<AppEntity, AppError>;
+    async fn update(
+        &self,
+        name: &str,
+        update: &UpdateApp,
+    ) -> Result<AppEntity, AppError>;
 
     /// Delete an app by name
     async fn delete(&self, name: &str) -> Result<bool, AppError>;

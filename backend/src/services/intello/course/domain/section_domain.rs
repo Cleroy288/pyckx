@@ -1,4 +1,6 @@
-use crate::http_api::data_transfer_object::intello::course::{ContentBlock, QcmSetPayload};
+use crate::http_api::data_transfer_object::intello::course::{
+    ContentBlock, QcmSetPayload,
+};
 
 // ** ParsedSection **
 // ==> Fully parsed section with content and QCM

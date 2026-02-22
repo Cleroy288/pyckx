@@ -3,8 +3,9 @@
 use super::helpers::parse_multipart;
 use crate::app::App;
 use crate::http_api::data_transfer_object::intello::{
-    CreateOrderPhraseRequest, CreateOrderPhraseResponse, OrderPhraseQuestionResponse,
-    OrderPhraseSetListResponse, OrderPhraseSetWithQuestionsResponse, OrderPhraseWordResponse,
+    CreateOrderPhraseRequest, CreateOrderPhraseResponse,
+    OrderPhraseQuestionResponse, OrderPhraseSetListResponse,
+    OrderPhraseSetWithQuestionsResponse, OrderPhraseWordResponse,
 };
 use crate::infra::user::get_user_id_from_session;
 use crate::shared::{AppError, AppResult};
@@ -23,12 +24,13 @@ pub async fn create_order_phrase_handler(
     let user_id = get_user_id_from_session(&app, &req)?;
 
     // Parse multipart form data
-    let (metadata, documents) = parse_multipart::<CreateOrderPhraseRequest>(payload).await?;
+    let (metadata, documents) =
+        parse_multipart::<CreateOrderPhraseRequest>(payload).await?;
 
     // Parse level (DTO validation)
     let level = metadata
         .parse_level()
-        .map_err(|e| AppError::validation("level", e))?;
+        .map_err(|err| AppError::validation("level", err))?;
 
     // Build service input
     let service_input = crate::services::GenerateContentInput {
@@ -102,7 +104,11 @@ pub async fn list_order_phrase_sets_handler(
                 .map(|q| OrderPhraseQuestionResponse {
                     id: q.id.to_string(),
                     original_phrase: q.original_phrase.clone(),
-                    words: q.words.iter().map(OrderPhraseWordResponse::from).collect(),
+                    words: q
+                        .words
+                        .iter()
+                        .map(OrderPhraseWordResponse::from)
+                        .collect(),
                     hint: q.hint.clone(),
                 })
                 .collect(),

@@ -112,8 +112,8 @@ const MOCK_COURSE_JSON: &str = r#"{
 
 #[test]
 fn test_parse_generated_course_from_mock_json() {
-    let course: GeneratedCourse =
-        serde_json::from_str(MOCK_COURSE_JSON).expect("Should parse mock course JSON");
+    let course: GeneratedCourse = serde_json::from_str(MOCK_COURSE_JSON)
+        .expect("Should parse mock course JSON");
 
     assert_eq!(course.course_metadata.title, "Introduction to Rust");
     assert_eq!(course.course_metadata.level, "beginner");
@@ -123,8 +123,8 @@ fn test_parse_generated_course_from_mock_json() {
 
 #[test]
 fn test_course_module_has_blocks() {
-    let course: GeneratedCourse =
-        serde_json::from_str(MOCK_COURSE_JSON).expect("Should parse mock course JSON");
+    let course: GeneratedCourse = serde_json::from_str(MOCK_COURSE_JSON)
+        .expect("Should parse mock course JSON");
 
     let blocks = &course.modules[0].blocks;
     assert_eq!(blocks.len(), 4, "Should have 4 content blocks");
@@ -145,8 +145,8 @@ fn test_minimal_course_json() {
         }
     }"#;
 
-    let course: GeneratedCourse =
-        serde_json::from_str(minimal_json).expect("Should parse minimal course JSON");
+    let course: GeneratedCourse = serde_json::from_str(minimal_json)
+        .expect("Should parse minimal course JSON");
 
     assert_eq!(course.course_metadata.title, "Minimal");
     assert!(course.modules.is_empty());

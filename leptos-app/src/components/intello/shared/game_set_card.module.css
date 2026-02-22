@@ -1,0 +1,17 @@
+/* ============================================
+   GameSetCard — domain-specific styles only
+   ============================================
+   Card shell handled by ItemCard component.
+   Only game-set-specific styles live here.
+   ============================================ */
+
+.meta {
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary, #999);
+}
+
+.subjects {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+}

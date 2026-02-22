@@ -7,7 +7,8 @@ use crate::tests::config::TestConfig;
 #[tokio::test]
 async fn test_supabase_login_real() {
     let cfg = Config::from_env().expect("Config should load from .env");
-    let test_cfg = TestConfig::from_env().expect("TestConfig should load from .env");
+    let test_cfg =
+        TestConfig::from_env().expect("TestConfig should load from .env");
 
     let supabase = SupabaseClient::new(&cfg);
 
@@ -15,10 +16,6 @@ async fn test_supabase_login_real() {
 
     match result {
         Ok(response) => {
-            println!("=== SUPABASE LOGIN SUCCESS ===");
-            println!("User authenticated successfully");
-            println!("==============================");
-
             assert!(
                 !response.access_token.is_empty(),
                 "Access token should not be empty"

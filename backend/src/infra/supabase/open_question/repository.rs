@@ -9,7 +9,9 @@
  * - open_questions: Individual questions
  */
 
-use super::types::{level_from_db, level_to_db, OpenQuestionRow, OpenQuestionSetRow};
+use super::types::{
+    level_from_db, level_to_db, OpenQuestionRow, OpenQuestionSetRow,
+};
 use crate::infra::database::OpenQuestionRepository;
 use crate::infra::supabase::shared::{SupabaseError, SupabaseHttpClient};
 use crate::services::intello::error_domain::IntelloError;
@@ -44,13 +46,18 @@ impl SupabaseOpenQuestionRepository {
         IntelloError::storage(err.to_string())
     }
 
-    async fn get_questions(&self, set_id: &str) -> Result<Vec<OpenQuestion>, IntelloError> {
-        let url = self
-            .client
-            .rest_url_with_query(TABLE_QUESTIONS, &format!("set_id=eq.{}", set_id));
+    async fn get_questions(
+        &self,
+        set_id: &str,
+    ) -> Result<Vec<OpenQuestion>, IntelloError> {
+        let url = self.client.rest_url_with_query(
+            TABLE_QUESTIONS,
+            &format!("set_id=eq.{}", set_id),
+        );
         debug!(url = %url, "Getting open questions");
 
-        let rows: Vec<OpenQuestionRow> = self.client.get(&url).await.map_err(Self::map_error)?;
+        let rows: Vec<OpenQuestionRow> =
+            self.client.get(&url).await.map_err(Self::map_error)?;
 
         let questions = rows
             .into_iter()
@@ -89,7 +96,10 @@ impl SupabaseOpenQuestionRepository {
 impl OpenQuestionRepository for SupabaseOpenQuestionRepository {
     /* CREATE */
     #[instrument(skip(self, set), fields(set_id = %set.id))]
-    async fn insert(&self, set: &OpenQuestionSet) -> Result<OpenQuestionSet, IntelloError> {
+    async fn insert(
+        &self,
+        set: &OpenQuestionSet,
+    ) -> Result<OpenQuestionSet, IntelloError> {
         let payload = serde_json::json!({
             "p_set": {
                 "id": set.id,
@@ -131,7 +141,8 @@ impl OpenQuestionRepository for SupabaseOpenQuestionRepository {
         let url = self.client.rest_url_with_query(TABLE_SETS, &query);
         debug!(url = %url, "Finding open question set by ID");
 
-        let rows: Vec<OpenQuestionSetRow> = self.client.get(&url).await.map_err(Self::map_error)?;
+        let rows: Vec<OpenQuestionSetRow> =
+            self.client.get(&url).await.map_err(Self::map_error)?;
 
         let row = match rows.into_iter().next() {
             Some(r) => r,
@@ -148,12 +159,16 @@ impl OpenQuestionRepository for SupabaseOpenQuestionRepository {
 
     /* READ: By user */
     #[instrument(skip(self), fields(user_id = %user_id))]
-    async fn find_by_user(&self, user_id: &str) -> Result<Vec<OpenQuestionSet>, IntelloError> {
+    async fn find_by_user(
+        &self,
+        user_id: &str,
+    ) -> Result<Vec<OpenQuestionSet>, IntelloError> {
         let query = format!("user_id=eq.{}", user_id);
         let url = self.client.rest_url_with_query(TABLE_SETS, &query);
         debug!(url = %url, "Finding open question sets by user");
 
-        let rows: Vec<OpenQuestionSetRow> = self.client.get(&url).await.map_err(Self::map_error)?;
+        let rows: Vec<OpenQuestionSetRow> =
+            self.client.get(&url).await.map_err(Self::map_error)?;
 
         let mut sets = Vec::with_capacity(rows.len());
         for row in rows {

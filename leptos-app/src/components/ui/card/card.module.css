@@ -4,7 +4,7 @@
 
 .card {
     position: relative;
-    border-radius: var(--radius-lg);
+    border-radius: 0;
     padding: 2.5rem 2rem;
     transition: transform var(--transition-slow), box-shadow var(--transition-slow),
                 border-color var(--transition-slow), background var(--transition-slow);
@@ -24,7 +24,7 @@
     backdrop-filter: blur(25px);
     -webkit-backdrop-filter: blur(25px);
     border: var(--glass-border);
-    box-shadow: 0 4px 30px rgba(128, 0, 128, 0.05);
+    box-shadow: 0 4px 30px color-mix(in srgb, var(--primary) 5%, transparent);
 }
 
 .glass:hover {
@@ -35,8 +35,8 @@
 
 .solid {
     background: var(--color-background);
-    border: 1px solid rgba(128, 0, 128, 0.15);
-    box-shadow: 0 4px 24px rgba(128, 0, 128, 0.08);
+    border: 1px solid color-mix(in srgb, var(--primary) 15%, transparent);
+    box-shadow: 0 4px 24px color-mix(in srgb, var(--primary) 8%, transparent);
 }
 
 .solid:hover {
@@ -53,5 +53,5 @@
 
 .popular:hover {
     transform: translate3d(0, -6px, 0);
-    box-shadow: 0 16px 50px rgba(128, 0, 128, 0.25);
+    box-shadow: 0 16px 50px color-mix(in srgb, var(--primary) 25%, transparent);
 }

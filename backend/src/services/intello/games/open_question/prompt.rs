@@ -31,7 +31,8 @@ pub struct OpenQuestionPromptInput {
 // @ input : OpenQuestionPromptInput with generation parameters
 // @ returns : Formatted prompt string for AI model
 pub fn build_open_question_prompt(input: &OpenQuestionPromptInput) -> String {
-    let game_format = get_game_format("open_question").unwrap_or(&GAME_FORMATS[1]);
+    let game_format =
+        get_game_format("open_question").unwrap_or(&GAME_FORMATS[1]);
 
     let subjects_list = if input.subjects.is_empty() {
         "General topics from the provided content".to_string()

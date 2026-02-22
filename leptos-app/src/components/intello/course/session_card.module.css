@@ -1,0 +1,35 @@
+.card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: 0;
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+
+.info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.topic {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin: 0;
+}
+
+.date {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+}
+
+.actions {
+    display: flex;
+    gap: 0.5rem;
+}

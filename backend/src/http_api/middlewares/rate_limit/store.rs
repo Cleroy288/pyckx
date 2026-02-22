@@ -6,6 +6,9 @@ use dashmap::DashMap;
 use std::sync::Arc;
 use std::time::{Duration, Instant};
 
+/// Thread-safe map of (route, client_key) to rate limit state
+type EntryMap = Arc<DashMap<(String, String), ClientEntry>>;
+
 // == TIME WINDOWS // ==
 
 /// Time window durations
@@ -87,7 +90,7 @@ pub struct RateLimiter {
     /// Route configurations: path -> config
     configs: Arc<DashMap<String, RateLimitConfig>>,
     /// Client state: (route, client_key) -> entry
-    entries: Arc<DashMap<(String, String), ClientEntry>>,
+    entries: EntryMap,
     /// Default config for unconfigured routes
     default_config: Option<RateLimitConfig>,
 }
@@ -129,7 +132,11 @@ impl RateLimiter {
     /// # Arguments
     /// * `route` - The request path
     /// * `client_key` - Unique client identifier (IP address or user ID)
-    pub fn check(&self, route: &str, client_key: &str) -> Result<(), RateLimitError> {
+    pub fn check(
+        &self,
+        route: &str,
+        client_key: &str,
+    ) -> Result<(), RateLimitError> {
         let config = match self.get_config(route) {
             Some(c) if c.has_limits() => c,
             _ => return Ok(()), // No limits configured
@@ -144,7 +151,9 @@ impl RateLimiter {
             .or_insert_with(|| ClientEntry::new(&config));
 
         // Check each window
-        if let (Some(limit), Some(bucket)) = (config.per_second, entry.second.as_mut()) {
+        if let (Some(limit), Some(bucket)) =
+            (config.per_second, entry.second.as_mut())
+        {
             let count = bucket.increment();
             if count > limit {
                 return Err(RateLimitError::new(
@@ -155,7 +164,9 @@ impl RateLimiter {
             }
         }
 
-        if let (Some(limit), Some(bucket)) = (config.per_minute, entry.minute.as_mut()) {
+        if let (Some(limit), Some(bucket)) =
+            (config.per_minute, entry.minute.as_mut())
+        {
             let count = bucket.increment();
             if count > limit {
                 return Err(RateLimitError::new(
@@ -166,7 +177,9 @@ impl RateLimiter {
             }
         }
 
-        if let (Some(limit), Some(bucket)) = (config.per_hour, entry.hour.as_mut()) {
+        if let (Some(limit), Some(bucket)) =
+            (config.per_hour, entry.hour.as_mut())
+        {
             let count = bucket.increment();
             if count > limit {
                 return Err(RateLimitError::new(
@@ -177,10 +190,16 @@ impl RateLimiter {
             }
         }
 
-        if let (Some(limit), Some(bucket)) = (config.per_day, entry.day.as_mut()) {
+        if let (Some(limit), Some(bucket)) =
+            (config.per_day, entry.day.as_mut())
+        {
             let count = bucket.increment();
             if count > limit {
-                return Err(RateLimitError::new("day", limit, bucket.time_until_reset()));
+                return Err(RateLimitError::new(
+                    "day",
+                    limit,
+                    bucket.time_until_reset(),
+                ));
             }
         }
 
@@ -287,7 +306,8 @@ mod tests {
 
     #[test]
     fn test_default_config() {
-        let limiter = RateLimiter::with_default(RateLimitConfig::new().per_second(2));
+        let limiter =
+            RateLimiter::with_default(RateLimitConfig::new().per_second(2));
 
         // Any route should use default
         assert!(limiter.check("/any", "client1").is_ok());
@@ -298,7 +318,10 @@ mod tests {
     #[test]
     fn test_multiple_windows() {
         let limiter = RateLimiter::new();
-        limiter.configure("/test", RateLimitConfig::new().per_second(10).per_minute(5));
+        limiter.configure(
+            "/test",
+            RateLimitConfig::new().per_second(10).per_minute(5),
+        );
 
         // Should hit minute limit before second limit
         for _ in 0..5 {
@@ -309,5 +332,111 @@ mod tests {
         let result = limiter.check("/test", "client1");
         assert!(result.is_err());
         assert_eq!(result.unwrap_err().window, "minute");
+    }
+
+    #[test]
+    fn test_rate_limiter_default_equals_new() {
+        // arrange / act
+        let limiter = RateLimiter::default();
+
+        // assert (no config = no limits)
+        assert!(limiter.check("/any", "client1").is_ok());
+    }
+
+    #[test]
+    fn test_with_default_route_override() {
+        // arrange
+        let limiter = RateLimiter::with_default(
+            RateLimitConfig::new().per_second(1),
+        );
+        limiter.configure(
+            "/custom",
+            RateLimitConfig::new().per_second(100),
+        );
+
+        // act - default route should block after 1
+        limiter.check("/default", "c1").unwrap();
+        let result = limiter.check("/default", "c1");
+
+        // assert
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_configure_overrides_default() {
+        // arrange
+        let limiter = RateLimiter::with_default(
+            RateLimitConfig::new().per_second(1),
+        );
+        limiter.configure(
+            "/custom",
+            RateLimitConfig::new().per_second(100),
+        );
+
+        // act - custom route should allow many
+        for _ in 0..50 {
+            assert!(limiter.check("/custom", "c1").is_ok());
+        }
+    }
+
+    #[test]
+    fn test_bucket_time_until_reset_positive() {
+        // arrange
+        let bucket = Bucket::new(Duration::from_secs(60));
+
+        // act
+        let reset = bucket.time_until_reset();
+
+        // assert - should be close to 60s
+        assert!(reset.as_secs() <= 60);
+        assert!(reset.as_secs() >= 59);
+    }
+
+    #[test]
+    fn test_bucket_time_until_reset_after_expiry() {
+        // arrange
+        let bucket = Bucket::new(Duration::from_millis(1));
+        std::thread::sleep(Duration::from_millis(5));
+
+        // act
+        let reset = bucket.time_until_reset();
+
+        // assert
+        assert_eq!(reset, Duration::ZERO);
+    }
+
+    #[test]
+    fn test_client_entry_creates_buckets_from_config() {
+        // arrange
+        let config = RateLimitConfig::new()
+            .per_second(1)
+            .per_minute(10);
+
+        // act
+        let entry = ClientEntry::new(&config);
+
+        // assert
+        assert!(entry.second.is_some());
+        assert!(entry.minute.is_some());
+        assert!(entry.hour.is_none());
+        assert!(entry.day.is_none());
+    }
+
+    #[test]
+    fn test_rate_limiter_error_contains_window() {
+        // arrange
+        let limiter = RateLimiter::new();
+        limiter.configure(
+            "/test",
+            RateLimitConfig::new().per_second(1),
+        );
+        limiter.check("/test", "c1").unwrap();
+
+        // act
+        let err = limiter.check("/test", "c1").unwrap_err();
+
+        // assert
+        assert_eq!(err.window, "second");
+        assert_eq!(err.limit, 1);
     }
 }

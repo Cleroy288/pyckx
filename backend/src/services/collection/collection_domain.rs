@@ -28,13 +28,18 @@ impl CollectionItemType {
             Self::Book => "Book",
         }
     }
+}
 
-    /// Parse from string (case-insensitive)
-    pub fn from_str(s: &str) -> Option<Self> {
+impl std::str::FromStr for CollectionItemType {
+    type Err = String;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s.to_lowercase().as_str() {
-            "dvd" => Some(Self::Dvd),
-            "book" => Some(Self::Book),
-            _ => None,
+            "dvd" => Ok(Self::Dvd),
+            "book" => Ok(Self::Book),
+            _ => Err(format!(
+                "Unknown collection type: {}", s
+            )),
         }
     }
 }
@@ -61,6 +66,108 @@ pub struct UserCollection {
 
 impl UserCollection {
     pub fn display_name(&self) -> String {
-        format!("{} Collection", self.collection_type.display_name())
+        format!(
+            "{} Collection",
+            self.collection_type.display_name()
+        )
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    // -- CollectionItemType::display_name tests --
+
+    #[test]
+    fn test_display_name_dvd_returns_uppercase() {
+        // arrange
+        let item = CollectionItemType::Dvd;
+
+        // act / assert
+        assert_eq!(item.display_name(), "DVD");
+    }
+
+    #[test]
+    fn test_display_name_book_returns_title_case() {
+        // arrange
+        let item = CollectionItemType::Book;
+
+        // act / assert
+        assert_eq!(item.display_name(), "Book");
+    }
+
+    // -- CollectionItemType::from_str tests --
+
+    #[test]
+    fn test_from_str_valid_cases() {
+        let cases = vec![
+            ("dvd", Some(CollectionItemType::Dvd)),
+            ("DVD", Some(CollectionItemType::Dvd)),
+            ("Dvd", Some(CollectionItemType::Dvd)),
+            ("book", Some(CollectionItemType::Book)),
+            ("BOOK", Some(CollectionItemType::Book)),
+            ("unknown", None),
+            ("", None),
+        ];
+        for (input, expected) in cases {
+            assert_eq!(
+                input.parse::<CollectionItemType>().ok(),
+                expected,
+                "from_str({:?})",
+                input
+            );
+        }
+    }
+
+    // -- CollectionItemType Display --
+
+    #[test]
+    fn test_item_type_display_dvd() {
+        assert_eq!(
+            CollectionItemType::Dvd.to_string(),
+            "dvd"
+        );
+    }
+
+    #[test]
+    fn test_item_type_display_book() {
+        assert_eq!(
+            CollectionItemType::Book.to_string(),
+            "book"
+        );
+    }
+
+    // -- UserCollection::display_name --
+
+    #[test]
+    fn test_user_collection_display_name_dvd() {
+        // arrange
+        let collection = UserCollection {
+            id: 1,
+            user_id: "usr-1".to_string(),
+            collection_type: CollectionItemType::Dvd,
+            created_at: Utc::now(),
+        };
+
+        // act / assert
+        assert_eq!(collection.display_name(), "DVD Collection");
+    }
+
+    #[test]
+    fn test_user_collection_display_name_book() {
+        // arrange
+        let collection = UserCollection {
+            id: 2,
+            user_id: "usr-2".to_string(),
+            collection_type: CollectionItemType::Book,
+            created_at: Utc::now(),
+        };
+
+        // act / assert
+        assert_eq!(
+            collection.display_name(),
+            "Book Collection"
+        );
     }
 }

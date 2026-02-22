@@ -104,18 +104,29 @@ impl TryFrom<DvdRow> for Dvd {
         use chrono::DateTime;
 
         let year = DateTime::parse_from_rfc3339(&row.year)
-            .map_err(|e| CollectionError::storage_error(format!("Invalid year format: {}", e)))?
+            .map_err(|err| {
+                CollectionError::storage_error(format!(
+                    "Invalid year format: {}",
+                    err
+                ))
+            })?
             .with_timezone(&chrono::Utc);
 
         let created_at = DateTime::parse_from_rfc3339(&row.created_at)
-            .map_err(|e| {
-                CollectionError::storage_error(format!("Invalid created_at format: {}", e))
+            .map_err(|err| {
+                CollectionError::storage_error(format!(
+                    "Invalid created_at format: {}",
+                    err
+                ))
             })?
             .with_timezone(&chrono::Utc);
 
         let updated_at = DateTime::parse_from_rfc3339(&row.updated_at)
-            .map_err(|e| {
-                CollectionError::storage_error(format!("Invalid updated_at format: {}", e))
+            .map_err(|err| {
+                CollectionError::storage_error(format!(
+                    "Invalid updated_at format: {}",
+                    err
+                ))
             })?
             .with_timezone(&chrono::Utc);
 
@@ -178,10 +189,9 @@ impl DvdRepository for SupabaseDvdRepository {
             .await
             .map_err(Self::map_error)?;
 
-        let dvd_row = rows
-            .into_iter()
-            .next()
-            .ok_or_else(|| CollectionError::storage_error("No row returned from insert"))?;
+        let dvd_row = rows.into_iter().next().ok_or_else(|| {
+            CollectionError::storage_error("No row returned from insert")
+        })?;
 
         let created_dvd = Dvd::try_from(dvd_row)?;
         info!(dvd_id = %created_dvd.id, "DVD inserted successfully");
@@ -191,12 +201,17 @@ impl DvdRepository for SupabaseDvdRepository {
 
     /* READ: By ID */
     #[instrument(skip(self), fields(user_id = %user_id, dvd_id = %dvd_id))]
-    async fn find_by_id(&self, user_id: &str, dvd_id: &str) -> Result<Dvd, CollectionError> {
+    async fn find_by_id(
+        &self,
+        user_id: &str,
+        dvd_id: &str,
+    ) -> Result<Dvd, CollectionError> {
         let query = format!("id=eq.{}&user_id=eq.{}", dvd_id, user_id);
         let url = self.client.rest_url_with_query(TABLE_DVDS, &query);
         debug!(url = %url, "Finding DVD by ID");
 
-        let rows: Vec<DvdRow> = self.client.get(&url).await.map_err(Self::map_error)?;
+        let rows: Vec<DvdRow> =
+            self.client.get(&url).await.map_err(Self::map_error)?;
 
         let dvd_row = rows
             .into_iter()
@@ -208,14 +223,19 @@ impl DvdRepository for SupabaseDvdRepository {
 
     /* READ: All for user */
     #[instrument(skip(self), fields(user_id = %user_id))]
-    async fn find_all(&self, user_id: &str) -> Result<Vec<Dvd>, CollectionError> {
+    async fn find_all(
+        &self,
+        user_id: &str,
+    ) -> Result<Vec<Dvd>, CollectionError> {
         let query = format!("user_id=eq.{}&order=created_at.desc", user_id);
         let url = self.client.rest_url_with_query(TABLE_DVDS, &query);
         debug!(url = %url, "Finding all DVDs for user");
 
-        let rows: Vec<DvdRow> = self.client.get(&url).await.map_err(Self::map_error)?;
+        let rows: Vec<DvdRow> =
+            self.client.get(&url).await.map_err(Self::map_error)?;
 
-        let dvds: Result<Vec<Dvd>, CollectionError> = rows.into_iter().map(Dvd::try_from).collect();
+        let dvds: Result<Vec<Dvd>, CollectionError> =
+            rows.into_iter().map(Dvd::try_from).collect();
         let dvds = dvds?;
         info!(count = dvds.len(), "Retrieved DVDs for user");
 
@@ -224,14 +244,20 @@ impl DvdRepository for SupabaseDvdRepository {
 
     /* READ: By collection */
     #[instrument(skip(self), fields(collection_id = %collection_id))]
-    async fn find_by_collection(&self, collection_id: i32) -> Result<Vec<Dvd>, CollectionError> {
-        let query = format!("collection_id=eq.{}&order=created_at.desc", collection_id);
+    async fn find_by_collection(
+        &self,
+        collection_id: i32,
+    ) -> Result<Vec<Dvd>, CollectionError> {
+        let query =
+            format!("collection_id=eq.{}&order=created_at.desc", collection_id);
         let url = self.client.rest_url_with_query(TABLE_DVDS, &query);
         debug!(url = %url, "Finding DVDs by collection");
 
-        let rows: Vec<DvdRow> = self.client.get(&url).await.map_err(Self::map_error)?;
+        let rows: Vec<DvdRow> =
+            self.client.get(&url).await.map_err(Self::map_error)?;
 
-        let dvds: Result<Vec<Dvd>, CollectionError> = rows.into_iter().map(Dvd::try_from).collect();
+        let dvds: Result<Vec<Dvd>, CollectionError> =
+            rows.into_iter().map(Dvd::try_from).collect();
         dvds
     }
 
@@ -254,7 +280,8 @@ impl DvdRepository for SupabaseDvdRepository {
             );
             let url = self.client.rest_url_with_query(TABLE_DVDS, &query);
 
-            let rows: Vec<DvdRow> = self.client.get(&url).await.map_err(Self::map_error)?;
+            let rows: Vec<DvdRow> =
+                self.client.get(&url).await.map_err(Self::map_error)?;
             if !rows.is_empty() {
                 return Err(CollectionError::dvd_duplicate(new_name));
             }
@@ -284,7 +311,11 @@ impl DvdRepository for SupabaseDvdRepository {
 
     /* DELETE */
     #[instrument(skip(self), fields(user_id = %user_id, dvd_id = %dvd_id))]
-    async fn delete(&self, user_id: &str, dvd_id: &str) -> Result<bool, CollectionError> {
+    async fn delete(
+        &self,
+        user_id: &str,
+        dvd_id: &str,
+    ) -> Result<bool, CollectionError> {
         let query = format!("id=eq.{}&user_id=eq.{}", dvd_id, user_id);
         let url = self.client.rest_url_with_query(TABLE_DVDS, &query);
         debug!(url = %url, "Deleting DVD");
@@ -296,8 +327,13 @@ impl DvdRepository for SupabaseDvdRepository {
 
     /* HELPER: Check existence by name */
     #[instrument(skip(self), fields(user_id = %user_id, name = %name))]
-    async fn exists_by_name(&self, user_id: &str, name: &str) -> Result<bool, CollectionError> {
-        let query = format!("user_id=eq.{}&name=ilike.{}&select=id", user_id, name);
+    async fn exists_by_name(
+        &self,
+        user_id: &str,
+        name: &str,
+    ) -> Result<bool, CollectionError> {
+        let query =
+            format!("user_id=eq.{}&name=ilike.{}&select=id", user_id, name);
         let url = self.client.rest_url_with_query(TABLE_DVDS, &query);
         debug!(url = %url, "Checking if DVD exists by name");
 
@@ -307,13 +343,17 @@ impl DvdRepository for SupabaseDvdRepository {
             id: String,
         }
 
-        let rows: Vec<IdOnly> = self.client.get(&url).await.map_err(Self::map_error)?;
+        let rows: Vec<IdOnly> =
+            self.client.get(&url).await.map_err(Self::map_error)?;
         Ok(!rows.is_empty())
     }
 
     /* DELETE: By collection */
     #[instrument(skip(self), fields(collection_id = %collection_id))]
-    async fn delete_by_collection(&self, collection_id: i32) -> Result<usize, CollectionError> {
+    async fn delete_by_collection(
+        &self,
+        collection_id: i32,
+    ) -> Result<usize, CollectionError> {
         let query = format!("collection_id=eq.{}", collection_id);
         let url = self.client.rest_url_with_query(TABLE_DVDS, &query);
         debug!(url = %url, "Deleting DVDs by collection");

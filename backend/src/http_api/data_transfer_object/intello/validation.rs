@@ -69,3 +69,146 @@ pub fn default_language() -> String {
 pub fn default_num_questions() -> u8 {
     10
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    // -- validate_subjects --
+
+    #[test]
+    fn test_validate_subjects_empty_ok() {
+        // arrange
+        let subjects: Vec<String> = vec![];
+
+        // act
+        let result = validate_subjects(&subjects);
+
+        // assert
+        assert!(result.is_ok());
+    }
+
+    #[test]
+    fn test_validate_subjects_within_limit_ok() {
+        // arrange
+        let subjects = vec!["Math".into(), "Science".into()];
+
+        // act
+        let result = validate_subjects(&subjects);
+
+        // assert
+        assert!(result.is_ok());
+    }
+
+    #[test]
+    fn test_validate_subjects_too_many_returns_error() {
+        // arrange
+        let subjects: Vec<String> = vec![
+            "A".into(),
+            "B".into(),
+            "C".into(),
+            "D".into(),
+        ];
+
+        // act
+        let result = validate_subjects(&subjects);
+
+        // assert
+        assert!(result.is_err());
+        assert!(result.unwrap_err().contains("Too many"));
+    }
+
+    #[test]
+    fn test_validate_subjects_too_long_returns_error() {
+        // arrange
+        let long = "a".repeat(MAX_SUBJECT_LENGTH + 1);
+        let subjects = vec![long];
+
+        // act
+        let result = validate_subjects(&subjects);
+
+        // assert
+        assert!(result.is_err());
+        assert!(result.unwrap_err().contains("too long"));
+    }
+
+    // -- parse_level --
+
+    #[test]
+    fn test_parse_level_easy() {
+        // arrange / act
+        let result = parse_level("easy");
+
+        // assert
+        assert_eq!(result.unwrap(), Level::Easy);
+    }
+
+    #[test]
+    fn test_parse_level_medium_case_insensitive() {
+        // arrange / act
+        let result = parse_level("Medium");
+
+        // assert
+        assert_eq!(result.unwrap(), Level::Medium);
+    }
+
+    #[test]
+    fn test_parse_level_hard_uppercase() {
+        // arrange / act
+        let result = parse_level("HARD");
+
+        // assert
+        assert_eq!(result.unwrap(), Level::Hard);
+    }
+
+    #[test]
+    fn test_parse_level_invalid_returns_error() {
+        // arrange / act
+        let result = parse_level("expert");
+
+        // assert
+        assert!(result.is_err());
+        assert!(result.unwrap_err().contains("expert"));
+    }
+
+    // -- validate_num_questions --
+
+    #[test]
+    fn test_validate_num_questions_valid_values() {
+        // arrange
+        let valid = vec![5, 10, 15, 20, 25, 30];
+
+        // act / assert
+        for n in valid {
+            assert!(
+                validate_num_questions(n).is_ok(),
+                "Expected {} to be valid",
+                n,
+            );
+        }
+    }
+
+    #[test]
+    fn test_validate_num_questions_invalid_value() {
+        // arrange / act
+        let result = validate_num_questions(7);
+
+        // assert
+        assert!(result.is_err());
+        assert!(result.unwrap_err().contains("7"));
+    }
+
+    // -- defaults --
+
+    #[test]
+    fn test_default_language_is_en() {
+        // arrange / act / assert
+        assert_eq!(default_language(), "en");
+    }
+
+    #[test]
+    fn test_default_num_questions_is_10() {
+        // arrange / act / assert
+        assert_eq!(default_num_questions(), 10);
+    }
+}

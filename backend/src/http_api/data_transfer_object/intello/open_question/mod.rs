@@ -6,6 +6,6 @@ mod response;
 
 pub use request::{CheckAnswersRequest, CreateOpenQuestionRequest};
 pub use response::{
-    CheckAnswersResponse, CreateOpenQuestionResponse, GradedAnswerResponse, OpenQuestionResponse,
-    OpenQuestionSetListResponse,
+    CheckAnswersResponse, CreateOpenQuestionResponse, GradedAnswerResponse,
+    OpenQuestionResponse, OpenQuestionSetListResponse,
 };

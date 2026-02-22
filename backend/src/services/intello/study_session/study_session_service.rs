@@ -49,7 +49,7 @@ impl IntelloService {
             .study_session_repo
             .create(&session)
             .await
-            .map_err(|e| IntelloError::storage(e.to_string()))?;
+            .map_err(|err| IntelloError::storage(err.to_string()))?;
 
         // Step 4: Log success and return created session
         info!(session_id = %created.id, "Study session created");
@@ -78,7 +78,7 @@ impl IntelloService {
             .study_session_repo
             .list_by_course(course_id)
             .await
-            .map_err(|e| IntelloError::storage(e.to_string()))?;
+            .map_err(|err| IntelloError::storage(err.to_string()))?;
 
         // Step 3: Log count and return sessions
         info!(count = sessions.len(), "Course sessions listed");
@@ -106,7 +106,7 @@ impl IntelloService {
             .study_session_repo
             .get(session_id)
             .await
-            .map_err(|e| IntelloError::storage(e.to_string()))?;
+            .map_err(|err| IntelloError::storage(err.to_string()))?;
 
         // TODO: Verify session belongs to user's course if needed.
         // Current repo `get` doesn't filter by user, but given UUIDs are unique it's "safe" from collision.

@@ -2,28 +2,21 @@
 // LAPP - Login Application
 // ============================================================================
 
-// Modules
-mod app;
-mod configs;
-mod http_api;
-mod infra;
-mod services;
-mod shared;
-
-#[cfg(test)]
-mod tests;
-
-// Imports
 use actix_cors::Cors;
 use actix_files::{Files, NamedFile};
 use actix_multipart::form::MultipartFormConfig;
 use actix_web::{
-    http::header, middleware::Logger, rt::signal, web, App as ActixApp, HttpRequest, HttpServer,
+    http::header,
+    middleware::{Compress, Logger},
+    rt::signal,
+    web, App as ActixApp, HttpRequest, HttpServer,
 };
-use app::App;
-use http_api::{RateLimitConfig, RateLimitMiddleware, RateLimiter};
+use LAPP::app::App;
+use LAPP::http_api::{RateLimitConfig, RateLimitMiddleware, RateLimiter};
 use tracing::{error, info, warn};
-use tracing_subscriber::{fmt, layer::SubscriberExt, util::SubscriberInitExt, EnvFilter};
+use tracing_subscriber::{
+    fmt, layer::SubscriberExt, util::SubscriberInitExt, EnvFilter,
+};
 
 // ============================================================================
 // MAIN
@@ -36,9 +29,9 @@ async fn main() -> std::io::Result<()> {
     // Initialize application
     let app = match App::new().await {
         Ok(app) => app,
-        Err(e) => {
-            error!("Failed to load configuration: {}", e);
-            eprintln!("\n❌ Configuration Error: {}", e);
+        Err(err) => {
+            error!("Failed to load configuration: {}", err);
+            eprintln!("\n❌ Configuration Error: {}", err);
             eprintln!("\nRequired env vars: IP, PORT, SP_ID, SP_URL, SP_ANON, SP_SERVICE_ROLE, SECURE_HTTP");
             std::process::exit(1);
         }
@@ -72,14 +65,17 @@ async fn main() -> std::io::Result<()> {
             .memory_limit(50 * 1024 * 1024);
 
         let json_config = web::JsonConfig::default().limit(10 * 1024 * 1024);
-        let payload_config = web::PayloadConfig::default().limit(100 * 1024 * 1024);
+        let payload_config =
+            web::PayloadConfig::default().limit(100 * 1024 * 1024);
 
         let cors = if serve_frontend {
             Cors::default()
         } else {
             Cors::default()
                 .allowed_origin("http://localhost:3000")
-                .allowed_methods(vec!["GET", "POST", "PUT", "DELETE", "OPTIONS"])
+                .allowed_methods(vec![
+                    "GET", "POST", "PUT", "DELETE", "OPTIONS",
+                ])
                 .allowed_headers(vec![
                     header::CONTENT_TYPE,
                     header::AUTHORIZATION,
@@ -95,9 +91,10 @@ async fn main() -> std::io::Result<()> {
             .app_data(json_config)
             .app_data(payload_config)
             .wrap(cors)
+            .wrap(Compress::default())
             .wrap(RateLimitMiddleware::new(rate_limiter.clone()))
             .wrap(Logger::new("%a \"%r\" %s %b %Dms"))
-            .configure(http_api::init);
+            .configure(LAPP::http_api::init);
 
         // Static file serving (Leptos WASM app)
         if serve_frontend {
@@ -120,6 +117,16 @@ async fn main() -> std::io::Result<()> {
     .bind((app.config.ip.clone(), port))?
     .run();
 
+    let scheme = if app.config.secure_http == "true" {
+        "https"
+    } else {
+        "http"
+    };
+    println!(
+        "\n🌐 {} running at {}://{}:{}\n",
+        app.name, scheme, app.config.ip, port
+    );
+
     // Graceful shutdown
     let srv_handle = server.handle();
     tokio::spawn(async move {
@@ -136,8 +143,9 @@ async fn main() -> std::io::Result<()> {
 // ============================================================================
 
 fn init_tracing() {
-    let filter = EnvFilter::try_from_default_env()
-        .unwrap_or_else(|_| EnvFilter::new("info,actix_web=info,actix_server=info"));
+    let filter = EnvFilter::try_from_default_env().unwrap_or_else(|_| {
+        EnvFilter::new("info,actix_web=info,actix_server=info")
+    });
 
     tracing_subscriber::registry()
         .with(filter)
@@ -170,7 +178,10 @@ fn configure_rate_limiter() -> RateLimiter {
 }
 
 /// SPA fallback - serves index.html for unmatched routes (client-side routing)
-async fn spa_fallback(req: HttpRequest, static_dir: String) -> actix_web::Result<NamedFile> {
+async fn spa_fallback(
+    req: HttpRequest,
+    static_dir: String,
+) -> actix_web::Result<NamedFile> {
     let path = req.path();
 
     // Reject API routes that fell through
@@ -180,7 +191,8 @@ async fn spa_fallback(req: HttpRequest, static_dir: String) -> actix_web::Result
     }
 
     // Try route-specific index.html (e.g., /intello -> /intello/index.html)
-    let route_index = format!("{}{}/index.html", static_dir, path.trim_end_matches('/'));
+    let route_index =
+        format!("{}{}/index.html", static_dir, path.trim_end_matches('/'));
     if let Ok(file) = NamedFile::open(&route_index) {
         return Ok(file);
     }

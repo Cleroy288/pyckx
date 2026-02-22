@@ -34,6 +34,7 @@ pub fn init(cfg: &mut web::ServiceConfig) {
             .service(ai_generation::create_custom_question_handler)
             .service(ai_generation::create_open_question_handler)
             .service(ai_generation::create_flashcard_handler)
+            .service(ai_generation::create_quick_qcm_handler)
             // Open Questions
             .service(open_question::list_open_questions_handler)
             .service(open_question::check_open_questions_handler)

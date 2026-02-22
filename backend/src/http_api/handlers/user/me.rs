@@ -7,7 +7,10 @@ use actix_web::{get, web, HttpRequest, HttpResponse, Responder};
 
 /// GET /user/me - Get current user from session
 #[get("/me")]
-pub async fn me_handler(app: web::Data<App>, req: HttpRequest) -> impl Responder {
+pub async fn me_handler(
+    app: web::Data<App>,
+    req: HttpRequest,
+) -> impl Responder {
     let session_id = match extract_session_id(&req) {
         Some(id) => id,
         None => return HttpResponse::Unauthorized().finish(),

@@ -1,7 +1,9 @@
 use crate::http_api::data_transfer_object::intello::course::{
     ContentBlock, CourseMetadata, CourseModule, GeneratedCourse,
 };
-use crate::services::intello::course::domain::{CoursePlan, ParsedSection, ParsedSynthesis};
+use crate::services::intello::course::domain::{
+    CoursePlan, ParsedSection, ParsedSynthesis,
+};
 use crate::services::intello::error_domain::IntelloError;
 
 // ** assemble_complete_course **
@@ -63,7 +65,9 @@ pub fn assemble_complete_course(
 //
 // @ synthesis : ParsedSynthesis with summary and QCM
 // @ returns : Vec of ContentBlocks for synthesis module
-fn create_synthesis_blocks(synthesis: &ParsedSynthesis) -> Result<Vec<ContentBlock>, IntelloError> {
+fn create_synthesis_blocks(
+    synthesis: &ParsedSynthesis,
+) -> Result<Vec<ContentBlock>, IntelloError> {
     // Step 1: Create summary text block
     let mut blocks = vec![
         ContentBlock::Subtitle {

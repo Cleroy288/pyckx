@@ -65,3 +65,113 @@ impl UpdateQcmSetRequest {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// Build a minimal CreateQcmSetRequest
+    fn create_req(level: &str) -> CreateQcmSetRequest {
+        CreateQcmSetRequest {
+            name: "Test".into(),
+            description: "Desc".into(),
+            level: level.into(),
+            language: "en".into(),
+            subjects: vec![],
+            questions: vec![],
+        }
+    }
+
+    #[test]
+    fn test_create_parse_level_easy() {
+        // arrange
+        let req = create_req("easy");
+
+        // act
+        let result = req.parse_level();
+
+        // assert
+        assert_eq!(result.unwrap(), Level::Easy);
+    }
+
+    #[test]
+    fn test_create_parse_level_invalid() {
+        // arrange
+        let req = create_req("impossible");
+
+        // act
+        let result = req.parse_level();
+
+        // assert
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_create_validate_subjects_ok() {
+        // arrange
+        let req = create_req("easy");
+
+        // act
+        let result = req.validate_subjects();
+
+        // assert
+        assert!(result.is_ok());
+    }
+
+    #[test]
+    fn test_update_parse_level_none_returns_ok_none() {
+        // arrange
+        let req = UpdateQcmSetRequest {
+            name: None,
+            description: None,
+            level: None,
+            language: None,
+            subjects: None,
+            questions: None,
+        };
+
+        // act
+        let result = req.parse_level();
+
+        // assert
+        assert!(result.unwrap().is_none());
+    }
+
+    #[test]
+    fn test_update_parse_level_some_valid() {
+        // arrange
+        let req = UpdateQcmSetRequest {
+            name: None,
+            description: None,
+            level: Some("hard".into()),
+            language: None,
+            subjects: None,
+            questions: None,
+        };
+
+        // act
+        let result = req.parse_level();
+
+        // assert
+        assert_eq!(result.unwrap(), Some(Level::Hard));
+    }
+
+    #[test]
+    fn test_update_validate_subjects_none_ok() {
+        // arrange
+        let req = UpdateQcmSetRequest {
+            name: None,
+            description: None,
+            level: None,
+            language: None,
+            subjects: None,
+            questions: None,
+        };
+
+        // act
+        let result = req.validate_subjects();
+
+        // assert
+        assert!(result.is_ok());
+    }
+}

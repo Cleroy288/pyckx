@@ -6,5 +6,6 @@ mod response;
 
 pub use request::{AddUserAppRequest, CreateAppRequest, UpdateAppRequest};
 pub use response::{
-    AppListResponse, AppResponse, AppSuccessResponse, SuccessResponse, UserAppSuccessResponse,
+    AppListResponse, AppResponse, AppSuccessResponse, SuccessResponse,
+    UserAppSuccessResponse,
 };

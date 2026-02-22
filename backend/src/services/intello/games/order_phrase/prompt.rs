@@ -31,7 +31,8 @@ pub struct OrderPhrasePromptInput {
 // @ input : OrderPhrasePromptInput with generation parameters
 // @ returns : Formatted prompt string for AI model
 pub fn build_order_phrase_prompt(input: &OrderPhrasePromptInput) -> String {
-    let game_format = get_game_format("order_phrase").unwrap_or(&GAME_FORMATS[5]);
+    let game_format =
+        get_game_format("order_phrase").unwrap_or(&GAME_FORMATS[5]);
 
     let subjects_list = if input.subjects.is_empty() {
         "General topics from the provided content".to_string()

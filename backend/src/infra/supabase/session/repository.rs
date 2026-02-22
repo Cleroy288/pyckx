@@ -58,15 +58,18 @@ impl SupabaseSessionRepository {
                 info!(count = sessions.len(), "Loaded sessions from Supabase");
                 Ok(sessions)
             }
-            Err(e) => {
-                warn!(error = %e, "Failed to load sessions from Supabase");
-                Err(e)
+            Err(err) => {
+                warn!(error = %err, "Failed to load sessions from Supabase");
+                Err(err)
             }
         }
     }
 
     /// Insert or update a session (upsert on session_id)
-    pub async fn upsert(&self, session: SessionRow) -> Result<(), SupabaseError> {
+    pub async fn upsert(
+        &self,
+        session: SessionRow,
+    ) -> Result<(), SupabaseError> {
         let url = self
             .client
             .rest_url_with_query(TABLE, "on_conflict=session_id");
@@ -90,9 +93,10 @@ impl SupabaseSessionRepository {
 
     /// Delete a session by session_id
     pub async fn delete(&self, session_id: &str) -> Result<(), SupabaseError> {
-        let url = self
-            .client
-            .rest_url_with_query(TABLE, &format!("session_id=eq.{}", session_id));
+        let url = self.client.rest_url_with_query(
+            TABLE,
+            &format!("session_id=eq.{}", session_id),
+        );
         debug!(session_id = %session_id, "Deleting session from Supabase");
 
         self.client.delete(&url).await?;
@@ -101,7 +105,11 @@ impl SupabaseSessionRepository {
     }
 
     /// Delete all sessions for a user (cleanup old sessions)
-    pub async fn delete_by_user_id(&self, user_id: &str) -> Result<(), SupabaseError> {
+    #[allow(dead_code)]
+    pub async fn delete_by_user_id(
+        &self,
+        user_id: &str,
+    ) -> Result<(), SupabaseError> {
         let url = self
             .client
             .rest_url_with_query(TABLE, &format!("user_id=eq.{}", user_id));

@@ -8,19 +8,6 @@ pub struct Card {
     pub description: &'static str,
 }
 
-pub const PLATFORM_CARDS: &[Card] = &[
-    Card {
-        icon: "Check",
-        title: "We Listen",
-        description: "Your feedback shapes our platform. We build features you need, when you need them.",
-    },
-    Card {
-        icon: "Star",
-        title: "One Subscription",
-        description: "Access all our features with a single subscription. No hidden fees, no feature limits.",
-    },
-];
-
 pub const APP_CARDS: &[Card] = &[
     Card {
         icon: "Book",
@@ -40,7 +27,6 @@ pub struct PricingTier {
     pub price: &'static str,
     pub period: &'static str,
     pub features: &'static [&'static str],
-    pub popular: bool,
 }
 
 pub const PRICING_TIERS: &[PricingTier] = &[
@@ -49,13 +35,11 @@ pub const PRICING_TIERS: &[PricingTier] = &[
         price: "5",
         period: "month",
         features: &["All apps included", "All features", "Regular updates"],
-        popular: false,
     },
     PricingTier {
         name: "Yearly",
         price: "50",
         period: "year",
         features: &["All apps included", "All features", "Regular updates", "Save 17%"],
-        popular: true,
     },
 ];

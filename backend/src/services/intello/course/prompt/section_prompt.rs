@@ -138,3 +138,72 @@ Respond with ONLY valid JSON:
         resources_section = resources_section
     )
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// Helper to build a test SectionPlan
+    fn test_section_plan() -> SectionPlan {
+        SectionPlan {
+            order: 1,
+            title: "Ownership".into(),
+            key_concepts: vec!["move".into(), "borrow".into()],
+            qcm_count: 3,
+        }
+    }
+
+    #[test]
+    fn test_build_section_prompt_contains_title() {
+        // arrange
+        let plan = test_section_plan();
+
+        // act
+        let result = build_section_prompt(&plan, None, None);
+
+        // assert
+        assert!(result.contains("Ownership"));
+    }
+
+    #[test]
+    fn test_build_section_prompt_without_context() {
+        // arrange
+        let plan = test_section_plan();
+
+        // act
+        let result = build_section_prompt(&plan, None, None);
+
+        // assert
+        assert!(!result.contains("Previous Sections Context"));
+    }
+
+    #[test]
+    fn test_build_section_prompt_with_context() {
+        // arrange
+        let plan = test_section_plan();
+        let ctx = "Previous section covered basics";
+
+        // act
+        let result =
+            build_section_prompt(&plan, Some(ctx), None);
+
+        // assert
+        assert!(result.contains("Previous Sections Context"));
+        assert!(result.contains("Previous section covered"));
+    }
+
+    #[test]
+    fn test_build_section_prompt_with_resources() {
+        // arrange
+        let plan = test_section_plan();
+        let res = "Chapter 2 content";
+
+        // act
+        let result =
+            build_section_prompt(&plan, None, Some(res));
+
+        // assert
+        assert!(result.contains("Source Materials"));
+        assert!(result.contains("Chapter 2 content"));
+    }
+}

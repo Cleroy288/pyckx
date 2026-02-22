@@ -9,7 +9,9 @@
 
 use crate::infra::database::CollectionRepository;
 use crate::infra::supabase::shared::{SupabaseError, SupabaseHttpClient};
-use crate::services::collection::collection_domain::{CollectionItemType, UserCollection};
+use crate::services::collection::collection_domain::{
+    CollectionItemType, UserCollection,
+};
 use crate::services::collection::error_domain::CollectionError;
 use async_trait::async_trait;
 use serde::{Deserialize, Serialize};
@@ -77,7 +79,12 @@ impl CollectionRow {
 
         let created_at = match self.created_at {
             Some(ts) => DateTime::parse_from_rfc3339(&ts)
-                .map_err(|e| CollectionError::storage_error(format!("Invalid created_at: {}", e)))?
+                .map_err(|err| {
+                    CollectionError::storage_error(format!(
+                        "Invalid created_at: {}",
+                        err
+                    ))
+                })?
                 .with_timezone(&Utc),
             None => Utc::now(),
         };
@@ -99,15 +106,22 @@ impl TryFrom<CollectionWithTypeRow> for UserCollection {
 
         let created_at = match row.created_at {
             Some(ts) => DateTime::parse_from_rfc3339(&ts)
-                .map_err(|e| CollectionError::storage_error(format!("Invalid created_at: {}", e)))?
+                .map_err(|err| {
+                    CollectionError::storage_error(format!(
+                        "Invalid created_at: {}",
+                        err
+                    ))
+                })?
                 .with_timezone(&Utc),
             None => Utc::now(),
         };
 
         let collection_type = row
             .collection_types
-            .and_then(|ct| CollectionItemType::from_str(&ct.name))
-            .ok_or_else(|| CollectionError::storage_error("Invalid collection type"))?;
+            .and_then(|ct| ct.name.parse::<CollectionItemType>().ok())
+            .ok_or_else(|| {
+                CollectionError::storage_error("Invalid collection type")
+            })?;
 
         Ok(UserCollection {
             id: row.id,
@@ -149,10 +163,14 @@ impl SupabaseCollectionRepository {
             .client
             .rest_url_with_query(TABLE_COLLECTION_TYPES, &query);
 
-        let rows: Vec<CollectionTypeRow> = self.client.get(&url).await.map_err(Self::map_error)?;
+        let rows: Vec<CollectionTypeRow> =
+            self.client.get(&url).await.map_err(Self::map_error)?;
 
         rows.into_iter().next().map(|row| row.id).ok_or_else(|| {
-            CollectionError::storage_error(format!("Collection type not found: {}", item_type))
+            CollectionError::storage_error(format!(
+                "Collection type not found: {}",
+                item_type
+            ))
         })
     }
 }
@@ -170,7 +188,8 @@ impl CollectionRepository for SupabaseCollectionRepository {
         user_id: &str,
         collection_type: CollectionItemType,
     ) -> Result<UserCollection, CollectionError> {
-        let collection_type_id = self.get_collection_type_id(collection_type).await?;
+        let collection_type_id =
+            self.get_collection_type_id(collection_type).await?;
         let row = InsertCollectionRow {
             user_id: user_id.to_string(),
             collection_type_id,
@@ -182,12 +201,13 @@ impl CollectionRepository for SupabaseCollectionRepository {
         /* Handle 409 Conflict (unique constraint violation) */
         match self.client.post::<Vec<CollectionRow>, _>(&url, &row).await {
             Ok(rows) => {
-                let collection_row = rows
-                    .into_iter()
-                    .next()
-                    .ok_or_else(|| CollectionError::storage_error("No row returned"))?;
+                let collection_row =
+                    rows.into_iter().next().ok_or_else(|| {
+                        CollectionError::storage_error("No row returned")
+                    })?;
 
-                let collection = collection_row.into_user_collection(collection_type)?;
+                let collection =
+                    collection_row.into_user_collection(collection_type)?;
                 info!(collection_id = collection.id, "Collection created");
                 Ok(collection)
             }
@@ -198,7 +218,7 @@ impl CollectionRepository for SupabaseCollectionRepository {
                 "Collection already exists for user {} and type {}",
                 user_id, collection_type
             ))),
-            Err(e) => Err(Self::map_error(e)),
+            Err(err) => Err(Self::map_error(err)),
         }
     }
 
@@ -209,7 +229,8 @@ impl CollectionRepository for SupabaseCollectionRepository {
         user_id: &str,
         collection_type: CollectionItemType,
     ) -> Result<bool, CollectionError> {
-        let collection_type_id = self.get_collection_type_id(collection_type).await?;
+        let collection_type_id =
+            self.get_collection_type_id(collection_type).await?;
         let query = format!(
             "user_id=eq.{}&collection_type_id=eq.{}",
             user_id, collection_type_id
@@ -224,8 +245,12 @@ impl CollectionRepository for SupabaseCollectionRepository {
 
     /* READ: Find by user */
     #[instrument(skip(self), fields(user_id = %user_id))]
-    async fn find_by_user(&self, user_id: &str) -> Result<Vec<UserCollection>, CollectionError> {
-        let query = format!("user_id=eq.{}&select=*,collection_types(*)", user_id);
+    async fn find_by_user(
+        &self,
+        user_id: &str,
+    ) -> Result<Vec<UserCollection>, CollectionError> {
+        let query =
+            format!("user_id=eq.{}&select=*,collection_types(*)", user_id);
         let url = self.client.rest_url_with_query(TABLE_COLLECTIONS, &query);
         debug!(url = %url, "Finding collections by user");
 
@@ -247,7 +272,8 @@ impl CollectionRepository for SupabaseCollectionRepository {
         user_id: &str,
         collection_type: CollectionItemType,
     ) -> Result<Option<UserCollection>, CollectionError> {
-        let collection_type_id = self.get_collection_type_id(collection_type).await?;
+        let collection_type_id =
+            self.get_collection_type_id(collection_type).await?;
         let query = format!(
             "user_id=eq.{}&collection_type_id=eq.{}",
             user_id, collection_type_id
@@ -255,7 +281,8 @@ impl CollectionRepository for SupabaseCollectionRepository {
         let url = self.client.rest_url_with_query(TABLE_COLLECTIONS, &query);
         debug!(url = %url, "Finding collection by type");
 
-        let rows: Vec<CollectionRow> = self.client.get(&url).await.map_err(Self::map_error)?;
+        let rows: Vec<CollectionRow> =
+            self.client.get(&url).await.map_err(Self::map_error)?;
 
         if let Some(row) = rows.into_iter().next() {
             let collection = row.into_user_collection(collection_type)?;
@@ -273,7 +300,9 @@ impl CollectionRepository for SupabaseCollectionRepository {
         collection_type: CollectionItemType,
     ) -> Result<UserCollection, CollectionError> {
         /* Try to find existing */
-        if let Some(collection) = self.find_by_type(user_id, collection_type).await? {
+        if let Some(collection) =
+            self.find_by_type(user_id, collection_type).await?
+        {
             debug!("Found existing collection: {}", collection.id);
             return Ok(collection);
         }
@@ -290,10 +319,12 @@ impl CollectionRepository for SupabaseCollectionRepository {
                 self.find_by_type(user_id, collection_type)
                     .await?
                     .ok_or_else(|| {
-                        CollectionError::storage_error("Collection not found after conflict")
+                        CollectionError::storage_error(
+                            "Collection not found after conflict",
+                        )
                     })
             }
-            Err(e) => Err(e),
+            Err(err) => Err(err),
         }
     }
 
@@ -304,7 +335,8 @@ impl CollectionRepository for SupabaseCollectionRepository {
         user_id: &str,
         collection_type: CollectionItemType,
     ) -> Result<bool, CollectionError> {
-        let collection_type_id = self.get_collection_type_id(collection_type).await?;
+        let collection_type_id =
+            self.get_collection_type_id(collection_type).await?;
         let query = format!(
             "user_id=eq.{}&collection_type_id=eq.{}&select=id",
             user_id, collection_type_id
@@ -317,7 +349,8 @@ impl CollectionRepository for SupabaseCollectionRepository {
             id: i32,
         }
 
-        let rows: Vec<IdOnly> = self.client.get(&url).await.map_err(Self::map_error)?;
+        let rows: Vec<IdOnly> =
+            self.client.get(&url).await.map_err(Self::map_error)?;
         Ok(!rows.is_empty())
     }
 }

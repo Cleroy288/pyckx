@@ -1,0 +1,13 @@
+/* GameProgress styles */
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+}

@@ -1,0 +1,28 @@
+/* Skeleton loading placeholders */
+
+.skeleton {
+    border-radius: var(--radius-sm, 6px);
+    background: linear-gradient(
+        90deg,
+        var(--color-border, #333) 25%,
+        rgba(255, 255, 255, 0.08) 50%,
+        var(--color-border, #333) 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.skeleton_card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.25rem;
+    border-radius: var(--radius-md, 8px);
+    border: 1px solid var(--color-border, #333);
+    background: var(--color-surface, #1a1a2e);
+}

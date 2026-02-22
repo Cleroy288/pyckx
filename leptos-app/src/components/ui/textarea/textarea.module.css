@@ -1,0 +1,68 @@
+/* ============================================
+   Textarea Component Styles
+   ============================================ */
+
+.form_group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    margin-bottom: 0.25rem;
+}
+
+.textarea {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    border: 2px solid color-mix(
+        in srgb, var(--primary) 20%, transparent
+    );
+    border-radius: 0;
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur-sm);
+    -webkit-backdrop-filter: var(--glass-blur-sm);
+    color: var(--color-text-primary);
+    font-size: 1rem;
+    font-family: var(--principal-font-family);
+    resize: vertical;
+    min-height: 80px;
+    transition: all var(--transition-base);
+    outline: none;
+    box-sizing: border-box;
+}
+
+.textarea::placeholder {
+    color: var(--color-text-secondary);
+}
+
+.textarea:focus {
+    border-color: var(--color-primary);
+    background: var(--glass-bg-hover);
+    box-shadow: 0 0 0 3px color-mix(
+        in srgb, var(--primary) 10%, transparent
+    );
+}
+
+.textarea:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.textarea.error {
+    border-color: var(--color-error);
+}
+
+.textarea.error:focus {
+    box-shadow: 0 0 0 3px color-mix(
+        in srgb, var(--destructive) 10%, transparent
+    );
+}
+
+.error_text {
+    font-size: 0.75rem;
+    color: var(--color-error);
+}

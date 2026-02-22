@@ -11,7 +11,11 @@ pub fn load_test_config() -> Option<Config> {
 }
 
 /// Create a test DVD for testing
-pub fn create_test_dvd(name: &str, user_id: &str, collection_id: i32) -> CreateDvd {
+pub fn create_test_dvd(
+    name: &str,
+    user_id: &str,
+    collection_id: i32,
+) -> CreateDvd {
     let year = Utc.with_ymd_and_hms(2010, 7, 16, 0, 0, 0).unwrap();
     CreateDvd::new(
         name,

@@ -1,3 +1,7 @@
+[serve]
+# Development server port
+port = 8083
+
 [build]
 # Output to backend's static folder
 dist = "../backend/static"
@@ -7,7 +11,7 @@ no_sri = true
 
 [watch]
 # Watch source files and CSS modules, but NOT the generated bundle
-watch = ["src", "index.html", "styles/global.css", "src/background.module.css"]
+watch = ["src", "index.html", "styles/global.css", "styles/background.module.css"]
 # Ignore the generated bundle to prevent infinite loop
 ignore = ["styles/bundle.css"]
 

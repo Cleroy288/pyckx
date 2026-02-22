@@ -1,6 +1,8 @@
 //! Collection Repository Trait - Abstraction for user collection operations
 
-use crate::services::collection::collection_domain::{CollectionItemType, UserCollection};
+use crate::services::collection::collection_domain::{
+    CollectionItemType, UserCollection,
+};
 use crate::services::collection::error_domain::CollectionError;
 use async_trait::async_trait;
 
@@ -24,7 +26,10 @@ pub trait CollectionRepository: Send + Sync {
     ) -> Result<bool, CollectionError>;
 
     /// Get all collections for a user
-    async fn find_by_user(&self, user_id: &str) -> Result<Vec<UserCollection>, CollectionError>;
+    async fn find_by_user(
+        &self,
+        user_id: &str,
+    ) -> Result<Vec<UserCollection>, CollectionError>;
 
     /// Find a specific collection by user and type
     async fn find_by_type(

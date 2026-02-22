@@ -32,14 +32,19 @@ impl Session {
     }
 }
 
+/// Thread-safe map of session IDs to sessions
+type SessionMap = Arc<RwLock<HashMap<SessionId, Session>>>;
+/// Thread-safe map of user IDs to their session IDs
+type UserSessionMap = Arc<RwLock<HashMap<UserId, SessionId>>>;
+
 /// SessionStore - In-memory + Supabase persistence
 /// Keyed by session_id for fast lookup from cookie
 #[derive(Clone)]
 pub struct SessionStore {
     // session_id -> Session
-    by_session: Arc<RwLock<HashMap<SessionId, Session>>>,
+    by_session: SessionMap,
     // user_id -> session_id (for lookup by Supabase ID)
-    user_to_session: Arc<RwLock<HashMap<UserId, SessionId>>>,
+    user_to_session: UserSessionMap,
     // Supabase repository for persistence
     repository: Arc<SupabaseSessionRepository>,
 }
@@ -91,19 +96,79 @@ impl SessionStore {
                         user,
                     };
 
-                    user_map.insert(session.user.id.clone(), session.id.clone());
+                    user_map
+                        .insert(session.user.id.clone(), session.id.clone());
                     sessions.insert(session.id.clone(), session);
                 }
 
                 info!(count = sessions.len(), "Sessions loaded from Supabase");
                 Ok(())
             }
-            Err(e) => {
-                warn!(error = %e, "Failed to load sessions from Supabase, starting fresh");
+            Err(err) => {
+                warn!(error = %err, "Failed to load sessions from Supabase, starting fresh");
                 // Don't fail startup if we can't load sessions
                 Ok(())
             }
         }
+    }
+
+    /// Find an existing valid (non-expired) session for a user
+    fn find_valid_session(&self, user_id: &UserId) -> Option<SessionId> {
+        let sessions = self.by_session.read().unwrap();
+        let user_map = self.user_to_session.read().unwrap();
+
+        let session_id = user_map.get(user_id)?;
+        let session = sessions.get(session_id)?;
+
+        let now = std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .unwrap()
+            .as_secs();
+
+        if session.user.expires_at > now {
+            Some(session_id.clone())
+        } else {
+            None
+        }
+    }
+
+    /// Spawn a background task to delete a session from Supabase
+    fn spawn_delete_session(&self, session_id: String) {
+        let repo = Arc::clone(&self.repository);
+        tokio::spawn(async move {
+            if let Err(err) = repo.delete(&session_id).await {
+                warn!(
+                    error = %err,
+                    "Failed to delete session from Supabase"
+                );
+            }
+        });
+    }
+
+    /// Spawn a background task to persist a session to Supabase
+    fn spawn_persist_session(&self, session: Session) {
+        use crate::infra::supabase::session::SessionRow;
+
+        let repo = Arc::clone(&self.repository);
+        let row = SessionRow {
+            session_id: session.id,
+            user_id: session.user.id.to_string(),
+            email: session.user.email,
+            username: session.user.username,
+            role: session.user.role,
+            access_token: session.user.access_token,
+            refresh_token: session.user.refresh_token,
+            expires_at: session.user.expires_at as i64,
+        };
+
+        tokio::spawn(async move {
+            if let Err(err) = repo.upsert(row).await {
+                warn!(
+                    error = %err,
+                    "Failed to persist session to Supabase"
+                );
+            }
+        });
     }
 
     /// Get or create session for user
@@ -111,24 +176,13 @@ impl SessionStore {
     /// Otherwise creates a new session
     pub fn create_session(&self, user: User) -> SessionId {
         // Check if user already has a valid session
-        {
-            let sessions = self.by_session.read().unwrap();
-            let user_map = self.user_to_session.read().unwrap();
-
-            if let Some(existing_session_id) = user_map.get(&user.id) {
-                if let Some(existing_session) = sessions.get(existing_session_id) {
-                    // Check if session is still valid (not expired)
-                    let now = std::time::SystemTime::now()
-                        .duration_since(std::time::UNIX_EPOCH)
-                        .unwrap()
-                        .as_secs();
-
-                    if existing_session.user.expires_at > now {
-                        info!(session_id = %existing_session_id, user_id = %user.id, "Reusing existing valid session");
-                        return existing_session_id.clone();
-                    }
-                }
-            }
+        if let Some(sid) = self.find_valid_session(&user.id) {
+            info!(
+                session_id = %sid,
+                user_id = %user.id,
+                "Reusing existing valid session"
+            );
+            return sid;
         }
 
         // No valid session exists, create new one
@@ -141,17 +195,10 @@ impl SessionStore {
             let mut user_map = self.user_to_session.write().unwrap();
 
             // Remove old expired session if exists
-            if let Some(old_session_id) = user_map.get(&session.user.id) {
-                let old_id = old_session_id.clone();
+            if let Some(old_id) = user_map.get(&session.user.id) {
+                let old_id = old_id.clone();
                 sessions.remove(&old_id);
-
-                // Delete old session from Supabase in background
-                let repo: Arc<SupabaseSessionRepository> = Arc::clone(&self.repository);
-                tokio::spawn(async move {
-                    if let Err(e) = repo.delete(&old_id).await {
-                        warn!(error = %e, "Failed to delete old session from Supabase");
-                    }
-                });
+                self.spawn_delete_session(old_id);
             }
 
             user_map.insert(session.user.id.clone(), session_id.clone());
@@ -159,25 +206,7 @@ impl SessionStore {
         }
 
         // Persist new session to Supabase in background
-        let repo: Arc<SupabaseSessionRepository> = Arc::clone(&self.repository);
-        tokio::spawn(async move {
-            use crate::infra::supabase::session::SessionRow;
-
-            let row = SessionRow {
-                session_id: session_for_persist.id,
-                user_id: session_for_persist.user.id.to_string(),
-                email: session_for_persist.user.email,
-                username: session_for_persist.user.username,
-                role: session_for_persist.user.role,
-                access_token: session_for_persist.user.access_token,
-                refresh_token: session_for_persist.user.refresh_token,
-                expires_at: session_for_persist.user.expires_at as i64,
-            };
-
-            if let Err(e) = repo.upsert(row).await {
-                warn!(error = %e, "Failed to persist session to Supabase");
-            }
-        });
+        self.spawn_persist_session(session_for_persist);
 
         info!(session_id = %session_id, "New session created");
         session_id
@@ -204,16 +233,66 @@ impl SessionStore {
         };
 
         if user.is_some() {
-            // Delete from Supabase in background
-            let repo: Arc<SupabaseSessionRepository> = Arc::clone(&self.repository);
-            let sid = session_id.to_string();
-            tokio::spawn(async move {
-                if let Err(e) = repo.delete(&sid).await {
-                    warn!(error = %e, "Failed to delete session from Supabase");
-                }
-            });
+            self.spawn_delete_session(session_id.to_string());
             info!(session_id = %session_id, "Session deleted");
         }
         user
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// Helper: create a test user with known fields
+    fn test_user() -> User {
+        User {
+            id: UserId::from_string("user-42".to_string()),
+            email: "alice@test.com".to_string(),
+            username: "alice".to_string(),
+            role: "student".to_string(),
+            access_token: "tok-access".to_string(),
+            refresh_token: "tok-refresh".to_string(),
+            expires_at: 9_999_999_999,
+        }
+    }
+
+    #[test]
+    fn test_session_new_generates_uuid_id() {
+        // arrange
+        let user = test_user();
+
+        // act
+        let session = Session::new(user);
+
+        // assert - UUID v4 format: 36 chars
+        assert_eq!(session.id.len(), 36);
+    }
+
+    #[test]
+    fn test_session_new_preserves_user() {
+        // arrange
+        let user = test_user();
+
+        // act
+        let session = Session::new(user.clone());
+
+        // assert
+        assert_eq!(session.user.email, "alice@test.com");
+        assert_eq!(session.user.username, "alice");
+    }
+
+    #[test]
+    fn test_session_new_generates_unique_ids() {
+        // arrange
+        let user1 = test_user();
+        let user2 = test_user();
+
+        // act
+        let session1 = Session::new(user1);
+        let session2 = Session::new(user2);
+
+        // assert
+        assert_ne!(session1.id, session2.id);
     }
 }

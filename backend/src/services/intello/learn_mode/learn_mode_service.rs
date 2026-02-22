@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use crate::http_api::data_transfer_object::intello::course::CourseModule;
 use crate::infra::openrouter::OpenRouterClient;
 use crate::infra::openrouter::DEFAULT_MODEL;
@@ -39,7 +41,10 @@ fn build_learn_mode_prompt(demand: &LearnModeDemand) -> String {
 
     let score_context = match demand.previous_score {
         Some(score) => format!("The student previously scored {}/100.", score),
-        None => "This is the student's first focused attempt on these concepts.".to_string(),
+        None => {
+            "This is the student's first focused attempt on these concepts."
+                .to_string()
+        }
     };
 
     let extended_context = if let Some(ref ek) = demand.expanded_knowledge {
@@ -138,17 +143,21 @@ pub async fn generate_learn_content(
     let response = service
         .send_chat_request(&prompt, Some(model))
         .await
-        .map_err(|e| IntelloError::external("OpenRouter", e.to_string()))?;
+        .map_err(|err| IntelloError::external("OpenRouter", err.to_string()))?;
 
     // Borrowed utility from existing code (would need to import or reimplement, here reusing logic)
     // Assuming we can parse the content directly or need cleaning (using a simple cleaner here for safety)
     let cleaned_json = clean_json_markers(&response.content);
 
-    let module: CourseModule = serde_json::from_str(&cleaned_json).map_err(|e| {
-        error!("Failed to parse Learn Mode JSON: {}", e);
-        error!("Raw content: {}", response.content);
-        IntelloError::validation("learn_mode_generation", format!("Invalid JSON: {}", e))
-    })?;
+    let module: CourseModule =
+        serde_json::from_str(&cleaned_json).map_err(|err| {
+            error!("Failed to parse Learn Mode JSON: {}", err);
+            error!("Raw content: {}", response.content);
+            IntelloError::validation(
+                "learn_mode_generation",
+                format!("Invalid JSON: {}", err),
+            )
+        })?;
 
     info!(
         "Successfully generated Learn Mode module: '{}'",
@@ -178,6 +187,7 @@ use std::sync::Arc;
 /// 1. Fetches the source session to get context (including extended knowledge).
 /// 2. Builds a comprehensive demand.
 /// 3. Generating the content via AI.
+#[allow(clippy::too_many_arguments)]
 pub async fn orchestrate_learn_mode_generation(
     service: &OpenRouterClient,
     repo: &Arc<dyn StudySessionRepository>,
@@ -186,10 +196,9 @@ pub async fn orchestrate_learn_mode_generation(
     previous_score: Option<u32>,
 ) -> Result<CourseModule, IntelloError> {
     // 1. Fetch Session
-    let session = repo
-        .get(session_id)
-        .await
-        .map_err(|e| IntelloError::validation("session_lookup", e.to_string()))?;
+    let session = repo.get(session_id).await.map_err(|err| {
+        IntelloError::validation("session_lookup", err.to_string())
+    })?;
 
     // 2. Build Demand
     let demand = LearnModeDemand {

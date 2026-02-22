@@ -65,3 +65,70 @@ pub async fn get_user_sets<T: Clone + Send + Sync>(
     // Step 4: Return the results
     Ok(sets)
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_validate_user_id_valid_returns_ok() {
+        // arrange
+        let user_id = "user-abc-123";
+
+        // act
+        let result = validate_user_id(user_id);
+
+        // assert
+        assert!(result.is_ok());
+    }
+
+    #[test]
+    fn test_validate_user_id_empty_returns_error() {
+        // arrange
+        let user_id = "";
+
+        // act
+        let result = validate_user_id(user_id);
+
+        // assert
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert_eq!(err.code(), "INTELLO_VALIDATION_FAILED");
+    }
+
+    #[test]
+    fn test_validate_user_id_whitespace_returns_error() {
+        // arrange
+        let user_id = "   ";
+
+        // act
+        let result = validate_user_id(user_id);
+
+        // assert
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_validate_user_id_tab_only_returns_error() {
+        // arrange
+        let user_id = "\t\n";
+
+        // act
+        let result = validate_user_id(user_id);
+
+        // assert
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_validate_user_id_with_spaces_around_is_ok() {
+        // arrange - has non-whitespace content
+        let user_id = "  abc  ";
+
+        // act
+        let result = validate_user_id(user_id);
+
+        // assert
+        assert!(result.is_ok());
+    }
+}

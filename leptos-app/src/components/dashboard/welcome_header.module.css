@@ -1,0 +1,38 @@
+/* ── WelcomeHeader — local styles ────────────
+   Banner container handled by HeroBanner.
+   Only greeting-specific styles live here.    */
+
+/* ── Greeting text ──────────────────────────  */
+.greeting {
+    position: relative;
+    z-index: 1;
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+}
+
+/* ── Username — gradient accent ──────────────
+   The username gets a primary-coloured
+   gradient.                                   */
+.username {
+    background: linear-gradient(
+        135deg,
+        var(--color-primary) 0%,
+        color-mix(
+            in srgb, var(--primary) 70%, black
+        ) 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ── Subtitle ───────────────────────────────  */
+.subtitle {
+    position: relative;
+    z-index: 1;
+    font-size: 1.125rem;
+    color: var(--color-text-secondary);
+}

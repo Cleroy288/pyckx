@@ -1,11 +1,12 @@
 /* ============================================
    Vitrine (Landing) Page Styles
-   Minimalist Tech Design with Glass Effects
+   Flat angular design: border-spin hover,
+   grid-line hero pattern, vertical side lines,
+   no rounded corners anywhere.
    ============================================ */
 
-/* ============================================
-   Main Container
-   ============================================ */
+/* ── Main Container + Side Lines ─────────── */
+
 .vitrine {
     position: relative;
     width: 100%;
@@ -13,72 +14,46 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 80px;
+    padding: 80px 2rem 4rem;
     z-index: 1;
+    background: var(--color-background);
     contain: layout style;
 }
 
-/* ============================================
-   Hero Section
-   ============================================ */
-.hero {
+/* ── Content wrapper ───────────────────────
+   Centered column at max 1200px.
+   Matches the side lines position.          */
+.content {
     position: relative;
+    flex: 1;
     width: 100%;
-    min-height: 90vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 6rem 2rem;
-    overflow: hidden;
-    contain: layout style paint;
-    content-visibility: auto;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-.hero_gradient {
+.vitrine::before,
+.vitrine::after {
+    content: "";
     position: absolute;
     top: 0;
-    left: 0;
-    right: 0;
     bottom: 0;
-    background: radial-gradient(ellipse 80% 50% at 50% 0%,
-            rgba(128, 0, 128, 0.06) 0%,
-            transparent 50%);
+    width: 1px;
+    background: var(--color-border);
     pointer-events: none;
-    z-index: 0;
+    z-index: 2;
 }
 
-.hero_content {
-    position: relative;
-    text-align: center;
-    max-width: 800px;
-    z-index: 1;
-    animation: fadeInUp 0.8s ease-out;
+.vitrine::before { left: calc(50% - 600px); }
+.vitrine::after { right: calc(50% - 600px); }
+
+/* ── Hero Banner Wrapper ─────────────────── */
+
+.hero_section {
+    width: 100%;
 }
 
-/* ============================================
-   Hero Title
-   ============================================ */
-.hero_title {
-    font-size: clamp(4rem, 10vw, 7rem);
-    font-weight: 900;
-    line-height: 1;
-    margin-bottom: 2rem;
-    letter-spacing: -0.05em;
-}
+/* ── Hero Content (inside HeroBanner) ────── */
 
-.title_highlight {
-    background: linear-gradient(135deg,
-            var(--color-primary) 0%,
-            rgba(128, 0, 128, 0.7) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    display: inline-block;
-}
-
-/* ============================================
-   Hero Tagline
-   ============================================ */
 .hero_tagline {
     font-size: clamp(1.25rem, 2.5vw, 1.75rem);
     color: var(--color-text-secondary);
@@ -88,9 +63,6 @@
     letter-spacing: -0.01em;
 }
 
-/* ============================================
-   Hero CTA Buttons
-   ============================================ */
 .hero_cta {
     display: flex;
     gap: 1rem;
@@ -99,44 +71,32 @@
     align-items: center;
 }
 
-/* ============================================
-   Platform Section
-   ============================================ */
-.platform {
-    width: 100%;
-    max-width: 1200px;
-    padding: 4rem 2rem;
-    contain: layout style paint;
-    content-visibility: auto;
+/* ── Vitrine Card (shared glass tile) ────── */
+
+.vitrine_card {
+    position: relative;
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--color-border);
+    border-radius: 0;
+    padding: 2.5rem 2rem;
+    overflow: hidden;
 }
 
-.platform_content {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
+.vitrine_card:hover {
+    border-color: transparent;
+    border-image: conic-gradient(
+        from var(--border-angle),
+        var(--color-primary),
+        transparent 25%,
+        transparent 75%,
+        var(--color-primary)
+    ) 1;
+    animation: border-spin 3s linear infinite;
 }
 
-/* ============================================
-   Card Content Styles (used inside Card component)
-   ============================================ */
-.card_inner {
-    text-align: center;
-}
-
-.card_icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 64px;
-    height: 64px;
-    margin: 0 auto 1.5rem;
-    color: var(--color-primary);
-}
-
-.card_icon svg {
-    width: 100%;
-    height: 100%;
-}
+/* ── Shared Card Text ────────────────────── */
 
 .card_title {
     font-size: 1.5rem;
@@ -153,206 +113,75 @@
     margin: 0;
 }
 
-/* ============================================
-   Apps Section
-   ============================================ */
+/* ── Tagline Section ────────────────────── */
+
+.tagline {
+    width: 100%;
+    padding: 3rem 0 3rem 15%;
+    margin-bottom: 2rem;
+}
+
+.tagline_text {
+    border-left: 2px solid var(--color-primary);
+    padding-left: 1.5rem;
+}
+
+.tagline_line {
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.8;
+    font-weight: 400;
+}
+
+/* ── Apps Section ────────────────────────── */
+
 .apps {
     width: 100%;
-    max-width: 1200px;
-    padding: 6rem 2rem;
+    margin-bottom: 4rem;
     contain: layout style paint;
     content-visibility: auto;
 }
 
-.section_header {
-    text-align: center;
-    margin-bottom: 4rem;
-}
-
-.section_title {
-    font-size: clamp(2.5rem, 5vw, 3.5rem);
-    font-weight: 800;
-    color: var(--color-text-primary);
-    margin-bottom: 1rem;
-    letter-spacing: -0.03em;
-}
-
-.section_subtitle {
-    font-size: clamp(1rem, 2vw, 1.25rem);
-    color: var(--color-text-secondary);
-    max-width: 600px;
-    margin: 0 auto;
-    line-height: 1.6;
-}
-
 .apps_grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(400px, 100%), 1fr));
-    gap: 2.5rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
 }
 
-/* App card enhancements */
+/* App card — vertical, full-width */
 .app_card {
-    padding: 3.5rem 3rem;
-    border-radius: var(--radius-xl);
-    position: relative;
-    overflow: hidden;
-}
-
-.app_card::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, var(--color-primary), rgba(128, 0, 128, 0.4));
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.5s ease;
-}
-
-.app_card:hover::before {
-    transform: scaleX(1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 2.5rem 2rem;
 }
 
 .app_card_icon {
-    width: 80px;
-    height: 80px;
-    background: rgba(128, 0, 128, 0.08);
-    border-radius: var(--radius-lg);
-    margin-bottom: 2rem;
-    backdrop-filter: blur(10px);
-    transition: all var(--transition-slow);
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: color-mix(
+        in srgb, var(--primary) 8%, transparent
+    );
+    border-radius: 0;
+    color: var(--color-primary);
+    margin-bottom: 1.5rem;
 }
 
-.app_card:hover .app_card_icon {
-    background: rgba(128, 0, 128, 0.12);
-    transform: scale(1.1) rotate(5deg);
+.app_card_icon svg {
+    width: 28px;
+    height: 28px;
 }
 
-.app_card .card_title {
-    font-size: 2rem;
-}
+/* ── Pricing Section ─────────────────────── */
 
-.app_card .card_content {
-    font-size: 1.125rem;
-}
-
-/* ============================================
-   Responsive Styles
-   ============================================ */
-@media (max-width: 1024px) {
-    .apps_grid {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-    }
-
-    .platform_content {
-        grid-template-columns: 1fr;
-    }
-}
-
-@media (max-width: 768px) {
-    .hero {
-        min-height: 80vh;
-        padding: 4rem 1.5rem;
-    }
-
-    .hero_title {
-        margin-bottom: 1.5rem;
-    }
-
-    .hero_tagline {
-        margin-bottom: 2.5rem;
-    }
-
-    .hero_cta {
-        flex-direction: column;
-        width: 100%;
-    }
-
-    .platform {
-        padding: 3rem 1.5rem;
-    }
-
-    .apps {
-        padding: 4rem 1.5rem;
-    }
-
-    .section_header {
-        margin-bottom: 3rem;
-    }
-
-    .app_card {
-        padding: 3rem 2rem;
-    }
-
-    .app_card_icon {
-        width: 70px;
-        height: 70px;
-    }
-
-    .card_icon {
-        width: 56px;
-        height: 56px;
-    }
-}
-
-@media (max-width: 480px) {
-    .hero {
-        padding: 3rem 1rem;
-        min-height: 75vh;
-    }
-
-    .hero_cta {
-        gap: 0.75rem;
-    }
-
-    .platform {
-        padding: 2.5rem 1rem;
-    }
-
-    .card_icon {
-        width: 48px;
-        height: 48px;
-        margin-bottom: 1rem;
-    }
-
-    .card_title {
-        font-size: 1.25rem;
-    }
-
-    .apps {
-        padding: 3rem 1rem;
-    }
-
-    .app_card {
-        padding: 2.5rem 1.5rem;
-    }
-
-    .app_card_icon {
-        width: 60px;
-        height: 60px;
-        margin-bottom: 1.5rem;
-    }
-
-    .app_card .card_title {
-        font-size: 1.5rem;
-    }
-
-    .app_card .card_content {
-        font-size: 1rem;
-    }
-}
-
-/* ============================================
-   Pricing Section
-   ============================================ */
 .pricing {
     width: 100%;
-    max-width: 1200px;
-    padding: 6rem 2rem;
+    margin-bottom: 2rem;
     contain: layout style paint;
     content-visibility: auto;
 }
@@ -360,35 +189,15 @@
 .pricing_grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
-    margin-top: 3rem;
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
+    gap: 0;
     align-items: stretch;
 }
 
-/* Pricing card content styles (used inside Card component) */
 .pricing_card_content {
     display: flex;
     flex-direction: column;
     text-align: center;
     min-height: 350px;
-}
-
-.pricing_badge {
-    position: absolute;
-    top: -12px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--color-primary);
-    color: var(--color-background);
-    padding: 0.375rem 1.25rem;
-    border-radius: var(--radius-lg);
-    font-size: 0.75rem;
-    font-weight: 600;
-    white-space: nowrap;
-    z-index: 1;
 }
 
 .pricing_name {
@@ -431,7 +240,9 @@
 .pricing_features li {
     padding: 0.75rem 0;
     color: var(--color-text-secondary);
-    border-bottom: 1px solid rgba(128, 0, 128, 0.05);
+    border-bottom: 1px solid color-mix(
+        in srgb, var(--primary) 5%, transparent
+    );
     font-size: 0.95rem;
     line-height: 1.4;
     word-wrap: break-word;
@@ -442,49 +253,35 @@
     border-bottom: none;
 }
 
-/* Button at bottom of pricing card */
 .pricing_button {
     margin-top: auto;
     width: 100%;
 }
 
-/* ============================================
-   Start Now Section
-   ============================================ */
+/* ── Start Now Section ───────────────────── */
+
 .start_now {
     width: 100%;
-    max-width: 800px;
-    padding: 6rem 2rem;
-    margin: 0 auto;
+    margin-top: 2rem;
+    border: 1px solid transparent;
+    border-image: conic-gradient(
+        from var(--border-angle),
+        var(--color-primary),
+        transparent 25%,
+        transparent 75%,
+        var(--color-primary)
+    ) 1;
+    animation: border-spin 3s linear infinite;
     contain: layout style paint;
     content-visibility: auto;
 }
 
-.start_now_content {
-    text-align: center;
-}
-
-.start_now_title {
-    font-size: clamp(2rem, 5vw, 3rem);
-    font-weight: 800;
-    color: var(--color-text-primary);
-    margin-bottom: 1rem;
-    letter-spacing: -0.02em;
-}
-
-.start_now_text {
-    font-size: clamp(1rem, 2vw, 1.25rem);
-    color: var(--color-text-secondary);
-    margin-bottom: 2.5rem;
-    line-height: 1.7;
-}
-
-.start_now_form {
+.start_now_cta {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    width: 100%;
-    margin: 0 auto 1.5rem;
+    gap: 1rem;
+    padding: 2rem 0;
 }
 
 .start_now_note {
@@ -493,30 +290,43 @@
     margin: 0;
 }
 
+/* ── Responsive ──────────────────────────── */
+
+@media (max-width: 1264px) {
+    .vitrine::before { left: 2rem; }
+    .vitrine::after { right: 2rem; }
+}
+
 @media (max-width: 768px) {
-    .pricing {
-        padding: 4rem 1.5rem;
+    .vitrine {
+        padding: 80px 1.5rem 3rem;
     }
 
-    .pricing_grid {
-        grid-template-columns: 1fr;
-    }
+    .vitrine::before { left: 1.5rem; }
+    .vitrine::after { right: 1.5rem; }
 
-    .start_now {
-        padding: 4rem 1.5rem;
-    }
+    .hero_tagline { margin-bottom: 2.5rem; }
 
-    .start_now_form {
+    .hero_cta {
         flex-direction: column;
+        width: 100%;
     }
+
+    .apps_grid { grid-template-columns: 1fr; }
+    .app_card { padding: 2rem 1.5rem; }
+
+    .pricing_grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 480px) {
-    .pricing {
-        padding: 3rem 1rem;
+    .vitrine {
+        padding: 70px 1rem 2rem;
     }
 
-    .start_now {
-        padding: 3rem 1rem;
-    }
+    .vitrine::before,
+    .vitrine::after { display: none; }
+
+    .hero_cta { gap: 0.75rem; }
+
+    .app_card { padding: 1.5rem 1rem; }
 }

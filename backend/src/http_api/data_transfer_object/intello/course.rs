@@ -3,6 +3,7 @@ use serde::{Deserialize, Serialize};
 
 // == KNOWLEDGE EXTRACTION DTOs // ==
 
+#[allow(dead_code)]
 #[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct DecryptedUserDemand {
     pub core_intent: String,
@@ -34,6 +35,7 @@ pub struct GenerateCourseRequest {
     pub keywords: Vec<String>,
     #[serde(default)]
     pub instructions: String,
+    #[allow(dead_code)]
     #[serde(default)]
     pub resource_ids: Vec<String>,
     #[serde(default)]
@@ -182,9 +184,9 @@ pub enum ContentBlock {
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize, PartialEq)]
 pub struct ContentSection {
     pub title: String,
-    pub content: String,         // 400-600 words of detailed explanation
+    pub content: String, // 400-600 words of detailed explanation
     pub key_points: Vec<String>, // 3-5 bullet points
-    pub examples: Vec<String>,   // 2-3 real-world examples
+    pub examples: Vec<String>, // 2-3 real-world examples
 }
 
 /// Detailed educational content for the entire course (Stage 1.5 output)

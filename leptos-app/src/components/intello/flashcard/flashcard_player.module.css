@@ -1,0 +1,47 @@
+/* FlashcardPlayer — local-only styles */
+
+.card {
+    width: 100%;
+    min-height: 200px;
+    perspective: 1000px;
+    cursor: pointer;
+    position: relative;
+}
+
+.front, .back {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+    text-align: center;
+    border-radius: 0;
+    backface-visibility: hidden;
+    transition: transform 0.5s ease;
+}
+
+.front {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-primary);
+}
+
+.back {
+    position: absolute;
+    inset: 0;
+    background: var(--primary-tint-light);
+    border: 1px solid var(--color-primary);
+    color: var(--color-primary);
+    transform: rotateY(180deg);
+}
+
+.flipped .front { transform: rotateY(180deg); }
+.flipped .back { transform: rotateY(0deg); }
+
+.actions {
+    display: flex;
+    gap: 1rem;
+}

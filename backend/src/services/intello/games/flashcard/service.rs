@@ -3,9 +3,13 @@
 use tracing::{info, instrument};
 
 use crate::infra::openrouter::DEFAULT_MODEL;
-use crate::services::intello::ai_usage::ai_usage_domain::feature_type;
+use crate::services::intello::ai_usage::ai_usage_domain::{
+    feature_type, AiUsageInput,
+};
 use crate::services::intello::error_domain::IntelloError;
-use crate::services::intello::types_domain::{GenerateContentInput, IntelloService};
+use crate::services::intello::types_domain::{
+    GenerateContentInput, IntelloService,
+};
 use crate::services::intello::SetId;
 
 use super::domain::FlashcardSet;
@@ -25,7 +29,12 @@ impl IntelloService {
         user_id: &str,
     ) -> Result<Vec<FlashcardSet>, IntelloError> {
         // Step 1: Query repository for all user flashcard sets
-        crud_service::get_user_sets(self.flashcard_repo.as_ref(), user_id, "flashcards").await
+        crud_service::get_user_sets(
+            self.flashcard_repo.as_ref(),
+            user_id,
+            "flashcards",
+        )
+        .await
     }
 
     // ** generate_ai_flashcards **
@@ -61,7 +70,9 @@ impl IntelloService {
             documents: input
                 .documents
                 .iter()
-                .map(|(filename, content, _)| (filename.clone(), content.clone()))
+                .map(|(filename, content, _)| {
+                    (filename.clone(), content.clone())
+                })
                 .collect(),
         };
 
@@ -73,17 +84,18 @@ impl IntelloService {
             .await?;
 
         // Step 4: Parse AI response into flashcards
-        let cards = super::parser::parse_flashcard_response(&ai_result.content)?;
+        let cards =
+            super::parser::parse_flashcard_response(&ai_result.content)?;
 
         // Step 5: Log AI usage (fire-and-forget)
         if let Some(usage) = ai_result.usage {
-            self.try_log_ai_usage(
+            self.try_log_ai_usage(AiUsageInput {
                 user_id,
-                DEFAULT_MODEL,
-                feature_type::FLASHCARD,
-                usage.prompt_tokens,
-                usage.completion_tokens,
-            )
+                model_id: DEFAULT_MODEL,
+                feature_type: feature_type::FLASHCARD,
+                input_tokens: usage.prompt_tokens,
+                output_tokens: usage.completion_tokens,
+            })
             .await;
         }
         info!(generated = cards.len(), "AI flashcards generated");

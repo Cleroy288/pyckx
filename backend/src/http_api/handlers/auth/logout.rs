@@ -9,7 +9,10 @@ use tracing::{info, instrument};
 /// POST /auth/logout
 #[post("/logout")]
 #[instrument(skip(app, req))]
-pub async fn logout_handler(app: web::Data<App>, req: HttpRequest) -> HttpResponse {
+pub async fn logout_handler(
+    app: web::Data<App>,
+    req: HttpRequest,
+) -> HttpResponse {
     let session_id = extract_session_id(&req);
 
     if let Some(ref sid) = session_id {

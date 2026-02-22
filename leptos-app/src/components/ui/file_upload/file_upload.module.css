@@ -1,0 +1,54 @@
+/* ============================================
+   File Upload — drag-drop zone
+   ============================================ */
+
+.zone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 2rem;
+    border: 2px dashed color-mix(
+        in srgb, var(--primary) 20%, transparent
+    );
+    border-radius: 0;
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur-sm);
+    -webkit-backdrop-filter: var(--glass-blur-sm);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.zone:hover,
+.dragging {
+    border-color: var(--color-primary);
+    background: var(--glass-bg-hover);
+}
+
+.zone svg {
+    width: 28px;
+    height: 28px;
+    color: var(--color-primary);
+}
+
+.text {
+    margin: 0;
+    font-size: 0.875rem;
+    text-align: center;
+}
+
+.browse {
+    color: var(--color-primary);
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.browse:hover {
+    opacity: 0.8;
+}
+
+.hidden_input {
+    display: none;
+}

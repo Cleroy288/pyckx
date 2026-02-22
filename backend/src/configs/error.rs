@@ -59,7 +59,8 @@ pub trait EnvVarExt {
 
 impl EnvVarExt for std::env::VarError {
     fn required(var_name: &'static str) -> Result<String, ConfigError> {
-        std::env::var(var_name).map_err(|_| ConfigError::MissingEnvVar { var_name })
+        std::env::var(var_name)
+            .map_err(|_| ConfigError::MissingEnvVar { var_name })
     }
 }
 
@@ -96,5 +97,51 @@ mod tests {
         };
         assert!(err.to_string().contains("PORT"));
         assert!(err.to_string().contains("not_a_number"));
+    }
+
+    #[test]
+    fn test_required_env_missing_var_returns_error() {
+        // arrange - use a var name that almost certainly doesn't exist
+        let var_name = "LAPP_TEST_NONEXISTENT_VAR_XYZ";
+
+        // act
+        let result = required_env(var_name);
+
+        // assert
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert_eq!(
+            err.to_string(),
+            "Missing required environment variable: LAPP_TEST_NONEXISTENT_VAR_XYZ"
+        );
+    }
+
+    #[test]
+    fn test_required_env_existing_var_returns_value() {
+        // arrange - PATH should always exist
+        let result = required_env("PATH");
+
+        // assert
+        assert!(result.is_ok());
+        assert!(!result.unwrap().is_empty());
+    }
+
+    #[test]
+    fn test_invalid_value_display_format() {
+        // arrange
+        let err = ConfigError::InvalidValue {
+            var_name: "LOG_LEVEL",
+            expected: "debug|info|warn|error",
+            actual: "verbose".to_string(),
+        };
+
+        // act
+        let display = err.to_string();
+
+        // assert
+        assert_eq!(
+            display,
+            "Invalid value for LOG_LEVEL: expected debug|info|warn|error, got 'verbose'"
+        );
     }
 }

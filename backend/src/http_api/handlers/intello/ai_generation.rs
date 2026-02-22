@@ -5,9 +5,12 @@
 use super::helpers::parse_multipart;
 use crate::app::App;
 use crate::http_api::data_transfer_object::intello::{
-    CreateCustomQuestionRequest, CreateFlashcardRequest, CreateFlashcardResponse,
-    CreateOpenQuestionRequest, CreateOpenQuestionResponse, CustomQuestionResponse,
-    FlashcardResponse, OpenQuestionResponse, QcmQuestionResponse,
+    CreateCustomQuestionRequest, CreateFlashcardRequest,
+    CreateFlashcardResponse, CreateOpenQuestionRequest,
+    CreateOpenQuestionResponse, CustomQuestionResponse,
+    FlashcardResponse, OpenQuestionResponse,
+    QcmQuestionResponse, QuickQcmRequest,
+    QuickQcmResponse,
 };
 use crate::infra::user::get_user_id_from_session;
 use crate::shared::AppResult;
@@ -26,12 +29,13 @@ pub async fn create_custom_question_handler(
     let user_id = get_user_id_from_session(&app, &req)?;
 
     // Parse multipart form data
-    let (metadata, documents) = parse_multipart::<CreateCustomQuestionRequest>(payload).await?;
+    let (metadata, documents) =
+        parse_multipart::<CreateCustomQuestionRequest>(payload).await?;
 
     // Parse level from metadata (DTO validation)
     let level = metadata
         .parse_level()
-        .map_err(|e| crate::shared::AppError::validation("level", e))?;
+        .map_err(|err| crate::shared::AppError::validation("level", err))?;
 
     // Build service input
     let service_input = crate::services::GenerateContentInput {
@@ -82,12 +86,13 @@ pub async fn create_open_question_handler(
     let user_id = get_user_id_from_session(&app, &req)?;
 
     // Parse multipart form data
-    let (metadata, documents) = parse_multipart::<CreateOpenQuestionRequest>(payload).await?;
+    let (metadata, documents) =
+        parse_multipart::<CreateOpenQuestionRequest>(payload).await?;
 
     // Parse level from metadata (DTO validation)
     let level = metadata
         .parse_level()
-        .map_err(|e| crate::shared::AppError::validation("level", e))?;
+        .map_err(|err| crate::shared::AppError::validation("level", err))?;
 
     // Combine document contents for source_content (used for grading later)
     let source_content: String = documents
@@ -145,12 +150,13 @@ pub async fn create_flashcard_handler(
     let user_id = get_user_id_from_session(&app, &req)?;
 
     // Parse multipart form data
-    let (metadata, documents) = parse_multipart::<CreateFlashcardRequest>(payload).await?;
+    let (metadata, documents) =
+        parse_multipart::<CreateFlashcardRequest>(payload).await?;
 
     // Parse level from metadata (DTO validation)
     let level = metadata
         .parse_level()
-        .map_err(|e| crate::shared::AppError::validation("level", e))?;
+        .map_err(|err| crate::shared::AppError::validation("level", err))?;
 
     // Build service input
     let service_input = crate::services::GenerateContentInput {
@@ -189,3 +195,44 @@ pub async fn create_flashcard_handler(
         cards: card_responses,
     }))
 }
+
+/// POST /api/intello/qcm/generate-quick
+/// Generate ephemeral QCM from uploaded documents
+#[post("/qcm/generate-quick")]
+#[instrument(skip(app, req, payload))]
+pub async fn create_quick_qcm_handler(
+    app: web::Data<App>,
+    req: HttpRequest,
+    payload: Multipart,
+) -> AppResult<HttpResponse> {
+    let user_id =
+        get_user_id_from_session(&app, &req)?;
+
+    let (metadata, documents) =
+        parse_multipart::<QuickQcmRequest>(payload)
+            .await?;
+
+    let level =
+        metadata.parse_level().map_err(|err| {
+            crate::shared::AppError::validation(
+                "level", err,
+            )
+        })?;
+
+    let input = crate::services::intello::QuickQcmInput {
+        language: metadata.language,
+        level,
+        num_questions: metadata.num_questions,
+        documents,
+    };
+
+    let qcm_set = app
+        .intello_service
+        .generate_quick_qcm(&user_id, input)
+        .await?;
+
+    Ok(HttpResponse::Ok().json(
+        QuickQcmResponse::from(&qcm_set),
+    ))
+}
+

@@ -42,3 +42,60 @@ impl AppModule for IntelloApp {
         &self.info
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_new_returns_intello_app_with_correct_id() {
+        // arrange / act
+        let app = IntelloApp::new();
+
+        // assert
+        assert_eq!(app.info().id, "intello");
+    }
+
+    #[test]
+    fn test_new_returns_correct_name() {
+        // arrange / act
+        let app = IntelloApp::new();
+
+        // assert
+        assert_eq!(app.info().name, "Intello");
+    }
+
+    #[test]
+    fn test_default_same_as_new() {
+        // arrange / act
+        let app = IntelloApp::default();
+
+        // assert
+        assert_eq!(app.info().id, "intello");
+        assert_eq!(app.info().name, "Intello");
+    }
+
+    #[test]
+    fn test_app_module_name_returns_intello() {
+        // arrange
+        let app = IntelloApp::new();
+
+        // act - uses AppModule trait method
+        let name = app.name();
+
+        // assert
+        assert_eq!(name, "Intello");
+    }
+
+    #[test]
+    fn test_app_module_id_returns_intello() {
+        // arrange
+        let app = IntelloApp::new();
+
+        // act - uses AppModule trait method
+        let id = app.id();
+
+        // assert
+        assert_eq!(id, "intello");
+    }
+}

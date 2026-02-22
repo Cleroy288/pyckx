@@ -1,0 +1,35 @@
+/* OrderPhrasePlayer — local-only styles */
+
+.hint {
+    font-size: 0.9375rem;
+    color: var(--color-text-secondary);
+    text-align: center;
+    font-style: italic;
+    margin: 0;
+}
+
+.placed {
+    min-height: 3rem;
+    width: 100%;
+    padding: 1rem;
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--color-border);
+    border-radius: 0;
+    font-size: 1rem;
+    color: var(--color-text-primary);
+    text-align: center;
+}
+
+.words {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.word_used {
+    opacity: 0.4;
+    text-decoration: line-through;
+}

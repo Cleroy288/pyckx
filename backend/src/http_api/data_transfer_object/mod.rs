@@ -15,8 +15,9 @@ pub mod user;
 
 // Re-export apps types (from local apps module)
 pub use apps::{
-    AddUserAppRequest, AppListResponse, AppResponse, AppSuccessResponse, CreateAppRequest,
-    SuccessResponse, UpdateAppRequest, UserAppSuccessResponse,
+    AddUserAppRequest, AppListResponse, AppResponse, AppSuccessResponse,
+    CreateAppRequest, SuccessResponse, UpdateAppRequest,
+    UserAppSuccessResponse,
 };
 
 // Re-export auth types
@@ -24,9 +25,9 @@ pub use auth::{AuthResponse, LoginRequest, RegisterRequest};
 
 // Re-export collection types
 pub use collection::{
-    AddDvdRequest, CollectionItemsResponse, CollectionListResponse, CollectionSuccessResponse,
-    CreateCollectionRequest, DeleteResponse, DvdListResponse, DvdResponse, DvdSuccessResponse,
-    UpdateDvdRequest,
+    AddDvdRequest, CollectionItemsResponse, CollectionListResponse,
+    CollectionSuccessResponse, CreateCollectionRequest, DeleteResponse,
+    DvdListResponse, DvdResponse, DvdSuccessResponse, UpdateDvdRequest,
 };
 
 // Re-export user types

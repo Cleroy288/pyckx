@@ -22,18 +22,22 @@ pub use user::User;
 
 // Repository traits
 pub use database::{
-    AiUsageRepository, AppRepository, CollectionRepository, CourseRepository, CreateApp, CreateDvd,
-    DvdRepository, FillBlankRepository, FlashcardRepository, GameSetRepository, KeywordsRepository,
-    OpenQuestionRepository, OrderPhraseRepository, QcmRepository, StudySessionRepository,
-    TrueOrFalseRepository, UpdateApp, UpdateDvd, UserAppRepository,
+    AiUsageRepository, AppRepository, CollectionRepository, CourseRepository,
+    CreateApp, CreateDvd, DvdRepository, FillBlankRepository,
+    FlashcardRepository, GameSetRepository, KeywordsRepository,
+    OpenQuestionRepository, OrderPhraseRepository, QcmRepository,
+    StudySessionRepository, TrueOrFalseRepository, UpdateApp, UpdateDvd,
+    UserAppRepository,
 };
 
 // Supabase implementations
 pub use supabase::{
-    SupabaseAiUsageRepository, SupabaseAppRepository, SupabaseClient, SupabaseCollectionRepository,
-    SupabaseCourseRepository, SupabaseDvdRepository, SupabaseFillBlankRepository,
-    SupabaseFlashcardRepository, SupabaseHttpClient, SupabaseKeywordsRepository,
-    SupabaseOpenQuestionRepository, SupabaseOrderPhraseRepository, SupabaseQcmRepository,
-    SupabaseSessionRepository, SupabaseStudySessionRepository, SupabaseTrueOrFalseRepository,
-    SupabaseUserAppRepository,
+    SupabaseAiUsageRepository, SupabaseAppRepository, SupabaseClient,
+    SupabaseCollectionRepository, SupabaseCourseRepository,
+    SupabaseDvdRepository, SupabaseFillBlankRepository,
+    SupabaseFlashcardRepository, SupabaseHttpClient,
+    SupabaseKeywordsRepository, SupabaseOpenQuestionRepository,
+    SupabaseOrderPhraseRepository, SupabaseQcmRepository,
+    SupabaseSessionRepository, SupabaseStudySessionRepository,
+    SupabaseTrueOrFalseRepository, SupabaseUserAppRepository,
 };

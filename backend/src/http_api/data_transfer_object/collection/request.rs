@@ -5,6 +5,9 @@ use chrono::{DateTime, NaiveDate, Utc};
 use serde::Deserialize;
 use validator::Validate;
 
+/// Result of parsing an optional year string
+type ParseYearResult = Result<Option<DateTime<Utc>>, String>;
+
 /// Request body for creating a new collection
 #[derive(Debug, Deserialize)]
 pub struct CreateCollectionRequest {
@@ -15,8 +18,8 @@ pub struct CreateCollectionRequest {
 impl CreateCollectionRequest {
     /// Parse the item_type string into CollectionItemType
     pub fn parse_type(&self) -> Result<CollectionItemType, String> {
-        CollectionItemType::from_str(&self.item_type)
-            .ok_or_else(|| format!("Invalid collection type: {}", self.item_type))
+        self.item_type
+            .parse::<CollectionItemType>()
     }
 }
 
@@ -84,24 +87,223 @@ pub struct UpdateDvdRequest {
 
 impl UpdateDvdRequest {
     /// Parse the year string into a `DateTime<Utc>` if present
-    pub fn parse_year(&self) -> Result<Option<DateTime<Utc>>, String> {
+    pub fn parse_year(&self) -> ParseYearResult {
         match &self.year {
             Some(year_str) => {
                 // Try parsing as full date first (YYYY-MM-DD)
-                if let Ok(date) = NaiveDate::parse_from_str(year_str, "%Y-%m-%d") {
-                    return Ok(Some(date.and_hms_opt(0, 0, 0).unwrap().and_utc()));
+                if let Ok(date) =
+                    NaiveDate::parse_from_str(year_str, "%Y-%m-%d")
+                {
+                    return Ok(Some(
+                        date.and_hms_opt(0, 0, 0).unwrap().and_utc(),
+                    ));
                 }
 
                 // Try parsing as year only (YYYY)
-                if let Ok(year) = year_str.parse::<i32>() {
-                    if let Some(date) = NaiveDate::from_ymd_opt(year, 1, 1) {
-                        return Ok(Some(date.and_hms_opt(0, 0, 0).unwrap().and_utc()));
-                    }
+                if let Some(date) = year_str
+                    .parse::<i32>()
+                    .ok()
+                    .and_then(|yr| NaiveDate::from_ymd_opt(yr, 1, 1))
+                {
+                    return Ok(Some(
+                        date.and_hms_opt(0, 0, 0).unwrap().and_utc(),
+                    ));
                 }
 
                 Err(format!("Invalid year format: {}", year_str))
             }
             None => Ok(None),
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    // -- CreateCollectionRequest::parse_type --
+
+    #[test]
+    fn test_parse_type_dvd_lowercase() {
+        // arrange
+        let req = CreateCollectionRequest {
+            item_type: "dvd".into(),
+        };
+
+        // act
+        let result = req.parse_type();
+
+        // assert
+        assert!(result.is_ok());
+        assert_eq!(
+            result.unwrap(),
+            CollectionItemType::Dvd
+        );
+    }
+
+    #[test]
+    fn test_parse_type_dvd_mixed_case() {
+        // arrange
+        let req = CreateCollectionRequest {
+            item_type: "Dvd".into(),
+        };
+
+        // act
+        let result = req.parse_type();
+
+        // assert
+        assert!(result.is_ok());
+    }
+
+    #[test]
+    fn test_parse_type_book() {
+        // arrange
+        let req = CreateCollectionRequest {
+            item_type: "book".into(),
+        };
+
+        // act
+        let result = req.parse_type();
+
+        // assert
+        assert!(result.is_ok());
+        assert_eq!(
+            result.unwrap(),
+            CollectionItemType::Book
+        );
+    }
+
+    #[test]
+    fn test_parse_type_invalid_returns_error() {
+        // arrange
+        let req = CreateCollectionRequest {
+            item_type: "vinyl".into(),
+        };
+
+        // act
+        let result = req.parse_type();
+
+        // assert
+        assert!(result.is_err());
+        assert!(result.unwrap_err().contains("vinyl"));
+    }
+
+    // -- AddDvdRequest::parse_year --
+
+    #[test]
+    fn test_parse_year_yyyy_format() {
+        // arrange
+        let req = AddDvdRequest {
+            name: "Test".into(),
+            year: "2024".into(),
+            realisator: None,
+            actors: vec![],
+            genre: None,
+        };
+
+        // act
+        let result = req.parse_year();
+
+        // assert
+        assert!(result.is_ok());
+        let dt = result.unwrap();
+        assert_eq!(dt.format("%Y").to_string(), "2024");
+    }
+
+    #[test]
+    fn test_parse_year_full_date_format() {
+        // arrange
+        let req = AddDvdRequest {
+            name: "Test".into(),
+            year: "2024-06-15".into(),
+            realisator: None,
+            actors: vec![],
+            genre: None,
+        };
+
+        // act
+        let result = req.parse_year();
+
+        // assert
+        assert!(result.is_ok());
+        let dt = result.unwrap();
+        assert_eq!(dt.format("%Y-%m-%d").to_string(), "2024-06-15");
+    }
+
+    #[test]
+    fn test_parse_year_invalid_returns_error() {
+        // arrange
+        let req = AddDvdRequest {
+            name: "Test".into(),
+            year: "not-a-year".into(),
+            realisator: None,
+            actors: vec![],
+            genre: None,
+        };
+
+        // act
+        let result = req.parse_year();
+
+        // assert
+        assert!(result.is_err());
+        assert!(result.unwrap_err().contains("not-a-year"));
+    }
+
+    // -- UpdateDvdRequest::parse_year --
+
+    #[test]
+    fn test_update_parse_year_none_returns_ok_none() {
+        // arrange
+        let req = UpdateDvdRequest {
+            name: None,
+            year: None,
+            realisator: None,
+            actors: None,
+            genre: None,
+        };
+
+        // act
+        let result = req.parse_year();
+
+        // assert
+        assert!(result.is_ok());
+        assert!(result.unwrap().is_none());
+    }
+
+    #[test]
+    fn test_update_parse_year_valid_returns_some() {
+        // arrange
+        let req = UpdateDvdRequest {
+            name: None,
+            year: Some("2023".into()),
+            realisator: None,
+            actors: None,
+            genre: None,
+        };
+
+        // act
+        let result = req.parse_year();
+
+        // assert
+        assert!(result.is_ok());
+        assert!(result.unwrap().is_some());
+    }
+
+    #[test]
+    fn test_update_parse_year_invalid_returns_error() {
+        // arrange
+        let req = UpdateDvdRequest {
+            name: None,
+            year: Some("xyz".into()),
+            realisator: None,
+            actors: None,
+            genre: None,
+        };
+
+        // act
+        let result = req.parse_year();
+
+        // assert
+        assert!(result.is_err());
     }
 }

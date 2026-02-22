@@ -17,7 +17,10 @@ use crate::services::intello::error_domain::IntelloError;
 // @ returns : ExtractedContent with the text and estimated token count
 // @ edge cases : Empty files, different text encodings
 // @ error conditions : Empty or whitespace-only files
-pub fn extract_txt(bytes: &[u8], filename: &str) -> ExtractResult<ExtractedContent> {
+pub fn extract_txt(
+    bytes: &[u8],
+    filename: &str,
+) -> ExtractResult<ExtractedContent> {
     // Step 1: Try UTF-8 decoding first (most common)
     match std::str::from_utf8(bytes) {
         Ok(text) => {
@@ -26,7 +29,10 @@ pub fn extract_txt(bytes: &[u8], filename: &str) -> ExtractResult<ExtractedConte
             if content.trim().is_empty() {
                 return Err(IntelloError::validation(
                     "document",
-                    format!("File '{}' is empty or contains only whitespace", filename),
+                    format!(
+                        "File '{}' is empty or contains only whitespace",
+                        filename
+                    ),
                 ));
             }
             // Step 3: Return extracted content
@@ -38,7 +44,10 @@ pub fn extract_txt(bytes: &[u8], filename: &str) -> ExtractResult<ExtractedConte
             if content.trim().is_empty() {
                 return Err(IntelloError::validation(
                     "document",
-                    format!("File '{}' is empty or contains only whitespace", filename),
+                    format!(
+                        "File '{}' is empty or contains only whitespace",
+                        filename
+                    ),
                 ));
             }
             Ok(ExtractedContent::new(content))
@@ -54,12 +63,15 @@ pub fn extract_txt(bytes: &[u8], filename: &str) -> ExtractResult<ExtractedConte
 // @ returns : ExtractedContent with the extracted text and estimated token count
 // @ edge cases : PDFs with no text content, encrypted PDFs
 // @ error conditions : Invalid PDF format, extraction failures
-pub fn extract_pdf(bytes: &[u8], filename: &str) -> ExtractResult<ExtractedContent> {
+pub fn extract_pdf(
+    bytes: &[u8],
+    filename: &str,
+) -> ExtractResult<ExtractedContent> {
     // Step 1: Extract text from PDF using pdf_extract crate
-    let content = pdf_extract::extract_text_from_mem(bytes).map_err(|e| {
+    let content = pdf_extract::extract_text_from_mem(bytes).map_err(|err| {
         IntelloError::validation(
             "document",
-            format!("Failed to extract text from PDF '{}': {}", filename, e),
+            format!("Failed to extract text from PDF '{}': {}", filename, err),
         )
     })?;
 
@@ -83,12 +95,16 @@ pub fn extract_pdf(bytes: &[u8], filename: &str) -> ExtractResult<ExtractedConte
 // @ returns : ExtractedContent with the extracted text and estimated token count
 // @ edge cases : Documents with no text content, complex formatting
 // @ error conditions : Invalid DOCX format, parsing failures
-pub fn extract_word(bytes: &[u8], filename: &str) -> ExtractResult<ExtractedContent> {
+#[allow(clippy::excessive_nesting)]
+pub fn extract_word(
+    bytes: &[u8],
+    filename: &str,
+) -> ExtractResult<ExtractedContent> {
     // Step 1: Parse DOCX file using docx_rs
-    let docx = docx_rs::read_docx(bytes).map_err(|e| {
+    let docx = docx_rs::read_docx(bytes).map_err(|err| {
         IntelloError::validation(
             "document",
-            format!("Failed to read Word document '{}': {}", filename, e),
+            format!("Failed to read Word document '{}': {}", filename, err),
         )
     })?;
 
@@ -113,7 +129,10 @@ pub fn extract_word(bytes: &[u8], filename: &str) -> ExtractResult<ExtractedCont
     if content.trim().is_empty() {
         return Err(IntelloError::validation(
             "document",
-            format!("Word document '{}' contains no extractable text", filename),
+            format!(
+                "Word document '{}' contains no extractable text",
+                filename
+            ),
         ));
     }
 
@@ -129,15 +148,18 @@ pub fn extract_word(bytes: &[u8], filename: &str) -> ExtractResult<ExtractedCont
 // @ returns : ExtractedContent with the extracted text and estimated token count
 // @ edge cases : Presentations with no text content, complex slide layouts
 // @ error conditions : Invalid PPTX format, ZIP extraction failures
-pub fn extract_pptx(bytes: &[u8], filename: &str) -> ExtractResult<ExtractedContent> {
+pub fn extract_pptx(
+    bytes: &[u8],
+    filename: &str,
+) -> ExtractResult<ExtractedContent> {
     use std::io::{Cursor, Read};
 
     // Step 1: Open PPTX as ZIP archive
     let cursor = Cursor::new(bytes);
-    let mut archive = zip::ZipArchive::new(cursor).map_err(|e| {
+    let mut archive = zip::ZipArchive::new(cursor).map_err(|err| {
         IntelloError::validation(
             "document",
-            format!("Failed to read PowerPoint '{}': {}", filename, e),
+            format!("Failed to read PowerPoint '{}': {}", filename, err),
         )
     })?;
 
@@ -149,7 +171,9 @@ pub fn extract_pptx(bytes: &[u8], filename: &str) -> ExtractResult<ExtractedCont
         .filter_map(|i| {
             archive.by_index(i).ok().and_then(|f| {
                 let name = f.name().to_string();
-                if name.starts_with("ppt/slides/slide") && name.ends_with(".xml") {
+                if name.starts_with("ppt/slides/slide")
+                    && name.ends_with(".xml")
+                {
                     Some(name)
                 } else {
                     None
@@ -161,18 +185,21 @@ pub fn extract_pptx(bytes: &[u8], filename: &str) -> ExtractResult<ExtractedCont
 
     // Step 3: Extract text from each slide XML
     for slide_path in slide_files {
-        let mut file = archive.by_name(&slide_path).map_err(|e| {
+        let mut file = archive.by_name(&slide_path).map_err(|err| {
             IntelloError::validation(
                 "document",
-                format!("Failed to read slide in '{}': {}", filename, e),
+                format!("Failed to read slide in '{}': {}", filename, err),
             )
         })?;
 
         let mut xml_content = String::new();
-        file.read_to_string(&mut xml_content).map_err(|e| {
+        file.read_to_string(&mut xml_content).map_err(|err| {
             IntelloError::validation(
                 "document",
-                format!("Failed to read slide content in '{}': {}", filename, e),
+                format!(
+                    "Failed to read slide content in '{}': {}",
+                    filename, err
+                ),
             )
         })?;
 
@@ -196,4 +223,103 @@ pub fn extract_pptx(bytes: &[u8], filename: &str) -> ExtractResult<ExtractedCont
 
     // Step 5: Return extracted content with token estimate
     Ok(ExtractedContent::new(content))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    // -- extract_txt tests --
+
+    #[test]
+    fn test_extract_txt_valid_utf8_returns_content() {
+        // arrange
+        let bytes = b"Hello, world!";
+
+        // act
+        let result = extract_txt(bytes, "test.txt");
+
+        // assert
+        assert!(result.is_ok());
+        assert_eq!(result.unwrap().content, "Hello, world!");
+    }
+
+    #[test]
+    fn test_extract_txt_empty_bytes_returns_error() {
+        // arrange
+        let bytes = b"";
+
+        // act
+        let result = extract_txt(bytes, "empty.txt");
+
+        // assert
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_extract_txt_whitespace_only_returns_error() {
+        // arrange
+        let bytes = b"   \n  \t  ";
+
+        // act
+        let result = extract_txt(bytes, "blank.txt");
+
+        // assert
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_extract_txt_latin1_fallback_returns_content() {
+        // arrange - bytes 0xE9 is 'e' with accent in Latin-1
+        let bytes: &[u8] = &[0xC0, 0xE9, 0x6C, 0x6F];
+
+        // act
+        let result = extract_txt(bytes, "latin.txt");
+
+        // assert
+        assert!(result.is_ok());
+        assert!(!result.unwrap().content.is_empty());
+    }
+
+    // -- extract_pdf tests (error case only) --
+
+    #[test]
+    fn test_extract_pdf_invalid_bytes_returns_error() {
+        // arrange
+        let bytes = b"not a real pdf";
+
+        // act
+        let result = extract_pdf(bytes, "bad.pdf");
+
+        // assert
+        assert!(result.is_err());
+    }
+
+    // -- extract_word tests (error case only) --
+
+    #[test]
+    fn test_extract_word_invalid_bytes_returns_error() {
+        // arrange
+        let bytes = b"not a real docx";
+
+        // act
+        let result = extract_word(bytes, "bad.docx");
+
+        // assert
+        assert!(result.is_err());
+    }
+
+    // -- extract_pptx tests (error case only) --
+
+    #[test]
+    fn test_extract_pptx_invalid_bytes_returns_error() {
+        // arrange
+        let bytes = b"not a real pptx";
+
+        // act
+        let result = extract_pptx(bytes, "bad.pptx");
+
+        // assert
+        assert!(result.is_err());
+    }
 }

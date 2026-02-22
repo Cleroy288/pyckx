@@ -1,0 +1,25 @@
+/* ============================================
+   DVD Card — domain-specific styles only
+   ============================================
+   Card shell handled by ItemCard component.
+   Only DVD-specific text styles live here.
+   ============================================ */
+
+.director {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.actors {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    font-style: italic;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

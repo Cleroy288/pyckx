@@ -90,3 +90,41 @@ pub struct CollectionSuccessResponse {
     pub message: String,
     pub collection: CollectionResponse,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_delete_response_success_message() {
+        // arrange / act
+        let resp = DeleteResponse::success();
+
+        // assert
+        assert_eq!(resp.message, "Item deleted successfully");
+        assert!(resp.deleted);
+    }
+
+    #[test]
+    fn test_delete_response_dvd_success_message() {
+        // arrange / act
+        let resp = DeleteResponse::dvd_success();
+
+        // assert
+        assert_eq!(resp.message, "DVD deleted successfully");
+        assert!(resp.deleted);
+    }
+
+    #[test]
+    fn test_delete_response_collection_success_message() {
+        // arrange / act
+        let resp = DeleteResponse::collection_success();
+
+        // assert
+        assert_eq!(
+            resp.message,
+            "Collection deleted successfully"
+        );
+        assert!(resp.deleted);
+    }
+}

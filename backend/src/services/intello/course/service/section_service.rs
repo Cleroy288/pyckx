@@ -1,3 +1,4 @@
+use crate::services::intello::ai_usage::ai_usage_domain::AiUsageInput;
 use crate::services::intello::course::domain::{ParsedSection, SectionPlan};
 use crate::services::intello::course::parser::parse_generated_section;
 use crate::services::intello::course::prompt::build_section_prompt;
@@ -14,6 +15,7 @@ impl IntelloService {
     // @ resources : Source documents for this section
     // @ returns : ParsedSection with content and QCM
     // @ errors : ExternalServiceError if AI fails, ValidationFailed if parse fails
+    #[allow(clippy::too_many_arguments)]
     #[instrument(skip(self, section_plan, context, resources))]
     pub async fn generate_course_section(
         &self,
@@ -36,13 +38,13 @@ impl IntelloService {
 
         // Step 2b: Track AI usage
         if let Some(usage) = &ai_result.usage {
-            self.try_log_ai_usage(
+            self.try_log_ai_usage(AiUsageInput {
                 user_id,
-                &ai_result.model,
-                "course_section_generation",
-                usage.prompt_tokens,
-                usage.completion_tokens,
-            )
+                model_id: &ai_result.model,
+                feature_type: "course_section_generation",
+                input_tokens: usage.prompt_tokens,
+                output_tokens: usage.completion_tokens,
+            })
             .await;
         }
 

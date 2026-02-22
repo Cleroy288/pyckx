@@ -1,0 +1,9 @@
+/* ── Actions — bottom-left of hero banner ── */
+.actions {
+    position: absolute;
+    bottom: 0.75rem;
+    left: 1rem;
+    z-index: 1;
+    display: flex;
+    gap: 0.5rem;
+}

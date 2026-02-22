@@ -61,20 +61,18 @@ impl TryFrom<AppRow> for AppEntity {
         use chrono::DateTime;
 
         let created_at = DateTime::parse_from_rfc3339(&row.created_at)
-            .map_err(|e| {
-                AppError::Internal(crate::http_api::utils::InternalError::new(format!(
-                    "Invalid created_at: {}",
-                    e
-                )))
+            .map_err(|err| {
+                AppError::Internal(crate::http_api::utils::InternalError::new(
+                    format!("Invalid created_at: {}", err),
+                ))
             })?
             .with_timezone(&chrono::Utc);
 
         let updated_at = DateTime::parse_from_rfc3339(&row.updated_at)
-            .map_err(|e| {
-                AppError::Internal(crate::http_api::utils::InternalError::new(format!(
-                    "Invalid updated_at: {}",
-                    e
-                )))
+            .map_err(|err| {
+                AppError::Internal(crate::http_api::utils::InternalError::new(
+                    format!("Invalid updated_at: {}", err),
+                ))
             })?
             .with_timezone(&chrono::Utc);
 
@@ -85,5 +83,105 @@ impl TryFrom<AppRow> for AppEntity {
             created_at,
             updated_at,
         })
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    // -- InsertAppRow from CreateApp --
+
+    #[test]
+    fn test_insert_app_row_from_create_app() {
+        // arrange
+        let create = CreateApp {
+            name: "TestApp".into(),
+            description: Some("Desc".into()),
+        };
+
+        // act
+        let row = InsertAppRow::from(&create);
+
+        // assert
+        assert_eq!(row.name, "TestApp");
+        assert_eq!(row.description, Some("Desc".into()));
+    }
+
+    // -- UpdateAppRow from UpdateApp --
+
+    #[test]
+    fn test_update_app_row_from_update_app() {
+        // arrange
+        let update = UpdateApp {
+            name: Some("New".into()),
+            description: None,
+        };
+
+        // act
+        let row = UpdateAppRow::from(&update);
+
+        // assert
+        assert_eq!(row.name, Some("New".into()));
+        assert!(row.description.is_none());
+    }
+
+    // -- AppRow TryFrom to AppEntity --
+
+    #[test]
+    fn test_app_row_try_from_valid_dates() {
+        // arrange
+        let row = AppRow {
+            id: 1,
+            name: "MyApp".into(),
+            description: None,
+            created_at: "2024-01-01T00:00:00+00:00".into(),
+            updated_at: "2024-06-15T12:30:00+00:00".into(),
+        };
+
+        // act
+        let result = AppEntity::try_from(row);
+
+        // assert
+        assert!(result.is_ok());
+        let app = result.unwrap();
+        assert_eq!(app.id, 1);
+        assert_eq!(app.name, "MyApp");
+    }
+
+    #[test]
+    fn test_app_row_try_from_invalid_created_at() {
+        // arrange
+        let row = AppRow {
+            id: 1,
+            name: "Bad".into(),
+            description: None,
+            created_at: "not-a-date".into(),
+            updated_at: "2024-01-01T00:00:00+00:00".into(),
+        };
+
+        // act
+        let result = AppEntity::try_from(row);
+
+        // assert
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_app_row_try_from_invalid_updated_at() {
+        // arrange
+        let row = AppRow {
+            id: 1,
+            name: "Bad".into(),
+            description: None,
+            created_at: "2024-01-01T00:00:00+00:00".into(),
+            updated_at: "bad-date".into(),
+        };
+
+        // act
+        let result = AppEntity::try_from(row);
+
+        // assert
+        assert!(result.is_err());
     }
 }

@@ -1,3 +1,4 @@
+#![allow(dead_code)]
 /*
  *
  * le mode learn c'est quand un user veut apprendre un truc

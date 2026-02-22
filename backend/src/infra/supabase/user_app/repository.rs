@@ -39,7 +39,9 @@ impl SupabaseUserAppRepository {
     }
 
     fn map_error(err: SupabaseError) -> AppError {
-        AppError::Internal(crate::http_api::utils::InternalError::new(err.to_string()))
+        AppError::Internal(crate::http_api::utils::InternalError::new(
+            err.to_string(),
+        ))
     }
 }
 
@@ -47,12 +49,16 @@ impl SupabaseUserAppRepository {
 impl UserAppRepository for SupabaseUserAppRepository {
     /* READ: Find by user */
     #[instrument(skip(self), fields(user_id = %user_id))]
-    async fn find_by_user(&self, user_id: &str) -> Result<Vec<UserApp>, AppError> {
+    async fn find_by_user(
+        &self,
+        user_id: &str,
+    ) -> Result<Vec<UserApp>, AppError> {
         let query = format!("user_id=eq.{}&order=id.desc", user_id);
         let url = self.client.rest_url_with_query(TABLE_USER_APPS, &query);
         debug!(url = %url, "Finding user apps");
 
-        let rows: Vec<UserAppRow> = self.client.get(&url).await.map_err(Self::map_error)?;
+        let rows: Vec<UserAppRow> =
+            self.client.get(&url).await.map_err(Self::map_error)?;
         let user_apps: Result<Vec<UserApp>, AppError> =
             rows.into_iter().map(UserApp::try_from).collect();
         let user_apps = user_apps?;
@@ -63,7 +69,11 @@ impl UserAppRepository for SupabaseUserAppRepository {
 
     /* CREATE: Add app */
     #[instrument(skip(self), fields(user_id = %user_id, app_id = %app_id))]
-    async fn add_app(&self, user_id: &str, app_id: i32) -> Result<UserApp, AppError> {
+    async fn add_app(
+        &self,
+        user_id: &str,
+        app_id: i32,
+    ) -> Result<UserApp, AppError> {
         if self.has_app(user_id, app_id).await? {
             return Err(AppError::App(
                 crate::services::app_registry::AppsError::UserAppAlreadyAdded {
@@ -98,7 +108,11 @@ impl UserAppRepository for SupabaseUserAppRepository {
 
     /* DELETE: Remove app */
     #[instrument(skip(self), fields(user_id = %user_id, app_id = %app_id))]
-    async fn remove_app(&self, user_id: &str, app_id: i32) -> Result<bool, AppError> {
+    async fn remove_app(
+        &self,
+        user_id: &str,
+        app_id: i32,
+    ) -> Result<bool, AppError> {
         let query = format!("user_id=eq.{}&app_id=eq.{}", user_id, app_id);
         let url = self.client.rest_url_with_query(TABLE_USER_APPS, &query);
         debug!(url = %url, "Removing user app");
@@ -110,8 +124,13 @@ impl UserAppRepository for SupabaseUserAppRepository {
 
     /* HELPER: Check if user has app */
     #[instrument(skip(self), fields(user_id = %user_id, app_id = %app_id))]
-    async fn has_app(&self, user_id: &str, app_id: i32) -> Result<bool, AppError> {
-        let query = format!("user_id=eq.{}&app_id=eq.{}&select=id", user_id, app_id);
+    async fn has_app(
+        &self,
+        user_id: &str,
+        app_id: i32,
+    ) -> Result<bool, AppError> {
+        let query =
+            format!("user_id=eq.{}&app_id=eq.{}&select=id", user_id, app_id);
         let url = self.client.rest_url_with_query(TABLE_USER_APPS, &query);
 
         #[derive(Deserialize)]
@@ -120,7 +139,8 @@ impl UserAppRepository for SupabaseUserAppRepository {
             id: i32,
         }
 
-        let rows: Vec<IdOnly> = self.client.get(&url).await.map_err(Self::map_error)?;
+        let rows: Vec<IdOnly> =
+            self.client.get(&url).await.map_err(Self::map_error)?;
         Ok(!rows.is_empty())
     }
 }

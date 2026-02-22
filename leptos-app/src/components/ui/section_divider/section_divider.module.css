@@ -1,0 +1,21 @@
+/* Section Divider — centered label with lines */
+
+.divider {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+}
+
+.line {
+    flex: 1;
+    height: 1px;
+    background: color-mix(
+        in srgb, var(--primary) 25%, transparent
+    );
+}

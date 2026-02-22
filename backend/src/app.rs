@@ -61,12 +61,14 @@ impl App {
         let supabase_client = Arc::new(SupabaseHttpClient::new(&cfg));
 
         /* Create session repository and store */
-        let session_repo = Arc::new(SupabaseSessionRepository::new(Arc::clone(&supabase_client)));
+        let session_repo = Arc::new(SupabaseSessionRepository::new(
+            Arc::clone(&supabase_client),
+        ));
         let sessions = SessionStore::new(session_repo);
 
         /* Load existing sessions from Supabase (best-effort) */
-        if let Err(e) = sessions.initialize().await {
-            tracing::warn!(error = %e, "Failed to load sessions from Supabase, continuing with empty store");
+        if let Err(err) = sessions.initialize().await {
+            tracing::warn!(error = %err, "Failed to load sessions from Supabase, continuing with empty store");
         }
 
         let auth = AuthService::new(&cfg, sessions);
@@ -74,53 +76,67 @@ impl App {
         let intello = IntelloApp::new();
 
         /* Create Supabase repositories (non-Intello) */
-        let collection_repo = Arc::new(SupabaseCollectionRepository::new(Arc::clone(
-            &supabase_client,
-        )));
-        let dvd_repo = Arc::new(SupabaseDvdRepository::new(Arc::clone(&supabase_client)));
-        let app_repository = Arc::new(SupabaseAppRepository::new(Arc::clone(&supabase_client)));
-        let user_app_repository =
-            Arc::new(SupabaseUserAppRepository::new(Arc::clone(&supabase_client)));
+        let collection_repo = Arc::new(SupabaseCollectionRepository::new(
+            Arc::clone(&supabase_client),
+        ));
+        let dvd_repo =
+            Arc::new(SupabaseDvdRepository::new(Arc::clone(&supabase_client)));
+        let app_repository =
+            Arc::new(SupabaseAppRepository::new(Arc::clone(&supabase_client)));
+        let user_app_repository = Arc::new(SupabaseUserAppRepository::new(
+            Arc::clone(&supabase_client),
+        ));
 
         /* Create Supabase repositories for Intello (bundled for cleaner construction) */
         let intello_repos = crate::services::IntelloRepositories {
-            qcm_repo: Arc::new(SupabaseQcmRepository::new(Arc::clone(&supabase_client))),
-            ai_qcm_repo: Arc::new(SupabaseQcmRepository::new(Arc::clone(&supabase_client))),
-            open_question_repo: Arc::new(SupabaseOpenQuestionRepository::new(Arc::clone(
+            qcm_repo: Arc::new(SupabaseQcmRepository::new(Arc::clone(
                 &supabase_client,
             ))),
-            flashcard_repo: Arc::new(SupabaseFlashcardRepository::new(Arc::clone(
+            ai_qcm_repo: Arc::new(SupabaseQcmRepository::new(Arc::clone(
                 &supabase_client,
             ))),
-            true_false_repo: Arc::new(SupabaseTrueOrFalseRepository::new(Arc::clone(
+            open_question_repo: Arc::new(SupabaseOpenQuestionRepository::new(
+                Arc::clone(&supabase_client),
+            )),
+            flashcard_repo: Arc::new(SupabaseFlashcardRepository::new(
+                Arc::clone(&supabase_client),
+            )),
+            true_false_repo: Arc::new(SupabaseTrueOrFalseRepository::new(
+                Arc::clone(&supabase_client),
+            )),
+            keywords_repo: Arc::new(SupabaseKeywordsRepository::new(
+                Arc::clone(&supabase_client),
+            )),
+            order_phrase_repo: Arc::new(SupabaseOrderPhraseRepository::new(
+                Arc::clone(&supabase_client),
+            )),
+            fill_blank_repo: Arc::new(SupabaseFillBlankRepository::new(
+                Arc::clone(&supabase_client),
+            )),
+            course_repo: Arc::new(SupabaseCourseRepository::new(Arc::clone(
                 &supabase_client,
             ))),
-            keywords_repo: Arc::new(SupabaseKeywordsRepository::new(Arc::clone(
-                &supabase_client,
-            ))),
-            order_phrase_repo: Arc::new(SupabaseOrderPhraseRepository::new(Arc::clone(
-                &supabase_client,
-            ))),
-            fill_blank_repo: Arc::new(SupabaseFillBlankRepository::new(Arc::clone(
-                &supabase_client,
-            ))),
-            course_repo: Arc::new(SupabaseCourseRepository::new(Arc::clone(&supabase_client))),
-            ai_usage_repo: Arc::new(SupabaseAiUsageRepository::new(Arc::clone(&supabase_client))),
-            study_session_repo: Arc::new(SupabaseStudySessionRepository::new(Arc::clone(
-                &supabase_client,
-            ))),
+            ai_usage_repo: Arc::new(SupabaseAiUsageRepository::new(
+                Arc::clone(&supabase_client),
+            )),
+            study_session_repo: Arc::new(SupabaseStudySessionRepository::new(
+                Arc::clone(&supabase_client),
+            )),
         };
 
         // Create caches
         let open_question_cache = Arc::new(OpenQuestionCache::new());
 
         // Create OpenRouter service (use empty string if no API key configured)
-        let openrouter_api_key = cfg.openrouter_api_key.clone().unwrap_or_default();
+        let openrouter_api_key =
+            cfg.openrouter_api_key.clone().unwrap_or_default();
         let google_ai_key = cfg.google_ai_key.clone();
 
         // Create services with all dependencies injected (wrapped in Arc for cheap cloning)
-        let collection_service = Arc::new(CollectionService::new(collection_repo, dvd_repo));
-        let app_service = Arc::new(AppService::new(app_repository, user_app_repository));
+        let collection_service =
+            Arc::new(CollectionService::new(collection_repo, dvd_repo));
+        let app_service =
+            Arc::new(AppService::new(app_repository, user_app_repository));
 
         // OpenRouter AI client
         let openrouter_client = Arc::new(OpenRouterClient::with_google_key(

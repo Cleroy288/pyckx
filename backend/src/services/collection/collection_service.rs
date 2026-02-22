@@ -3,7 +3,9 @@
 //! CRUD operations for collections themselves.
 
 use super::CollectionService;
-use crate::services::collection::collection_domain::{CollectionItemType, UserCollection};
+use crate::services::collection::collection_domain::{
+    CollectionItemType, UserCollection,
+};
 use crate::shared::AppResult;
 use tracing::{info, instrument};
 
@@ -15,7 +17,8 @@ impl CollectionService {
         user_id: &str,
         item_type: CollectionItemType,
     ) -> AppResult<UserCollection> {
-        let collection = self.collection_repo.create(user_id, item_type).await?;
+        let collection =
+            self.collection_repo.create(user_id, item_type).await?;
         info!(collection_id = collection.id, "Collection created");
         Ok(collection)
     }
@@ -40,7 +43,8 @@ impl CollectionService {
             }
 
             // Then delete the collection itself
-            let deleted = self.collection_repo.delete(user_id, item_type).await?;
+            let deleted =
+                self.collection_repo.delete(user_id, item_type).await?;
             info!(collection_id = coll.id, "Collection and items deleted");
             Ok(deleted)
         } else {
@@ -50,7 +54,10 @@ impl CollectionService {
 
     /// Get all collections for a user
     #[instrument(skip(self), fields(user_id = %user_id))]
-    pub async fn get_user_collections(&self, user_id: &str) -> AppResult<Vec<UserCollection>> {
+    pub async fn get_user_collections(
+        &self,
+        user_id: &str,
+    ) -> AppResult<Vec<UserCollection>> {
         let collections = self.collection_repo.find_by_user(user_id).await?;
         info!(count = collections.len(), "Retrieved user collections");
         Ok(collections)

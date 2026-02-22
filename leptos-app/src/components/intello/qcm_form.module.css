@@ -1,0 +1,189 @@
+/* ============================================
+   Manual QCM Form Styles
+   ============================================
+   Flat layout matching GenerateForm style.
+   ============================================ */
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* ── Sections — flat, no card wrapper ──────── */
+.section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-top: 1rem;
+}
+
+.section:first-of-type {
+    padding-top: 0;
+}
+
+/* ── Layout ────────────────────────────────── */
+.row {
+    display: flex;
+    gap: 1rem;
+}
+
+.row > * {
+    flex: 1;
+    min-width: 0;
+}
+
+/* ── Subjects ──────────────────────────────── */
+.subjects_section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.subject_input_row {
+    display: flex;
+    gap: 0.5rem;
+    align-items: stretch;
+}
+
+.subject_input_row > div:first-child {
+    flex: 1;
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    background: color-mix(
+        in srgb, var(--primary) 10%, transparent
+    );
+    border: 1px solid var(--color-primary);
+    border-radius: 0;
+    font-size: 0.875rem;
+    color: var(--color-primary);
+}
+
+.tag_remove {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    padding: 0;
+    margin-left: 0.25rem;
+    cursor: pointer;
+    color: var(--color-primary);
+    opacity: 0.7;
+    transition: opacity var(--transition-fast);
+}
+
+.tag_remove:hover {
+    opacity: 1;
+}
+
+.tag_remove svg {
+    width: 14px;
+    height: 14px;
+}
+
+/* ── Questions ─────────────────────────────── */
+.questions_list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.question_card {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.question_card + .question_card {
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-border);
+}
+
+.remove_btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    align-self: flex-end;
+    background: none;
+    border: none;
+    padding: 0.25rem 0.5rem;
+    cursor: pointer;
+    color: var(--color-error);
+    font-size: 0.8rem;
+    opacity: 0.7;
+    transition: opacity var(--transition-fast);
+}
+
+.remove_btn:hover {
+    opacity: 1;
+}
+
+.remove_btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* ── Answers Grid ──────────────────────────── */
+.answers_grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+/* ── Actions ───────────────────────────────── */
+.actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 1.5rem;
+}
+
+/* ── Messages ──────────────────────────────── */
+.error_banner {
+    padding: 1rem;
+    background: color-mix(
+        in srgb, var(--destructive) 10%, transparent
+    );
+    border: 1px solid var(--color-error);
+    border-radius: 0;
+    color: var(--color-error);
+    font-size: 0.875rem;
+}
+
+.success_banner {
+    padding: 1rem;
+    background: color-mix(
+        in srgb, var(--color-success) 10%, transparent
+    );
+    border: 1px solid var(--color-success);
+    border-radius: 0;
+    color: var(--color-success);
+    font-size: 0.875rem;
+}
+
+/* ── Responsive ────────────────────────────── */
+@media (max-width: 640px) {
+    .row {
+        flex-direction: column;
+    }
+
+    .answers_grid {
+        grid-template-columns: 1fr;
+    }
+
+    .actions {
+        flex-direction: column-reverse;
+    }
+}

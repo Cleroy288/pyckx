@@ -25,7 +25,11 @@ pub struct AppInstance {
 
 impl AppInstance {
     /// Create a new app instance
-    pub const fn new(id: AppId, name: &'static str, description: &'static str) -> Self {
+    pub const fn new(
+        id: AppId,
+        name: &'static str,
+        description: &'static str,
+    ) -> Self {
         Self {
             id,
             name,
@@ -71,7 +75,11 @@ pub struct App {
 impl App {
     /// Create a new App instance (for testing/mocking)
     #[allow(dead_code)]
-    pub fn new(id: i32, name: impl Into<String>, description: Option<String>) -> Self {
+    pub fn new(
+        id: i32,
+        name: impl Into<String>,
+        description: Option<String>,
+    ) -> Self {
         let now = Utc::now();
         Self {
             id,
@@ -108,5 +116,87 @@ impl UserApp {
             app_id,
             created_at: Utc::now(),
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    // -- AppInstance::new tests --
+
+    #[test]
+    fn test_app_instance_new_stores_fields() {
+        // arrange / act
+        let instance =
+            AppInstance::new("test", "Test App", "A test");
+
+        // assert
+        assert_eq!(instance.id, "test");
+        assert_eq!(instance.name, "Test App");
+        assert_eq!(instance.description, "A test");
+    }
+
+    // -- App::new tests --
+
+    #[test]
+    fn test_app_new_stores_id_and_name() {
+        // arrange / act
+        let app = App::new(1, "intello", None);
+
+        // assert
+        assert_eq!(app.id, 1);
+        assert_eq!(app.name, "intello");
+        assert!(app.description.is_none());
+    }
+
+    #[test]
+    fn test_app_new_with_description() {
+        // arrange / act
+        let app = App::new(
+            2,
+            "quiz",
+            Some("A quiz app".to_string()),
+        );
+
+        // assert
+        assert_eq!(app.id, 2);
+        assert_eq!(app.name, "quiz");
+        assert_eq!(
+            app.description.as_deref(),
+            Some("A quiz app")
+        );
+    }
+
+    #[test]
+    fn test_app_new_timestamps_are_equal() {
+        // arrange / act
+        let app = App::new(1, "app", None);
+
+        // assert - created_at and updated_at should be the same
+        assert_eq!(app.created_at, app.updated_at);
+    }
+
+    // -- UserApp::new tests --
+
+    #[test]
+    fn test_user_app_new_stores_fields() {
+        // arrange / act
+        let user_app = UserApp::new(1, "user-abc", 5);
+
+        // assert
+        assert_eq!(user_app.id, 1);
+        assert_eq!(user_app.user_id, "user-abc");
+        assert_eq!(user_app.app_id, 5);
+    }
+
+    #[test]
+    fn test_user_app_new_with_string_user_id() {
+        // arrange / act
+        let user_app =
+            UserApp::new(2, "uid-42".to_string(), 3);
+
+        // assert
+        assert_eq!(user_app.user_id, "uid-42");
     }
 }

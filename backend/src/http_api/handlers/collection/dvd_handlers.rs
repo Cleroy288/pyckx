@@ -5,8 +5,8 @@
 use super::helpers::validate_request;
 use crate::app::App;
 use crate::http_api::data_transfer_object::{
-    AddDvdRequest, DeleteResponse, DvdListResponse, DvdResponse, DvdSuccessResponse,
-    UpdateDvdRequest,
+    AddDvdRequest, DeleteResponse, DvdListResponse, DvdResponse,
+    DvdSuccessResponse, UpdateDvdRequest,
 };
 use crate::infra::user::get_user_id_from_session;
 use crate::shared::{AppError, AppResult};
@@ -28,7 +28,7 @@ pub async fn add_dvd_handler(
 
     let year = body
         .parse_year()
-        .map_err(|e| AppError::validation("year", e))?;
+        .map_err(|err| AppError::validation("year", err))?;
 
     // Call service directly
     let dvd = app
@@ -98,7 +98,7 @@ pub async fn update_dvd_handler(
 
     let year = body
         .parse_year()
-        .map_err(|e| AppError::validation("year", e))?;
+        .map_err(|err| AppError::validation("year", err))?;
 
     let dvd_id = path.into_inner();
 

@@ -3,12 +3,16 @@
 use tracing::{debug, info, instrument, warn};
 
 use crate::infra::openrouter::DEFAULT_MODEL;
-use crate::services::intello::ai_usage::ai_usage_domain::feature_type;
+use crate::services::intello::ai_usage::ai_usage_domain::{
+    feature_type, AiUsageInput,
+};
 use crate::services::intello::custom_question_domain::{
     CustomQuestion, CustomQuestionDocument, DocumentType,
 };
 use crate::services::intello::error_domain::IntelloError;
-use crate::services::intello::types_domain::{GenerateContentInput, IntelloService};
+use crate::services::intello::types_domain::{
+    GenerateContentInput, IntelloService,
+};
 use crate::services::intello::SetId;
 
 use super::domain::QcmSet;
@@ -22,7 +26,10 @@ impl IntelloService {
     // @ returns : The created QcmSet with assigned ID
     // @ errors : ValidationFailed if set data is invalid, StorageError if insert fails
     #[instrument(skip(self, qcm_set), fields(user_id = %qcm_set.user_id, set_id = %qcm_set.id))]
-    pub async fn create_qcm_set(&self, qcm_set: QcmSet) -> Result<QcmSet, IntelloError> {
+    pub async fn create_qcm_set(
+        &self,
+        qcm_set: QcmSet,
+    ) -> Result<QcmSet, IntelloError> {
         // Step 1: Validate QCM set structure and content
         self.validate_qcm_set(&qcm_set)?;
 
@@ -41,7 +48,10 @@ impl IntelloService {
     // @ returns : Vector of all QcmSets owned by the user
     // @ errors : ValidationFailed if user_id invalid, StorageError if query fails
     #[instrument(skip(self), fields(user_id = %user_id))]
-    pub async fn get_user_qcm_sets(&self, user_id: &str) -> Result<Vec<QcmSet>, IntelloError> {
+    pub async fn get_user_qcm_sets(
+        &self,
+        user_id: &str,
+    ) -> Result<Vec<QcmSet>, IntelloError> {
         // Step 1: Validate user ID
         self.validate_user_id(user_id)?;
 
@@ -88,7 +98,10 @@ impl IntelloService {
     // @ returns : bool - true if updated, false if not found or not owned
     // @ errors : ValidationFailed if set invalid, StorageError if update fails
     #[instrument(skip(self, qcm_set), fields(user_id = %qcm_set.user_id, set_id = %qcm_set.id))]
-    pub async fn update_qcm_set(&self, qcm_set: QcmSet) -> Result<bool, IntelloError> {
+    pub async fn update_qcm_set(
+        &self,
+        qcm_set: QcmSet,
+    ) -> Result<bool, IntelloError> {
         // Step 1: Validate QCM set structure
         self.validate_qcm_set(&qcm_set)?;
 
@@ -120,7 +133,11 @@ impl IntelloService {
     // @ returns : bool - true if deleted, false if not found or not owned
     // @ errors : ValidationFailed if IDs invalid, StorageError if delete fails
     #[instrument(skip(self), fields(user_id = %user_id, set_id = %set_id))]
-    pub async fn delete_qcm_set(&self, set_id: &str, user_id: &str) -> Result<bool, IntelloError> {
+    pub async fn delete_qcm_set(
+        &self,
+        set_id: &str,
+        user_id: &str,
+    ) -> Result<bool, IntelloError> {
         // Step 1: Validate user and set IDs
         self.validate_user_id(user_id)?;
         self.validate_set_id(set_id)?;
@@ -164,7 +181,8 @@ impl IntelloService {
         );
 
         // Step 2: Build AI prompt from input
-        let custom_question = self.build_custom_question_for_qcm(user_id, &input);
+        let custom_question =
+            self.build_custom_question_for_qcm(user_id, &input);
         let prompt = super::prompt::build_qcm_prompt(&custom_question);
 
         // Step 3: Send request to AI service
@@ -182,13 +200,13 @@ impl IntelloService {
 
         // Step 5: Log AI usage (fire-and-forget)
         if let Some(usage) = ai_result.usage {
-            self.try_log_ai_usage(
+            self.try_log_ai_usage(AiUsageInput {
                 user_id,
-                DEFAULT_MODEL,
-                feature_type::QCM,
-                usage.prompt_tokens,
-                usage.completion_tokens,
-            )
+                model_id: DEFAULT_MODEL,
+                feature_type: feature_type::QCM,
+                input_tokens: usage.prompt_tokens,
+                output_tokens: usage.completion_tokens,
+            })
             .await;
         }
         info!(generated = questions.len(), "AI QCM questions generated");
@@ -236,11 +254,13 @@ impl IntelloService {
             documents: input
                 .documents
                 .iter()
-                .map(|(filename, content, token_count)| CustomQuestionDocument {
-                    filename: filename.clone(),
-                    doc_type: DocumentType::Text,
-                    content: content.clone(),
-                    token_count: *token_count,
+                .map(|(filename, content, token_count)| {
+                    CustomQuestionDocument {
+                        filename: filename.clone(),
+                        doc_type: DocumentType::Text,
+                        content: content.clone(),
+                        token_count: *token_count,
+                    }
                 })
                 .collect(),
             total_token_count: input.documents.iter().map(|(_, _, t)| t).sum(),

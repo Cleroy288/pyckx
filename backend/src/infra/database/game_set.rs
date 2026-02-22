@@ -31,5 +31,6 @@ pub trait GameSetRepository<T: Clone + Send + Sync>: Send + Sync {
     async fn insert(&self, set: &T) -> Result<T, IntelloError>;
 
     /// Find all game sets for a specific user.
-    async fn find_by_user(&self, user_id: &str) -> Result<Vec<T>, IntelloError>;
+    async fn find_by_user(&self, user_id: &str)
+        -> Result<Vec<T>, IntelloError>;
 }
