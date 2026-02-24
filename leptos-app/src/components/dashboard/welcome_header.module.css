@@ -13,20 +13,26 @@
     letter-spacing: -0.02em;
 }
 
-/* ── Username — gradient accent ──────────────
-   The username gets a primary-coloured
-   gradient.                                   */
+/* ── Username — animated gradient accent ───── */
 .username {
     background: linear-gradient(
-        135deg,
+        90deg,
         var(--color-primary) 0%,
         color-mix(
-            in srgb, var(--primary) 70%, black
-        ) 100%
+            in srgb, var(--primary) 60%, white
+        ) 50%,
+        var(--color-primary) 100%
     );
+    background-size: 200% 100%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
 }
 
 /* ── Subtitle ───────────────────────────────  */
@@ -35,4 +41,5 @@
     z-index: 1;
     font-size: 1.125rem;
     color: var(--color-text-secondary);
+    letter-spacing: 0.02em;
 }

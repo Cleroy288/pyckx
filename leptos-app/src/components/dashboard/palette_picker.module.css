@@ -35,8 +35,10 @@
     border-radius: 50%;
     border: 2px solid transparent;
     cursor: pointer;
-    transition: transform var(--transition-fast),
-                border-color var(--transition-fast);
+    transition:
+        transform var(--transition-fast),
+        border-color var(--transition-fast),
+        box-shadow var(--transition-fast);
     padding: 0;
     outline: none;
     position: relative;
@@ -44,12 +46,17 @@
 
 .swatch:hover {
     transform: scale(1.15);
+    box-shadow: 0 0 12px color-mix(
+        in srgb, var(--primary) 40%, transparent
+    );
 }
 
 /* ── Active swatch ring ───────────────────── */
 .active {
     border-color: var(--color-text-primary);
-    box-shadow: 0 0 0 3px var(--glow);
+    box-shadow:
+        0 0 0 3px var(--glow),
+        0 0 16px var(--glow);
 }
 
 /* ── Swatch label (tooltip) ───────────────── */
@@ -84,12 +91,15 @@
     background: var(--muted);
     cursor: pointer;
     padding: 2px;
-    transition: background var(--transition-fast);
+    transition:
+        background var(--transition-fast),
+        box-shadow var(--transition-fast);
     position: relative;
 }
 
 .toggle_on {
     background: var(--color-primary);
+    box-shadow: 0 0 10px var(--glow);
 }
 
 .toggle_knob {
@@ -97,8 +107,10 @@
     height: 18px;
     border-radius: 50%;
     background: white;
-    transition: transform var(--transition-fast);
+    transition:
+        transform var(--transition-smooth);
     transform: translateX(0);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .knob_on {

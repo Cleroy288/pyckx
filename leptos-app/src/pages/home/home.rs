@@ -54,25 +54,38 @@ pub fn HomePage() -> impl IntoView {
                         <WelcomeHeader
                             username=username
                         />
-                        <SectionDivider label="My Apps" />
-                        <div class=style::section_gap_sm>
-                            <MyApps />
+                        <div
+                            class=style::section
+                            style="--delay: 0.1s"
+                        >
+                            <SectionDivider
+                                label="My Apps"
+                            />
+                            <div class=style::section_body>
+                                <MyApps />
+                            </div>
                         </div>
-                        <div class=style::section_gap_lg>
+                        <div
+                            class=style::section
+                            style="--delay: 0.25s"
+                        >
                             <SectionDivider
                                 label="Pyckx Apps"
                             />
+                            <div class=style::section_body>
+                                <AppStore />
+                            </div>
                         </div>
-                        <div class=style::section_gap_sm>
-                            <AppStore />
-                        </div>
-                        <div class=style::section_gap_lg>
+                        <div
+                            class=style::section
+                            style="--delay: 0.4s"
+                        >
                             <SectionDivider
                                 label="Theme"
                             />
-                        </div>
-                        <div class=style::section_gap_sm>
-                            <PalettePicker />
+                            <div class=style::section_body>
+                                <PalettePicker />
+                            </div>
                         </div>
                     </Show>
                 </Show>

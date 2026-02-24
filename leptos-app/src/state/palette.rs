@@ -47,7 +47,7 @@ impl PaletteState {
 
     /// Whether dark mode is active
     pub fn is_dark(&self) -> bool {
-        self.is_dark.get()
+        self.is_dark.get_untracked()
     }
 
     /// Switch to a different palette by id

@@ -135,6 +135,12 @@ pub struct GenerateCourseRequest {
     pub session_id: Option<String>,
 }
 
+/// List courses response wrapper
+#[derive(Debug, Clone, Deserialize)]
+pub struct CourseListResponse {
+    pub courses: Vec<CourseData>,
+}
+
 /// Generate course response
 #[derive(Debug, Clone, Deserialize)]
 pub struct GenerateCourseResponse {

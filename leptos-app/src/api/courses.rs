@@ -13,7 +13,9 @@ pub async fn create_course(
 /// List all courses
 pub async fn list_courses(
 ) -> Result<Vec<CourseData>, String> {
-    helpers::get_json(endpoints::COURSES).await
+    let resp: CourseListResponse =
+        helpers::get_json(endpoints::COURSES).await?;
+    Ok(resp.courses)
 }
 
 /// Delete a course

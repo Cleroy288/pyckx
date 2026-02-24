@@ -99,10 +99,26 @@
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
-    padding: 1.25rem;
+    padding: 1.5rem;
     border-radius: 0;
-    background: var(--glass-bg, rgba(255 255 255 / 0.04));
-    border: 1px solid var(--glass-border, rgba(255 255 255 / 0.08));
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--color-border);
+    transition:
+        border-color var(--transition-fast);
+}
+
+.card-32ab410:hover {
+    border-color: transparent;
+    border-image: conic-gradient(
+        from var(--border-angle),
+        var(--color-primary),
+        transparent 25%,
+        transparent 75%,
+        var(--color-primary)
+    ) 1;
+    animation: border-spin 3s linear infinite;
 }
 
 .header-32ab410 {
@@ -112,10 +128,21 @@
 }
 
 .icon-32ab410 {
-    width: 32px;
-    height: 32px;
+    width: 40px;
+    height: 40px;
     flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: color-mix(
+        in srgb, var(--primary) 10%, transparent
+    );
     color: var(--color-primary);
+}
+
+.icon-32ab410 svg {
+    width: 22px;
+    height: 22px;
 }
 
 .name-32ab410 {
@@ -127,9 +154,10 @@
 
 .desc-32ab410 {
     font-size: 0.875rem;
-    color: var(--color-text-secondary, #999);
+    color: var(--color-text-secondary);
     margin: 0;
     line-height: 1.4;
+    flex: 1;
 }
 
 
@@ -1439,13 +1467,16 @@
     font-size: 1.1rem;
 }
 
-/* ── Section spacing ─────────────────────── */
-.section_gap_sm-3ba2a58 {
-    margin-top: 2rem;
+/* ── Section with entrance animation ───────── */
+.section-3ba2a58 {
+    margin-top: 3rem;
+    animation: fadeInUp 0.6s ease both;
+    animation-delay: var(--delay, 0s);
 }
 
-.section_gap_lg-3ba2a58 {
-    margin-top: 4rem;
+/* ── Section body — spacing below divider ──── */
+.section_body-3ba2a58 {
+    margin-top: 1.5rem;
 }
 
 
@@ -2055,6 +2086,8 @@
     color: var(--color-text-primary);
     cursor: pointer;
     font-family: inherit;
+    transition:
+        border-color var(--transition-fast);
 }
 
 .card-39d8194:hover {
@@ -2079,8 +2112,18 @@
     background: color-mix(
         in srgb, var(--primary) 10%, transparent
     );
+    border: 1px solid color-mix(
+        in srgb, var(--primary) 15%, transparent
+    );
     border-radius: 0;
     color: var(--color-primary);
+    transition: background var(--transition-fast);
+}
+
+.card-39d8194:hover .icon-39d8194 {
+    background: color-mix(
+        in srgb, var(--primary) 18%, transparent
+    );
 }
 
 .icon-39d8194 svg {
@@ -2464,8 +2507,10 @@
     border-radius: 50%;
     border: 2px solid transparent;
     cursor: pointer;
-    transition: transform var(--transition-fast),
-                border-color var(--transition-fast);
+    transition:
+        transform var(--transition-fast),
+        border-color var(--transition-fast),
+        box-shadow var(--transition-fast);
     padding: 0;
     outline: none;
     position: relative;
@@ -2473,12 +2518,17 @@
 
 .swatch-a254bfd:hover {
     transform: scale(1.15);
+    box-shadow: 0 0 12px color-mix(
+        in srgb, var(--primary) 40%, transparent
+    );
 }
 
 /* ── Active swatch ring ───────────────────── */
 .active-a254bfd {
     border-color: var(--color-text-primary);
-    box-shadow: 0 0 0 3px var(--glow);
+    box-shadow:
+        0 0 0 3px var(--glow),
+        0 0 16px var(--glow);
 }
 
 /* ── Swatch label (tooltip) ───────────────── */
@@ -2513,12 +2563,15 @@
     background: var(--muted);
     cursor: pointer;
     padding: 2px;
-    transition: background var(--transition-fast);
+    transition:
+        background var(--transition-fast),
+        box-shadow var(--transition-fast);
     position: relative;
 }
 
 .toggle_on-a254bfd {
     background: var(--color-primary);
+    box-shadow: 0 0 10px var(--glow);
 }
 
 .toggle_knob-a254bfd {
@@ -2526,8 +2579,10 @@
     height: 18px;
     border-radius: 50%;
     background: white;
-    transition: transform var(--transition-fast);
+    transition:
+        transform var(--transition-smooth);
     transform: translateX(0);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .knob_on-a254bfd {
@@ -3799,6 +3854,7 @@
 
 .hero_section-775442b {
     width: 100%;
+    animation: fadeInUp 0.6s ease both;
 }
 
 /* ── Hero Content (inside HeroBanner) ────── */
@@ -3831,6 +3887,8 @@
     border-radius: 0;
     padding: 2.5rem 2rem;
     overflow: hidden;
+    transition:
+        border-color var(--transition-fast);
 }
 
 .vitrine_card-775442b:hover {
@@ -3868,6 +3926,8 @@
     width: 100%;
     padding: 3rem 0 3rem 15%;
     margin-bottom: 2rem;
+    animation: fadeInUp 0.6s ease both;
+    animation-delay: 0.15s;
 }
 
 .tagline_text-775442b {
@@ -3888,8 +3948,8 @@
 .apps-775442b {
     width: 100%;
     margin-bottom: 4rem;
-    contain: layout style paint;
-    content-visibility: auto;
+    animation: fadeInUp 0.6s ease both;
+    animation-delay: 0.25s;
 }
 
 .apps_grid-775442b {
@@ -3916,9 +3976,19 @@
     background: color-mix(
         in srgb, var(--primary) 8%, transparent
     );
+    border: 1px solid color-mix(
+        in srgb, var(--primary) 15%, transparent
+    );
     border-radius: 0;
     color: var(--color-primary);
     margin-bottom: 1.5rem;
+    transition: background var(--transition-fast);
+}
+
+.vitrine_card-775442b:hover .app_card_icon-775442b {
+    background: color-mix(
+        in srgb, var(--primary) 18%, transparent
+    );
 }
 
 .app_card_icon-775442b svg {
@@ -3931,8 +4001,8 @@
 .pricing-775442b {
     width: 100%;
     margin-bottom: 2rem;
-    contain: layout style paint;
-    content-visibility: auto;
+    animation: fadeInUp 0.6s ease both;
+    animation-delay: 0.35s;
 }
 
 .pricing_grid-775442b {
@@ -4020,9 +4090,9 @@
         transparent 75%,
         var(--color-primary)
     ) 1;
-    animation: border-spin 3s linear infinite;
-    contain: layout style paint;
-    content-visibility: auto;
+    animation:
+        fadeInUp 0.6s ease both,
+        border-spin 3s linear 0.6s infinite;
 }
 
 .start_now_cta-775442b {
@@ -4096,20 +4166,26 @@
     letter-spacing: -0.02em;
 }
 
-/* ── Username — gradient accent ──────────────
-   The username gets a primary-coloured
-   gradient.                                   */
+/* ── Username — animated gradient accent ───── */
 .username-d2981f9 {
     background: linear-gradient(
-        135deg,
+        90deg,
         var(--color-primary) 0%,
         color-mix(
-            in srgb, var(--primary) 70%, black
-        ) 100%
+            in srgb, var(--primary) 60%, white
+        ) 50%,
+        var(--color-primary) 100%
     );
+    background-size: 200% 100%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
 }
 
 /* ── Subtitle ───────────────────────────────  */
@@ -4118,4 +4194,5 @@
     z-index: 1;
     font-size: 1.125rem;
     color: var(--color-text-secondary);
+    letter-spacing: 0.02em;
 }
