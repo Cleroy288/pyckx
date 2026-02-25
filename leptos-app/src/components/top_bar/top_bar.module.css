@@ -1,5 +1,9 @@
-/* Top Bar — clean, opaque, minimal
-   No blur, no glass. Simple border. */
+/* ============================================
+   Top Bar — Obsidian Grain
+   ============================================
+   Nearly transparent, strong blur, subtle
+   tinted borders. Clean frosted surface.
+   ============================================ */
 
 .top_bar {
     position: fixed;
@@ -7,8 +11,16 @@
     left: 0;
     right: 0;
     z-index: 100;
-    background: var(--color-background);
-    border-bottom: 1px solid var(--color-border);
+    background: color-mix(
+        in srgb,
+        var(--color-background) 70%,
+        transparent
+    );
+    backdrop-filter: var(--glass-blur-lg);
+    -webkit-backdrop-filter: var(--glass-blur-lg);
+    border-bottom: 1px solid color-mix(
+        in srgb, var(--primary) 6%, transparent
+    );
 }
 
 .nav_content {
@@ -25,18 +37,20 @@
 .nav_logo {
     display: flex;
     align-items: center;
-    padding: 0.75rem 1.25rem;
-    font-size: 1.25rem;
+    padding: 1rem 1.5rem;
+    border-right: 1px solid color-mix(
+        in srgb, var(--primary) 6%, transparent
+    );
+    font-size: 1.5rem;
     font-weight: 700;
-    color: var(--color-text-primary);
+    color: var(--color-primary);
     text-decoration: none;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.05em;
     text-transform: uppercase;
-    transition:
-        opacity var(--transition-fast);
+    transition: opacity var(--transition-fast);
 }
 
-.nav_logo:hover { opacity: 0.7; }
+.nav_logo:hover { opacity: 0.8; }
 
 .nav_links {
     display: flex;
@@ -46,10 +60,13 @@
 .nav_link {
     display: flex;
     align-items: center;
-    padding: 0.75rem 1rem;
-    font-size: 0.875rem;
+    padding: 1rem 1.5rem;
+    border-left: 1px solid color-mix(
+        in srgb, var(--primary) 6%, transparent
+    );
+    font-size: 0.9375rem;
     font-weight: 500;
-    color: var(--color-text-secondary);
+    color: var(--color-text-primary);
     text-decoration: none;
     white-space: nowrap;
     transition:
@@ -58,8 +75,10 @@
 }
 
 .nav_link:hover {
-    color: var(--color-text-primary);
-    background: var(--color-surface-hover);
+    color: var(--color-primary);
+    background: color-mix(
+        in srgb, var(--primary) 4%, transparent
+    );
 }
 
 .nav_link:focus-visible {
@@ -71,18 +90,28 @@
 .nav_link_primary {
     display: flex;
     align-items: center;
-    padding: 0.75rem 1rem;
-    font-size: 0.875rem;
+    padding: 1rem 1.5rem;
+    border-left: 1px solid color-mix(
+        in srgb, var(--primary) 6%, transparent
+    );
+    font-size: 0.9375rem;
     font-weight: 600;
     color: var(--color-background);
     text-decoration: none;
     white-space: nowrap;
     background: var(--color-primary);
     transition:
-        opacity var(--transition-fast);
+        box-shadow var(--transition-fast);
 }
 
-.nav_link_primary:hover { opacity: 0.85; }
+.nav_link_primary:hover {
+    box-shadow:
+        0 0 16px color-mix(
+            in srgb,
+            var(--primary) 25%,
+            transparent
+        );
+}
 
 .nav_link_primary:focus-visible {
     outline: 2px solid var(--color-primary);
@@ -93,25 +122,25 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 3rem;
+    width: 3.25rem;
     padding: 0;
     border: none;
-    border-left: 1px solid
-        var(--color-border);
+    border-left: 1px solid color-mix(
+        in srgb, var(--primary) 6%, transparent
+    );
     background: transparent;
-    color: var(--color-text-secondary);
+    color: var(--color-text-primary);
     cursor: pointer;
-    transition:
-        color var(--transition-fast);
+    transition: color var(--transition-fast);
 }
 
 .nav_icon_btn svg {
-    width: 1rem;
-    height: 1rem;
+    width: 1.125rem;
+    height: 1.125rem;
 }
 
 .nav_icon_btn:hover {
-    color: var(--color-text-primary);
+    color: var(--color-primary);
 }
 
 .nav_icon_btn:focus-visible {
@@ -125,11 +154,11 @@
 @media (max-width: 768px) {
     .nav_content { padding: 0 1.5rem; }
     .nav_logo {
-        padding: 0.625rem 0.75rem;
-        font-size: 1.125rem;
+        padding: 0.75rem 1rem;
+        font-size: 1.25rem;
     }
     .nav_link, .nav_link_primary {
-        padding: 0.625rem 0.75rem;
+        padding: 0.75rem 1rem;
         font-size: 0.8125rem;
     }
 }
@@ -137,11 +166,11 @@
 @media (max-width: 480px) {
     .nav_content { padding: 0 1rem; }
     .nav_logo {
-        padding: 0.5rem 0.5rem;
-        font-size: 1rem;
+        padding: 0.625rem 0.75rem;
+        font-size: 1.125rem;
     }
     .nav_link, .nav_link_primary {
-        padding: 0.5rem 0.625rem;
+        padding: 0.625rem 0.75rem;
         font-size: 0.75rem;
     }
 }

@@ -1,20 +1,27 @@
-/* Home Page — simple fadeInUp sections */
+/* ── Home Page — local styles ───────────────
+   Page layout is handled by PageLayout.
+   Only page-specific styles live here.        */
 
+/* ── Loading state ─────────────────────────── */
 .loading {
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 50vh;
     color: var(--color-text-secondary);
-    font-size: 1rem;
+    font-size: 1.1rem;
 }
 
+/* ── Section with power-on entrance ───────── */
 .section {
-    margin-top: 2.5rem;
-    animation: fadeInUp 0.4s ease both;
+    margin-top: 3rem;
+    animation:
+        float-in 0.8s
+        cubic-bezier(0.16, 1, 0.3, 1) both;
     animation-delay: var(--delay, 0s);
 }
 
+/* ── Section body — spacing below divider ──── */
 .section_body {
-    margin-top: 1.25rem;
+    margin-top: 1.5rem;
 }
