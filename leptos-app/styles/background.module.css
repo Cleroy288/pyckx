@@ -1,6 +1,10 @@
 /* ============================================
-   Background Component Styles (Scoped)
+   Background — Aurora blobs + Grid overlay
+   ============================================
+   Aurora blobs drift behind grid lines.
+   Grid has intersection dots at crossings.
    ============================================ */
+
 .background {
     position: relative;
     width: 100%;
@@ -9,6 +13,43 @@
     overflow-x: hidden;
 }
 
+/* ── Aurora blobs — soft colored light ──────
+   Fixed position, paints below .lines.
+   Two radial-gradient blobs drift slowly.   */
+.background::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background:
+        radial-gradient(
+            ellipse 55vw 55vw at 20% 25%,
+            color-mix(
+                in srgb,
+                var(--primary) 12%,
+                transparent
+            ),
+            transparent
+        ),
+        radial-gradient(
+            ellipse 45vw 45vw at 80% 75%,
+            color-mix(
+                in srgb,
+                var(--accent) 10%,
+                transparent
+            ),
+            transparent
+        );
+    animation:
+        aurora-drift 30s ease-in-out infinite
+        alternate;
+}
+
+/* ── Grid lines + intersection dots ────────
+   Fixed overlay with horizontal/vertical
+   lines, diagonal dots, and node dots at
+   every grid intersection.                  */
 .lines {
     position: fixed;
     top: 0;
@@ -17,6 +58,11 @@
     height: 100%;
     pointer-events: none;
     background-image:
+        radial-gradient(
+            circle,
+            var(--grid-line) 1px,
+            transparent 1px
+        ),
         linear-gradient(
             to right,
             var(--grid-line) 1px,
@@ -38,6 +84,7 @@
             transparent 1px
         );
     background-size:
+        30px 30px,
         30px 30px,
         30px 30px,
         45px 45px,

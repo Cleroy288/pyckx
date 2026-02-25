@@ -1,13 +1,19 @@
 /* ============================================
-   Card Component Styles
+   Card — Base card with glass/solid/popular
+   ============================================
+   Smooth border-glow hover. No border-spin
+   on regular cards — reserved for key CTAs.
    ============================================ */
 
 .card {
     position: relative;
     border-radius: 0;
     padding: 2.5rem 2rem;
-    transition: transform var(--transition-slow), box-shadow var(--transition-slow),
-                border-color var(--transition-slow), background var(--transition-slow);
+    transition:
+        transform var(--transition-slow),
+        box-shadow var(--transition-slow),
+        border-color var(--transition-slow),
+        background var(--transition-slow);
     will-change: transform;
     transform: translate3d(0, 0, 0);
     overflow: hidden;
@@ -17,31 +23,54 @@
     transform: translate3d(0, -4px, 0);
 }
 
-/* Variants */
+/* ── Glass variant ────────────────────────── */
 
 .glass {
     background: var(--glass-bg);
     backdrop-filter: blur(25px);
     -webkit-backdrop-filter: blur(25px);
     border: var(--glass-border);
-    box-shadow: 0 4px 30px color-mix(in srgb, var(--primary) 5%, transparent);
+    box-shadow: 0 4px 30px color-mix(
+        in srgb, var(--primary) 5%, transparent
+    );
 }
 
 .glass:hover {
-    box-shadow: var(--shadow-xl);
     border: var(--glass-border-hover);
     background: var(--glass-bg-hover);
+    box-shadow:
+        0 0 15px color-mix(
+            in srgb,
+            var(--primary) 15%,
+            transparent
+        );
 }
+
+/* ── Solid variant ────────────────────────── */
 
 .solid {
     background: var(--color-background);
-    border: 1px solid color-mix(in srgb, var(--primary) 15%, transparent);
-    box-shadow: 0 4px 24px color-mix(in srgb, var(--primary) 8%, transparent);
+    border: 1px solid color-mix(
+        in srgb, var(--primary) 15%, transparent
+    );
+    box-shadow: 0 4px 24px color-mix(
+        in srgb, var(--primary) 8%, transparent
+    );
 }
 
 .solid:hover {
-    box-shadow: var(--shadow-lg);
+    border-color: color-mix(
+        in srgb, var(--primary) 40%, transparent
+    );
+    box-shadow:
+        0 0 15px color-mix(
+            in srgb,
+            var(--primary) 15%,
+            transparent
+        );
 }
+
+/* ── Popular variant ──────────────────────── */
 
 .popular {
     background: var(--glass-bg);
@@ -53,5 +82,10 @@
 
 .popular:hover {
     transform: translate3d(0, -6px, 0);
-    box-shadow: 0 16px 50px color-mix(in srgb, var(--primary) 25%, transparent);
+    box-shadow:
+        0 0 25px color-mix(
+            in srgb,
+            var(--primary) 25%,
+            transparent
+        );
 }

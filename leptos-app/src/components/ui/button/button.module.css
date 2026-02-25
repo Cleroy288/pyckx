@@ -1,8 +1,8 @@
 /* ============================================
-   Button Component Styles
+   Button — Primary (glow) + Outline (trace)
    ============================================
-   Two variants: Primary (filled) and Outline.
-   No icons, no movement, no transform.
+   Primary: filled with ambient glow on hover.
+   Outline: border with subtle tint on hover.
    ============================================ */
 
 .btn {
@@ -10,13 +10,15 @@
     align-items: center;
     justify-content: center;
     font-weight: 600;
-    font-family: var(--principal-font-family, sans-serif);
+    font-family: var(--heading-font-family);
     border: none;
     border-radius: 0;
     cursor: pointer;
-    transition: background var(--transition-base),
-                color var(--transition-base),
-                opacity var(--transition-base);
+    transition:
+        background var(--transition-base),
+        color var(--transition-base),
+        box-shadow var(--transition-base),
+        opacity var(--transition-base);
     text-decoration: none;
     line-height: 1.5;
 }
@@ -31,7 +33,7 @@
     outline-offset: 2px;
 }
 
-/* ── Size Variants ─────────────────────────── */
+/* ── Size Variants ────────────────────────── */
 
 .small {
     padding: 0.5rem 1.25rem;
@@ -48,7 +50,7 @@
     font-size: 1rem;
 }
 
-/* ── Primary — filled button ───────────────── */
+/* ── Primary — filled + ambient glow ──────── */
 
 .primary {
     color: var(--color-background);
@@ -56,14 +58,25 @@
 }
 
 .primary:hover:not(:disabled) {
-    opacity: 0.85;
+    box-shadow:
+        0 0 20px color-mix(
+            in srgb,
+            var(--primary) 35%,
+            transparent
+        ),
+        0 0 40px color-mix(
+            in srgb,
+            var(--primary) 15%,
+            transparent
+        );
 }
 
 .primary:active:not(:disabled) {
-    opacity: 0.7;
+    opacity: 0.85;
+    box-shadow: none;
 }
 
-/* ── Outline — border button ───────────────── */
+/* ── Outline — border + tint on hover ─────── */
 
 .outline {
     background: transparent;
@@ -72,8 +85,15 @@
 }
 
 .outline:hover:not(:disabled) {
-    background: var(--color-primary);
-    color: var(--color-background);
+    background: color-mix(
+        in srgb, var(--primary) 10%, transparent
+    );
+    box-shadow:
+        0 0 12px color-mix(
+            in srgb,
+            var(--primary) 20%,
+            transparent
+        );
 }
 
 .outline:active:not(:disabled) {

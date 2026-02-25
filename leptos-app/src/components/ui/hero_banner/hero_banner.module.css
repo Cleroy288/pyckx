@@ -1,15 +1,12 @@
 /* ============================================
-   HeroBanner — Shared hero section
+   HeroBanner — Glass hero with aurora mesh
    ============================================
    Glass background, grid-line pattern,
-   radial glow, gradient title.
-   Used by home, intello, and collection pages.
+   aurora mesh glow, neon gradient title.
+   Used by home, intello, and collection.
    ============================================ */
 
-/* ── Banner container ───────────────────────
-   Glass card with primary-tinted top/bottom
-   borders. position:relative so pseudo-
-   elements clip inside.                       */
+/* ── Banner container ─────────────────────  */
 .banner {
     position: relative;
     overflow: hidden;
@@ -30,50 +27,60 @@
     box-shadow: none;
 }
 
-/* ── Grid-lines overlay ─────────────────────
-   Repeating lines + diagonal dots behind
-   the banner text. Opacity keeps it subtle.   */
+/* ── Grid-lines overlay ───────────────────  */
 .banner::before {
     content: "";
     position: absolute;
     inset: 0;
     pointer-events: none;
     z-index: 0;
-    background-image: var(--grid-overlay-image);
-    background-size: var(--grid-overlay-size);
+    background-image:
+        var(--grid-overlay-image);
+    background-size:
+        var(--grid-overlay-size);
     opacity: 0.6;
 }
 
-/* ── Primary glow accent ───────────────────
-   Soft radial glow behind the text.           */
+/* ── Aurora mesh glow ─────────────────────
+   Two-blob aurora behind the text, subtler
+   than the global aurora but visible.
+   Constrained to banner bounds.             */
 .banner::after {
     content: "";
     position: absolute;
-    top: -30%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60%;
-    height: 80%;
+    inset: 0;
     pointer-events: none;
     z-index: 0;
-    background: radial-gradient(
-        ellipse at center,
-        color-mix(
-            in srgb, var(--primary) 12%, transparent
+    background:
+        radial-gradient(
+            ellipse 50% 70% at 30% 40%,
+            color-mix(
+                in srgb,
+                var(--primary) 18%,
+                transparent
+            ),
+            transparent
         ),
-        transparent 70%
-    );
+        radial-gradient(
+            ellipse 45% 60% at 70% 55%,
+            color-mix(
+                in srgb,
+                var(--accent) 12%,
+                transparent
+            ),
+            transparent
+        );
 }
 
-/* ── Title — gradient text ──────────────────
-   Displayed when the `title` prop is set.     */
+/* ── Title — gradient text + neon glow ────  */
 .banner_title {
     position: relative;
     z-index: 1;
     margin: 0 0 0.5rem;
+    font-family: var(--heading-font-family);
     font-size: clamp(2rem, 5vw, 3rem);
     font-weight: 700;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.03em;
     background: linear-gradient(
         135deg,
         var(--color-primary) 0%,
@@ -84,17 +91,21 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    filter: drop-shadow(
+        0 0 18px color-mix(
+            in srgb,
+            var(--primary) 30%,
+            transparent
+        )
+    );
 }
 
-/* ── Body wrapper ───────────────────────────
-   Children sit above the grid overlay.
-   No position:relative so absolute children
-   anchor to .banner instead.                  */
+/* ── Body wrapper ─────────────────────────  */
 .banner_body {
     z-index: 1;
 }
 
-/* ── Responsive ─────────────────────────────  */
+/* ── Responsive ───────────────────────────  */
 
 @media (max-width: 768px) {
     .banner {

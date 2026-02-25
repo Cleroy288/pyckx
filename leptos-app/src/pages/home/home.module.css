@@ -12,10 +12,10 @@
     font-size: 1.1rem;
 }
 
-/* ── Section with entrance animation ───────── */
+/* ── Section with power-on entrance ───────── */
 .section {
     margin-top: 3rem;
-    animation: fadeInUp 0.6s ease both;
+    animation: power-on 0.8s ease both;
     animation-delay: var(--delay, 0s);
 }
 

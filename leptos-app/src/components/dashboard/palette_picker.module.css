@@ -2,7 +2,7 @@
    PalettePicker — Color theme selector card
    ============================================
    Glass card with swatches grid + dark toggle.
-   Matches NavCard glass aesthetic.
+   Monospace label for theme name.
    ============================================ */
 
 /* ── Card container ───────────────────────── */
@@ -59,12 +59,14 @@
         0 0 16px var(--glow);
 }
 
-/* ── Swatch label (tooltip) ───────────────── */
+/* ── Swatch label (monospace tooltip) ─────── */
 .label {
-    font-size: 0.75rem;
+    font-family: var(--mono-font-family);
+    font-size: 0.7rem;
     color: var(--color-text-secondary);
     text-align: center;
     margin-top: 0.25rem;
+    letter-spacing: 0.02em;
 }
 
 /* ── Dark mode toggle row ─────────────────── */
@@ -78,8 +80,10 @@
 }
 
 .toggle_label {
-    font-size: 0.85rem;
+    font-family: var(--mono-font-family);
+    font-size: 0.8rem;
     color: var(--color-text-secondary);
+    letter-spacing: 0.02em;
 }
 
 /* ── Toggle switch ────────────────────────── */

@@ -1,8 +1,7 @@
 /* ============================================
-   Vitrine (Landing) Page Styles
-   Flat angular design: border-spin hover,
-   grid-line hero pattern, vertical side lines,
-   no rounded corners anywhere.
+   Vitrine (Landing) Page — Hybrid Forge
+   Flat angular, aurora-through-grid,
+   smooth glow on cards, border-spin on CTA.
    ============================================ */
 
 /* ── Main Container + Side Lines ─────────── */
@@ -20,9 +19,6 @@
     contain: layout style;
 }
 
-/* ── Content wrapper ───────────────────────
-   Centered column at max 1200px.
-   Matches the side lines position.          */
 .content {
     position: relative;
     flex: 1;
@@ -50,10 +46,10 @@
 
 .hero_section {
     width: 100%;
-    animation: fadeInUp 0.6s ease both;
+    animation: power-on 0.8s ease both;
 }
 
-/* ── Hero Content (inside HeroBanner) ────── */
+/* ── Hero Content ────────────────────────── */
 
 .hero_tagline {
     font-size: clamp(1.25rem, 2.5vw, 1.75rem);
@@ -72,7 +68,7 @@
     align-items: center;
 }
 
-/* ── Vitrine Card (shared glass tile) ────── */
+/* ── Vitrine Card — smooth border-glow ───── */
 
 .vitrine_card {
     position: relative;
@@ -84,29 +80,33 @@
     padding: 2.5rem 2rem;
     overflow: hidden;
     transition:
-        border-color var(--transition-fast);
+        border-color var(--transition-base),
+        box-shadow var(--transition-base),
+        background var(--transition-base);
 }
 
 .vitrine_card:hover {
-    border-color: transparent;
-    border-image: conic-gradient(
-        from var(--border-angle),
-        var(--color-primary),
-        transparent 25%,
-        transparent 75%,
-        var(--color-primary)
-    ) 1;
-    animation: border-spin 3s linear infinite;
+    border-color: color-mix(
+        in srgb, var(--primary) 50%, transparent
+    );
+    box-shadow:
+        0 0 15px color-mix(
+            in srgb,
+            var(--primary) 15%,
+            transparent
+        );
+    background: var(--glass-bg-hover);
 }
 
 /* ── Shared Card Text ────────────────────── */
 
 .card_title {
+    font-family: var(--heading-font-family);
     font-size: 1.5rem;
     font-weight: 700;
     color: var(--color-text-primary);
     margin-bottom: 1rem;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.02em;
 }
 
 .card_content {
@@ -116,13 +116,13 @@
     margin: 0;
 }
 
-/* ── Tagline Section ────────────────────── */
+/* ── Tagline Section ─────────────────────── */
 
 .tagline {
     width: 100%;
     padding: 3rem 0 3rem 15%;
     margin-bottom: 2rem;
-    animation: fadeInUp 0.6s ease both;
+    animation: power-on 0.8s ease both;
     animation-delay: 0.15s;
 }
 
@@ -144,7 +144,7 @@
 .apps {
     width: 100%;
     margin-bottom: 4rem;
-    animation: fadeInUp 0.6s ease both;
+    animation: power-on 0.8s ease both;
     animation-delay: 0.25s;
 }
 
@@ -154,7 +154,6 @@
     gap: 0;
 }
 
-/* App card — vertical, full-width */
 .app_card {
     display: flex;
     flex-direction: column;
@@ -178,13 +177,16 @@
     border-radius: 0;
     color: var(--color-primary);
     margin-bottom: 1.5rem;
-    transition: background var(--transition-fast);
+    transition:
+        background var(--transition-fast),
+        box-shadow var(--transition-fast);
 }
 
 .vitrine_card:hover .app_card_icon {
     background: color-mix(
         in srgb, var(--primary) 18%, transparent
     );
+    box-shadow: 0 0 10px var(--glow);
 }
 
 .app_card_icon svg {
@@ -197,7 +199,7 @@
 .pricing {
     width: 100%;
     margin-bottom: 2rem;
-    animation: fadeInUp 0.6s ease both;
+    animation: power-on 0.8s ease both;
     animation-delay: 0.35s;
 }
 
@@ -216,6 +218,7 @@
 }
 
 .pricing_name {
+    font-family: var(--heading-font-family);
     font-size: 1.5rem;
     font-weight: 700;
     color: var(--color-text-primary);
@@ -233,14 +236,24 @@
 }
 
 .pricing_amount {
+    font-family: var(--mono-font-family);
     font-size: 2.5rem;
-    font-weight: 800;
+    font-weight: 700;
     color: var(--color-primary);
     line-height: 1;
+    font-variant-numeric: tabular-nums;
+    filter: drop-shadow(
+        0 0 10px color-mix(
+            in srgb,
+            var(--primary) 25%,
+            transparent
+        )
+    );
 }
 
 .pricing_period {
-    font-size: 1rem;
+    font-family: var(--mono-font-family);
+    font-size: 0.9rem;
     color: var(--color-text-secondary);
 }
 
@@ -273,7 +286,7 @@
     width: 100%;
 }
 
-/* ── Start Now Section ───────────────────── */
+/* ── Start Now — border-spin CTA ─────────── */
 
 .start_now {
     width: 100%;
@@ -287,8 +300,15 @@
         var(--color-primary)
     ) 1;
     animation:
-        fadeInUp 0.6s ease both,
-        border-spin 3s linear 0.6s infinite;
+        power-on 0.8s ease both,
+        border-spin 3s linear 0.8s infinite;
+}
+
+/* Remove inner banner margin so border-spin
+   aligns flush with the visible content.    */
+.start_now :global(header) {
+    margin-bottom: 0;
+    border: none;
 }
 
 .start_now_cta {
@@ -313,35 +333,23 @@
 }
 
 @media (max-width: 768px) {
-    .vitrine {
-        padding: 80px 1.5rem 3rem;
-    }
-
+    .vitrine { padding: 80px 1.5rem 3rem; }
     .vitrine::before { left: 1.5rem; }
     .vitrine::after { right: 1.5rem; }
-
     .hero_tagline { margin-bottom: 2.5rem; }
-
     .hero_cta {
         flex-direction: column;
         width: 100%;
     }
-
     .apps_grid { grid-template-columns: 1fr; }
     .app_card { padding: 2rem 1.5rem; }
-
     .pricing_grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 480px) {
-    .vitrine {
-        padding: 70px 1rem 2rem;
-    }
-
+    .vitrine { padding: 70px 1rem 2rem; }
     .vitrine::before,
     .vitrine::after { display: none; }
-
     .hero_cta { gap: 0.75rem; }
-
     .app_card { padding: 1.5rem 1rem; }
 }

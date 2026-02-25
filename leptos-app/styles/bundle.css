@@ -93,7 +93,8 @@
 }
 
 
-/* AppStore — app catalog card */
+/* AppStore — app catalog card
+   Smooth border-glow hover (no border-spin) */
 
 .card-32ab410 {
     display: flex;
@@ -106,19 +107,22 @@
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid var(--color-border);
     transition:
-        border-color var(--transition-fast);
+        border-color var(--transition-base),
+        box-shadow var(--transition-base),
+        background var(--transition-base);
 }
 
 .card-32ab410:hover {
-    border-color: transparent;
-    border-image: conic-gradient(
-        from var(--border-angle),
-        var(--color-primary),
-        transparent 25%,
-        transparent 75%,
-        var(--color-primary)
-    ) 1;
-    animation: border-spin 3s linear infinite;
+    border-color: color-mix(
+        in srgb, var(--primary) 50%, transparent
+    );
+    box-shadow:
+        0 0 15px color-mix(
+            in srgb,
+            var(--primary) 15%,
+            transparent
+        );
+    background: var(--glass-bg-hover);
 }
 
 .header-32ab410 {
@@ -138,6 +142,12 @@
         in srgb, var(--primary) 10%, transparent
     );
     color: var(--color-primary);
+    transition:
+        box-shadow var(--transition-fast);
+}
+
+.card-32ab410:hover .icon-32ab410 {
+    box-shadow: 0 0 8px var(--glow);
 }
 
 .icon-32ab410 svg {
@@ -147,6 +157,7 @@
 
 .name-32ab410 {
     margin: 0;
+    font-family: var(--heading-font-family);
     font-size: 1rem;
     font-weight: 600;
     color: var(--color-text-primary);
@@ -162,8 +173,12 @@
 
 
 /* ============================================
-   Background Component Styles (Scoped)
+   Background — Aurora blobs + Grid overlay
+   ============================================
+   Aurora blobs drift behind grid lines.
+   Grid has intersection dots at crossings.
    ============================================ */
+
 .background-bde41b1 {
     position: relative;
     width: 100%;
@@ -172,6 +187,43 @@
     overflow-x: hidden;
 }
 
+/* ── Aurora blobs — soft colored light ──────
+   Fixed position, paints below .lines.
+   Two radial-gradient blobs drift slowly.   */
+.background-bde41b1::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background:
+        radial-gradient(
+            ellipse 55vw 55vw at 20% 25%,
+            color-mix(
+                in srgb,
+                var(--primary) 12%,
+                transparent
+            ),
+            transparent
+        ),
+        radial-gradient(
+            ellipse 45vw 45vw at 80% 75%,
+            color-mix(
+                in srgb,
+                var(--accent) 10%,
+                transparent
+            ),
+            transparent
+        );
+    animation:
+        aurora-drift 30s ease-in-out infinite
+        alternate;
+}
+
+/* ── Grid lines + intersection dots ────────
+   Fixed overlay with horizontal/vertical
+   lines, diagonal dots, and node dots at
+   every grid intersection.                  */
 .lines-bde41b1 {
     position: fixed;
     top: 0;
@@ -180,6 +232,11 @@
     height: 100%;
     pointer-events: none;
     background-image:
+        radial-gradient(
+            circle,
+            var(--grid-line) 1px,
+            transparent 1px
+        ),
         linear-gradient(
             to right,
             var(--grid-line) 1px,
@@ -201,6 +258,7 @@
             transparent 1px
         );
     background-size:
+        30px 30px,
         30px 30px,
         30px 30px,
         45px 45px,
@@ -251,10 +309,10 @@
 
 
 /* ============================================
-   Button Component Styles
+   Button — Primary (glow) + Outline (trace)
    ============================================
-   Two variants: Primary (filled) and Outline.
-   No icons, no movement, no transform.
+   Primary: filled with ambient glow on hover.
+   Outline: border with subtle tint on hover.
    ============================================ */
 
 .btn-b0e9139 {
@@ -262,13 +320,15 @@
     align-items: center;
     justify-content: center;
     font-weight: 600;
-    font-family: var(--principal-font-family, sans-serif);
+    font-family: var(--heading-font-family);
     border: none;
     border-radius: 0;
     cursor: pointer;
-    transition: background var(--transition-base),
-                color var(--transition-base),
-                opacity var(--transition-base);
+    transition:
+        background var(--transition-base),
+        color var(--transition-base),
+        box-shadow var(--transition-base),
+        opacity var(--transition-base);
     text-decoration: none;
     line-height: 1.5;
 }
@@ -283,7 +343,7 @@
     outline-offset: 2px;
 }
 
-/* ── Size Variants ─────────────────────────── */
+/* ── Size Variants ────────────────────────── */
 
 .small-b0e9139 {
     padding: 0.5rem 1.25rem;
@@ -300,7 +360,7 @@
     font-size: 1rem;
 }
 
-/* ── Primary — filled button ───────────────── */
+/* ── Primary — filled + ambient glow ──────── */
 
 .primary-b0e9139 {
     color: var(--color-background);
@@ -308,14 +368,25 @@
 }
 
 .primary-b0e9139:hover:not(:disabled) {
-    opacity: 0.85;
+    box-shadow:
+        0 0 20px color-mix(
+            in srgb,
+            var(--primary) 35%,
+            transparent
+        ),
+        0 0 40px color-mix(
+            in srgb,
+            var(--primary) 15%,
+            transparent
+        );
 }
 
 .primary-b0e9139:active:not(:disabled) {
-    opacity: 0.7;
+    opacity: 0.85;
+    box-shadow: none;
 }
 
-/* ── Outline — border button ───────────────── */
+/* ── Outline — border + tint on hover ─────── */
 
 .outline-b0e9139 {
     background: transparent;
@@ -324,8 +395,15 @@
 }
 
 .outline-b0e9139:hover:not(:disabled) {
-    background: var(--color-primary);
-    color: var(--color-background);
+    background: color-mix(
+        in srgb, var(--primary) 10%, transparent
+    );
+    box-shadow:
+        0 0 12px color-mix(
+            in srgb,
+            var(--primary) 20%,
+            transparent
+        );
 }
 
 .outline-b0e9139:active:not(:disabled) {
@@ -334,15 +412,21 @@
 
 
 /* ============================================
-   Card Component Styles
+   Card — Base card with glass/solid/popular
+   ============================================
+   Smooth border-glow hover. No border-spin
+   on regular cards — reserved for key CTAs.
    ============================================ */
 
 .card-53cbc03 {
     position: relative;
     border-radius: 0;
     padding: 2.5rem 2rem;
-    transition: transform var(--transition-slow), box-shadow var(--transition-slow),
-                border-color var(--transition-slow), background var(--transition-slow);
+    transition:
+        transform var(--transition-slow),
+        box-shadow var(--transition-slow),
+        border-color var(--transition-slow),
+        background var(--transition-slow);
     will-change: transform;
     transform: translate3d(0, 0, 0);
     overflow: hidden;
@@ -352,31 +436,54 @@
     transform: translate3d(0, -4px, 0);
 }
 
-/* Variants */
+/* ── Glass variant ────────────────────────── */
 
 .glass-53cbc03 {
     background: var(--glass-bg);
     backdrop-filter: blur(25px);
     -webkit-backdrop-filter: blur(25px);
     border: var(--glass-border);
-    box-shadow: 0 4px 30px color-mix(in srgb, var(--primary) 5%, transparent);
+    box-shadow: 0 4px 30px color-mix(
+        in srgb, var(--primary) 5%, transparent
+    );
 }
 
 .glass-53cbc03:hover {
-    box-shadow: var(--shadow-xl);
     border: var(--glass-border-hover);
     background: var(--glass-bg-hover);
+    box-shadow:
+        0 0 15px color-mix(
+            in srgb,
+            var(--primary) 15%,
+            transparent
+        );
 }
+
+/* ── Solid variant ────────────────────────── */
 
 .solid-53cbc03 {
     background: var(--color-background);
-    border: 1px solid color-mix(in srgb, var(--primary) 15%, transparent);
-    box-shadow: 0 4px 24px color-mix(in srgb, var(--primary) 8%, transparent);
+    border: 1px solid color-mix(
+        in srgb, var(--primary) 15%, transparent
+    );
+    box-shadow: 0 4px 24px color-mix(
+        in srgb, var(--primary) 8%, transparent
+    );
 }
 
 .solid-53cbc03:hover {
-    box-shadow: var(--shadow-lg);
+    border-color: color-mix(
+        in srgb, var(--primary) 40%, transparent
+    );
+    box-shadow:
+        0 0 15px color-mix(
+            in srgb,
+            var(--primary) 15%,
+            transparent
+        );
 }
+
+/* ── Popular variant ──────────────────────── */
 
 .popular-53cbc03 {
     background: var(--glass-bg);
@@ -388,8 +495,14 @@
 
 .popular-53cbc03:hover {
     transform: translate3d(0, -6px, 0);
-    box-shadow: 0 16px 50px color-mix(in srgb, var(--primary) 25%, transparent);
+    box-shadow:
+        0 0 25px color-mix(
+            in srgb,
+            var(--primary) 25%,
+            transparent
+        );
 }
+
 
 /* ============================================
    CardGrid — Responsive card container
@@ -1342,17 +1455,14 @@
 
 
 /* ============================================
-   HeroBanner — Shared hero section
+   HeroBanner — Glass hero with aurora mesh
    ============================================
    Glass background, grid-line pattern,
-   radial glow, gradient title.
-   Used by home, intello, and collection pages.
+   aurora mesh glow, neon gradient title.
+   Used by home, intello, and collection.
    ============================================ */
 
-/* ── Banner container ───────────────────────
-   Glass card with primary-tinted top/bottom
-   borders. position:relative so pseudo-
-   elements clip inside.                       */
+/* ── Banner container ─────────────────────  */
 .banner-2a53f23 {
     position: relative;
     overflow: hidden;
@@ -1373,50 +1483,60 @@
     box-shadow: none;
 }
 
-/* ── Grid-lines overlay ─────────────────────
-   Repeating lines + diagonal dots behind
-   the banner text. Opacity keeps it subtle.   */
+/* ── Grid-lines overlay ───────────────────  */
 .banner-2a53f23::before {
     content: "";
     position: absolute;
     inset: 0;
     pointer-events: none;
     z-index: 0;
-    background-image: var(--grid-overlay-image);
-    background-size: var(--grid-overlay-size);
+    background-image:
+        var(--grid-overlay-image);
+    background-size:
+        var(--grid-overlay-size);
     opacity: 0.6;
 }
 
-/* ── Primary glow accent ───────────────────
-   Soft radial glow behind the text.           */
+/* ── Aurora mesh glow ─────────────────────
+   Two-blob aurora behind the text, subtler
+   than the global aurora but visible.
+   Constrained to banner bounds.             */
 .banner-2a53f23::after {
     content: "";
     position: absolute;
-    top: -30%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60%;
-    height: 80%;
+    inset: 0;
     pointer-events: none;
     z-index: 0;
-    background: radial-gradient(
-        ellipse at center,
-        color-mix(
-            in srgb, var(--primary) 12%, transparent
+    background:
+        radial-gradient(
+            ellipse 50% 70% at 30% 40%,
+            color-mix(
+                in srgb,
+                var(--primary) 18%,
+                transparent
+            ),
+            transparent
         ),
-        transparent 70%
-    );
+        radial-gradient(
+            ellipse 45% 60% at 70% 55%,
+            color-mix(
+                in srgb,
+                var(--accent) 12%,
+                transparent
+            ),
+            transparent
+        );
 }
 
-/* ── Title — gradient text ──────────────────
-   Displayed when the `title` prop is set.     */
+/* ── Title — gradient text + neon glow ────  */
 .banner_title-2a53f23 {
     position: relative;
     z-index: 1;
     margin: 0 0 0.5rem;
+    font-family: var(--heading-font-family);
     font-size: clamp(2rem, 5vw, 3rem);
     font-weight: 700;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.03em;
     background: linear-gradient(
         135deg,
         var(--color-primary) 0%,
@@ -1427,17 +1547,21 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    filter: drop-shadow(
+        0 0 18px color-mix(
+            in srgb,
+            var(--primary) 30%,
+            transparent
+        )
+    );
 }
 
-/* ── Body wrapper ───────────────────────────
-   Children sit above the grid overlay.
-   No position:relative so absolute children
-   anchor to .banner instead.                  */
+/* ── Body wrapper ─────────────────────────  */
 .banner_body-2a53f23 {
     z-index: 1;
 }
 
-/* ── Responsive ─────────────────────────────  */
+/* ── Responsive ───────────────────────────  */
 
 @media (max-width: 768px) {
     .banner-2a53f23 {
@@ -1467,10 +1591,10 @@
     font-size: 1.1rem;
 }
 
-/* ── Section with entrance animation ───────── */
+/* ── Section with power-on entrance ───────── */
 .section-3ba2a58 {
     margin-top: 3rem;
-    animation: fadeInUp 0.6s ease both;
+    animation: power-on 0.8s ease both;
     animation-delay: var(--delay, 0s);
 }
 
@@ -2067,8 +2191,7 @@
    NavCard — Clickable navigation tile
    ============================================
    Glass card with icon, title, description.
-   Border-spin hover, no rounded corners,
-   no transform. Used on home + intello pages.
+   Smooth border-glow hover, no border-spin.
    ============================================ */
 
 .card-39d8194 {
@@ -2087,19 +2210,22 @@
     cursor: pointer;
     font-family: inherit;
     transition:
-        border-color var(--transition-fast);
+        border-color var(--transition-base),
+        box-shadow var(--transition-base),
+        background var(--transition-base);
 }
 
 .card-39d8194:hover {
-    border-color: transparent;
-    border-image: conic-gradient(
-        from var(--border-angle),
-        var(--color-primary),
-        transparent 25%,
-        transparent 75%,
-        var(--color-primary)
-    ) 1;
-    animation: border-spin 3s linear infinite;
+    border-color: color-mix(
+        in srgb, var(--primary) 50%, transparent
+    );
+    box-shadow:
+        0 0 15px color-mix(
+            in srgb,
+            var(--primary) 15%,
+            transparent
+        );
+    background: var(--glass-bg-hover);
 }
 
 /* ── Icon container ──────────────────────── */
@@ -2117,13 +2243,16 @@
     );
     border-radius: 0;
     color: var(--color-primary);
-    transition: background var(--transition-fast);
+    transition:
+        background var(--transition-fast),
+        box-shadow var(--transition-fast);
 }
 
 .card-39d8194:hover .icon-39d8194 {
     background: color-mix(
         in srgb, var(--primary) 18%, transparent
     );
+    box-shadow: 0 0 10px var(--glow);
 }
 
 .icon-39d8194 svg {
@@ -2133,6 +2262,7 @@
 
 /* ── Text ─────────────────────────────────── */
 .title-39d8194 {
+    font-family: var(--heading-font-family);
     font-size: 1.1rem;
     font-weight: 600;
 }
@@ -2474,7 +2604,7 @@
    PalettePicker — Color theme selector card
    ============================================
    Glass card with swatches grid + dark toggle.
-   Matches NavCard glass aesthetic.
+   Monospace label for theme name.
    ============================================ */
 
 /* ── Card container ───────────────────────── */
@@ -2531,12 +2661,14 @@
         0 0 16px var(--glow);
 }
 
-/* ── Swatch label (tooltip) ───────────────── */
+/* ── Swatch label (monospace tooltip) ─────── */
 .label-a254bfd {
-    font-size: 0.75rem;
+    font-family: var(--mono-font-family);
+    font-size: 0.7rem;
     color: var(--color-text-secondary);
     text-align: center;
     margin-top: 0.25rem;
+    letter-spacing: 0.02em;
 }
 
 /* ── Dark mode toggle row ─────────────────── */
@@ -2550,8 +2682,10 @@
 }
 
 .toggle_label-a254bfd {
-    font-size: 0.85rem;
+    font-family: var(--mono-font-family);
+    font-size: 0.8rem;
     color: var(--color-text-secondary);
+    letter-spacing: 0.02em;
 }
 
 /* ── Toggle switch ────────────────────────── */
@@ -3130,26 +3264,56 @@
 }
 
 
-/* Section Divider — centered label with lines */
+/* Section Divider — circuit trace with nodes
+   ●───────── LABEL ─────────●
+   Monospace label, primary-colored line,
+   small node dots at outer ends.             */
 
 .divider-97c5c7b {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    font-size: 0.8rem;
+    font-family: var(--mono-font-family);
+    font-size: 0.75rem;
     font-weight: 600;
     color: var(--color-primary);
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.1em;
     white-space: nowrap;
 }
 
+/* ── Trace line ──────────────────────────── */
 .line-97c5c7b {
     flex: 1;
     height: 1px;
     background: color-mix(
-        in srgb, var(--primary) 25%, transparent
+        in srgb, var(--primary) 30%, transparent
     );
+    position: relative;
+}
+
+/* ── Node dots at outer ends ─────────────── */
+.line-97c5c7b::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    box-shadow: 0 0 8px var(--glow);
+}
+
+/* Left line → node at left edge */
+.line-97c5c7b:first-of-type::before {
+    left: 0;
+}
+
+/* Right line → node at right edge */
+.line-97c5c7b:last-of-type::before {
+    right: 0;
+    left: auto;
 }
 
 
@@ -3803,10 +3967,9 @@
 
 
 /* ============================================
-   Vitrine (Landing) Page Styles
-   Flat angular design: border-spin hover,
-   grid-line hero pattern, vertical side lines,
-   no rounded corners anywhere.
+   Vitrine (Landing) Page — Hybrid Forge
+   Flat angular, aurora-through-grid,
+   smooth glow on cards, border-spin on CTA.
    ============================================ */
 
 /* ── Main Container + Side Lines ─────────── */
@@ -3824,9 +3987,6 @@
     contain: layout style;
 }
 
-/* ── Content wrapper ───────────────────────
-   Centered column at max 1200px.
-   Matches the side lines position.          */
 .content-775442b {
     position: relative;
     flex: 1;
@@ -3854,10 +4014,10 @@
 
 .hero_section-775442b {
     width: 100%;
-    animation: fadeInUp 0.6s ease both;
+    animation: power-on 0.8s ease both;
 }
 
-/* ── Hero Content (inside HeroBanner) ────── */
+/* ── Hero Content ────────────────────────── */
 
 .hero_tagline-775442b {
     font-size: clamp(1.25rem, 2.5vw, 1.75rem);
@@ -3876,7 +4036,7 @@
     align-items: center;
 }
 
-/* ── Vitrine Card (shared glass tile) ────── */
+/* ── Vitrine Card — smooth border-glow ───── */
 
 .vitrine_card-775442b {
     position: relative;
@@ -3888,29 +4048,33 @@
     padding: 2.5rem 2rem;
     overflow: hidden;
     transition:
-        border-color var(--transition-fast);
+        border-color var(--transition-base),
+        box-shadow var(--transition-base),
+        background var(--transition-base);
 }
 
 .vitrine_card-775442b:hover {
-    border-color: transparent;
-    border-image: conic-gradient(
-        from var(--border-angle),
-        var(--color-primary),
-        transparent 25%,
-        transparent 75%,
-        var(--color-primary)
-    ) 1;
-    animation: border-spin 3s linear infinite;
+    border-color: color-mix(
+        in srgb, var(--primary) 50%, transparent
+    );
+    box-shadow:
+        0 0 15px color-mix(
+            in srgb,
+            var(--primary) 15%,
+            transparent
+        );
+    background: var(--glass-bg-hover);
 }
 
 /* ── Shared Card Text ────────────────────── */
 
 .card_title-775442b {
+    font-family: var(--heading-font-family);
     font-size: 1.5rem;
     font-weight: 700;
     color: var(--color-text-primary);
     margin-bottom: 1rem;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.02em;
 }
 
 .card_content-775442b {
@@ -3920,13 +4084,13 @@
     margin: 0;
 }
 
-/* ── Tagline Section ────────────────────── */
+/* ── Tagline Section ─────────────────────── */
 
 .tagline-775442b {
     width: 100%;
     padding: 3rem 0 3rem 15%;
     margin-bottom: 2rem;
-    animation: fadeInUp 0.6s ease both;
+    animation: power-on 0.8s ease both;
     animation-delay: 0.15s;
 }
 
@@ -3948,7 +4112,7 @@
 .apps-775442b {
     width: 100%;
     margin-bottom: 4rem;
-    animation: fadeInUp 0.6s ease both;
+    animation: power-on 0.8s ease both;
     animation-delay: 0.25s;
 }
 
@@ -3958,7 +4122,6 @@
     gap: 0;
 }
 
-/* App card — vertical, full-width */
 .app_card-775442b {
     display: flex;
     flex-direction: column;
@@ -3982,13 +4145,16 @@
     border-radius: 0;
     color: var(--color-primary);
     margin-bottom: 1.5rem;
-    transition: background var(--transition-fast);
+    transition:
+        background var(--transition-fast),
+        box-shadow var(--transition-fast);
 }
 
 .vitrine_card-775442b:hover .app_card_icon-775442b {
     background: color-mix(
         in srgb, var(--primary) 18%, transparent
     );
+    box-shadow: 0 0 10px var(--glow);
 }
 
 .app_card_icon-775442b svg {
@@ -4001,7 +4167,7 @@
 .pricing-775442b {
     width: 100%;
     margin-bottom: 2rem;
-    animation: fadeInUp 0.6s ease both;
+    animation: power-on 0.8s ease both;
     animation-delay: 0.35s;
 }
 
@@ -4020,6 +4186,7 @@
 }
 
 .pricing_name-775442b {
+    font-family: var(--heading-font-family);
     font-size: 1.5rem;
     font-weight: 700;
     color: var(--color-text-primary);
@@ -4037,14 +4204,24 @@
 }
 
 .pricing_amount-775442b {
+    font-family: var(--mono-font-family);
     font-size: 2.5rem;
-    font-weight: 800;
+    font-weight: 700;
     color: var(--color-primary);
     line-height: 1;
+    font-variant-numeric: tabular-nums;
+    filter: drop-shadow(
+        0 0 10px color-mix(
+            in srgb,
+            var(--primary) 25%,
+            transparent
+        )
+    );
 }
 
 .pricing_period-775442b {
-    font-size: 1rem;
+    font-family: var(--mono-font-family);
+    font-size: 0.9rem;
     color: var(--color-text-secondary);
 }
 
@@ -4077,7 +4254,7 @@
     width: 100%;
 }
 
-/* ── Start Now Section ───────────────────── */
+/* ── Start Now — border-spin CTA ─────────── */
 
 .start_now-775442b {
     width: 100%;
@@ -4091,8 +4268,15 @@
         var(--color-primary)
     ) 1;
     animation:
-        fadeInUp 0.6s ease both,
-        border-spin 3s linear 0.6s infinite;
+        power-on 0.8s ease both,
+        border-spin 3s linear 0.8s infinite;
+}
+
+/* Remove inner banner margin so border-spin
+   aligns flush with the visible content.    */
+.start_now-775442b header {
+    margin-bottom: 0;
+    border: none;
 }
 
 .start_now_cta-775442b {
@@ -4117,36 +4301,24 @@
 }
 
 @media (max-width: 768px) {
-    .vitrine-775442b {
-        padding: 80px 1.5rem 3rem;
-    }
-
+    .vitrine-775442b { padding: 80px 1.5rem 3rem; }
     .vitrine-775442b::before { left: 1.5rem; }
     .vitrine-775442b::after { right: 1.5rem; }
-
     .hero_tagline-775442b { margin-bottom: 2.5rem; }
-
     .hero_cta-775442b {
         flex-direction: column;
         width: 100%;
     }
-
     .apps_grid-775442b { grid-template-columns: 1fr; }
     .app_card-775442b { padding: 2rem 1.5rem; }
-
     .pricing_grid-775442b { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 480px) {
-    .vitrine-775442b {
-        padding: 70px 1rem 2rem;
-    }
-
+    .vitrine-775442b { padding: 70px 1rem 2rem; }
     .vitrine-775442b::before,
     .vitrine-775442b::after { display: none; }
-
     .hero_cta-775442b { gap: 0.75rem; }
-
     .app_card-775442b { padding: 1.5rem 1rem; }
 }
 
@@ -4159,14 +4331,15 @@
 .greeting-d2981f9 {
     position: relative;
     z-index: 1;
+    font-family: var(--heading-font-family);
     font-size: clamp(2rem, 5vw, 3rem);
     font-weight: 700;
     color: var(--color-text-primary);
     margin-bottom: 0.5rem;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.03em;
 }
 
-/* ── Username — animated gradient accent ───── */
+/* ── Username — gradient + neon glow ──────── */
 .username-d2981f9 {
     background: linear-gradient(
         90deg,
@@ -4181,6 +4354,13 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
     animation: shimmer 3s ease-in-out infinite;
+    filter: drop-shadow(
+        0 0 12px color-mix(
+            in srgb,
+            var(--primary) 35%,
+            transparent
+        )
+    );
 }
 
 @keyframes shimmer {

@@ -2,8 +2,7 @@
    NavCard — Clickable navigation tile
    ============================================
    Glass card with icon, title, description.
-   Border-spin hover, no rounded corners,
-   no transform. Used on home + intello pages.
+   Smooth border-glow hover, no border-spin.
    ============================================ */
 
 .card {
@@ -22,19 +21,22 @@
     cursor: pointer;
     font-family: inherit;
     transition:
-        border-color var(--transition-fast);
+        border-color var(--transition-base),
+        box-shadow var(--transition-base),
+        background var(--transition-base);
 }
 
 .card:hover {
-    border-color: transparent;
-    border-image: conic-gradient(
-        from var(--border-angle),
-        var(--color-primary),
-        transparent 25%,
-        transparent 75%,
-        var(--color-primary)
-    ) 1;
-    animation: border-spin 3s linear infinite;
+    border-color: color-mix(
+        in srgb, var(--primary) 50%, transparent
+    );
+    box-shadow:
+        0 0 15px color-mix(
+            in srgb,
+            var(--primary) 15%,
+            transparent
+        );
+    background: var(--glass-bg-hover);
 }
 
 /* ── Icon container ──────────────────────── */
@@ -52,13 +54,16 @@
     );
     border-radius: 0;
     color: var(--color-primary);
-    transition: background var(--transition-fast);
+    transition:
+        background var(--transition-fast),
+        box-shadow var(--transition-fast);
 }
 
 .card:hover .icon {
     background: color-mix(
         in srgb, var(--primary) 18%, transparent
     );
+    box-shadow: 0 0 10px var(--glow);
 }
 
 .icon svg {
@@ -68,6 +73,7 @@
 
 /* ── Text ─────────────────────────────────── */
 .title {
+    font-family: var(--heading-font-family);
     font-size: 1.1rem;
     font-weight: 600;
 }

@@ -61,6 +61,10 @@
         sans-serif;
     --logo-font-family:
         "VT323", var(--principal-font-family);
+    --heading-font-family:
+        "Inter", var(--principal-font-family);
+    --mono-font-family:
+        "JetBrains Mono", "Fira Code", monospace;
 
     /* ── Border radius ───────────────────────── */
     --radius-sm: 8px;
@@ -154,6 +158,11 @@
 
     /* ── Grid overlay background ─────────────── */
     --grid-overlay-image:
+        radial-gradient(
+            circle,
+            var(--grid-line) 1px,
+            transparent 1px
+        ),
         linear-gradient(
             to right,
             var(--grid-line) 1px,
@@ -175,6 +184,7 @@
             transparent 1px
         );
     --grid-overlay-size:
+        16px 16px,
         16px 16px,
         16px 16px,
         24px 24px,
@@ -205,6 +215,37 @@
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+/* Aurora drift — slow movement of aurora blobs */
+@keyframes aurora-drift {
+    0% {
+        transform: translate(0, 0) scale(1);
+    }
+    50% {
+        transform: translate(5vw, 8vh) scale(1.05);
+    }
+    100% {
+        transform: translate(-3vw, 3vh) scale(0.97);
+    }
+}
+
+/* Power-on — brief flash as elements energize */
+@keyframes power-on {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+        filter: brightness(2) saturate(0);
+    }
+    30% {
+        opacity: 1;
+        filter: brightness(1.3) saturate(0.7);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+        filter: brightness(1) saturate(1);
     }
 }
 

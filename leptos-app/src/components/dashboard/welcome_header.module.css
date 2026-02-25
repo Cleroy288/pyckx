@@ -6,14 +6,15 @@
 .greeting {
     position: relative;
     z-index: 1;
+    font-family: var(--heading-font-family);
     font-size: clamp(2rem, 5vw, 3rem);
     font-weight: 700;
     color: var(--color-text-primary);
     margin-bottom: 0.5rem;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.03em;
 }
 
-/* ── Username — animated gradient accent ───── */
+/* ── Username — gradient + neon glow ──────── */
 .username {
     background: linear-gradient(
         90deg,
@@ -28,6 +29,13 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
     animation: shimmer 3s ease-in-out infinite;
+    filter: drop-shadow(
+        0 0 12px color-mix(
+            in srgb,
+            var(--primary) 35%,
+            transparent
+        )
+    );
 }
 
 @keyframes shimmer {
