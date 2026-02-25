@@ -1,9 +1,6 @@
-/* ============================================
-   HeroBanner — Minimal glass panel
-   ============================================
-   Subtle glass, rounded, inner glow. No grid,
-   no aurora. Clean surface for content.
-   ============================================ */
+/* HeroBanner — clean flat panel
+   Subtle border, generous padding.
+   No glass, no blur, no glow. */
 
 .banner {
     position: relative;
@@ -11,27 +8,11 @@
     margin-bottom: 2rem;
     padding: 3rem 2rem;
     text-align: center;
-    background: var(--glass-bg);
-    backdrop-filter: var(--glass-blur);
-    -webkit-backdrop-filter: var(--glass-blur);
-    border: 1px solid color-mix(
-        in srgb, var(--primary) 8%, transparent
-    );
-    border-radius: var(--radius-md);
-    box-shadow:
-        0 4px 24px color-mix(
-            in srgb,
-            var(--primary) 5%,
-            transparent
-        ),
-        inset 0 1px 0 color-mix(
-            in srgb,
-            var(--primary) 5%,
-            transparent
-        );
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
 }
 
-/* ── Title — bold, clean ─────────────────  */
 .banner_title {
     position: relative;
     z-index: 1;
@@ -43,13 +24,11 @@
     color: var(--color-text-primary);
 }
 
-/* ── Body wrapper ─────────────────────────  */
 .banner_body {
     position: relative;
     z-index: 1;
 }
 
-/* ── Responsive ───────────────────────────  */
 @media (max-width: 768px) {
     .banner {
         margin-bottom: 1.5rem;

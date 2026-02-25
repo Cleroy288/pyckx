@@ -1,89 +1,60 @@
-/* ============================================
-   NavCard — Clickable navigation tile
-   ============================================
-   Rounded glass card with icon, title, desc.
-   Hover: glow + slight lift + scale.
-   ============================================ */
+/* NavCard — clickable navigation tile
+   Flat surface, subtle hover tint. */
 
 .card {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 0.75rem;
-    padding: 2rem 1.5rem;
+    padding: 1.75rem 1.5rem;
     width: 100%;
-    background: var(--glass-bg);
-    backdrop-filter: var(--glass-blur);
-    -webkit-backdrop-filter: var(--glass-blur);
-    border: 1px solid color-mix(
-        in srgb, var(--primary) 10%, transparent
-    );
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
     color: var(--color-text-primary);
     cursor: pointer;
     font-family: inherit;
     transition:
-        border-color var(--transition-smooth),
-        box-shadow var(--transition-smooth),
-        background var(--transition-smooth),
-        transform var(--transition-smooth);
+        background var(--transition-fast),
+        border-color var(--transition-fast);
 }
 
 .card:hover {
-    transform: translateY(-3px) scale(1.01);
+    background: var(--color-surface-hover);
     border-color: color-mix(
-        in srgb, var(--primary) 30%, transparent
+        in srgb, var(--primary) 15%,
+        var(--border)
     );
-    box-shadow:
-        0 8px 32px color-mix(
-            in srgb,
-            var(--primary) 12%,
-            transparent
-        );
-    background: var(--glass-bg-hover);
 }
 
 /* ── Icon container ──────────────────────── */
+
 .icon {
-    width: 56px;
-    height: 56px;
+    width: 48px;
+    height: 48px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: color-mix(
-        in srgb, var(--primary) 8%, transparent
-    );
-    border: 1px solid color-mix(
-        in srgb, var(--primary) 12%, transparent
-    );
+    background: var(--primary-tint-light);
     border-radius: var(--radius-sm);
     color: var(--color-primary);
-    transition:
-        background var(--transition-fast),
-        box-shadow var(--transition-fast);
-}
-
-.card:hover .icon {
-    background: color-mix(
-        in srgb, var(--primary) 15%, transparent
-    );
-    box-shadow: 0 0 12px var(--glow);
 }
 
 .icon svg {
-    width: 28px;
-    height: 28px;
+    width: 24px;
+    height: 24px;
 }
 
 /* ── Text ─────────────────────────────────── */
+
 .title {
     font-family: var(--heading-font-family);
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 600;
 }
 
 .desc {
-    font-size: 0.85rem;
+    font-size: 0.8125rem;
     color: var(--color-text-secondary);
     line-height: 1.4;
 }

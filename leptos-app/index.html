@@ -2,37 +2,44 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="viewport"
+              content="width=device-width, initial-scale=1.0"
+        />
         <title>pyckx</title>
-        <link data-trunk rel="copy-file" href="favicon.svg" />
-        <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-
-        <!-- Trunk: Compile Rust to WASM -->
-        <link data-trunk rel="rust" data-wasm-opt="0" />
-
-        <!-- Fonts: Space Grotesk + Space Mono + VT323 -->
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=VT323&display=swap"
-            rel="stylesheet"
+        <link data-trunk rel="copy-file"
+              href="favicon.svg"
+        />
+        <link rel="icon" type="image/svg+xml"
+              href="favicon.svg"
         />
 
-        <!-- Global styles (design tokens, reset, utilities) -->
-        <link data-trunk rel="css" href="styles/global.css" />
+        <!-- Trunk: Compile Rust to WASM -->
+        <link data-trunk rel="rust"
+              data-wasm-opt="0"
+        />
 
-        <!-- Stylance bundle (scoped component CSS) -->
-        <link data-trunk rel="css" href="styles/bundle.css" />
+        <!-- Fonts: VT323 for logo only -->
+        <link rel="preconnect"
+              href="https://fonts.googleapis.com"
+        />
+        <link rel="preconnect"
+              href="https://fonts.gstatic.com"
+              crossorigin
+        />
+        <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap"
+              rel="stylesheet"
+        />
+
+        <!-- Global styles (design tokens, reset) -->
+        <link data-trunk rel="css"
+              href="styles/global.css"
+        />
+
+        <!-- Stylance bundle (scoped CSS) -->
+        <link data-trunk rel="css"
+              href="styles/bundle.css"
+        />
     </head>
 
     <body></body>
-
-    <!-- Cursor spotlight — sets --mx/--my on :root -->
-    <script>
-        document.addEventListener("mousemove", e => {
-            const r = document.documentElement.style;
-            r.setProperty("--mx", e.clientX + "px");
-            r.setProperty("--my", e.clientY + "px");
-        });
-    </script>
 </html>

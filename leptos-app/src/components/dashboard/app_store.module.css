@@ -1,33 +1,24 @@
-/* AppStore — app catalog card
-   Smooth border-glow hover (no border-spin) */
+/* AppStore — flat app catalog card */
 
 .card {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
-    padding: 1.5rem;
+    padding: 1.25rem;
     border-radius: var(--radius-md);
-    background: var(--glass-bg);
-    backdrop-filter: var(--glass-blur);
-    -webkit-backdrop-filter: var(--glass-blur);
+    background: var(--color-surface);
     border: 1px solid var(--color-border);
     transition:
-        border-color var(--transition-base),
-        box-shadow var(--transition-base),
-        background var(--transition-base);
+        background var(--transition-fast),
+        border-color var(--transition-fast);
 }
 
 .card:hover {
+    background: var(--color-surface-hover);
     border-color: color-mix(
-        in srgb, var(--primary) 25%, transparent
+        in srgb, var(--primary) 15%,
+        var(--border)
     );
-    box-shadow:
-        0 8px 32px color-mix(
-            in srgb,
-            var(--primary) 12%,
-            transparent
-        );
-    background: var(--glass-bg-hover);
 }
 
 .header {
@@ -37,39 +28,32 @@
 }
 
 .icon {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: color-mix(
-        in srgb, var(--primary) 10%, transparent
-    );
+    background: var(--primary-tint-light);
+    border-radius: var(--radius-sm);
     color: var(--color-primary);
-    transition:
-        box-shadow var(--transition-fast);
-}
-
-.card:hover .icon {
-    box-shadow: 0 0 8px var(--glow);
 }
 
 .icon :global(svg) {
-    width: 22px;
-    height: 22px;
+    width: 20px;
+    height: 20px;
 }
 
 .name {
     margin: 0;
     font-family: var(--heading-font-family);
-    font-size: 1rem;
+    font-size: 0.9375rem;
     font-weight: 600;
     color: var(--color-text-primary);
 }
 
 .desc {
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
     color: var(--color-text-secondary);
     margin: 0;
     line-height: 1.4;

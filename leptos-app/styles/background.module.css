@@ -1,67 +1,15 @@
-/* ============================================
-   Background — Obsidian Grain
-   ============================================
-   Cursor spotlight + dim mesh blobs + film
-   grain SVG texture overlay.
-   ============================================ */
+/* Background — clean solid surface
+   No effects, no grain, no spotlight. */
 
-/* ── Base + cursor spotlight ──────────────
-   Radial glow follows --mx/--my set by JS. */
 .background {
     position: relative;
     width: 100%;
     min-height: 100vh;
     background-color: var(--color-background);
-    background-image: radial-gradient(
-        600px circle at var(--mx) var(--my),
-        color-mix(
-            in srgb,
-            var(--primary) 4%,
-            transparent
-        ),
-        transparent
-    );
     overflow-x: hidden;
 }
 
-/* ── Mesh blobs — very dim ambient color ── */
-.background::before {
-    content: "";
-    position: fixed;
-    inset: -15%;
-    pointer-events: none;
-    z-index: 0;
-    background:
-        radial-gradient(
-            ellipse 50vw 50vw at 15% 20%,
-            color-mix(
-                in srgb,
-                var(--primary) 8%,
-                transparent
-            ),
-            transparent
-        ),
-        radial-gradient(
-            ellipse 40vw 40vw at 85% 65%,
-            color-mix(
-                in srgb,
-                var(--accent) 6%,
-                transparent
-            ),
-            transparent
-        );
-    animation:
-        mesh-drift 30s ease-in-out infinite
-        alternate;
-}
-
-/* ── Film grain — SVG feTurbulence noise ── */
+/* Kept for DOM compat — hidden */
 .lines {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 1;
-    opacity: 0.030;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    background-size: 200px 200px;
+    display: none;
 }
