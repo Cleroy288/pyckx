@@ -1,44 +1,21 @@
-/* Section Divider — soft gradient line
-   ─────────── LABEL ───────────
-   Monospace label, gradient fade-out lines. */
+/* Section Divider — centered label with lines */
 
 .divider {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    font-family: var(--mono-font-family);
-    font-size: 0.7rem;
-    font-weight: 500;
-    color: var(--color-text-secondary);
+    gap: 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-primary);
     text-transform: uppercase;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.05em;
     white-space: nowrap;
 }
 
-/* ── Fade-out line ─────────────────────── */
 .line {
     flex: 1;
     height: 1px;
-    background: linear-gradient(
-        90deg,
-        color-mix(
-            in srgb,
-            var(--primary) 20%,
-            transparent
-        ),
-        transparent
-    );
-}
-
-/* Right line fades the other direction */
-.line:last-of-type {
-    background: linear-gradient(
-        -90deg,
-        color-mix(
-            in srgb,
-            var(--primary) 20%,
-            transparent
-        ),
-        transparent
+    background: color-mix(
+        in srgb, var(--primary) 25%, transparent
     );
 }

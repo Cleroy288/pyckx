@@ -35,7 +35,14 @@ pub fn VitrineTopBar() -> impl IntoView {
                         }
                     }
                     attr:class=style::nav_logo
-                >"PYCKX"</A>
+                >
+                    <img
+                        src="/favicon.svg"
+                        alt="Pyckx"
+                        class=style::nav_logo_icon
+                    />
+                    "PYCKX"
+                </A>
                 <div class=style::nav_links>
                     <a
                         href="#services"
@@ -109,7 +116,14 @@ pub fn HomeTopBar() -> impl IntoView {
                 <A
                     href="/home"
                     attr:class=style::nav_logo
-                >"PYCKX"</A>
+                >
+                    <img
+                        src="/favicon.svg"
+                        alt="Pyckx"
+                        class=style::nav_logo_icon
+                    />
+                    "PYCKX"
+                </A>
                 <PageNav />
                 <div class=style::nav_links>
                     <DarkModeBtn />

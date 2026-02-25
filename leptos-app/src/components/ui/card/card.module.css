@@ -1,104 +1,57 @@
 /* ============================================
-   Card — Rounded glass panels with depth
-   ============================================
-   Glass/solid/popular variants. Hover lifts
-   with subtle scale and glow. Rounded 12px.
+   Card Component Styles
    ============================================ */
 
 .card {
     position: relative;
-    border-radius: var(--radius-md);
+    border-radius: 0;
     padding: 2.5rem 2rem;
-    transition:
-        transform var(--transition-smooth),
-        box-shadow var(--transition-smooth),
-        border-color var(--transition-smooth),
-        background var(--transition-smooth);
+    transition: transform var(--transition-slow), box-shadow var(--transition-slow),
+                border-color var(--transition-slow), background var(--transition-slow);
     will-change: transform;
     transform: translate3d(0, 0, 0);
     overflow: hidden;
 }
 
 .card:hover {
-    transform: translate3d(0, -4px, 0) scale(1.01);
+    transform: translate3d(0, -4px, 0);
 }
 
-/* ── Glass variant ────────────────────────── */
+/* Variants */
 
 .glass {
     background: var(--glass-bg);
-    backdrop-filter: var(--glass-blur);
-    -webkit-backdrop-filter: var(--glass-blur);
-    border: 1px solid color-mix(
-        in srgb, var(--primary) 10%, transparent
-    );
-    box-shadow:
-        0 4px 24px color-mix(
-            in srgb,
-            var(--primary) 5%,
-            transparent
-        );
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: var(--glass-border);
+    box-shadow: 0 4px 30px color-mix(in srgb, var(--primary) 5%, transparent);
 }
 
 .glass:hover {
-    border-color: color-mix(
-        in srgb, var(--primary) 25%, transparent
-    );
+    box-shadow: var(--shadow-xl);
+    border: var(--glass-border-hover);
     background: var(--glass-bg-hover);
-    box-shadow:
-        0 8px 32px color-mix(
-            in srgb,
-            var(--primary) 12%,
-            transparent
-        );
 }
-
-/* ── Solid variant ────────────────────────── */
 
 .solid {
     background: var(--color-background);
-    border: 1px solid color-mix(
-        in srgb, var(--primary) 12%, transparent
-    );
-    box-shadow:
-        0 4px 24px color-mix(
-            in srgb,
-            var(--primary) 6%,
-            transparent
-        );
+    border: 1px solid color-mix(in srgb, var(--primary) 15%, transparent);
+    box-shadow: 0 4px 24px color-mix(in srgb, var(--primary) 8%, transparent);
 }
 
 .solid:hover {
-    border-color: color-mix(
-        in srgb, var(--primary) 30%, transparent
-    );
-    box-shadow:
-        0 8px 32px color-mix(
-            in srgb,
-            var(--primary) 12%,
-            transparent
-        );
+    box-shadow: var(--shadow-lg);
 }
-
-/* ── Popular variant ──────────────────────── */
 
 .popular {
     background: var(--glass-bg);
-    backdrop-filter: var(--glass-blur);
-    -webkit-backdrop-filter: var(--glass-blur);
-    border: 2px solid color-mix(
-        in srgb, var(--primary) 50%, transparent
-    );
-    box-shadow: var(--shadow-md);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 3px solid var(--color-primary);
+    box-shadow: var(--shadow-lg);
 }
 
 .popular:hover {
-    transform: translate3d(0, -6px, 0) scale(1.02);
-    border-color: var(--color-primary);
-    box-shadow:
-        0 12px 40px color-mix(
-            in srgb,
-            var(--primary) 20%,
-            transparent
-        );
+    transform: translate3d(0, -6px, 0);
+    box-shadow: 0 16px 50px color-mix(in srgb, var(--primary) 25%, transparent);
 }

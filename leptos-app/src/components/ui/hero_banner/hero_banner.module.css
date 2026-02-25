@@ -1,10 +1,15 @@
 /* ============================================
-   HeroBanner — Minimal glass panel
+   HeroBanner — Shared hero section
    ============================================
-   Subtle glass, rounded, inner glow. No grid,
-   no aurora. Clean surface for content.
+   Glass background, grid-line pattern,
+   radial glow, gradient title.
+   Used by home, intello, and collection pages.
    ============================================ */
 
+/* ── Banner container ───────────────────────
+   Glass card with primary-tinted top/bottom
+   borders. position:relative so pseudo-
+   elements clip inside.                       */
 .banner {
     position: relative;
     overflow: hidden;
@@ -12,44 +17,85 @@
     padding: 3rem 2rem;
     text-align: center;
     background: var(--glass-bg);
-    backdrop-filter: var(--glass-blur);
-    -webkit-backdrop-filter: var(--glass-blur);
-    border: 1px solid color-mix(
-        in srgb, var(--primary) 8%, transparent
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid var(--color-border);
+    border-top-color: color-mix(
+        in srgb, var(--primary) 15%, transparent
     );
-    border-radius: var(--radius-md);
-    box-shadow:
-        0 4px 24px color-mix(
-            in srgb,
-            var(--primary) 5%,
-            transparent
-        ),
-        inset 0 1px 0 color-mix(
-            in srgb,
-            var(--primary) 5%,
-            transparent
-        );
+    border-bottom-color: color-mix(
+        in srgb, var(--primary) 15%, transparent
+    );
+    border-radius: 0;
+    box-shadow: none;
 }
 
-/* ── Title — bold, clean ─────────────────  */
+/* ── Grid-lines overlay ─────────────────────
+   Repeating lines + diagonal dots behind
+   the banner text. Opacity keeps it subtle.   */
+.banner::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background-image: var(--grid-overlay-image);
+    background-size: var(--grid-overlay-size);
+    opacity: 0.6;
+}
+
+/* ── Primary glow accent ───────────────────
+   Soft radial glow behind the text.           */
+.banner::after {
+    content: "";
+    position: absolute;
+    top: -30%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 80%;
+    pointer-events: none;
+    z-index: 0;
+    background: radial-gradient(
+        ellipse at center,
+        color-mix(
+            in srgb, var(--primary) 12%, transparent
+        ),
+        transparent 70%
+    );
+}
+
+/* ── Title — gradient text ──────────────────
+   Displayed when the `title` prop is set.     */
 .banner_title {
     position: relative;
     z-index: 1;
-    margin: 0 0 0.75rem;
-    font-family: var(--heading-font-family);
-    font-size: clamp(2rem, 5vw, 3.5rem);
+    margin: 0 0 0.5rem;
+    font-size: clamp(2rem, 5vw, 3rem);
     font-weight: 700;
-    letter-spacing: -0.03em;
-    color: var(--color-text-primary);
+    letter-spacing: -0.02em;
+    background: linear-gradient(
+        135deg,
+        var(--color-primary) 0%,
+        color-mix(
+            in srgb, var(--primary) 70%, black
+        ) 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
-/* ── Body wrapper ─────────────────────────  */
+/* ── Body wrapper ───────────────────────────
+   Children sit above the grid overlay.
+   No position:relative so absolute children
+   anchor to .banner instead.                  */
 .banner_body {
-    position: relative;
     z-index: 1;
 }
 
-/* ── Responsive ───────────────────────────  */
+/* ── Responsive ─────────────────────────────  */
+
 @media (max-width: 768px) {
     .banner {
         margin-bottom: 1.5rem;
@@ -58,5 +104,7 @@
 }
 
 @media (max-width: 480px) {
-    .banner { padding: 2rem 1rem; }
+    .banner {
+        padding: 2rem 1rem;
+    }
 }

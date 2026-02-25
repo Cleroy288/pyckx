@@ -1,11 +1,11 @@
 /* ============================================
-   Vitrine — Obsidian Grain identity
-   ============================================
-   Film grain + cursor spotlight + gradient
-   text sweep hero + animated beam CTA border.
+   Vitrine (Landing) Page Styles
+   Flat angular design: border-spin hover,
+   grid-line hero pattern, vertical side lines,
+   no rounded corners anywhere.
    ============================================ */
 
-/* ── Main Container ───────────────────────── */
+/* ── Main Container + Side Lines ─────────── */
 
 .vitrine {
     position: relative;
@@ -14,63 +14,54 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 100px 2rem 4rem;
+    padding: 80px 2rem 4rem;
     z-index: 1;
+    background: var(--color-background);
+    contain: layout style;
 }
 
+/* ── Content wrapper ───────────────────────
+   Centered column at max 1200px.
+   Matches the side lines position.          */
 .content {
     position: relative;
     flex: 1;
     width: 100%;
-    max-width: 1000px;
+    max-width: 1200px;
     margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 4rem;
 }
 
-/* ── Hero Section ─────────────────────────── */
+.vitrine::before,
+.vitrine::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--color-border);
+    pointer-events: none;
+    z-index: 2;
+}
+
+.vitrine::before { left: calc(50% - 600px); }
+.vitrine::after { right: calc(50% - 600px); }
+
+/* ── Hero Banner Wrapper ─────────────────── */
 
 .hero_section {
     width: 100%;
-    animation:
-        float-in 0.9s
-        cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation: fadeInUp 0.6s ease both;
 }
 
-/* Gradient text sweep on hero title only */
-.hero_section :global(h1) {
-    background: linear-gradient(
-        90deg,
-        var(--color-text-primary) 0%,
-        var(--color-primary) 45%,
-        color-mix(
-            in srgb, var(--primary) 50%, white
-        ) 50%,
-        var(--color-primary) 55%,
-        var(--color-text-primary) 100%
-    );
-    background-size: 200% 100%;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    animation: text-sweep 5s ease-in-out infinite;
-    text-shadow: none;
-    filter: drop-shadow(
-        0 0 30px color-mix(
-            in srgb,
-            var(--primary) 15%,
-            transparent
-        )
-    );
-}
+/* ── Hero Content (inside HeroBanner) ────── */
 
 .hero_tagline {
-    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+    font-size: clamp(1.25rem, 2.5vw, 1.75rem);
     color: var(--color-text-secondary);
-    margin-bottom: 2rem;
-    line-height: 1.7;
+    margin-bottom: 3rem;
+    line-height: 1.6;
     font-weight: 400;
+    letter-spacing: -0.01em;
 }
 
 .hero_cta {
@@ -81,53 +72,41 @@
     align-items: center;
 }
 
-/* ── Vitrine Card — subtle glass ──────────── */
+/* ── Vitrine Card (shared glass tile) ────── */
 
 .vitrine_card {
     position: relative;
     background: var(--glass-bg);
-    backdrop-filter: var(--glass-blur);
-    -webkit-backdrop-filter: var(--glass-blur);
-    border: 1px solid color-mix(
-        in srgb, var(--primary) 8%, transparent
-    );
-    border-radius: var(--radius-md);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--color-border);
+    border-radius: 0;
     padding: 2.5rem 2rem;
     overflow: hidden;
     transition:
-        border-color var(--transition-smooth),
-        box-shadow var(--transition-smooth),
-        background var(--transition-smooth);
+        border-color var(--transition-fast);
 }
 
-/* Inner radial glow on hover */
 .vitrine_card:hover {
-    border-color: color-mix(
-        in srgb, var(--primary) 20%, transparent
-    );
-    box-shadow:
-        0 8px 32px color-mix(
-            in srgb,
-            var(--primary) 10%,
-            transparent
-        ),
-        inset 0 0 60px color-mix(
-            in srgb,
-            var(--primary) 4%,
-            transparent
-        );
-    background: var(--glass-bg-hover);
+    border-color: transparent;
+    border-image: conic-gradient(
+        from var(--border-angle),
+        var(--color-primary),
+        transparent 25%,
+        transparent 75%,
+        var(--color-primary)
+    ) 1;
+    animation: border-spin 3s linear infinite;
 }
 
-/* ── Card Text ────────────────────────────── */
+/* ── Shared Card Text ────────────────────── */
 
 .card_title {
-    font-family: var(--heading-font-family);
     font-size: 1.5rem;
     font-weight: 700;
     color: var(--color-text-primary);
     margin-bottom: 1rem;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.01em;
 }
 
 .card_content {
@@ -137,46 +116,45 @@
     margin: 0;
 }
 
-/* ── Tagline — centered statement ─────────── */
+/* ── Tagline Section ────────────────────── */
 
 .tagline {
     width: 100%;
-    text-align: center;
-    animation:
-        float-in 0.9s
-        cubic-bezier(0.16, 1, 0.3, 1) both;
-    animation-delay: 0.1s;
+    padding: 3rem 0 3rem 15%;
+    margin-bottom: 2rem;
+    animation: fadeInUp 0.6s ease both;
+    animation-delay: 0.15s;
 }
 
-.tagline_text { padding: 0; }
+.tagline_text {
+    border-left: 2px solid var(--color-primary);
+    padding-left: 1.5rem;
+}
 
 .tagline_line {
-    font-family: var(--heading-font-family);
-    font-size: clamp(1.3rem, 2.5vw, 1.75rem);
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
     color: var(--color-text-secondary);
     margin: 0;
     line-height: 1.8;
-    font-weight: 500;
-    letter-spacing: -0.01em;
+    font-weight: 400;
 }
 
-/* ── Apps Section ─────────────────────────── */
+/* ── Apps Section ────────────────────────── */
 
 .apps {
     width: 100%;
-    animation:
-        float-in 0.9s
-        cubic-bezier(0.16, 1, 0.3, 1) both;
-    animation-delay: 0.2s;
+    margin-bottom: 4rem;
+    animation: fadeInUp 0.6s ease both;
+    animation-delay: 0.25s;
 }
 
 .apps_grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
-    margin-top: 1.5rem;
+    gap: 0;
 }
 
+/* App card — vertical, full-width */
 .app_card {
     display: flex;
     flex-direction: column;
@@ -192,24 +170,21 @@
     align-items: center;
     justify-content: center;
     background: color-mix(
-        in srgb, var(--primary) 6%, transparent
+        in srgb, var(--primary) 8%, transparent
     );
     border: 1px solid color-mix(
-        in srgb, var(--primary) 10%, transparent
+        in srgb, var(--primary) 15%, transparent
     );
-    border-radius: var(--radius-sm);
+    border-radius: 0;
     color: var(--color-primary);
     margin-bottom: 1.5rem;
-    transition:
-        background var(--transition-fast),
-        box-shadow var(--transition-fast);
+    transition: background var(--transition-fast);
 }
 
 .vitrine_card:hover .app_card_icon {
     background: color-mix(
-        in srgb, var(--primary) 12%, transparent
+        in srgb, var(--primary) 18%, transparent
     );
-    box-shadow: 0 0 16px var(--glow);
 }
 
 .app_card_icon svg {
@@ -217,21 +192,19 @@
     height: 28px;
 }
 
-/* ── Pricing Section ──────────────────────── */
+/* ── Pricing Section ─────────────────────── */
 
 .pricing {
     width: 100%;
-    animation:
-        float-in 0.9s
-        cubic-bezier(0.16, 1, 0.3, 1) both;
-    animation-delay: 0.3s;
+    margin-bottom: 2rem;
+    animation: fadeInUp 0.6s ease both;
+    animation-delay: 0.35s;
 }
 
 .pricing_grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
-    margin-top: 1.5rem;
+    gap: 0;
     align-items: stretch;
 }
 
@@ -243,7 +216,6 @@
 }
 
 .pricing_name {
-    font-family: var(--heading-font-family);
     font-size: 1.5rem;
     font-weight: 700;
     color: var(--color-text-primary);
@@ -261,23 +233,14 @@
 }
 
 .pricing_amount {
-    font-family: var(--mono-font-family);
     font-size: 2.5rem;
-    font-weight: 700;
+    font-weight: 800;
     color: var(--color-primary);
     line-height: 1;
-    font-variant-numeric: tabular-nums;
-    text-shadow:
-        0 0 20px color-mix(
-            in srgb,
-            var(--primary) 20%,
-            transparent
-        );
 }
 
 .pricing_period {
-    font-family: var(--mono-font-family);
-    font-size: 0.9rem;
+    font-size: 1rem;
     color: var(--color-text-secondary);
 }
 
@@ -297,6 +260,8 @@
     );
     font-size: 0.95rem;
     line-height: 1.4;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .pricing_features li:last-child {
@@ -308,43 +273,22 @@
     width: 100%;
 }
 
-/* ── Start Now — animated beam border ────── */
+/* ── Start Now Section ───────────────────── */
 
 .start_now {
     width: 100%;
-    animation:
-        float-in 0.9s
-        cubic-bezier(0.16, 1, 0.3, 1) both;
-    animation-delay: 0.4s;
-}
-
-/* Animated conic-gradient beam on CTA banner
-   Uses mask-composite to show border only,
-   works with border-radius (unlike border-image) */
-.start_now :global(header) {
-    overflow: visible;
-}
-
-.start_now :global(header)::after {
-    content: "";
-    position: absolute;
-    inset: -2px;
-    border-radius: calc(var(--radius-md) + 2px);
-    padding: 2px;
-    background: conic-gradient(
+    margin-top: 2rem;
+    border: 1px solid transparent;
+    border-image: conic-gradient(
         from var(--border-angle),
         var(--color-primary),
-        transparent 30%,
-        transparent 70%,
+        transparent 25%,
+        transparent 75%,
         var(--color-primary)
-    );
-    -webkit-mask:
-        linear-gradient(#fff 0 0) content-box,
-        linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    animation: border-spin 4s linear infinite;
-    pointer-events: none;
+    ) 1;
+    animation:
+        fadeInUp 0.6s ease both,
+        border-spin 3s linear 0.6s infinite;
 }
 
 .start_now_cta {
@@ -361,23 +305,43 @@
     margin: 0;
 }
 
-/* ── Responsive ───────────────────────────── */
+/* ── Responsive ──────────────────────────── */
+
+@media (max-width: 1264px) {
+    .vitrine::before { left: 2rem; }
+    .vitrine::after { right: 2rem; }
+}
 
 @media (max-width: 768px) {
-    .vitrine { padding: 90px 1.5rem 3rem; }
-    .content { gap: 3rem; }
+    .vitrine {
+        padding: 80px 1.5rem 3rem;
+    }
+
+    .vitrine::before { left: 1.5rem; }
+    .vitrine::after { right: 1.5rem; }
+
+    .hero_tagline { margin-bottom: 2.5rem; }
+
     .hero_cta {
         flex-direction: column;
         width: 100%;
     }
+
     .apps_grid { grid-template-columns: 1fr; }
     .app_card { padding: 2rem 1.5rem; }
+
     .pricing_grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 480px) {
-    .vitrine { padding: 80px 1rem 2rem; }
-    .content { gap: 2.5rem; }
+    .vitrine {
+        padding: 70px 1rem 2rem;
+    }
+
+    .vitrine::before,
+    .vitrine::after { display: none; }
+
     .hero_cta { gap: 0.75rem; }
+
     .app_card { padding: 1.5rem 1rem; }
 }

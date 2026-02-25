@@ -61,10 +61,6 @@
         sans-serif;
     --logo-font-family:
         "VT323", var(--principal-font-family);
-    --heading-font-family:
-        "Space Grotesk", var(--principal-font-family);
-    --mono-font-family:
-        "Space Mono", "Fira Code", monospace;
 
     /* ── Border radius ───────────────────────── */
     --radius-sm: 8px;
@@ -95,15 +91,11 @@
     --transition-slow: 0.4s ease;
 
     /* ── Glassmorphism ───────────────────────── */
-    --glass-bg: rgba(255, 255, 255, 0.45);
-    --glass-bg-hover: rgba(255, 255, 255, 0.55);
-    --glass-blur: blur(24px);
-    --glass-blur-sm: blur(12px);
-    --glass-blur-lg: blur(36px);
-
-    /* ── Cursor spotlight (set by JS) ────────── */
-    --mx: 50%;
-    --my: 50%;
+    --glass-bg: rgba(255, 255, 255, 0.5);
+    --glass-bg-hover: rgba(255, 255, 255, 0.6);
+    --glass-blur: blur(20px);
+    --glass-blur-sm: blur(10px);
+    --glass-blur-lg: blur(24px);
     --glass-border: 1px solid color-mix(
         in srgb, var(--primary) 12%, transparent
     );
@@ -162,11 +154,6 @@
 
     /* ── Grid overlay background ─────────────── */
     --grid-overlay-image:
-        radial-gradient(
-            circle,
-            var(--grid-line) 1px,
-            transparent 1px
-        ),
         linear-gradient(
             to right,
             var(--grid-line) 1px,
@@ -188,7 +175,6 @@
             transparent 1px
         );
     --grid-overlay-size:
-        16px 16px,
         16px 16px,
         16px 16px,
         24px 24px,
@@ -219,61 +205,6 @@
     to {
         opacity: 1;
         transform: translateY(0);
-    }
-}
-
-/* Mesh drift — slow organic blob movement */
-@keyframes mesh-drift {
-    0% {
-        transform: translate(0, 0) scale(1);
-    }
-    33% {
-        transform:
-            translate(3vw, -4vh) scale(1.03);
-    }
-    66% {
-        transform:
-            translate(-4vw, 3vh) scale(0.97);
-    }
-    100% {
-        transform:
-            translate(2vw, -2vh) scale(1.01);
-    }
-}
-
-/* Float-in — smooth spring entrance */
-@keyframes float-in {
-    0% {
-        opacity: 0;
-        transform: translateY(30px) scale(0.97);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
-
-/* Text-sweep — gradient shimmer across text */
-@keyframes text-sweep {
-    0%, 100% { background-position: 100% 50%; }
-    50% { background-position: 0% 50%; }
-}
-
-/* Power-on — brief flash as elements energize */
-@keyframes power-on {
-    0% {
-        opacity: 0;
-        transform: translateY(20px);
-        filter: brightness(2) saturate(0);
-    }
-    30% {
-        opacity: 1;
-        filter: brightness(1.3) saturate(0.7);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-        filter: brightness(1) saturate(1);
     }
 }
 

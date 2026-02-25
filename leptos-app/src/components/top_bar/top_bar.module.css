@@ -1,28 +1,52 @@
 /* ============================================
-   Top Bar — Obsidian Grain
+   Top Bar Navigation Styles
    ============================================
-   Nearly transparent, strong blur, subtle
-   tinted borders. Clean frosted surface.
+   Fixed top bar with glass background and
+   grid-line pattern overlay.
+   Logo + buttons aligned with the page
+   content section (max-width: 1200px).
+   Layout:
+   | PYCKX |                    | Profile | Logout |
+   Vertical lines span full bar height.
+   No horizontal borders on cells.
    ============================================ */
 
+/* ── Bar container ───────────────────────────
+   Fixed at top, glass background, grid-line
+   pattern via ::before pseudo-element.
+   No vertical padding — cells stretch to
+   fill the full bar height.                   */
 .top_bar {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     z-index: 100;
-    background: color-mix(
-        in srgb,
-        var(--color-background) 70%,
-        transparent
-    );
-    backdrop-filter: var(--glass-blur-lg);
-    -webkit-backdrop-filter: var(--glass-blur-lg);
-    border-bottom: 1px solid color-mix(
-        in srgb, var(--primary) 6%, transparent
-    );
+    background: var(--glass-bg);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-bottom: 1px solid var(--color-border);
+    will-change: backdrop-filter;
 }
 
+/* ── Grid-lines overlay ──────────────────────
+   Same pattern as the dashboard banners.
+   Lower opacity to keep nav text readable.    */
+.top_bar::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background-image: var(--grid-overlay-image);
+    background-size: var(--grid-overlay-size);
+    opacity: 0.35;
+}
+
+/* ── Nav content ─────────────────────────────
+   max-width + padding mirror the page layout.
+   align-items:stretch so cells fill the full
+   bar height.                                 */
 .nav_content {
     position: relative;
     z-index: 1;
@@ -34,15 +58,21 @@
     justify-content: space-between;
 }
 
+/* ── Logo cell ───────────────────────────────
+   Vertical lines left and right. Opaque bg
+   hides the grid overlay.                     */
 .nav_logo {
+    position: relative;
+    z-index: 1;
     display: flex;
     align-items: center;
+    gap: 0.5rem;
     padding: 1rem 1.5rem;
-    border-right: 1px solid color-mix(
-        in srgb, var(--primary) 6%, transparent
-    );
+    border-left: 1px solid var(--color-border);
+    border-right: 1px solid var(--color-border);
+    background: var(--color-background);
     font-size: 1.5rem;
-    font-weight: 700;
+    font-weight: 800;
     color: var(--color-primary);
     text-decoration: none;
     letter-spacing: 0.05em;
@@ -50,35 +80,47 @@
     transition: opacity var(--transition-fast);
 }
 
-.nav_logo:hover { opacity: 0.8; }
+/* ── Logo icon (SVG favicon) ───────────── */
+.nav_logo_icon {
+    width: 56px;
+    height: 56px;
+    flex-shrink: 0;
+    margin: -14px 0;
+}
 
+.nav_logo:hover {
+    opacity: 0.8;
+}
+
+/* ── Nav links container ─────────────────────
+   No outer border — each cell has its own
+   left/right vertical lines.                  */
 .nav_links {
     display: flex;
     align-items: stretch;
 }
 
+/* ── Nav link (cell) ─────────────────────────
+   Left border separator. Opaque bg hides the
+   grid overlay.                               */
 .nav_link {
+    position: relative;
+    z-index: 1;
     display: flex;
     align-items: center;
     padding: 1rem 1.5rem;
-    border-left: 1px solid color-mix(
-        in srgb, var(--primary) 6%, transparent
-    );
+    border-left: 1px solid var(--color-border);
+    background: var(--color-background);
     font-size: 0.9375rem;
     font-weight: 500;
     color: var(--color-text-primary);
     text-decoration: none;
     white-space: nowrap;
-    transition:
-        color var(--transition-fast),
-        background var(--transition-fast);
+    transition: color var(--transition-fast);
 }
 
 .nav_link:hover {
     color: var(--color-primary);
-    background: color-mix(
-        in srgb, var(--primary) 4%, transparent
-    );
 }
 
 .nav_link:focus-visible {
@@ -87,30 +129,33 @@
     outline-offset: -2px;
 }
 
+/* ── Primary action link (cell) ──────────────
+   Gradient bg is opaque. z-index:1 sits
+   above the grid overlay.                     */
 .nav_link_primary {
+    position: relative;
+    z-index: 1;
     display: flex;
     align-items: center;
     padding: 1rem 1.5rem;
-    border-left: 1px solid color-mix(
-        in srgb, var(--primary) 6%, transparent
-    );
+    border-left: 1px solid var(--color-border);
     font-size: 0.9375rem;
     font-weight: 600;
     color: var(--color-background);
     text-decoration: none;
     white-space: nowrap;
-    background: var(--color-primary);
-    transition:
-        box-shadow var(--transition-fast);
+    background: linear-gradient(
+        135deg,
+        var(--color-primary) 0%,
+        color-mix(
+            in srgb, var(--primary) 90%, transparent
+        ) 100%
+    );
+    transition: opacity var(--transition-fast);
 }
 
 .nav_link_primary:hover {
-    box-shadow:
-        0 0 16px color-mix(
-            in srgb,
-            var(--primary) 25%,
-            transparent
-        );
+    filter: brightness(1.15);
 }
 
 .nav_link_primary:focus-visible {
@@ -118,17 +163,20 @@
     outline-offset: -2px;
 }
 
+/* ── Icon button cell ────────────────────────
+   Same cell styling as nav_link but sized for
+   an icon. Shows Sun/Moon for dark mode.      */
 .nav_icon_btn {
+    position: relative;
+    z-index: 1;
     display: flex;
     align-items: center;
     justify-content: center;
     width: 3.25rem;
     padding: 0;
     border: none;
-    border-left: 1px solid color-mix(
-        in srgb, var(--primary) 6%, transparent
-    );
-    background: transparent;
+    border-left: 1px solid var(--color-border);
+    background: var(--color-background);
     color: var(--color-text-primary);
     cursor: pointer;
     transition: color var(--transition-fast);
@@ -149,27 +197,44 @@
     outline-offset: -2px;
 }
 
-/* ── Responsive ──────────────────────────── */
+/* Right border on the last cell to close
+   the button group.                           */
+.nav_link:last-child,
+.nav_link_primary:last-child {
+    border-right: 1px solid var(--color-border);
+}
+
+/* ── Responsive ──────────────────────────────  */
 
 @media (max-width: 768px) {
-    .nav_content { padding: 0 1.5rem; }
+    .nav_content {
+        padding: 0 1.5rem;
+    }
+
     .nav_logo {
         padding: 0.75rem 1rem;
         font-size: 1.25rem;
     }
-    .nav_link, .nav_link_primary {
+
+    .nav_link,
+    .nav_link_primary {
         padding: 0.75rem 1rem;
         font-size: 0.8125rem;
     }
 }
 
 @media (max-width: 480px) {
-    .nav_content { padding: 0 1rem; }
+    .nav_content {
+        padding: 0 1rem;
+    }
+
     .nav_logo {
         padding: 0.625rem 0.75rem;
         font-size: 1.125rem;
     }
-    .nav_link, .nav_link_primary {
+
+    .nav_link,
+    .nav_link_primary {
         padding: 0.625rem 0.75rem;
         font-size: 0.75rem;
     }
