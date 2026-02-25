@@ -1,9 +1,8 @@
 /* ============================================
-   Vitrine (Landing) Page — Liquid Glass
+   Vitrine — Obsidian Grain identity
    ============================================
-   Rounded glass panels floating above mesh
-   background. Generous whitespace, smooth
-   spring-like entrance animations.
+   Film grain + cursor spotlight + gradient
+   text sweep hero + animated beam CTA border.
    ============================================ */
 
 /* ── Main Container ───────────────────────── */
@@ -23,11 +22,11 @@
     position: relative;
     flex: 1;
     width: 100%;
-    max-width: 1100px;
+    max-width: 1000px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 3rem;
+    gap: 4rem;
 }
 
 /* ── Hero Section ─────────────────────────── */
@@ -35,14 +34,39 @@
 .hero_section {
     width: 100%;
     animation:
-        float-in 0.8s
+        float-in 0.9s
         cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-/* ── Hero Content ─────────────────────────── */
+/* Gradient text sweep on hero title only */
+.hero_section :global(h1) {
+    background: linear-gradient(
+        90deg,
+        var(--color-text-primary) 0%,
+        var(--color-primary) 45%,
+        color-mix(
+            in srgb, var(--primary) 50%, white
+        ) 50%,
+        var(--color-primary) 55%,
+        var(--color-text-primary) 100%
+    );
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: text-sweep 5s ease-in-out infinite;
+    text-shadow: none;
+    filter: drop-shadow(
+        0 0 30px color-mix(
+            in srgb,
+            var(--primary) 15%,
+            transparent
+        )
+    );
+}
 
 .hero_tagline {
-    font-size: clamp(1.15rem, 2.5vw, 1.5rem);
+    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
     color: var(--color-text-secondary);
     margin-bottom: 2rem;
     line-height: 1.7;
@@ -57,7 +81,7 @@
     align-items: center;
 }
 
-/* ── Vitrine Card — rounded glass panel ──── */
+/* ── Vitrine Card — subtle glass ──────────── */
 
 .vitrine_card {
     position: relative;
@@ -65,7 +89,7 @@
     backdrop-filter: var(--glass-blur);
     -webkit-backdrop-filter: var(--glass-blur);
     border: 1px solid color-mix(
-        in srgb, var(--primary) 10%, transparent
+        in srgb, var(--primary) 8%, transparent
     );
     border-radius: var(--radius-md);
     padding: 2.5rem 2rem;
@@ -73,25 +97,29 @@
     transition:
         border-color var(--transition-smooth),
         box-shadow var(--transition-smooth),
-        background var(--transition-smooth),
-        transform var(--transition-smooth);
+        background var(--transition-smooth);
 }
 
+/* Inner radial glow on hover */
 .vitrine_card:hover {
-    transform: translateY(-3px) scale(1.01);
     border-color: color-mix(
-        in srgb, var(--primary) 25%, transparent
+        in srgb, var(--primary) 20%, transparent
     );
     box-shadow:
         0 8px 32px color-mix(
             in srgb,
-            var(--primary) 12%,
+            var(--primary) 10%,
+            transparent
+        ),
+        inset 0 0 60px color-mix(
+            in srgb,
+            var(--primary) 4%,
             transparent
         );
     background: var(--glass-bg-hover);
 }
 
-/* ── Shared Card Text ─────────────────────── */
+/* ── Card Text ────────────────────────────── */
 
 .card_title {
     font-family: var(--heading-font-family);
@@ -109,20 +137,18 @@
     margin: 0;
 }
 
-/* ── Tagline Section ──────────────────────── */
+/* ── Tagline — centered statement ─────────── */
 
 .tagline {
     width: 100%;
     text-align: center;
     animation:
-        float-in 0.8s
+        float-in 0.9s
         cubic-bezier(0.16, 1, 0.3, 1) both;
     animation-delay: 0.1s;
 }
 
-.tagline_text {
-    padding: 0;
-}
+.tagline_text { padding: 0; }
 
 .tagline_line {
     font-family: var(--heading-font-family);
@@ -139,7 +165,7 @@
 .apps {
     width: 100%;
     animation:
-        float-in 0.8s
+        float-in 0.9s
         cubic-bezier(0.16, 1, 0.3, 1) both;
     animation-delay: 0.2s;
 }
@@ -166,10 +192,10 @@
     align-items: center;
     justify-content: center;
     background: color-mix(
-        in srgb, var(--primary) 8%, transparent
+        in srgb, var(--primary) 6%, transparent
     );
     border: 1px solid color-mix(
-        in srgb, var(--primary) 12%, transparent
+        in srgb, var(--primary) 10%, transparent
     );
     border-radius: var(--radius-sm);
     color: var(--color-primary);
@@ -181,9 +207,9 @@
 
 .vitrine_card:hover .app_card_icon {
     background: color-mix(
-        in srgb, var(--primary) 15%, transparent
+        in srgb, var(--primary) 12%, transparent
     );
-    box-shadow: 0 0 12px var(--glow);
+    box-shadow: 0 0 16px var(--glow);
 }
 
 .app_card_icon svg {
@@ -196,7 +222,7 @@
 .pricing {
     width: 100%;
     animation:
-        float-in 0.8s
+        float-in 0.9s
         cubic-bezier(0.16, 1, 0.3, 1) both;
     animation-delay: 0.3s;
 }
@@ -241,6 +267,12 @@
     color: var(--color-primary);
     line-height: 1;
     font-variant-numeric: tabular-nums;
+    text-shadow:
+        0 0 20px color-mix(
+            in srgb,
+            var(--primary) 20%,
+            transparent
+        );
 }
 
 .pricing_period {
@@ -261,7 +293,7 @@
     padding: 0.75rem 0;
     color: var(--color-text-secondary);
     border-bottom: 1px solid color-mix(
-        in srgb, var(--primary) 6%, transparent
+        in srgb, var(--primary) 5%, transparent
     );
     font-size: 0.95rem;
     line-height: 1.4;
@@ -276,32 +308,43 @@
     width: 100%;
 }
 
-/* ── Start Now — ambient glow CTA ────────── */
+/* ── Start Now — animated beam border ────── */
 
 .start_now {
     width: 100%;
     animation:
-        float-in 0.8s
+        float-in 0.9s
         cubic-bezier(0.16, 1, 0.3, 1) both;
     animation-delay: 0.4s;
 }
 
-/* Glass glow around the inner banner */
+/* Animated conic-gradient beam on CTA banner
+   Uses mask-composite to show border only,
+   works with border-radius (unlike border-image) */
 .start_now :global(header) {
-    box-shadow:
-        0 0 40px color-mix(
-            in srgb,
-            var(--primary) 12%,
-            transparent
-        ),
-        0 8px 32px color-mix(
-            in srgb,
-            var(--primary) 8%,
-            transparent
-        );
-    border-color: color-mix(
-        in srgb, var(--primary) 25%, transparent
+    overflow: visible;
+}
+
+.start_now :global(header)::after {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border-radius: calc(var(--radius-md) + 2px);
+    padding: 2px;
+    background: conic-gradient(
+        from var(--border-angle),
+        var(--color-primary),
+        transparent 30%,
+        transparent 70%,
+        var(--color-primary)
     );
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: border-spin 4s linear infinite;
+    pointer-events: none;
 }
 
 .start_now_cta {
@@ -321,27 +364,20 @@
 /* ── Responsive ───────────────────────────── */
 
 @media (max-width: 768px) {
-    .vitrine {
-        padding: 90px 1.5rem 3rem;
-    }
-    .content { gap: 2.5rem; }
-    .hero_tagline { margin-bottom: 2rem; }
+    .vitrine { padding: 90px 1.5rem 3rem; }
+    .content { gap: 3rem; }
     .hero_cta {
         flex-direction: column;
         width: 100%;
     }
-    .apps_grid {
-        grid-template-columns: 1fr;
-    }
+    .apps_grid { grid-template-columns: 1fr; }
     .app_card { padding: 2rem 1.5rem; }
-    .pricing_grid {
-        grid-template-columns: 1fr;
-    }
+    .pricing_grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 480px) {
     .vitrine { padding: 80px 1rem 2rem; }
-    .content { gap: 2rem; }
+    .content { gap: 2.5rem; }
     .hero_cta { gap: 0.75rem; }
     .app_card { padding: 1.5rem 1rem; }
 }

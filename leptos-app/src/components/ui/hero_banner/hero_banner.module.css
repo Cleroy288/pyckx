@@ -1,12 +1,10 @@
 /* ============================================
-   HeroBanner — Rounded glass panel
+   HeroBanner — Minimal glass panel
    ============================================
-   Frosted glass with gradient accent glow
-   behind the title. Rounded corners, soft
-   shadow, no grid overlay.
+   Subtle glass, rounded, inner glow. No grid,
+   no aurora. Clean surface for content.
    ============================================ */
 
-/* ── Banner container ─────────────────────  */
 .banner {
     position: relative;
     overflow: hidden;
@@ -14,75 +12,35 @@
     padding: 3rem 2rem;
     text-align: center;
     background: var(--glass-bg);
-    backdrop-filter: var(--glass-blur-lg);
-    -webkit-backdrop-filter: var(--glass-blur-lg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
     border: 1px solid color-mix(
-        in srgb, var(--primary) 12%, transparent
+        in srgb, var(--primary) 8%, transparent
     );
     border-radius: var(--radius-md);
     box-shadow:
-        0 8px 32px color-mix(
+        0 4px 24px color-mix(
             in srgb,
-            var(--primary) 8%,
+            var(--primary) 5%,
+            transparent
+        ),
+        inset 0 1px 0 color-mix(
+            in srgb,
+            var(--primary) 5%,
             transparent
         );
 }
 
-/* ── Gradient accent glow behind title ────
-   Soft ellipse centered at top, creates a
-   warm halo behind the heading text.        */
-.banner::after {
-    content: "";
-    position: absolute;
-    top: -30%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 70%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 0;
-    background: radial-gradient(
-        ellipse at center,
-        color-mix(
-            in srgb,
-            var(--primary) 18%,
-            transparent
-        ),
-        transparent 70%
-    );
-    filter: blur(40px);
-}
-
-/* ── Title — bold, clean, no gradient ─────
-   Gradient accent line above via ::before.  */
+/* ── Title — bold, clean ─────────────────  */
 .banner_title {
     position: relative;
     z-index: 1;
     margin: 0 0 0.75rem;
     font-family: var(--heading-font-family);
     font-size: clamp(2rem, 5vw, 3.5rem);
-    font-weight: 800;
-    letter-spacing: -0.04em;
+    font-weight: 700;
+    letter-spacing: -0.03em;
     color: var(--color-text-primary);
-}
-
-/* ── Gradient accent line above title ────  */
-.banner_title::before {
-    content: "";
-    display: block;
-    width: 40px;
-    height: 4px;
-    margin: 0 auto 1rem;
-    border-radius: var(--radius-full);
-    background: linear-gradient(
-        90deg,
-        var(--color-primary),
-        color-mix(
-            in srgb,
-            var(--accent) 80%,
-            white
-        )
-    );
 }
 
 /* ── Body wrapper ─────────────────────────  */
@@ -92,7 +50,6 @@
 }
 
 /* ── Responsive ───────────────────────────  */
-
 @media (max-width: 768px) {
     .banner {
         margin-bottom: 1.5rem;
@@ -101,7 +58,5 @@
 }
 
 @media (max-width: 480px) {
-    .banner {
-        padding: 2rem 1rem;
-    }
+    .banner { padding: 2rem 1rem; }
 }

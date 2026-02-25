@@ -1,27 +1,28 @@
 /* ============================================
-   Top Bar — Frosted glass navigation
+   Top Bar — Obsidian Grain
    ============================================
-   Fixed top bar with heavy backdrop blur.
-   No grid overlay — clean frosted surface.
-   Cells separated by subtle vertical borders.
+   Nearly transparent, strong blur, subtle
+   tinted borders. Clean frosted surface.
    ============================================ */
 
-/* ── Bar container ───────────────────────── */
 .top_bar {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     z-index: 100;
-    background: var(--glass-bg);
+    background: color-mix(
+        in srgb,
+        var(--color-background) 70%,
+        transparent
+    );
     backdrop-filter: var(--glass-blur-lg);
     -webkit-backdrop-filter: var(--glass-blur-lg);
     border-bottom: 1px solid color-mix(
-        in srgb, var(--primary) 8%, transparent
+        in srgb, var(--primary) 6%, transparent
     );
 }
 
-/* ── Nav content ─────────────────────────── */
 .nav_content {
     position: relative;
     z-index: 1;
@@ -33,18 +34,15 @@
     justify-content: space-between;
 }
 
-/* ── Logo cell ───────────────────────────── */
 .nav_logo {
-    position: relative;
-    z-index: 1;
     display: flex;
     align-items: center;
     padding: 1rem 1.5rem;
     border-right: 1px solid color-mix(
-        in srgb, var(--primary) 8%, transparent
+        in srgb, var(--primary) 6%, transparent
     );
     font-size: 1.5rem;
-    font-weight: 800;
+    font-weight: 700;
     color: var(--color-primary);
     text-decoration: none;
     letter-spacing: 0.05em;
@@ -52,25 +50,19 @@
     transition: opacity var(--transition-fast);
 }
 
-.nav_logo:hover {
-    opacity: 0.8;
-}
+.nav_logo:hover { opacity: 0.8; }
 
-/* ── Nav links container ─────────────────── */
 .nav_links {
     display: flex;
     align-items: stretch;
 }
 
-/* ── Nav link (cell) ─────────────────────── */
 .nav_link {
-    position: relative;
-    z-index: 1;
     display: flex;
     align-items: center;
     padding: 1rem 1.5rem;
     border-left: 1px solid color-mix(
-        in srgb, var(--primary) 8%, transparent
+        in srgb, var(--primary) 6%, transparent
     );
     font-size: 0.9375rem;
     font-weight: 500;
@@ -85,7 +77,7 @@
 .nav_link:hover {
     color: var(--color-primary);
     background: color-mix(
-        in srgb, var(--primary) 5%, transparent
+        in srgb, var(--primary) 4%, transparent
     );
 }
 
@@ -95,15 +87,12 @@
     outline-offset: -2px;
 }
 
-/* ── Primary action link ─────────────────── */
 .nav_link_primary {
-    position: relative;
-    z-index: 1;
     display: flex;
     align-items: center;
     padding: 1rem 1.5rem;
     border-left: 1px solid color-mix(
-        in srgb, var(--primary) 8%, transparent
+        in srgb, var(--primary) 6%, transparent
     );
     font-size: 0.9375rem;
     font-weight: 600;
@@ -112,7 +101,6 @@
     white-space: nowrap;
     background: var(--color-primary);
     transition:
-        opacity var(--transition-fast),
         box-shadow var(--transition-fast);
 }
 
@@ -120,7 +108,7 @@
     box-shadow:
         0 0 16px color-mix(
             in srgb,
-            var(--primary) 30%,
+            var(--primary) 25%,
             transparent
         );
 }
@@ -130,10 +118,7 @@
     outline-offset: -2px;
 }
 
-/* ── Icon button cell ────────────────────── */
 .nav_icon_btn {
-    position: relative;
-    z-index: 1;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -141,7 +126,7 @@
     padding: 0;
     border: none;
     border-left: 1px solid color-mix(
-        in srgb, var(--primary) 8%, transparent
+        in srgb, var(--primary) 6%, transparent
     );
     background: transparent;
     color: var(--color-text-primary);
@@ -167,34 +152,24 @@
 /* ── Responsive ──────────────────────────── */
 
 @media (max-width: 768px) {
-    .nav_content {
-        padding: 0 1.5rem;
-    }
-
+    .nav_content { padding: 0 1.5rem; }
     .nav_logo {
         padding: 0.75rem 1rem;
         font-size: 1.25rem;
     }
-
-    .nav_link,
-    .nav_link_primary {
+    .nav_link, .nav_link_primary {
         padding: 0.75rem 1rem;
         font-size: 0.8125rem;
     }
 }
 
 @media (max-width: 480px) {
-    .nav_content {
-        padding: 0 1rem;
-    }
-
+    .nav_content { padding: 0 1rem; }
     .nav_logo {
         padding: 0.625rem 0.75rem;
         font-size: 1.125rem;
     }
-
-    .nav_link,
-    .nav_link_primary {
+    .nav_link, .nav_link_primary {
         padding: 0.625rem 0.75rem;
         font-size: 0.75rem;
     }

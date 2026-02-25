@@ -62,9 +62,9 @@
     --logo-font-family:
         "VT323", var(--principal-font-family);
     --heading-font-family:
-        "Outfit", var(--principal-font-family);
+        "Space Grotesk", var(--principal-font-family);
     --mono-font-family:
-        "Fira Code", "JetBrains Mono", monospace;
+        "Space Mono", "Fira Code", monospace;
 
     /* ── Border radius ───────────────────────── */
     --radius-sm: 8px;
@@ -95,11 +95,15 @@
     --transition-slow: 0.4s ease;
 
     /* ── Glassmorphism ───────────────────────── */
-    --glass-bg: rgba(255, 255, 255, 0.55);
-    --glass-bg-hover: rgba(255, 255, 255, 0.7);
-    --glass-blur: blur(30px);
+    --glass-bg: rgba(255, 255, 255, 0.45);
+    --glass-bg-hover: rgba(255, 255, 255, 0.55);
+    --glass-blur: blur(24px);
     --glass-blur-sm: blur(12px);
-    --glass-blur-lg: blur(40px);
+    --glass-blur-lg: blur(36px);
+
+    /* ── Cursor spotlight (set by JS) ────────── */
+    --mx: 50%;
+    --my: 50%;
     --glass-border: 1px solid color-mix(
         in srgb, var(--primary) 12%, transparent
     );
@@ -247,6 +251,12 @@
         opacity: 1;
         transform: translateY(0) scale(1);
     }
+}
+
+/* Text-sweep — gradient shimmer across text */
+@keyframes text-sweep {
+    0%, 100% { background-position: 100% 50%; }
+    50% { background-position: 0% 50%; }
 }
 
 /* Power-on — brief flash as elements energize */

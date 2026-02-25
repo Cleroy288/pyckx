@@ -173,25 +173,32 @@
 
 
 /* ============================================
-   Background — Mesh gradient blobs
+   Background — Obsidian Grain
    ============================================
-   Three large color blobs drift slowly behind
-   all page content. No grid lines — clean
-   surface for glassmorphism depth.
+   Cursor spotlight + dim mesh blobs + film
+   grain SVG texture overlay.
    ============================================ */
 
+/* ── Base + cursor spotlight ──────────────
+   Radial glow follows --mx/--my set by JS. */
 .background-bde41b1 {
     position: relative;
     width: 100%;
     min-height: 100vh;
     background-color: var(--color-background);
+    background-image: radial-gradient(
+        600px circle at var(--mx) var(--my),
+        color-mix(
+            in srgb,
+            var(--primary) 4%,
+            transparent
+        ),
+        transparent
+    );
     overflow-x: hidden;
 }
 
-/* ── Mesh blobs — ambient colored light ───
-   Three radial-gradient blobs positioned at
-   different corners, drifting with mesh-drift
-   animation for organic movement.             */
+/* ── Mesh blobs — very dim ambient color ── */
 .background-bde41b1::before {
     content: "";
     position: fixed;
@@ -200,40 +207,37 @@
     z-index: 0;
     background:
         radial-gradient(
-            ellipse 45vw 45vw at 20% 15%,
+            ellipse 50vw 50vw at 15% 20%,
             color-mix(
                 in srgb,
-                var(--primary) 14%,
+                var(--primary) 8%,
                 transparent
             ),
             transparent
         ),
         radial-gradient(
-            ellipse 40vw 40vw at 80% 55%,
+            ellipse 40vw 40vw at 85% 65%,
             color-mix(
                 in srgb,
-                var(--accent) 10%,
-                transparent
-            ),
-            transparent
-        ),
-        radial-gradient(
-            ellipse 35vw 35vw at 45% 85%,
-            color-mix(
-                in srgb,
-                var(--muted) 12%,
+                var(--accent) 6%,
                 transparent
             ),
             transparent
         );
     animation:
-        mesh-drift 25s ease-in-out infinite
+        mesh-drift 30s ease-in-out infinite
         alternate;
 }
 
-/* ── Grid lines hidden — clean glass surface */
+/* ── Film grain — SVG feTurbulence noise ── */
 .lines-bde41b1 {
-    display: none;
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.030;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
 }
 
 
@@ -278,11 +282,10 @@
 
 
 /* ============================================
-   Button — Rounded glass + solid variants
+   Button — Obsidian Grain
    ============================================
-   Primary: solid fill with inner highlight
-   and ambient glow on hover.
-   Outline: frosted glass with tinted border.
+   Rounded, solid primary with glow hover,
+   ghost glass outline variant.
    ============================================ */
 
 .btn-b0e9139 {
@@ -298,8 +301,7 @@
         background var(--transition-smooth),
         color var(--transition-smooth),
         box-shadow var(--transition-smooth),
-        transform var(--transition-smooth),
-        opacity var(--transition-smooth);
+        transform var(--transition-smooth);
     text-decoration: none;
     line-height: 1.5;
 }
@@ -314,45 +316,30 @@
     outline-offset: 2px;
 }
 
-/* ── Size Variants ────────────────────────── */
+/* ── Sizes ────────────────────────────────── */
 
-.small-b0e9139 {
-    padding: 0.5rem 1.25rem;
-    font-size: 0.875rem;
-}
+.small-b0e9139 { padding: 0.5rem 1.25rem; font-size: 0.875rem; }
+.medium-b0e9139 { padding: 0.75rem 1.75rem; font-size: 0.9375rem; }
+.large-b0e9139 { padding: 1rem 2.5rem; font-size: 1rem; }
 
-.medium-b0e9139 {
-    padding: 0.75rem 1.75rem;
-    font-size: 0.9375rem;
-}
-
-.large-b0e9139 {
-    padding: 1rem 2.5rem;
-    font-size: 1rem;
-}
-
-/* ── Primary — solid + inner glow ────────── */
+/* ── Primary — solid + luminous glow ─────── */
 
 .primary-b0e9139 {
     color: var(--color-background);
     background: var(--color-primary);
     box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
 .primary-b0e9139:hover:not(:disabled) {
     transform: translateY(-1px);
     box-shadow:
         inset 0 1px 0 rgba(255, 255, 255, 0.15),
-        0 0 20px color-mix(
-            in srgb,
-            var(--primary) 30%,
-            transparent
+        0 0 24px color-mix(
+            in srgb, var(--primary) 35%, transparent
         ),
         0 4px 16px color-mix(
-            in srgb,
-            var(--primary) 20%,
-            transparent
+            in srgb, var(--primary) 20%, transparent
         );
 }
 
@@ -362,12 +349,10 @@
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
-/* ── Outline — frosted glass border ──────── */
+/* ── Outline — ghost glass ───────────────── */
 
 .outline-b0e9139 {
-    background: var(--glass-bg);
-    backdrop-filter: var(--glass-blur-sm);
-    -webkit-backdrop-filter: var(--glass-blur-sm);
+    background: transparent;
     border: 1px solid color-mix(
         in srgb, var(--primary) 25%, transparent
     );
@@ -377,19 +362,16 @@
 .outline-b0e9139:hover:not(:disabled) {
     transform: translateY(-1px);
     background: color-mix(
-        in srgb, var(--primary) 8%, transparent
+        in srgb, var(--primary) 6%, transparent
     );
     box-shadow:
         0 0 16px color-mix(
-            in srgb,
-            var(--primary) 15%,
-            transparent
+            in srgb, var(--primary) 12%, transparent
         );
 }
 
 .outline-b0e9139:active:not(:disabled) {
     transform: translateY(0);
-    opacity: 0.85;
 }
 
 
@@ -1450,14 +1432,12 @@
 
 
 /* ============================================
-   HeroBanner — Rounded glass panel
+   HeroBanner — Minimal glass panel
    ============================================
-   Frosted glass with gradient accent glow
-   behind the title. Rounded corners, soft
-   shadow, no grid overlay.
+   Subtle glass, rounded, inner glow. No grid,
+   no aurora. Clean surface for content.
    ============================================ */
 
-/* ── Banner container ─────────────────────  */
 .banner-2a53f23 {
     position: relative;
     overflow: hidden;
@@ -1465,75 +1445,35 @@
     padding: 3rem 2rem;
     text-align: center;
     background: var(--glass-bg);
-    backdrop-filter: var(--glass-blur-lg);
-    -webkit-backdrop-filter: var(--glass-blur-lg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
     border: 1px solid color-mix(
-        in srgb, var(--primary) 12%, transparent
+        in srgb, var(--primary) 8%, transparent
     );
     border-radius: var(--radius-md);
     box-shadow:
-        0 8px 32px color-mix(
+        0 4px 24px color-mix(
             in srgb,
-            var(--primary) 8%,
+            var(--primary) 5%,
+            transparent
+        ),
+        inset 0 1px 0 color-mix(
+            in srgb,
+            var(--primary) 5%,
             transparent
         );
 }
 
-/* ── Gradient accent glow behind title ────
-   Soft ellipse centered at top, creates a
-   warm halo behind the heading text.        */
-.banner-2a53f23::after {
-    content: "";
-    position: absolute;
-    top: -30%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 70%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 0;
-    background: radial-gradient(
-        ellipse at center,
-        color-mix(
-            in srgb,
-            var(--primary) 18%,
-            transparent
-        ),
-        transparent 70%
-    );
-    filter: blur(40px);
-}
-
-/* ── Title — bold, clean, no gradient ─────
-   Gradient accent line above via ::before.  */
+/* ── Title — bold, clean ─────────────────  */
 .banner_title-2a53f23 {
     position: relative;
     z-index: 1;
     margin: 0 0 0.75rem;
     font-family: var(--heading-font-family);
     font-size: clamp(2rem, 5vw, 3.5rem);
-    font-weight: 800;
-    letter-spacing: -0.04em;
+    font-weight: 700;
+    letter-spacing: -0.03em;
     color: var(--color-text-primary);
-}
-
-/* ── Gradient accent line above title ────  */
-.banner_title-2a53f23::before {
-    content: "";
-    display: block;
-    width: 40px;
-    height: 4px;
-    margin: 0 auto 1rem;
-    border-radius: var(--radius-full);
-    background: linear-gradient(
-        90deg,
-        var(--color-primary),
-        color-mix(
-            in srgb,
-            var(--accent) 80%,
-            white
-        )
-    );
 }
 
 /* ── Body wrapper ─────────────────────────  */
@@ -1543,7 +1483,6 @@
 }
 
 /* ── Responsive ───────────────────────────  */
-
 @media (max-width: 768px) {
     .banner-2a53f23 {
         margin-bottom: 1.5rem;
@@ -1552,9 +1491,7 @@
 }
 
 @media (max-width: 480px) {
-    .banner-2a53f23 {
-        padding: 2rem 1rem;
-    }
+    .banner-2a53f23 { padding: 2rem 1rem; }
 }
 
 
@@ -3698,29 +3635,30 @@
 
 
 /* ============================================
-   Top Bar — Frosted glass navigation
+   Top Bar — Obsidian Grain
    ============================================
-   Fixed top bar with heavy backdrop blur.
-   No grid overlay — clean frosted surface.
-   Cells separated by subtle vertical borders.
+   Nearly transparent, strong blur, subtle
+   tinted borders. Clean frosted surface.
    ============================================ */
 
-/* ── Bar container ───────────────────────── */
 .top_bar-a11eefe {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     z-index: 100;
-    background: var(--glass-bg);
+    background: color-mix(
+        in srgb,
+        var(--color-background) 70%,
+        transparent
+    );
     backdrop-filter: var(--glass-blur-lg);
     -webkit-backdrop-filter: var(--glass-blur-lg);
     border-bottom: 1px solid color-mix(
-        in srgb, var(--primary) 8%, transparent
+        in srgb, var(--primary) 6%, transparent
     );
 }
 
-/* ── Nav content ─────────────────────────── */
 .nav_content-a11eefe {
     position: relative;
     z-index: 1;
@@ -3732,18 +3670,15 @@
     justify-content: space-between;
 }
 
-/* ── Logo cell ───────────────────────────── */
 .nav_logo-a11eefe {
-    position: relative;
-    z-index: 1;
     display: flex;
     align-items: center;
     padding: 1rem 1.5rem;
     border-right: 1px solid color-mix(
-        in srgb, var(--primary) 8%, transparent
+        in srgb, var(--primary) 6%, transparent
     );
     font-size: 1.5rem;
-    font-weight: 800;
+    font-weight: 700;
     color: var(--color-primary);
     text-decoration: none;
     letter-spacing: 0.05em;
@@ -3751,25 +3686,19 @@
     transition: opacity var(--transition-fast);
 }
 
-.nav_logo-a11eefe:hover {
-    opacity: 0.8;
-}
+.nav_logo-a11eefe:hover { opacity: 0.8; }
 
-/* ── Nav links container ─────────────────── */
 .nav_links-a11eefe {
     display: flex;
     align-items: stretch;
 }
 
-/* ── Nav link (cell) ─────────────────────── */
 .nav_link-a11eefe {
-    position: relative;
-    z-index: 1;
     display: flex;
     align-items: center;
     padding: 1rem 1.5rem;
     border-left: 1px solid color-mix(
-        in srgb, var(--primary) 8%, transparent
+        in srgb, var(--primary) 6%, transparent
     );
     font-size: 0.9375rem;
     font-weight: 500;
@@ -3784,7 +3713,7 @@
 .nav_link-a11eefe:hover {
     color: var(--color-primary);
     background: color-mix(
-        in srgb, var(--primary) 5%, transparent
+        in srgb, var(--primary) 4%, transparent
     );
 }
 
@@ -3794,15 +3723,12 @@
     outline-offset: -2px;
 }
 
-/* ── Primary action link ─────────────────── */
 .nav_link_primary-a11eefe {
-    position: relative;
-    z-index: 1;
     display: flex;
     align-items: center;
     padding: 1rem 1.5rem;
     border-left: 1px solid color-mix(
-        in srgb, var(--primary) 8%, transparent
+        in srgb, var(--primary) 6%, transparent
     );
     font-size: 0.9375rem;
     font-weight: 600;
@@ -3811,7 +3737,6 @@
     white-space: nowrap;
     background: var(--color-primary);
     transition:
-        opacity var(--transition-fast),
         box-shadow var(--transition-fast);
 }
 
@@ -3819,7 +3744,7 @@
     box-shadow:
         0 0 16px color-mix(
             in srgb,
-            var(--primary) 30%,
+            var(--primary) 25%,
             transparent
         );
 }
@@ -3829,10 +3754,7 @@
     outline-offset: -2px;
 }
 
-/* ── Icon button cell ────────────────────── */
 .nav_icon_btn-a11eefe {
-    position: relative;
-    z-index: 1;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -3840,7 +3762,7 @@
     padding: 0;
     border: none;
     border-left: 1px solid color-mix(
-        in srgb, var(--primary) 8%, transparent
+        in srgb, var(--primary) 6%, transparent
     );
     background: transparent;
     color: var(--color-text-primary);
@@ -3866,34 +3788,24 @@
 /* ── Responsive ──────────────────────────── */
 
 @media (max-width: 768px) {
-    .nav_content-a11eefe {
-        padding: 0 1.5rem;
-    }
-
+    .nav_content-a11eefe { padding: 0 1.5rem; }
     .nav_logo-a11eefe {
         padding: 0.75rem 1rem;
         font-size: 1.25rem;
     }
-
-    .nav_link-a11eefe,
-    .nav_link_primary-a11eefe {
+    .nav_link-a11eefe, .nav_link_primary-a11eefe {
         padding: 0.75rem 1rem;
         font-size: 0.8125rem;
     }
 }
 
 @media (max-width: 480px) {
-    .nav_content-a11eefe {
-        padding: 0 1rem;
-    }
-
+    .nav_content-a11eefe { padding: 0 1rem; }
     .nav_logo-a11eefe {
         padding: 0.625rem 0.75rem;
         font-size: 1.125rem;
     }
-
-    .nav_link-a11eefe,
-    .nav_link_primary-a11eefe {
+    .nav_link-a11eefe, .nav_link_primary-a11eefe {
         padding: 0.625rem 0.75rem;
         font-size: 0.75rem;
     }
@@ -3916,11 +3828,10 @@
 
 
 /* ============================================
-   Vitrine (Landing) Page — Liquid Glass
+   Vitrine — Obsidian Grain identity
    ============================================
-   Rounded glass panels floating above mesh
-   background. Generous whitespace, smooth
-   spring-like entrance animations.
+   Film grain + cursor spotlight + gradient
+   text sweep hero + animated beam CTA border.
    ============================================ */
 
 /* ── Main Container ───────────────────────── */
@@ -3940,11 +3851,11 @@
     position: relative;
     flex: 1;
     width: 100%;
-    max-width: 1100px;
+    max-width: 1000px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 3rem;
+    gap: 4rem;
 }
 
 /* ── Hero Section ─────────────────────────── */
@@ -3952,14 +3863,39 @@
 .hero_section-775442b {
     width: 100%;
     animation:
-        float-in 0.8s
+        float-in 0.9s
         cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-/* ── Hero Content ─────────────────────────── */
+/* Gradient text sweep on hero title only */
+.hero_section-775442b h1 {
+    background: linear-gradient(
+        90deg,
+        var(--color-text-primary) 0%,
+        var(--color-primary) 45%,
+        color-mix(
+            in srgb, var(--primary) 50%, white
+        ) 50%,
+        var(--color-primary) 55%,
+        var(--color-text-primary) 100%
+    );
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: text-sweep 5s ease-in-out infinite;
+    text-shadow: none;
+    filter: drop-shadow(
+        0 0 30px color-mix(
+            in srgb,
+            var(--primary) 15%,
+            transparent
+        )
+    );
+}
 
 .hero_tagline-775442b {
-    font-size: clamp(1.15rem, 2.5vw, 1.5rem);
+    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
     color: var(--color-text-secondary);
     margin-bottom: 2rem;
     line-height: 1.7;
@@ -3974,7 +3910,7 @@
     align-items: center;
 }
 
-/* ── Vitrine Card — rounded glass panel ──── */
+/* ── Vitrine Card — subtle glass ──────────── */
 
 .vitrine_card-775442b {
     position: relative;
@@ -3982,7 +3918,7 @@
     backdrop-filter: var(--glass-blur);
     -webkit-backdrop-filter: var(--glass-blur);
     border: 1px solid color-mix(
-        in srgb, var(--primary) 10%, transparent
+        in srgb, var(--primary) 8%, transparent
     );
     border-radius: var(--radius-md);
     padding: 2.5rem 2rem;
@@ -3990,25 +3926,29 @@
     transition:
         border-color var(--transition-smooth),
         box-shadow var(--transition-smooth),
-        background var(--transition-smooth),
-        transform var(--transition-smooth);
+        background var(--transition-smooth);
 }
 
+/* Inner radial glow on hover */
 .vitrine_card-775442b:hover {
-    transform: translateY(-3px) scale(1.01);
     border-color: color-mix(
-        in srgb, var(--primary) 25%, transparent
+        in srgb, var(--primary) 20%, transparent
     );
     box-shadow:
         0 8px 32px color-mix(
             in srgb,
-            var(--primary) 12%,
+            var(--primary) 10%,
+            transparent
+        ),
+        inset 0 0 60px color-mix(
+            in srgb,
+            var(--primary) 4%,
             transparent
         );
     background: var(--glass-bg-hover);
 }
 
-/* ── Shared Card Text ─────────────────────── */
+/* ── Card Text ────────────────────────────── */
 
 .card_title-775442b {
     font-family: var(--heading-font-family);
@@ -4026,20 +3966,18 @@
     margin: 0;
 }
 
-/* ── Tagline Section ──────────────────────── */
+/* ── Tagline — centered statement ─────────── */
 
 .tagline-775442b {
     width: 100%;
     text-align: center;
     animation:
-        float-in 0.8s
+        float-in 0.9s
         cubic-bezier(0.16, 1, 0.3, 1) both;
     animation-delay: 0.1s;
 }
 
-.tagline_text-775442b {
-    padding: 0;
-}
+.tagline_text-775442b { padding: 0; }
 
 .tagline_line-775442b {
     font-family: var(--heading-font-family);
@@ -4056,7 +3994,7 @@
 .apps-775442b {
     width: 100%;
     animation:
-        float-in 0.8s
+        float-in 0.9s
         cubic-bezier(0.16, 1, 0.3, 1) both;
     animation-delay: 0.2s;
 }
@@ -4083,10 +4021,10 @@
     align-items: center;
     justify-content: center;
     background: color-mix(
-        in srgb, var(--primary) 8%, transparent
+        in srgb, var(--primary) 6%, transparent
     );
     border: 1px solid color-mix(
-        in srgb, var(--primary) 12%, transparent
+        in srgb, var(--primary) 10%, transparent
     );
     border-radius: var(--radius-sm);
     color: var(--color-primary);
@@ -4098,9 +4036,9 @@
 
 .vitrine_card-775442b:hover .app_card_icon-775442b {
     background: color-mix(
-        in srgb, var(--primary) 15%, transparent
+        in srgb, var(--primary) 12%, transparent
     );
-    box-shadow: 0 0 12px var(--glow);
+    box-shadow: 0 0 16px var(--glow);
 }
 
 .app_card_icon-775442b svg {
@@ -4113,7 +4051,7 @@
 .pricing-775442b {
     width: 100%;
     animation:
-        float-in 0.8s
+        float-in 0.9s
         cubic-bezier(0.16, 1, 0.3, 1) both;
     animation-delay: 0.3s;
 }
@@ -4158,6 +4096,12 @@
     color: var(--color-primary);
     line-height: 1;
     font-variant-numeric: tabular-nums;
+    text-shadow:
+        0 0 20px color-mix(
+            in srgb,
+            var(--primary) 20%,
+            transparent
+        );
 }
 
 .pricing_period-775442b {
@@ -4178,7 +4122,7 @@
     padding: 0.75rem 0;
     color: var(--color-text-secondary);
     border-bottom: 1px solid color-mix(
-        in srgb, var(--primary) 6%, transparent
+        in srgb, var(--primary) 5%, transparent
     );
     font-size: 0.95rem;
     line-height: 1.4;
@@ -4193,32 +4137,43 @@
     width: 100%;
 }
 
-/* ── Start Now — ambient glow CTA ────────── */
+/* ── Start Now — animated beam border ────── */
 
 .start_now-775442b {
     width: 100%;
     animation:
-        float-in 0.8s
+        float-in 0.9s
         cubic-bezier(0.16, 1, 0.3, 1) both;
     animation-delay: 0.4s;
 }
 
-/* Glass glow around the inner banner */
+/* Animated conic-gradient beam on CTA banner
+   Uses mask-composite to show border only,
+   works with border-radius (unlike border-image) */
 .start_now-775442b header {
-    box-shadow:
-        0 0 40px color-mix(
-            in srgb,
-            var(--primary) 12%,
-            transparent
-        ),
-        0 8px 32px color-mix(
-            in srgb,
-            var(--primary) 8%,
-            transparent
-        );
-    border-color: color-mix(
-        in srgb, var(--primary) 25%, transparent
+    overflow: visible;
+}
+
+.start_now-775442b header::after {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border-radius: calc(var(--radius-md) + 2px);
+    padding: 2px;
+    background: conic-gradient(
+        from var(--border-angle),
+        var(--color-primary),
+        transparent 30%,
+        transparent 70%,
+        var(--color-primary)
     );
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: border-spin 4s linear infinite;
+    pointer-events: none;
 }
 
 .start_now_cta-775442b {
@@ -4238,27 +4193,20 @@
 /* ── Responsive ───────────────────────────── */
 
 @media (max-width: 768px) {
-    .vitrine-775442b {
-        padding: 90px 1.5rem 3rem;
-    }
-    .content-775442b { gap: 2.5rem; }
-    .hero_tagline-775442b { margin-bottom: 2rem; }
+    .vitrine-775442b { padding: 90px 1.5rem 3rem; }
+    .content-775442b { gap: 3rem; }
     .hero_cta-775442b {
         flex-direction: column;
         width: 100%;
     }
-    .apps_grid-775442b {
-        grid-template-columns: 1fr;
-    }
+    .apps_grid-775442b { grid-template-columns: 1fr; }
     .app_card-775442b { padding: 2rem 1.5rem; }
-    .pricing_grid-775442b {
-        grid-template-columns: 1fr;
-    }
+    .pricing_grid-775442b { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 480px) {
     .vitrine-775442b { padding: 80px 1rem 2rem; }
-    .content-775442b { gap: 2rem; }
+    .content-775442b { gap: 2.5rem; }
     .hero_cta-775442b { gap: 0.75rem; }
     .app_card-775442b { padding: 1.5rem 1rem; }
 }
