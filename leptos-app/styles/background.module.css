@@ -1,8 +1,9 @@
 /* ============================================
-   Background — Aurora blobs + Grid overlay
+   Background — Mesh gradient blobs
    ============================================
-   Aurora blobs drift behind grid lines.
-   Grid has intersection dots at crossings.
+   Three large color blobs drift slowly behind
+   all page content. No grid lines — clean
+   surface for glassmorphism depth.
    ============================================ */
 
 .background {
@@ -13,82 +14,50 @@
     overflow-x: hidden;
 }
 
-/* ── Aurora blobs — soft colored light ──────
-   Fixed position, paints below .lines.
-   Two radial-gradient blobs drift slowly.   */
+/* ── Mesh blobs — ambient colored light ───
+   Three radial-gradient blobs positioned at
+   different corners, drifting with mesh-drift
+   animation for organic movement.             */
 .background::before {
     content: "";
     position: fixed;
-    inset: 0;
+    inset: -15%;
     pointer-events: none;
     z-index: 0;
     background:
         radial-gradient(
-            ellipse 55vw 55vw at 20% 25%,
+            ellipse 45vw 45vw at 20% 15%,
             color-mix(
                 in srgb,
-                var(--primary) 12%,
+                var(--primary) 14%,
                 transparent
             ),
             transparent
         ),
         radial-gradient(
-            ellipse 45vw 45vw at 80% 75%,
+            ellipse 40vw 40vw at 80% 55%,
             color-mix(
                 in srgb,
                 var(--accent) 10%,
                 transparent
             ),
             transparent
+        ),
+        radial-gradient(
+            ellipse 35vw 35vw at 45% 85%,
+            color-mix(
+                in srgb,
+                var(--muted) 12%,
+                transparent
+            ),
+            transparent
         );
     animation:
-        aurora-drift 30s ease-in-out infinite
+        mesh-drift 25s ease-in-out infinite
         alternate;
 }
 
-/* ── Grid lines + intersection dots ────────
-   Fixed overlay with horizontal/vertical
-   lines, diagonal dots, and node dots at
-   every grid intersection.                  */
+/* ── Grid lines hidden — clean glass surface */
 .lines {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    background-image:
-        radial-gradient(
-            circle,
-            var(--grid-line) 1px,
-            transparent 1px
-        ),
-        linear-gradient(
-            to right,
-            var(--grid-line) 1px,
-            transparent 1px
-        ),
-        linear-gradient(
-            to bottom,
-            var(--grid-line) 1px,
-            transparent 1px
-        ),
-        linear-gradient(
-            45deg,
-            var(--grid-dot) 1px,
-            transparent 1px
-        ),
-        linear-gradient(
-            -45deg,
-            var(--grid-dot) 1px,
-            transparent 1px
-        );
-    background-size:
-        30px 30px,
-        30px 30px,
-        30px 30px,
-        45px 45px,
-        45px 45px;
-    opacity: var(--transparency-high);
-    z-index: 0;
+    display: none;
 }

@@ -62,9 +62,9 @@
     --logo-font-family:
         "VT323", var(--principal-font-family);
     --heading-font-family:
-        "Inter", var(--principal-font-family);
+        "Outfit", var(--principal-font-family);
     --mono-font-family:
-        "JetBrains Mono", "Fira Code", monospace;
+        "Fira Code", "JetBrains Mono", monospace;
 
     /* ── Border radius ───────────────────────── */
     --radius-sm: 8px;
@@ -95,11 +95,11 @@
     --transition-slow: 0.4s ease;
 
     /* ── Glassmorphism ───────────────────────── */
-    --glass-bg: rgba(255, 255, 255, 0.5);
-    --glass-bg-hover: rgba(255, 255, 255, 0.6);
-    --glass-blur: blur(20px);
-    --glass-blur-sm: blur(10px);
-    --glass-blur-lg: blur(24px);
+    --glass-bg: rgba(255, 255, 255, 0.55);
+    --glass-bg-hover: rgba(255, 255, 255, 0.7);
+    --glass-blur: blur(30px);
+    --glass-blur-sm: blur(12px);
+    --glass-blur-lg: blur(40px);
     --glass-border: 1px solid color-mix(
         in srgb, var(--primary) 12%, transparent
     );
@@ -218,16 +218,34 @@
     }
 }
 
-/* Aurora drift — slow movement of aurora blobs */
-@keyframes aurora-drift {
+/* Mesh drift — slow organic blob movement */
+@keyframes mesh-drift {
     0% {
         transform: translate(0, 0) scale(1);
     }
-    50% {
-        transform: translate(5vw, 8vh) scale(1.05);
+    33% {
+        transform:
+            translate(3vw, -4vh) scale(1.03);
+    }
+    66% {
+        transform:
+            translate(-4vw, 3vh) scale(0.97);
     }
     100% {
-        transform: translate(-3vw, 3vh) scale(0.97);
+        transform:
+            translate(2vw, -2vh) scale(1.01);
+    }
+}
+
+/* Float-in — smooth spring entrance */
+@keyframes float-in {
+    0% {
+        opacity: 0;
+        transform: translateY(30px) scale(0.97);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
     }
 }
 

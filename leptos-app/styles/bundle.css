@@ -101,10 +101,10 @@
     flex-direction: column;
     gap: 0.75rem;
     padding: 1.5rem;
-    border-radius: 0;
+    border-radius: var(--radius-md);
     background: var(--glass-bg);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
     border: 1px solid var(--color-border);
     transition:
         border-color var(--transition-base),
@@ -114,12 +114,12 @@
 
 .card-32ab410:hover {
     border-color: color-mix(
-        in srgb, var(--primary) 50%, transparent
+        in srgb, var(--primary) 25%, transparent
     );
     box-shadow:
-        0 0 15px color-mix(
+        0 8px 32px color-mix(
             in srgb,
-            var(--primary) 15%,
+            var(--primary) 12%,
             transparent
         );
     background: var(--glass-bg-hover);
@@ -173,10 +173,11 @@
 
 
 /* ============================================
-   Background — Aurora blobs + Grid overlay
+   Background — Mesh gradient blobs
    ============================================
-   Aurora blobs drift behind grid lines.
-   Grid has intersection dots at crossings.
+   Three large color blobs drift slowly behind
+   all page content. No grid lines — clean
+   surface for glassmorphism depth.
    ============================================ */
 
 .background-bde41b1 {
@@ -187,84 +188,52 @@
     overflow-x: hidden;
 }
 
-/* ── Aurora blobs — soft colored light ──────
-   Fixed position, paints below .lines.
-   Two radial-gradient blobs drift slowly.   */
+/* ── Mesh blobs — ambient colored light ───
+   Three radial-gradient blobs positioned at
+   different corners, drifting with mesh-drift
+   animation for organic movement.             */
 .background-bde41b1::before {
     content: "";
     position: fixed;
-    inset: 0;
+    inset: -15%;
     pointer-events: none;
     z-index: 0;
     background:
         radial-gradient(
-            ellipse 55vw 55vw at 20% 25%,
+            ellipse 45vw 45vw at 20% 15%,
             color-mix(
                 in srgb,
-                var(--primary) 12%,
+                var(--primary) 14%,
                 transparent
             ),
             transparent
         ),
         radial-gradient(
-            ellipse 45vw 45vw at 80% 75%,
+            ellipse 40vw 40vw at 80% 55%,
             color-mix(
                 in srgb,
                 var(--accent) 10%,
                 transparent
             ),
             transparent
+        ),
+        radial-gradient(
+            ellipse 35vw 35vw at 45% 85%,
+            color-mix(
+                in srgb,
+                var(--muted) 12%,
+                transparent
+            ),
+            transparent
         );
     animation:
-        aurora-drift 30s ease-in-out infinite
+        mesh-drift 25s ease-in-out infinite
         alternate;
 }
 
-/* ── Grid lines + intersection dots ────────
-   Fixed overlay with horizontal/vertical
-   lines, diagonal dots, and node dots at
-   every grid intersection.                  */
+/* ── Grid lines hidden — clean glass surface */
 .lines-bde41b1 {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    background-image:
-        radial-gradient(
-            circle,
-            var(--grid-line) 1px,
-            transparent 1px
-        ),
-        linear-gradient(
-            to right,
-            var(--grid-line) 1px,
-            transparent 1px
-        ),
-        linear-gradient(
-            to bottom,
-            var(--grid-line) 1px,
-            transparent 1px
-        ),
-        linear-gradient(
-            45deg,
-            var(--grid-dot) 1px,
-            transparent 1px
-        ),
-        linear-gradient(
-            -45deg,
-            var(--grid-dot) 1px,
-            transparent 1px
-        );
-    background-size:
-        30px 30px,
-        30px 30px,
-        30px 30px,
-        45px 45px,
-        45px 45px;
-    opacity: var(--transparency-high);
-    z-index: 0;
+    display: none;
 }
 
 
@@ -309,10 +278,11 @@
 
 
 /* ============================================
-   Button — Primary (glow) + Outline (trace)
+   Button — Rounded glass + solid variants
    ============================================
-   Primary: filled with ambient glow on hover.
-   Outline: border with subtle tint on hover.
+   Primary: solid fill with inner highlight
+   and ambient glow on hover.
+   Outline: frosted glass with tinted border.
    ============================================ */
 
 .btn-b0e9139 {
@@ -322,19 +292,20 @@
     font-weight: 600;
     font-family: var(--heading-font-family);
     border: none;
-    border-radius: 0;
+    border-radius: var(--radius-sm);
     cursor: pointer;
     transition:
-        background var(--transition-base),
-        color var(--transition-base),
-        box-shadow var(--transition-base),
-        opacity var(--transition-base);
+        background var(--transition-smooth),
+        color var(--transition-smooth),
+        box-shadow var(--transition-smooth),
+        transform var(--transition-smooth),
+        opacity var(--transition-smooth);
     text-decoration: none;
     line-height: 1.5;
 }
 
 .btn-b0e9139:disabled {
-    opacity: 0.6;
+    opacity: 0.5;
     cursor: not-allowed;
 }
 
@@ -360,101 +331,119 @@
     font-size: 1rem;
 }
 
-/* ── Primary — filled + ambient glow ──────── */
+/* ── Primary — solid + inner glow ────────── */
 
 .primary-b0e9139 {
     color: var(--color-background);
     background: var(--color-primary);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .primary-b0e9139:hover:not(:disabled) {
+    transform: translateY(-1px);
     box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.15),
         0 0 20px color-mix(
             in srgb,
-            var(--primary) 35%,
+            var(--primary) 30%,
             transparent
         ),
-        0 0 40px color-mix(
-            in srgb,
-            var(--primary) 15%,
-            transparent
-        );
-}
-
-.primary-b0e9139:active:not(:disabled) {
-    opacity: 0.85;
-    box-shadow: none;
-}
-
-/* ── Outline — border + tint on hover ─────── */
-
-.outline-b0e9139 {
-    background: transparent;
-    border: 1px solid var(--color-primary);
-    color: var(--color-primary);
-}
-
-.outline-b0e9139:hover:not(:disabled) {
-    background: color-mix(
-        in srgb, var(--primary) 10%, transparent
-    );
-    box-shadow:
-        0 0 12px color-mix(
+        0 4px 16px color-mix(
             in srgb,
             var(--primary) 20%,
             transparent
         );
 }
 
+.primary-b0e9139:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* ── Outline — frosted glass border ──────── */
+
+.outline-b0e9139 {
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur-sm);
+    -webkit-backdrop-filter: var(--glass-blur-sm);
+    border: 1px solid color-mix(
+        in srgb, var(--primary) 25%, transparent
+    );
+    color: var(--color-primary);
+}
+
+.outline-b0e9139:hover:not(:disabled) {
+    transform: translateY(-1px);
+    background: color-mix(
+        in srgb, var(--primary) 8%, transparent
+    );
+    box-shadow:
+        0 0 16px color-mix(
+            in srgb,
+            var(--primary) 15%,
+            transparent
+        );
+}
+
 .outline-b0e9139:active:not(:disabled) {
-    opacity: 0.8;
+    transform: translateY(0);
+    opacity: 0.85;
 }
 
 
 /* ============================================
-   Card — Base card with glass/solid/popular
+   Card — Rounded glass panels with depth
    ============================================
-   Smooth border-glow hover. No border-spin
-   on regular cards — reserved for key CTAs.
+   Glass/solid/popular variants. Hover lifts
+   with subtle scale and glow. Rounded 12px.
    ============================================ */
 
 .card-53cbc03 {
     position: relative;
-    border-radius: 0;
+    border-radius: var(--radius-md);
     padding: 2.5rem 2rem;
     transition:
-        transform var(--transition-slow),
-        box-shadow var(--transition-slow),
-        border-color var(--transition-slow),
-        background var(--transition-slow);
+        transform var(--transition-smooth),
+        box-shadow var(--transition-smooth),
+        border-color var(--transition-smooth),
+        background var(--transition-smooth);
     will-change: transform;
     transform: translate3d(0, 0, 0);
     overflow: hidden;
 }
 
 .card-53cbc03:hover {
-    transform: translate3d(0, -4px, 0);
+    transform: translate3d(0, -4px, 0) scale(1.01);
 }
 
 /* ── Glass variant ────────────────────────── */
 
 .glass-53cbc03 {
     background: var(--glass-bg);
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
-    border: var(--glass-border);
-    box-shadow: 0 4px 30px color-mix(
-        in srgb, var(--primary) 5%, transparent
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid color-mix(
+        in srgb, var(--primary) 10%, transparent
     );
+    box-shadow:
+        0 4px 24px color-mix(
+            in srgb,
+            var(--primary) 5%,
+            transparent
+        );
 }
 
 .glass-53cbc03:hover {
-    border: var(--glass-border-hover);
+    border-color: color-mix(
+        in srgb, var(--primary) 25%, transparent
+    );
     background: var(--glass-bg-hover);
     box-shadow:
-        0 0 15px color-mix(
+        0 8px 32px color-mix(
             in srgb,
-            var(--primary) 15%,
+            var(--primary) 12%,
             transparent
         );
 }
@@ -464,21 +453,24 @@
 .solid-53cbc03 {
     background: var(--color-background);
     border: 1px solid color-mix(
-        in srgb, var(--primary) 15%, transparent
+        in srgb, var(--primary) 12%, transparent
     );
-    box-shadow: 0 4px 24px color-mix(
-        in srgb, var(--primary) 8%, transparent
-    );
+    box-shadow:
+        0 4px 24px color-mix(
+            in srgb,
+            var(--primary) 6%,
+            transparent
+        );
 }
 
 .solid-53cbc03:hover {
     border-color: color-mix(
-        in srgb, var(--primary) 40%, transparent
+        in srgb, var(--primary) 30%, transparent
     );
     box-shadow:
-        0 0 15px color-mix(
+        0 8px 32px color-mix(
             in srgb,
-            var(--primary) 15%,
+            var(--primary) 12%,
             transparent
         );
 }
@@ -487,18 +479,21 @@
 
 .popular-53cbc03 {
     background: var(--glass-bg);
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
-    border: 3px solid var(--color-primary);
-    box-shadow: var(--shadow-lg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 2px solid color-mix(
+        in srgb, var(--primary) 50%, transparent
+    );
+    box-shadow: var(--shadow-md);
 }
 
 .popular-53cbc03:hover {
-    transform: translate3d(0, -6px, 0);
+    transform: translate3d(0, -6px, 0) scale(1.02);
+    border-color: var(--color-primary);
     box-shadow:
-        0 0 25px color-mix(
+        0 12px 40px color-mix(
             in srgb,
-            var(--primary) 25%,
+            var(--primary) 20%,
             transparent
         );
 }
@@ -1455,11 +1450,11 @@
 
 
 /* ============================================
-   HeroBanner — Glass hero with aurora mesh
+   HeroBanner — Rounded glass panel
    ============================================
-   Glass background, grid-line pattern,
-   aurora mesh glow, neon gradient title.
-   Used by home, intello, and collection.
+   Frosted glass with gradient accent glow
+   behind the title. Rounded corners, soft
+   shadow, no grid overlay.
    ============================================ */
 
 /* ── Banner container ─────────────────────  */
@@ -1470,94 +1465,80 @@
     padding: 3rem 2rem;
     text-align: center;
     background: var(--glass-bg);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid var(--color-border);
-    border-top-color: color-mix(
-        in srgb, var(--primary) 15%, transparent
+    backdrop-filter: var(--glass-blur-lg);
+    -webkit-backdrop-filter: var(--glass-blur-lg);
+    border: 1px solid color-mix(
+        in srgb, var(--primary) 12%, transparent
     );
-    border-bottom-color: color-mix(
-        in srgb, var(--primary) 15%, transparent
-    );
-    border-radius: 0;
-    box-shadow: none;
-}
-
-/* ── Grid-lines overlay ───────────────────  */
-.banner-2a53f23::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    background-image:
-        var(--grid-overlay-image);
-    background-size:
-        var(--grid-overlay-size);
-    opacity: 0.6;
-}
-
-/* ── Aurora mesh glow ─────────────────────
-   Two-blob aurora behind the text, subtler
-   than the global aurora but visible.
-   Constrained to banner bounds.             */
-.banner-2a53f23::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    background:
-        radial-gradient(
-            ellipse 50% 70% at 30% 40%,
-            color-mix(
-                in srgb,
-                var(--primary) 18%,
-                transparent
-            ),
-            transparent
-        ),
-        radial-gradient(
-            ellipse 45% 60% at 70% 55%,
-            color-mix(
-                in srgb,
-                var(--accent) 12%,
-                transparent
-            ),
+    border-radius: var(--radius-md);
+    box-shadow:
+        0 8px 32px color-mix(
+            in srgb,
+            var(--primary) 8%,
             transparent
         );
 }
 
-/* ── Title — gradient text + neon glow ────  */
+/* ── Gradient accent glow behind title ────
+   Soft ellipse centered at top, creates a
+   warm halo behind the heading text.        */
+.banner-2a53f23::after {
+    content: "";
+    position: absolute;
+    top: -30%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    background: radial-gradient(
+        ellipse at center,
+        color-mix(
+            in srgb,
+            var(--primary) 18%,
+            transparent
+        ),
+        transparent 70%
+    );
+    filter: blur(40px);
+}
+
+/* ── Title — bold, clean, no gradient ─────
+   Gradient accent line above via ::before.  */
 .banner_title-2a53f23 {
     position: relative;
     z-index: 1;
-    margin: 0 0 0.5rem;
+    margin: 0 0 0.75rem;
     font-family: var(--heading-font-family);
-    font-size: clamp(2rem, 5vw, 3rem);
-    font-weight: 700;
-    letter-spacing: -0.03em;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    color: var(--color-text-primary);
+}
+
+/* ── Gradient accent line above title ────  */
+.banner_title-2a53f23::before {
+    content: "";
+    display: block;
+    width: 40px;
+    height: 4px;
+    margin: 0 auto 1rem;
+    border-radius: var(--radius-full);
     background: linear-gradient(
-        135deg,
-        var(--color-primary) 0%,
+        90deg,
+        var(--color-primary),
         color-mix(
-            in srgb, var(--primary) 70%, black
-        ) 100%
-    );
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    filter: drop-shadow(
-        0 0 18px color-mix(
             in srgb,
-            var(--primary) 30%,
-            transparent
+            var(--accent) 80%,
+            white
         )
     );
 }
 
 /* ── Body wrapper ─────────────────────────  */
 .banner_body-2a53f23 {
+    position: relative;
     z-index: 1;
 }
 
@@ -1594,7 +1575,9 @@
 /* ── Section with power-on entrance ───────── */
 .section-3ba2a58 {
     margin-top: 3rem;
-    animation: power-on 0.8s ease both;
+    animation:
+        float-in 0.8s
+        cubic-bezier(0.16, 1, 0.3, 1) both;
     animation-delay: var(--delay, 0s);
 }
 
@@ -2190,8 +2173,8 @@
 /* ============================================
    NavCard — Clickable navigation tile
    ============================================
-   Glass card with icon, title, description.
-   Smooth border-glow hover, no border-spin.
+   Rounded glass card with icon, title, desc.
+   Hover: glow + slight lift + scale.
    ============================================ */
 
 .card-39d8194 {
@@ -2202,27 +2185,31 @@
     padding: 2rem 1.5rem;
     width: 100%;
     background: var(--glass-bg);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid var(--color-border);
-    border-radius: 0;
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid color-mix(
+        in srgb, var(--primary) 10%, transparent
+    );
+    border-radius: var(--radius-md);
     color: var(--color-text-primary);
     cursor: pointer;
     font-family: inherit;
     transition:
-        border-color var(--transition-base),
-        box-shadow var(--transition-base),
-        background var(--transition-base);
+        border-color var(--transition-smooth),
+        box-shadow var(--transition-smooth),
+        background var(--transition-smooth),
+        transform var(--transition-smooth);
 }
 
 .card-39d8194:hover {
+    transform: translateY(-3px) scale(1.01);
     border-color: color-mix(
-        in srgb, var(--primary) 50%, transparent
+        in srgb, var(--primary) 30%, transparent
     );
     box-shadow:
-        0 0 15px color-mix(
+        0 8px 32px color-mix(
             in srgb,
-            var(--primary) 15%,
+            var(--primary) 12%,
             transparent
         );
     background: var(--glass-bg-hover);
@@ -2236,12 +2223,12 @@
     align-items: center;
     justify-content: center;
     background: color-mix(
-        in srgb, var(--primary) 10%, transparent
+        in srgb, var(--primary) 8%, transparent
     );
     border: 1px solid color-mix(
-        in srgb, var(--primary) 15%, transparent
+        in srgb, var(--primary) 12%, transparent
     );
-    border-radius: 0;
+    border-radius: var(--radius-sm);
     color: var(--color-primary);
     transition:
         background var(--transition-fast),
@@ -2250,9 +2237,9 @@
 
 .card-39d8194:hover .icon-39d8194 {
     background: color-mix(
-        in srgb, var(--primary) 18%, transparent
+        in srgb, var(--primary) 15%, transparent
     );
-    box-shadow: 0 0 10px var(--glow);
+    box-shadow: 0 0 12px var(--glow);
 }
 
 .icon-39d8194 svg {
@@ -2618,7 +2605,7 @@
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid var(--color-border);
-    border-radius: 0;
+    border-radius: var(--radius-md);
     color: var(--color-text-primary);
 }
 
@@ -3264,56 +3251,49 @@
 }
 
 
-/* Section Divider — circuit trace with nodes
-   ●───────── LABEL ─────────●
-   Monospace label, primary-colored line,
-   small node dots at outer ends.             */
+/* Section Divider — soft gradient line
+   ─────────── LABEL ───────────
+   Monospace label, gradient fade-out lines. */
 
 .divider-97c5c7b {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 1rem;
     font-family: var(--mono-font-family);
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--color-primary);
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--color-text-secondary);
     text-transform: uppercase;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.12em;
     white-space: nowrap;
 }
 
-/* ── Trace line ──────────────────────────── */
+/* ── Fade-out line ─────────────────────── */
 .line-97c5c7b {
     flex: 1;
     height: 1px;
-    background: color-mix(
-        in srgb, var(--primary) 30%, transparent
+    background: linear-gradient(
+        90deg,
+        color-mix(
+            in srgb,
+            var(--primary) 20%,
+            transparent
+        ),
+        transparent
     );
-    position: relative;
 }
 
-/* ── Node dots at outer ends ─────────────── */
-.line-97c5c7b::before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background: var(--color-primary);
-    box-shadow: 0 0 8px var(--glow);
-}
-
-/* Left line → node at left edge */
-.line-97c5c7b:first-of-type::before {
-    left: 0;
-}
-
-/* Right line → node at right edge */
-.line-97c5c7b:last-of-type::before {
-    right: 0;
-    left: auto;
+/* Right line fades the other direction */
+.line-97c5c7b:last-of-type {
+    background: linear-gradient(
+        -90deg,
+        color-mix(
+            in srgb,
+            var(--primary) 20%,
+            transparent
+        ),
+        transparent
+    );
 }
 
 
@@ -3718,23 +3698,14 @@
 
 
 /* ============================================
-   Top Bar Navigation Styles
+   Top Bar — Frosted glass navigation
    ============================================
-   Fixed top bar with glass background and
-   grid-line pattern overlay.
-   Logo + buttons aligned with the page
-   content section (max-width: 1200px).
-   Layout:
-   | PYCKX |                    | Profile | Logout |
-   Vertical lines span full bar height.
-   No horizontal borders on cells.
+   Fixed top bar with heavy backdrop blur.
+   No grid overlay — clean frosted surface.
+   Cells separated by subtle vertical borders.
    ============================================ */
 
-/* ── Bar container ───────────────────────────
-   Fixed at top, glass background, grid-line
-   pattern via ::before pseudo-element.
-   No vertical padding — cells stretch to
-   fill the full bar height.                   */
+/* ── Bar container ───────────────────────── */
 .top_bar-a11eefe {
     position: fixed;
     top: 0;
@@ -3742,30 +3713,14 @@
     right: 0;
     z-index: 100;
     background: var(--glass-bg);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border-bottom: 1px solid var(--color-border);
-    will-change: backdrop-filter;
+    backdrop-filter: var(--glass-blur-lg);
+    -webkit-backdrop-filter: var(--glass-blur-lg);
+    border-bottom: 1px solid color-mix(
+        in srgb, var(--primary) 8%, transparent
+    );
 }
 
-/* ── Grid-lines overlay ──────────────────────
-   Same pattern as the dashboard banners.
-   Lower opacity to keep nav text readable.    */
-.top_bar-a11eefe::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    background-image: var(--grid-overlay-image);
-    background-size: var(--grid-overlay-size);
-    opacity: 0.35;
-}
-
-/* ── Nav content ─────────────────────────────
-   max-width + padding mirror the page layout.
-   align-items:stretch so cells fill the full
-   bar height.                                 */
+/* ── Nav content ─────────────────────────── */
 .nav_content-a11eefe {
     position: relative;
     z-index: 1;
@@ -3777,18 +3732,16 @@
     justify-content: space-between;
 }
 
-/* ── Logo cell ───────────────────────────────
-   Vertical lines left and right. Opaque bg
-   hides the grid overlay.                     */
+/* ── Logo cell ───────────────────────────── */
 .nav_logo-a11eefe {
     position: relative;
     z-index: 1;
     display: flex;
     align-items: center;
     padding: 1rem 1.5rem;
-    border-left: 1px solid var(--color-border);
-    border-right: 1px solid var(--color-border);
-    background: var(--color-background);
+    border-right: 1px solid color-mix(
+        in srgb, var(--primary) 8%, transparent
+    );
     font-size: 1.5rem;
     font-weight: 800;
     color: var(--color-primary);
@@ -3802,35 +3755,37 @@
     opacity: 0.8;
 }
 
-/* ── Nav links container ─────────────────────
-   No outer border — each cell has its own
-   left/right vertical lines.                  */
+/* ── Nav links container ─────────────────── */
 .nav_links-a11eefe {
     display: flex;
     align-items: stretch;
 }
 
-/* ── Nav link (cell) ─────────────────────────
-   Left border separator. Opaque bg hides the
-   grid overlay.                               */
+/* ── Nav link (cell) ─────────────────────── */
 .nav_link-a11eefe {
     position: relative;
     z-index: 1;
     display: flex;
     align-items: center;
     padding: 1rem 1.5rem;
-    border-left: 1px solid var(--color-border);
-    background: var(--color-background);
+    border-left: 1px solid color-mix(
+        in srgb, var(--primary) 8%, transparent
+    );
     font-size: 0.9375rem;
     font-weight: 500;
     color: var(--color-text-primary);
     text-decoration: none;
     white-space: nowrap;
-    transition: color var(--transition-fast);
+    transition:
+        color var(--transition-fast),
+        background var(--transition-fast);
 }
 
 .nav_link-a11eefe:hover {
     color: var(--color-primary);
+    background: color-mix(
+        in srgb, var(--primary) 5%, transparent
+    );
 }
 
 .nav_link-a11eefe:focus-visible {
@@ -3839,33 +3794,34 @@
     outline-offset: -2px;
 }
 
-/* ── Primary action link (cell) ──────────────
-   Gradient bg is opaque. z-index:1 sits
-   above the grid overlay.                     */
+/* ── Primary action link ─────────────────── */
 .nav_link_primary-a11eefe {
     position: relative;
     z-index: 1;
     display: flex;
     align-items: center;
     padding: 1rem 1.5rem;
-    border-left: 1px solid var(--color-border);
+    border-left: 1px solid color-mix(
+        in srgb, var(--primary) 8%, transparent
+    );
     font-size: 0.9375rem;
     font-weight: 600;
     color: var(--color-background);
     text-decoration: none;
     white-space: nowrap;
-    background: linear-gradient(
-        135deg,
-        var(--color-primary) 0%,
-        color-mix(
-            in srgb, var(--primary) 90%, transparent
-        ) 100%
-    );
-    transition: opacity var(--transition-fast);
+    background: var(--color-primary);
+    transition:
+        opacity var(--transition-fast),
+        box-shadow var(--transition-fast);
 }
 
 .nav_link_primary-a11eefe:hover {
-    filter: brightness(1.15);
+    box-shadow:
+        0 0 16px color-mix(
+            in srgb,
+            var(--primary) 30%,
+            transparent
+        );
 }
 
 .nav_link_primary-a11eefe:focus-visible {
@@ -3873,9 +3829,7 @@
     outline-offset: -2px;
 }
 
-/* ── Icon button cell ────────────────────────
-   Same cell styling as nav_link but sized for
-   an icon. Shows Sun/Moon for dark mode.      */
+/* ── Icon button cell ────────────────────── */
 .nav_icon_btn-a11eefe {
     position: relative;
     z-index: 1;
@@ -3885,8 +3839,10 @@
     width: 3.25rem;
     padding: 0;
     border: none;
-    border-left: 1px solid var(--color-border);
-    background: var(--color-background);
+    border-left: 1px solid color-mix(
+        in srgb, var(--primary) 8%, transparent
+    );
+    background: transparent;
     color: var(--color-text-primary);
     cursor: pointer;
     transition: color var(--transition-fast);
@@ -3907,14 +3863,7 @@
     outline-offset: -2px;
 }
 
-/* Right border on the last cell to close
-   the button group.                           */
-.nav_link-a11eefe:last-child,
-.nav_link_primary-a11eefe:last-child {
-    border-right: 1px solid var(--color-border);
-}
-
-/* ── Responsive ──────────────────────────────  */
+/* ── Responsive ──────────────────────────── */
 
 @media (max-width: 768px) {
     .nav_content-a11eefe {
@@ -3967,12 +3916,14 @@
 
 
 /* ============================================
-   Vitrine (Landing) Page — Hybrid Forge
-   Flat angular, aurora-through-grid,
-   smooth glow on cards, border-spin on CTA.
+   Vitrine (Landing) Page — Liquid Glass
+   ============================================
+   Rounded glass panels floating above mesh
+   background. Generous whitespace, smooth
+   spring-like entrance animations.
    ============================================ */
 
-/* ── Main Container + Side Lines ─────────── */
+/* ── Main Container ───────────────────────── */
 
 .vitrine-775442b {
     position: relative;
@@ -3981,51 +3932,38 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 80px 2rem 4rem;
+    padding: 100px 2rem 4rem;
     z-index: 1;
-    background: var(--color-background);
-    contain: layout style;
 }
 
 .content-775442b {
     position: relative;
     flex: 1;
     width: 100%;
-    max-width: 1200px;
+    max-width: 1100px;
     margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
 }
 
-.vitrine-775442b::before,
-.vitrine-775442b::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 1px;
-    background: var(--color-border);
-    pointer-events: none;
-    z-index: 2;
-}
-
-.vitrine-775442b::before { left: calc(50% - 600px); }
-.vitrine-775442b::after { right: calc(50% - 600px); }
-
-/* ── Hero Banner Wrapper ─────────────────── */
+/* ── Hero Section ─────────────────────────── */
 
 .hero_section-775442b {
     width: 100%;
-    animation: power-on 0.8s ease both;
+    animation:
+        float-in 0.8s
+        cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-/* ── Hero Content ────────────────────────── */
+/* ── Hero Content ─────────────────────────── */
 
 .hero_tagline-775442b {
-    font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+    font-size: clamp(1.15rem, 2.5vw, 1.5rem);
     color: var(--color-text-secondary);
-    margin-bottom: 3rem;
-    line-height: 1.6;
+    margin-bottom: 2rem;
+    line-height: 1.7;
     font-weight: 400;
-    letter-spacing: -0.01em;
 }
 
 .hero_cta-775442b {
@@ -4036,37 +3974,41 @@
     align-items: center;
 }
 
-/* ── Vitrine Card — smooth border-glow ───── */
+/* ── Vitrine Card — rounded glass panel ──── */
 
 .vitrine_card-775442b {
     position: relative;
     background: var(--glass-bg);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid var(--color-border);
-    border-radius: 0;
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid color-mix(
+        in srgb, var(--primary) 10%, transparent
+    );
+    border-radius: var(--radius-md);
     padding: 2.5rem 2rem;
     overflow: hidden;
     transition:
-        border-color var(--transition-base),
-        box-shadow var(--transition-base),
-        background var(--transition-base);
+        border-color var(--transition-smooth),
+        box-shadow var(--transition-smooth),
+        background var(--transition-smooth),
+        transform var(--transition-smooth);
 }
 
 .vitrine_card-775442b:hover {
+    transform: translateY(-3px) scale(1.01);
     border-color: color-mix(
-        in srgb, var(--primary) 50%, transparent
+        in srgb, var(--primary) 25%, transparent
     );
     box-shadow:
-        0 0 15px color-mix(
+        0 8px 32px color-mix(
             in srgb,
-            var(--primary) 15%,
+            var(--primary) 12%,
             transparent
         );
     background: var(--glass-bg-hover);
 }
 
-/* ── Shared Card Text ────────────────────── */
+/* ── Shared Card Text ─────────────────────── */
 
 .card_title-775442b {
     font-family: var(--heading-font-family);
@@ -4084,42 +4026,46 @@
     margin: 0;
 }
 
-/* ── Tagline Section ─────────────────────── */
+/* ── Tagline Section ──────────────────────── */
 
 .tagline-775442b {
     width: 100%;
-    padding: 3rem 0 3rem 15%;
-    margin-bottom: 2rem;
-    animation: power-on 0.8s ease both;
-    animation-delay: 0.15s;
+    text-align: center;
+    animation:
+        float-in 0.8s
+        cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: 0.1s;
 }
 
 .tagline_text-775442b {
-    border-left: 2px solid var(--color-primary);
-    padding-left: 1.5rem;
+    padding: 0;
 }
 
 .tagline_line-775442b {
-    font-size: clamp(1.1rem, 2vw, 1.4rem);
+    font-family: var(--heading-font-family);
+    font-size: clamp(1.3rem, 2.5vw, 1.75rem);
     color: var(--color-text-secondary);
     margin: 0;
     line-height: 1.8;
-    font-weight: 400;
+    font-weight: 500;
+    letter-spacing: -0.01em;
 }
 
-/* ── Apps Section ────────────────────────── */
+/* ── Apps Section ─────────────────────────── */
 
 .apps-775442b {
     width: 100%;
-    margin-bottom: 4rem;
-    animation: power-on 0.8s ease both;
-    animation-delay: 0.25s;
+    animation:
+        float-in 0.8s
+        cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: 0.2s;
 }
 
 .apps_grid-775442b {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 0;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
 }
 
 .app_card-775442b {
@@ -4140,9 +4086,9 @@
         in srgb, var(--primary) 8%, transparent
     );
     border: 1px solid color-mix(
-        in srgb, var(--primary) 15%, transparent
+        in srgb, var(--primary) 12%, transparent
     );
-    border-radius: 0;
+    border-radius: var(--radius-sm);
     color: var(--color-primary);
     margin-bottom: 1.5rem;
     transition:
@@ -4152,9 +4098,9 @@
 
 .vitrine_card-775442b:hover .app_card_icon-775442b {
     background: color-mix(
-        in srgb, var(--primary) 18%, transparent
+        in srgb, var(--primary) 15%, transparent
     );
-    box-shadow: 0 0 10px var(--glow);
+    box-shadow: 0 0 12px var(--glow);
 }
 
 .app_card_icon-775442b svg {
@@ -4162,19 +4108,21 @@
     height: 28px;
 }
 
-/* ── Pricing Section ─────────────────────── */
+/* ── Pricing Section ──────────────────────── */
 
 .pricing-775442b {
     width: 100%;
-    margin-bottom: 2rem;
-    animation: power-on 0.8s ease both;
-    animation-delay: 0.35s;
+    animation:
+        float-in 0.8s
+        cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: 0.3s;
 }
 
 .pricing_grid-775442b {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 0;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
     align-items: stretch;
 }
 
@@ -4210,13 +4158,6 @@
     color: var(--color-primary);
     line-height: 1;
     font-variant-numeric: tabular-nums;
-    filter: drop-shadow(
-        0 0 10px color-mix(
-            in srgb,
-            var(--primary) 25%,
-            transparent
-        )
-    );
 }
 
 .pricing_period-775442b {
@@ -4237,12 +4178,10 @@
     padding: 0.75rem 0;
     color: var(--color-text-secondary);
     border-bottom: 1px solid color-mix(
-        in srgb, var(--primary) 5%, transparent
+        in srgb, var(--primary) 6%, transparent
     );
     font-size: 0.95rem;
     line-height: 1.4;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
 }
 
 .pricing_features-775442b li:last-child {
@@ -4254,29 +4193,32 @@
     width: 100%;
 }
 
-/* ── Start Now — border-spin CTA ─────────── */
+/* ── Start Now — ambient glow CTA ────────── */
 
 .start_now-775442b {
     width: 100%;
-    margin-top: 2rem;
-    border: 1px solid transparent;
-    border-image: conic-gradient(
-        from var(--border-angle),
-        var(--color-primary),
-        transparent 25%,
-        transparent 75%,
-        var(--color-primary)
-    ) 1;
     animation:
-        power-on 0.8s ease both,
-        border-spin 3s linear 0.8s infinite;
+        float-in 0.8s
+        cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: 0.4s;
 }
 
-/* Remove inner banner margin so border-spin
-   aligns flush with the visible content.    */
+/* Glass glow around the inner banner */
 .start_now-775442b header {
-    margin-bottom: 0;
-    border: none;
+    box-shadow:
+        0 0 40px color-mix(
+            in srgb,
+            var(--primary) 12%,
+            transparent
+        ),
+        0 8px 32px color-mix(
+            in srgb,
+            var(--primary) 8%,
+            transparent
+        );
+    border-color: color-mix(
+        in srgb, var(--primary) 25%, transparent
+    );
 }
 
 .start_now_cta-775442b {
@@ -4293,31 +4235,30 @@
     margin: 0;
 }
 
-/* ── Responsive ──────────────────────────── */
-
-@media (max-width: 1264px) {
-    .vitrine-775442b::before { left: 2rem; }
-    .vitrine-775442b::after { right: 2rem; }
-}
+/* ── Responsive ───────────────────────────── */
 
 @media (max-width: 768px) {
-    .vitrine-775442b { padding: 80px 1.5rem 3rem; }
-    .vitrine-775442b::before { left: 1.5rem; }
-    .vitrine-775442b::after { right: 1.5rem; }
-    .hero_tagline-775442b { margin-bottom: 2.5rem; }
+    .vitrine-775442b {
+        padding: 90px 1.5rem 3rem;
+    }
+    .content-775442b { gap: 2.5rem; }
+    .hero_tagline-775442b { margin-bottom: 2rem; }
     .hero_cta-775442b {
         flex-direction: column;
         width: 100%;
     }
-    .apps_grid-775442b { grid-template-columns: 1fr; }
+    .apps_grid-775442b {
+        grid-template-columns: 1fr;
+    }
     .app_card-775442b { padding: 2rem 1.5rem; }
-    .pricing_grid-775442b { grid-template-columns: 1fr; }
+    .pricing_grid-775442b {
+        grid-template-columns: 1fr;
+    }
 }
 
 @media (max-width: 480px) {
-    .vitrine-775442b { padding: 70px 1rem 2rem; }
-    .vitrine-775442b::before,
-    .vitrine-775442b::after { display: none; }
+    .vitrine-775442b { padding: 80px 1rem 2rem; }
+    .content-775442b { gap: 2rem; }
     .hero_cta-775442b { gap: 0.75rem; }
     .app_card-775442b { padding: 1.5rem 1rem; }
 }

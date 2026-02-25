@@ -1,10 +1,12 @@
 /* ============================================
-   Vitrine (Landing) Page — Hybrid Forge
-   Flat angular, aurora-through-grid,
-   smooth glow on cards, border-spin on CTA.
+   Vitrine (Landing) Page — Liquid Glass
+   ============================================
+   Rounded glass panels floating above mesh
+   background. Generous whitespace, smooth
+   spring-like entrance animations.
    ============================================ */
 
-/* ── Main Container + Side Lines ─────────── */
+/* ── Main Container ───────────────────────── */
 
 .vitrine {
     position: relative;
@@ -13,51 +15,38 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 80px 2rem 4rem;
+    padding: 100px 2rem 4rem;
     z-index: 1;
-    background: var(--color-background);
-    contain: layout style;
 }
 
 .content {
     position: relative;
     flex: 1;
     width: 100%;
-    max-width: 1200px;
+    max-width: 1100px;
     margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
 }
 
-.vitrine::before,
-.vitrine::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 1px;
-    background: var(--color-border);
-    pointer-events: none;
-    z-index: 2;
-}
-
-.vitrine::before { left: calc(50% - 600px); }
-.vitrine::after { right: calc(50% - 600px); }
-
-/* ── Hero Banner Wrapper ─────────────────── */
+/* ── Hero Section ─────────────────────────── */
 
 .hero_section {
     width: 100%;
-    animation: power-on 0.8s ease both;
+    animation:
+        float-in 0.8s
+        cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-/* ── Hero Content ────────────────────────── */
+/* ── Hero Content ─────────────────────────── */
 
 .hero_tagline {
-    font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+    font-size: clamp(1.15rem, 2.5vw, 1.5rem);
     color: var(--color-text-secondary);
-    margin-bottom: 3rem;
-    line-height: 1.6;
+    margin-bottom: 2rem;
+    line-height: 1.7;
     font-weight: 400;
-    letter-spacing: -0.01em;
 }
 
 .hero_cta {
@@ -68,37 +57,41 @@
     align-items: center;
 }
 
-/* ── Vitrine Card — smooth border-glow ───── */
+/* ── Vitrine Card — rounded glass panel ──── */
 
 .vitrine_card {
     position: relative;
     background: var(--glass-bg);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid var(--color-border);
-    border-radius: 0;
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid color-mix(
+        in srgb, var(--primary) 10%, transparent
+    );
+    border-radius: var(--radius-md);
     padding: 2.5rem 2rem;
     overflow: hidden;
     transition:
-        border-color var(--transition-base),
-        box-shadow var(--transition-base),
-        background var(--transition-base);
+        border-color var(--transition-smooth),
+        box-shadow var(--transition-smooth),
+        background var(--transition-smooth),
+        transform var(--transition-smooth);
 }
 
 .vitrine_card:hover {
+    transform: translateY(-3px) scale(1.01);
     border-color: color-mix(
-        in srgb, var(--primary) 50%, transparent
+        in srgb, var(--primary) 25%, transparent
     );
     box-shadow:
-        0 0 15px color-mix(
+        0 8px 32px color-mix(
             in srgb,
-            var(--primary) 15%,
+            var(--primary) 12%,
             transparent
         );
     background: var(--glass-bg-hover);
 }
 
-/* ── Shared Card Text ────────────────────── */
+/* ── Shared Card Text ─────────────────────── */
 
 .card_title {
     font-family: var(--heading-font-family);
@@ -116,42 +109,46 @@
     margin: 0;
 }
 
-/* ── Tagline Section ─────────────────────── */
+/* ── Tagline Section ──────────────────────── */
 
 .tagline {
     width: 100%;
-    padding: 3rem 0 3rem 15%;
-    margin-bottom: 2rem;
-    animation: power-on 0.8s ease both;
-    animation-delay: 0.15s;
+    text-align: center;
+    animation:
+        float-in 0.8s
+        cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: 0.1s;
 }
 
 .tagline_text {
-    border-left: 2px solid var(--color-primary);
-    padding-left: 1.5rem;
+    padding: 0;
 }
 
 .tagline_line {
-    font-size: clamp(1.1rem, 2vw, 1.4rem);
+    font-family: var(--heading-font-family);
+    font-size: clamp(1.3rem, 2.5vw, 1.75rem);
     color: var(--color-text-secondary);
     margin: 0;
     line-height: 1.8;
-    font-weight: 400;
+    font-weight: 500;
+    letter-spacing: -0.01em;
 }
 
-/* ── Apps Section ────────────────────────── */
+/* ── Apps Section ─────────────────────────── */
 
 .apps {
     width: 100%;
-    margin-bottom: 4rem;
-    animation: power-on 0.8s ease both;
-    animation-delay: 0.25s;
+    animation:
+        float-in 0.8s
+        cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: 0.2s;
 }
 
 .apps_grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 0;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
 }
 
 .app_card {
@@ -172,9 +169,9 @@
         in srgb, var(--primary) 8%, transparent
     );
     border: 1px solid color-mix(
-        in srgb, var(--primary) 15%, transparent
+        in srgb, var(--primary) 12%, transparent
     );
-    border-radius: 0;
+    border-radius: var(--radius-sm);
     color: var(--color-primary);
     margin-bottom: 1.5rem;
     transition:
@@ -184,9 +181,9 @@
 
 .vitrine_card:hover .app_card_icon {
     background: color-mix(
-        in srgb, var(--primary) 18%, transparent
+        in srgb, var(--primary) 15%, transparent
     );
-    box-shadow: 0 0 10px var(--glow);
+    box-shadow: 0 0 12px var(--glow);
 }
 
 .app_card_icon svg {
@@ -194,19 +191,21 @@
     height: 28px;
 }
 
-/* ── Pricing Section ─────────────────────── */
+/* ── Pricing Section ──────────────────────── */
 
 .pricing {
     width: 100%;
-    margin-bottom: 2rem;
-    animation: power-on 0.8s ease both;
-    animation-delay: 0.35s;
+    animation:
+        float-in 0.8s
+        cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: 0.3s;
 }
 
 .pricing_grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 0;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
     align-items: stretch;
 }
 
@@ -242,13 +241,6 @@
     color: var(--color-primary);
     line-height: 1;
     font-variant-numeric: tabular-nums;
-    filter: drop-shadow(
-        0 0 10px color-mix(
-            in srgb,
-            var(--primary) 25%,
-            transparent
-        )
-    );
 }
 
 .pricing_period {
@@ -269,12 +261,10 @@
     padding: 0.75rem 0;
     color: var(--color-text-secondary);
     border-bottom: 1px solid color-mix(
-        in srgb, var(--primary) 5%, transparent
+        in srgb, var(--primary) 6%, transparent
     );
     font-size: 0.95rem;
     line-height: 1.4;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
 }
 
 .pricing_features li:last-child {
@@ -286,29 +276,32 @@
     width: 100%;
 }
 
-/* ── Start Now — border-spin CTA ─────────── */
+/* ── Start Now — ambient glow CTA ────────── */
 
 .start_now {
     width: 100%;
-    margin-top: 2rem;
-    border: 1px solid transparent;
-    border-image: conic-gradient(
-        from var(--border-angle),
-        var(--color-primary),
-        transparent 25%,
-        transparent 75%,
-        var(--color-primary)
-    ) 1;
     animation:
-        power-on 0.8s ease both,
-        border-spin 3s linear 0.8s infinite;
+        float-in 0.8s
+        cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: 0.4s;
 }
 
-/* Remove inner banner margin so border-spin
-   aligns flush with the visible content.    */
+/* Glass glow around the inner banner */
 .start_now :global(header) {
-    margin-bottom: 0;
-    border: none;
+    box-shadow:
+        0 0 40px color-mix(
+            in srgb,
+            var(--primary) 12%,
+            transparent
+        ),
+        0 8px 32px color-mix(
+            in srgb,
+            var(--primary) 8%,
+            transparent
+        );
+    border-color: color-mix(
+        in srgb, var(--primary) 25%, transparent
+    );
 }
 
 .start_now_cta {
@@ -325,31 +318,30 @@
     margin: 0;
 }
 
-/* ── Responsive ──────────────────────────── */
-
-@media (max-width: 1264px) {
-    .vitrine::before { left: 2rem; }
-    .vitrine::after { right: 2rem; }
-}
+/* ── Responsive ───────────────────────────── */
 
 @media (max-width: 768px) {
-    .vitrine { padding: 80px 1.5rem 3rem; }
-    .vitrine::before { left: 1.5rem; }
-    .vitrine::after { right: 1.5rem; }
-    .hero_tagline { margin-bottom: 2.5rem; }
+    .vitrine {
+        padding: 90px 1.5rem 3rem;
+    }
+    .content { gap: 2.5rem; }
+    .hero_tagline { margin-bottom: 2rem; }
     .hero_cta {
         flex-direction: column;
         width: 100%;
     }
-    .apps_grid { grid-template-columns: 1fr; }
+    .apps_grid {
+        grid-template-columns: 1fr;
+    }
     .app_card { padding: 2rem 1.5rem; }
-    .pricing_grid { grid-template-columns: 1fr; }
+    .pricing_grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 @media (max-width: 480px) {
-    .vitrine { padding: 70px 1rem 2rem; }
-    .vitrine::before,
-    .vitrine::after { display: none; }
+    .vitrine { padding: 80px 1rem 2rem; }
+    .content { gap: 2rem; }
     .hero_cta { gap: 0.75rem; }
     .app_card { padding: 1.5rem 1rem; }
 }

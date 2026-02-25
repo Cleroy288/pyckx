@@ -1,9 +1,9 @@
 /* ============================================
-   HeroBanner — Glass hero with aurora mesh
+   HeroBanner — Rounded glass panel
    ============================================
-   Glass background, grid-line pattern,
-   aurora mesh glow, neon gradient title.
-   Used by home, intello, and collection.
+   Frosted glass with gradient accent glow
+   behind the title. Rounded corners, soft
+   shadow, no grid overlay.
    ============================================ */
 
 /* ── Banner container ─────────────────────  */
@@ -14,94 +14,80 @@
     padding: 3rem 2rem;
     text-align: center;
     background: var(--glass-bg);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid var(--color-border);
-    border-top-color: color-mix(
-        in srgb, var(--primary) 15%, transparent
+    backdrop-filter: var(--glass-blur-lg);
+    -webkit-backdrop-filter: var(--glass-blur-lg);
+    border: 1px solid color-mix(
+        in srgb, var(--primary) 12%, transparent
     );
-    border-bottom-color: color-mix(
-        in srgb, var(--primary) 15%, transparent
-    );
-    border-radius: 0;
-    box-shadow: none;
-}
-
-/* ── Grid-lines overlay ───────────────────  */
-.banner::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    background-image:
-        var(--grid-overlay-image);
-    background-size:
-        var(--grid-overlay-size);
-    opacity: 0.6;
-}
-
-/* ── Aurora mesh glow ─────────────────────
-   Two-blob aurora behind the text, subtler
-   than the global aurora but visible.
-   Constrained to banner bounds.             */
-.banner::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    background:
-        radial-gradient(
-            ellipse 50% 70% at 30% 40%,
-            color-mix(
-                in srgb,
-                var(--primary) 18%,
-                transparent
-            ),
-            transparent
-        ),
-        radial-gradient(
-            ellipse 45% 60% at 70% 55%,
-            color-mix(
-                in srgb,
-                var(--accent) 12%,
-                transparent
-            ),
+    border-radius: var(--radius-md);
+    box-shadow:
+        0 8px 32px color-mix(
+            in srgb,
+            var(--primary) 8%,
             transparent
         );
 }
 
-/* ── Title — gradient text + neon glow ────  */
+/* ── Gradient accent glow behind title ────
+   Soft ellipse centered at top, creates a
+   warm halo behind the heading text.        */
+.banner::after {
+    content: "";
+    position: absolute;
+    top: -30%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    background: radial-gradient(
+        ellipse at center,
+        color-mix(
+            in srgb,
+            var(--primary) 18%,
+            transparent
+        ),
+        transparent 70%
+    );
+    filter: blur(40px);
+}
+
+/* ── Title — bold, clean, no gradient ─────
+   Gradient accent line above via ::before.  */
 .banner_title {
     position: relative;
     z-index: 1;
-    margin: 0 0 0.5rem;
+    margin: 0 0 0.75rem;
     font-family: var(--heading-font-family);
-    font-size: clamp(2rem, 5vw, 3rem);
-    font-weight: 700;
-    letter-spacing: -0.03em;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    color: var(--color-text-primary);
+}
+
+/* ── Gradient accent line above title ────  */
+.banner_title::before {
+    content: "";
+    display: block;
+    width: 40px;
+    height: 4px;
+    margin: 0 auto 1rem;
+    border-radius: var(--radius-full);
     background: linear-gradient(
-        135deg,
-        var(--color-primary) 0%,
+        90deg,
+        var(--color-primary),
         color-mix(
-            in srgb, var(--primary) 70%, black
-        ) 100%
-    );
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    filter: drop-shadow(
-        0 0 18px color-mix(
             in srgb,
-            var(--primary) 30%,
-            transparent
+            var(--accent) 80%,
+            white
         )
     );
 }
 
 /* ── Body wrapper ─────────────────────────  */
 .banner_body {
+    position: relative;
     z-index: 1;
 }
 

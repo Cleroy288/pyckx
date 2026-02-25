@@ -6,10 +6,10 @@
     flex-direction: column;
     gap: 0.75rem;
     padding: 1.5rem;
-    border-radius: 0;
+    border-radius: var(--radius-md);
     background: var(--glass-bg);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
     border: 1px solid var(--color-border);
     transition:
         border-color var(--transition-base),
@@ -19,12 +19,12 @@
 
 .card:hover {
     border-color: color-mix(
-        in srgb, var(--primary) 50%, transparent
+        in srgb, var(--primary) 25%, transparent
     );
     box-shadow:
-        0 0 15px color-mix(
+        0 8px 32px color-mix(
             in srgb,
-            var(--primary) 15%,
+            var(--primary) 12%,
             transparent
         );
     background: var(--glass-bg-hover);
