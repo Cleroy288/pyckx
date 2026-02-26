@@ -1,42 +1,54 @@
 # Lapp-Pyckx Development Commands
-# Run with: just <recipe>
 
-# Default: run both frontend and backend (use two terminals or &)
-dev:
-    @echo "Starting hot reload dev servers..."
-    @echo "Run these in separate terminals:"
-    @echo "  just watch-front"
-    @echo "  just watch-back"
-    @echo ""
-    @echo "Or run both with:"
-    @echo "  just dev-all"
+# 1. Build CSS + WASM  2. Delete old  3. Replace  4. Serve
+build-front:
+    #!/usr/bin/env bash
+    set -e
+    cd dioxus-app
+    npx @tailwindcss/cli -i input.css -o assets/tailwind.css
+    rm -rf ../target/dx/dioxus-app/release
+    dx build --release
+    DX="../target/dx/dioxus-app/release/web/public"
+    cp -r assets/* "$DX/assets/"
+    rm -rf ../backend/static
+    cp -r "$DX" ../backend/static
+    echo "✓ frontend ready in backend/static"
 
-# Run both in background (simpler approach)
+# Run both: frontend watch + backend watch
 dev-all:
     #!/usr/bin/env bash
     trap 'kill 0' EXIT
-    (cd leptos-app && trunk watch) &
-    (cd backend && cargo watch -x run) &
+    (cd dioxus-app && cargo watch -w src -w assets -w input.css -s "\
+        npx @tailwindcss/cli -i input.css -o assets/tailwind.css \
+        && rm -rf ../target/dx/dioxus-app/release \
+        && dx build --release \
+        && DX=../target/dx/dioxus-app/release/web/public \
+        && cp -r assets/* \$DX/assets/ \
+        && rm -rf ../backend/static \
+        && cp -r \$DX ../backend/static \
+        && echo '✓ frontend ready'" 2>&1 | sed 's/^/[front] /') &
+    (cd backend && cargo watch -x run 2>&1 | sed 's/^/[back]  /') &
     wait
 
-# Frontend: Trunk watches and builds to backend/static
-watch-front:
-    cd leptos-app && trunk watch
-
-# Backend: cargo-watch restarts on changes
+# Backend: auto-restart on changes
 watch-back:
     cd backend && cargo watch -x run
 
-# Production build
+# Production build (minified CSS + backend binary)
 build:
-    cd leptos-app && trunk build --release
-    cd backend && cargo build --release
+    #!/usr/bin/env bash
+    set -e
+    cd dioxus-app
+    npx @tailwindcss/cli -i input.css -o assets/tailwind.css --minify
+    rm -rf ../target/dx/dioxus-app/release
+    dx build --release
+    DX="../target/dx/dioxus-app/release/web/public"
+    cp -r assets/* "$DX/assets/"
+    rm -rf ../backend/static
+    cp -r "$DX" ../backend/static
+    cd ../backend && cargo build --release
 
-# Clean all build artifacts
+# Clean everything
 clean:
     cargo clean
     rm -rf backend/static
-
-# Install development tools
-install-tools:
-    cargo install just cargo-watch trunk

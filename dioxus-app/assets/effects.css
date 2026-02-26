@@ -1,0 +1,136 @@
+/* ============================================
+   DECORATIVE EFFECTS
+   ============================================
+   Imported UNLAYERED so these rules beat
+   Tailwind utilities in the CSS cascade.
+   ============================================ */
+
+/* ── Grid overlay (banners + top bar) ──── */
+.hero-banner::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background-image: var(--grid-overlay-image);
+    background-size: var(--grid-overlay-size);
+    opacity: 0.6;
+}
+
+.hero-banner::after {
+    content: "";
+    position: absolute;
+    top: -30%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 80%;
+    pointer-events: none;
+    z-index: 0;
+    background: radial-gradient(
+        ellipse at center,
+        color-mix(
+            in srgb, var(--primary) 12%,
+            transparent
+        ),
+        transparent 70%
+    );
+}
+
+.top-bar-grid::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background-image: var(--grid-overlay-image);
+    background-size: var(--grid-overlay-size);
+    opacity: 0.35;
+}
+
+/* ── Page side lines + connectors ──────── */
+.page-layout::before,
+.page-layout::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--color-border);
+    pointer-events: none;
+    z-index: 2;
+}
+
+.page-layout::before {
+    left: calc(50% - 600px);
+}
+
+.page-layout::after {
+    right: calc(50% - 600px);
+}
+
+.page-nav-lines::before,
+.page-nav-lines::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    height: 1px;
+    width: min(
+        calc(600px - 5.5rem - 2rem),
+        calc(50vw - 5.5rem - 2rem)
+    );
+    background: var(--color-border);
+    pointer-events: none;
+}
+
+.page-nav-lines::before { right: 100%; }
+.page-nav-lines::after { left: 100%; }
+
+@media (max-width: 1264px) {
+    .page-layout::before { left: 2rem; }
+    .page-layout::after { right: 2rem; }
+}
+
+@media (max-width: 768px) {
+    .page-layout::before { left: 1.5rem; }
+    .page-layout::after { right: 1.5rem; }
+}
+
+@media (max-width: 480px) {
+    .page-layout::before,
+    .page-layout::after { display: none; }
+    .page-nav-lines::before,
+    .page-nav-lines::after { display: none; }
+}
+
+/* ── Border-spin card hover ────────────── */
+.border-spin-card {
+    transition: border-color 0.2s;
+}
+
+.border-spin-card:hover {
+    border-color: transparent;
+    border-image: conic-gradient(
+        from var(--border-angle),
+        var(--color-primary),
+        transparent 25%,
+        transparent 75%,
+        var(--color-primary)
+    ) 1;
+    animation: border-spin 3s linear infinite;
+}
+
+/* Start-now: always animated (not hover) */
+.border-spin-always {
+    border: 1px solid transparent;
+    border-image: conic-gradient(
+        from var(--border-angle),
+        var(--color-primary),
+        transparent 25%,
+        transparent 75%,
+        var(--color-primary)
+    ) 1;
+    animation:
+        fadeInUp 0.6s ease both,
+        border-spin 3s linear 0.6s infinite;
+}

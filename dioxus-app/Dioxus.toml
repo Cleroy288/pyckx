@@ -1,0 +1,16 @@
+[application]
+name = "pyckx"
+out_dir = "dist"
+asset_dir = "assets"
+
+[web.app]
+title = "pyckx"
+base_path = "/"
+
+[web.watcher]
+reload_html = true
+watch_path = ["src", "assets"]
+index_on_404 = true
+
+[[web.proxy]]
+backend = "http://localhost:8080/api/"

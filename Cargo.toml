@@ -1,5 +1,5 @@
 [workspace]
-members = ["backend", "leptos-app"]
+members = ["backend", "leptos-app", "dioxus-app"]
 resolver = "2"
 
 [profile.release]
