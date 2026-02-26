@@ -1,7 +1,11 @@
 //! Vitrine (landing) page module
 
-mod components;
+mod apps;
 mod data;
+mod hero;
+mod nav;
+mod pricing;
+mod stage;
 mod vitrine;
 
 pub use vitrine::VitrinePage;

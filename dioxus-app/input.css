@@ -2,3 +2,4 @@
 @source "./src/**/*.{rs,html,css}";
 @import "./assets/global.css" layer(base);
 @import "./assets/effects.css";
+@import "./assets/vitrine.css";

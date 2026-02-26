@@ -1,1 +1,0 @@
-//! Vitrine page sub-components

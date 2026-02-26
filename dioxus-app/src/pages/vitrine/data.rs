@@ -1,62 +1,44 @@
-//! Data constants for the vitrine page
+//! Static data constants for the vitrine page
 
-/// App card data for the services section
-#[derive(Clone)]
-pub struct Card {
-    pub icon: &'static str,
-    pub title: &'static str,
-    pub description: &'static str,
+/// Single stat item (value + label)
+pub struct Stat {
+    /// Display value (e.g. "7+")
+    pub value: &'static str,
+    /// Description label
+    pub label: &'static str,
 }
 
-/// All available app cards
-pub const APP_CARDS: &[Card] = &[
-    Card {
-        icon: "Book",
-        title: "Intello",
-        description: "Your complete student companion. \
-            Organize courses, track progress, and \
-            excel in your studies with powerful \
-            learning tools.",
+/// Hero stats row data
+pub const STATS: [Stat; 3] = [
+    Stat {
+        value: "7+",
+        label: "Types de jeux",
     },
-    Card {
-        icon: "Disc",
-        title: "Collection",
-        description: "Manage your DVD collection \
-            effortlessly. Catalog, organize, and \
-            discover your favorite movies and shows.",
+    Stat {
+        value: "10s",
+        label: "PDF \u{2192} Quiz",
+    },
+    Stat {
+        value: "3\u{20AC}",
+        label: "Par mois",
     },
 ];
 
-/// Pricing tier data
-#[derive(Clone)]
-pub struct PricingTier {
-    pub name: &'static str,
-    pub price: &'static str,
-    pub period: &'static str,
-    pub features: &'static [&'static str],
-}
+/// Intello featured-card bullet points
+pub const INTELLO_FEATURES: [&str; 5] = [
+    "7 types de jeux generes par IA",
+    "PDF, Word, TXT \u{2192} Quiz en 10s",
+    "Cours complets en 5 etapes",
+    "Correction automatique IA",
+    "Mode rapide sans compte",
+];
 
-/// All pricing tiers
-pub const PRICING_TIERS: &[PricingTier] = &[
-    PricingTier {
-        name: "Monthly",
-        price: "5",
-        period: "month",
-        features: &[
-            "All apps included",
-            "All features",
-            "Regular updates",
-        ],
-    },
-    PricingTier {
-        name: "Yearly",
-        price: "50",
-        period: "year",
-        features: &[
-            "All apps included",
-            "All features",
-            "Regular updates",
-            "Save 17%",
-        ],
-    },
+/// Pricing section feature list
+pub const PRICE_FEATURES: [&str; 6] = [
+    "Intello \u{2014} Acces complet",
+    "Collection \u{2014} Acces complet",
+    "Toutes les futures apps",
+    "Generations AI illimitees",
+    "Support prioritaire",
+    "Annulable a tout moment",
 ];
