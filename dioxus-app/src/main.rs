@@ -17,6 +17,8 @@ enum Route {
     // Public
     #[route("/")]
     Vitrine {},
+    #[route("/produit/intello")]
+    IntelloProduct {},
     #[route("/login")]
     Login {},
     #[route("/register")]
@@ -107,6 +109,11 @@ enum Route {
 /// Landing page
 fn Vitrine() -> Element {
     pages::vitrine::VitrinePage()
+}
+
+/// Intello product marketing page
+fn IntelloProduct() -> Element {
+    pages::vitrine::IntelloProductPage()
 }
 
 /// Login page

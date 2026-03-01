@@ -19,8 +19,8 @@ pub const STATS: [Stat; 3] = [
         label: "PDF \u{2192} Quiz",
     },
     Stat {
-        value: "3\u{20AC}",
-        label: "Par mois",
+        value: "0\u{20AC}",
+        label: "Gratuit",
     },
 ];
 
@@ -40,5 +40,5 @@ pub const PRICE_FEATURES: [&str; 6] = [
     "Toutes les futures apps",
     "Generations AI illimitees",
     "Support prioritaire",
-    "Annulable a tout moment",
+    "Aucune carte requise",
 ];

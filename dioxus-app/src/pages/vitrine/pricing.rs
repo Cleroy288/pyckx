@@ -12,19 +12,11 @@ pub fn PricingSection() -> Element {
             class: "pricing-wrap",
             id: "pricing",
             h2 {
-                "Un seul prix." br {} "Tout inclus."
+                "100% gratuit." br {} "Tout inclus."
             }
             div { class: "pricing-box",
                 div { class: "top-tag",
-                    "\u{2726} OFFRE DE LANCEMENT"
-                }
-                div {
-                    style: "font-size:12px;\
-                        color:var(--muted);\
-                        font-weight:700;\
-                        text-transform:uppercase;\
-                        letter-spacing:2px",
-                    "Mensuel"
+                    "\u{2726} ACCES GRATUIT"
                 }
                 PriceDisplay {}
                 p {
@@ -37,16 +29,17 @@ pub fn PricingSection() -> Element {
                 FeaturesList {}
                 Link { to: "/login",
                     span { class: "btn-cta",
-                        "Commencer pour \
-                            3\u{20AC}/mois \u{2192}"
+                        "Commencer "
+                        span { class: "cta-hi",
+                            "gratuitement \u{2192}"
+                        }
                     }
                 }
                 p {
                     style: "font-size:12px;\
                         color:var(--muted);\
                         margin-top:16px",
-                    "Aucun engagement. \
-                        Resiliable en 1 clic."
+                    "Aucune carte requise."
                 }
             }
         }
@@ -58,9 +51,7 @@ pub fn PricingSection() -> Element {
 fn PriceDisplay() -> Element {
     rsx! {
         div { class: "big-price",
-            sup { "\u{20AC}" }
-            "3"
-            sub { "/mois" }
+            "Gratuit"
         }
     }
 }

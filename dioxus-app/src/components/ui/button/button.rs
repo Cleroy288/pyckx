@@ -24,11 +24,13 @@ const BASE: &str = "\
     inline-flex items-center justify-center \
     font-semibold font-[var(--principal-font-family,sans-serif)] \
     border-none cursor-pointer no-underline leading-relaxed \
-    transition-all duration-[var(--transition-base)] \
+    transition-all duration-300 ease-out \
+    hover:scale-105 active:scale-95 \
     focus-visible:outline-2 \
     focus-visible:outline-[var(--color-primary)] \
     focus-visible:outline-offset-2 \
-    disabled:opacity-60 disabled:cursor-not-allowed";
+    disabled:opacity-60 disabled:cursor-not-allowed \
+    disabled:hover:scale-100 disabled:active:scale-100";
 
 /// Tailwind classes for a button variant
 fn variant_class(v: ButtonVariant) -> &'static str {
@@ -36,14 +38,17 @@ fn variant_class(v: ButtonVariant) -> &'static str {
         ButtonVariant::Primary => "\
             text-[var(--color-background)] \
             bg-[var(--color-primary)] \
-            hover:enabled:opacity-85 \
-            active:enabled:opacity-70",
+            shadow-md shadow-[color-mix(in_srgb,var(--color-primary)_40%,transparent)] \
+            hover:enabled:opacity-90 \
+            hover:shadow-lg hover:shadow-[color-mix(in_srgb,var(--color-primary)_60%,transparent)] \
+            active:enabled:opacity-80",
         ButtonVariant::Outline => "\
             bg-transparent \
-            border border-[var(--color-primary)] \
+            border-2 border-[var(--color-primary)] \
             text-[var(--color-primary)] \
             hover:enabled:bg-[var(--color-primary)] \
             hover:enabled:text-[var(--color-background)] \
+            hover:shadow-lg hover:shadow-[color-mix(in_srgb,var(--color-primary)_40%,transparent)] \
             active:enabled:opacity-80",
     }
 }

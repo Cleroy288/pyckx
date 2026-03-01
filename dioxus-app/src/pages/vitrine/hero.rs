@@ -15,11 +15,16 @@ const SPLIT_LINE: &str = r##"<svg class="split-line"
 #[component]
 pub fn HeroSection() -> Element {
     rsx! {
-        header { class: "hero",
-            div { class: "eyebrow",
-                "\u{2726} Une plateforme \u{00B7} \
-                    Plusieurs outils"
-            }
+        header { class: "hero relative overflow-visible",
+            // Ambient Orbs
+            div { class: "ambient-orb ambient-orb-primary w-[500px] h-[500px] top-[-10%] left-[-15%]" }
+            div { class: "ambient-orb ambient-orb-secondary w-[400px] h-[400px] bottom-[20%] right-[-10%]" }
+            
+            div { class: "relative z-10",
+                div { class: "eyebrow bg-white/5 border border-white/10 rounded-full px-4 py-1.5 backdrop-blur-md",
+                    "\u{2726} Une plateforme \u{00B7} \
+                        Plusieurs outils"
+                }
             div { class: "split-wrap",
                 span { class: "split-top", "PYCKX" }
                 span {
@@ -48,7 +53,10 @@ pub fn HeroSection() -> Element {
             div { class: "hero-actions",
                 Link { to: "/login",
                     span { class: "btn-ink",
-                        "Commencer gratuitement"
+                        "Commencer "
+                        span { class: "cta-hi",
+                            "gratuitement"
+                        }
                     }
                 }
                 a { href: "#services",
@@ -57,6 +65,7 @@ pub fn HeroSection() -> Element {
                 }
             }
             StatsRow {}
+            }
         }
     }
 }

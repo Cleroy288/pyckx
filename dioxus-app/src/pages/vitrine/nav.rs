@@ -47,7 +47,8 @@ const SPLIT_LINE: &str = r##"<svg class="split-line"
 pub fn VitrineNav() -> Element {
     rsx! {
         nav {
-            div { class: "logo-wrap",
+            Link { to: "/",
+                class: "logo-wrap",
                 div {
                     dangerous_inner_html: NAV_LOGO,
                 }
@@ -80,7 +81,10 @@ pub fn VitrineNav() -> Element {
                 Link { to: "/login",
                     span {
                         class: "btn-ink",
-                        "Commencer \u{2192}"
+                        "Commencer"
+                        span { class: "cta-hi",
+                            " \u{2192}"
+                        }
                     }
                 }
             }

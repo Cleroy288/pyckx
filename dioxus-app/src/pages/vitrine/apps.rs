@@ -34,7 +34,9 @@ pub fn AppsSection() -> Element {
 #[component]
 fn FeaturedCard() -> Element {
     rsx! {
-        div { class: "acard feat",
+        Link {
+            to: "/produit/intello",
+            class: "acard feat",
             div { class: "acard-icon",
                 "\u{1F9E0}"
             }

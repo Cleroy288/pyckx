@@ -24,24 +24,24 @@ fn variant_class(v: CardVariant) -> &'static str {
     match v {
         CardVariant::Glass => "\
             bg-[var(--glass-bg)] \
-            backdrop-blur-[25px] \
-            border-[var(--glass-border)] \
-            shadow-[0_4px_30px_color-mix(in_srgb,var(--primary)_5%,transparent)] \
-            hover:shadow-xl \
-            hover:border-[var(--glass-border-hover)] \
-            hover:bg-[var(--glass-bg-hover)]",
+            backdrop-blur-3xl \
+            border border-[color-mix(in_srgb,var(--color-primary)_20%,transparent)] \
+            shadow-[0_8px_32px_color-mix(in_srgb,var(--color-primary)_10%,transparent)] \
+            hover:shadow-[0_12px_45px_color-mix(in_srgb,var(--color-primary)_15%,transparent)] \
+            hover:border-[color-mix(in_srgb,var(--color-primary)_40%,transparent)] \
+            hover:bg-[color-mix(in_srgb,var(--glass-bg)_90%,transparent)]",
         CardVariant::Solid => "\
             bg-[var(--color-background)] \
-            border border-[color-mix(in_srgb,var(--primary)_15%,transparent)] \
-            shadow-[0_4px_24px_color-mix(in_srgb,var(--primary)_8%,transparent)] \
-            hover:shadow-lg",
+            border border-[color-mix(in_srgb,var(--color-primary)_20%,transparent)] \
+            shadow-[0_4px_24px_color-mix(in_srgb,var(--color-primary)_10%,transparent)] \
+            hover:shadow-xl",
         CardVariant::Popular => "\
-            bg-[var(--glass-bg)] \
-            backdrop-blur-[25px] \
-            border-[3px] border-[var(--color-primary)] \
-            shadow-lg \
-            hover:-translate-y-1.5 \
-            hover:shadow-[0_16px_50px_color-mix(in_srgb,var(--primary)_25%,transparent)]",
+            bg-[color-mix(in_srgb,var(--color-background)_60%,transparent)] \
+            backdrop-blur-3xl \
+            border-spin-always \
+            shadow-xl \
+            hover:-translate-y-2 \
+            hover:shadow-[0_20px_60px_color-mix(in_srgb,var(--color-primary)_35%,transparent)]",
     }
 }
 
