@@ -1,0 +1,7 @@
+/* GenerateForm styles */
+.form { display: flex; flex-direction: column; gap: 1rem; }
+.row { display: flex; gap: 1rem; }
+.row > * { flex: 1; }
+.file_count { margin: 0; font-size: 0.8125rem; color: var(--color-text-secondary, #999); }
+.error { color: var(--color-error); font-size: 0.875rem; margin: 0; }
+.loading { display: flex; align-items: center; gap: 0.75rem; color: var(--color-text-secondary, #999); }

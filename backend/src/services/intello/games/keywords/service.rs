@@ -3,14 +3,18 @@
 use tracing::{info, instrument};
 
 use crate::infra::openrouter::DEFAULT_MODEL;
-use crate::services::intello::ai_usage::ai_usage_domain::feature_type;
+use crate::services::intello::ai_usage::ai_usage_domain::{
+    feature_type, AiUsageInput,
+};
 use crate::services::intello::error_domain::IntelloError;
-use crate::services::intello::types_domain::{GenerateContentInput, IntelloService};
+use crate::services::intello::types_domain::{
+    GenerateContentInput, IntelloService,
+};
 use crate::services::intello::SetId;
 
-use crate::services::intello::crud::crud_service;
 use super::domain::KeywordSet;
 use super::prompt::{build_keywords_prompt, KeywordsPromptInput};
+use crate::services::intello::crud::crud_service;
 
 impl IntelloService {
     // ** get_user_keyword_sets **
@@ -25,7 +29,12 @@ impl IntelloService {
         user_id: &str,
     ) -> Result<Vec<KeywordSet>, IntelloError> {
         // Step 1: Query repository for all user keyword sets
-        crud_service::get_user_sets(self.keywords_repo.as_ref(), user_id, "keywords").await
+        crud_service::get_user_sets(
+            self.keywords_repo.as_ref(),
+            user_id,
+            "keywords",
+        )
+        .await
     }
 
     // ** generate_ai_keywords **
@@ -44,7 +53,10 @@ impl IntelloService {
         // Step 1: Validate user ID and generation input
         self.validate_user_id(user_id)?;
         self.validate_generation_input(&input)?;
-        info!(num_questions = input.num_questions, "Generating AI keyword questions");
+        info!(
+            num_questions = input.num_questions,
+            "Generating AI keyword questions"
+        );
 
         // Step 2: Build prompt input from generation parameters
         let prompt_input = KeywordsPromptInput {
@@ -58,29 +70,38 @@ impl IntelloService {
             documents: input
                 .documents
                 .iter()
-                .map(|(filename, content, _)| (filename.clone(), content.clone()))
+                .map(|(filename, content, _)| {
+                    (filename.clone(), content.clone())
+                })
                 .collect(),
         };
 
         // Step 3: Build prompt and send request to AI service
         let prompt = build_keywords_prompt(&prompt_input);
-        let ai_result = self.openrouter_client.send_chat_request(&prompt, None).await?;
+        let ai_result = self
+            .openrouter_client
+            .send_chat_request(&prompt, None)
+            .await?;
 
         // Step 4: Parse AI response into keyword questions
-        let questions = super::parser::parse_keywords_response(&ai_result.content)?;
+        let questions =
+            super::parser::parse_keywords_response(&ai_result.content)?;
 
         // Step 5: Log AI usage (fire-and-forget)
         if let Some(usage) = ai_result.usage {
-            self.try_log_ai_usage(
+            self.try_log_ai_usage(AiUsageInput {
                 user_id,
-                DEFAULT_MODEL,
-                feature_type::KEYWORDS,
-                usage.prompt_tokens,
-                usage.completion_tokens,
-            )
+                model_id: DEFAULT_MODEL,
+                feature_type: feature_type::KEYWORDS,
+                input_tokens: usage.prompt_tokens,
+                output_tokens: usage.completion_tokens,
+            })
             .await;
         }
-        info!(generated = questions.len(), "AI keyword questions generated");
+        info!(
+            generated = questions.len(),
+            "AI keyword questions generated"
+        );
 
         // Step 6: Build and store the keyword set
         let keyword_set = KeywordSet {

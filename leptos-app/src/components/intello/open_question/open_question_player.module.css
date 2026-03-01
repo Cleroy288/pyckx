@@ -1,0 +1,9 @@
+/* OpenQuestionPlayer styles */
+.player { display:flex; flex-direction:column; gap:1.25rem; max-width:700px; margin:0 auto; }
+.question_block { padding:1rem; background:var(--glass-bg); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border:1px solid var(--color-border); border-radius:0; }
+.question { margin:0 0 0.5rem; font-size:1rem; font-weight:600; color:var(--color-text-primary); }
+.hint { margin:0 0 0.5rem; font-size:0.8125rem; color:var(--color-text-secondary); font-style:italic; }
+.error { color:var(--color-error); font-size:0.875rem; }
+.grades { display:flex; flex-direction:column; gap:1rem; }
+.grade_item { padding:1rem; background:var(--glass-bg); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border:1px solid var(--color-border); border-radius:0; }
+.grade_label { font-weight:700; color:var(--color-primary); }

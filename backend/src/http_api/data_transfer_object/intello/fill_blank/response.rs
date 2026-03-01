@@ -59,3 +59,43 @@ pub struct FillBlankSetWithQuestionsResponse {
     pub subjects: Vec<String>,
     pub questions: Vec<FillBlankQuestionResponse>,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::services::intello::OptionId;
+
+    #[test]
+    fn test_fill_blank_option_response_from_correct() {
+        // arrange
+        let opt = FillBlankOption {
+            id: OptionId::from_string("opt-1".into()),
+            text: "Paris".into(),
+            is_correct: true,
+        };
+
+        // act
+        let resp = FillBlankOptionResponse::from(&opt);
+
+        // assert
+        assert_eq!(resp.id, "opt-1");
+        assert_eq!(resp.text, "Paris");
+        assert!(resp.is_correct);
+    }
+
+    #[test]
+    fn test_fill_blank_option_response_from_incorrect() {
+        // arrange
+        let opt = FillBlankOption {
+            id: OptionId::from_string("opt-2".into()),
+            text: "London".into(),
+            is_correct: false,
+        };
+
+        // act
+        let resp = FillBlankOptionResponse::from(&opt);
+
+        // assert
+        assert!(!resp.is_correct);
+    }
+}

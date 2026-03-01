@@ -1,12 +1,12 @@
 //! DVD lifecycle tests - full CRUD operations
 
 use super::helpers::{create_test_dvd, load_test_config};
+use crate::infra::{
+    CollectionRepository, DvdRepository, SupabaseCollectionRepository,
+    SupabaseDvdRepository, SupabaseHttpClient, UpdateDvd,
+};
 use crate::services::collection::collection_domain::CollectionItemType;
 use crate::services::collection::error_domain::CollectionError;
-use crate::infra::{
-    CollectionRepository, DvdRepository, SupabaseCollectionRepository, SupabaseDvdRepository,
-    SupabaseHttpClient, UpdateDvd,
-};
 use std::sync::Arc;
 
 /// Full DVD lifecycle test with collection
@@ -15,22 +15,17 @@ use std::sync::Arc;
 async fn test_dvd_full_lifecycle() {
     let config = match load_test_config() {
         Some(cfg) => cfg,
-        None => {
-            eprintln!("Skipping test: Config not available");
-            return;
-        }
+        None => return,
     };
 
     let user_id = match config.get_test_user_id() {
         Some(id) => id.to_string(),
-        None => {
-            eprintln!("Skipping test: TEST_USR_ID not set");
-            return;
-        }
+        None => return,
     };
 
     let http_client = Arc::new(SupabaseHttpClient::new(&config));
-    let collection_repo = SupabaseCollectionRepository::new(http_client.clone());
+    let collection_repo =
+        SupabaseCollectionRepository::new(http_client.clone());
     let dvd_repo = SupabaseDvdRepository::new(http_client);
 
     let collection = collection_repo
@@ -38,12 +33,9 @@ async fn test_dvd_full_lifecycle() {
         .await
         .expect("Failed to get/create collection");
 
-    println!("✓ Using collection ID: {}", collection.id);
-
     let test_dvd_name = format!("Test DVD {}", uuid::Uuid::new_v4());
 
     // == 1. ADD DVD ==
-    println!("\n=== Step 1: Add DVD ===");
     let create_dvd = create_test_dvd(&test_dvd_name, &user_id, collection.id);
     let dvd = dvd_repo
         .insert(&create_dvd)
@@ -54,12 +46,10 @@ async fn test_dvd_full_lifecycle() {
     assert_eq!(dvd.name, test_dvd_name);
     assert_eq!(dvd.collection_id, collection.id);
     assert_eq!(dvd.user_id, user_id);
-    println!("✓ DVD created with ID: {}", dvd.id);
 
     let dvd_id = dvd.id.to_string();
 
     // == 2. MODIFY DVD ==
-    println!("\n=== Step 2: Modify DVD ===");
     let update = UpdateDvd::new()
         .with_name(format!("{} (Updated)", test_dvd_name))
         .with_genre("Thriller")
@@ -77,10 +67,8 @@ async fn test_dvd_full_lifecycle() {
     assert!(updated_dvd.name.contains("(Updated)"));
     assert_eq!(updated_dvd.genre, Some("Thriller".to_string()));
     assert!(updated_dvd.actors.contains("Ellen Page"));
-    println!("✓ DVD updated: {}", updated_dvd.name);
 
     // == 3. GET ALL USER DVDs ==
-    println!("\n=== Step 3: Get all user DVDs ===");
     let all_user_dvds = dvd_repo
         .find_all(&user_id)
         .await
@@ -92,10 +80,8 @@ async fn test_dvd_full_lifecycle() {
     );
     let found_in_all = all_user_dvds.iter().any(|d| d.id == dvd_id);
     assert!(found_in_all, "Our test DVD should be in the user's list");
-    println!("✓ Found {} DVDs for user", all_user_dvds.len());
 
     // == 4. GET ONE DVD BY ID ==
-    println!("\n=== Step 4: Get one DVD by ID ===");
     let found_dvd = dvd_repo
         .find_by_id(&user_id, &dvd_id)
         .await
@@ -103,10 +89,8 @@ async fn test_dvd_full_lifecycle() {
 
     assert_eq!(found_dvd.id, dvd_id);
     assert_eq!(found_dvd.user_id, user_id);
-    println!("✓ Found DVD by ID: {}", found_dvd.name);
 
     // == 5. GET DVDs BY COLLECTION ==
-    println!("\n=== Step 5: Get DVDs by collection ===");
     let collection_dvds = dvd_repo
         .find_by_collection(collection.id)
         .await
@@ -121,17 +105,14 @@ async fn test_dvd_full_lifecycle() {
         found_in_collection,
         "Our test DVD should be in the collection"
     );
-    println!("✓ Found {} DVDs in collection", collection_dvds.len());
 
     // == 6. DELETE DVD ==
-    println!("\n=== Step 6: Delete DVD ===");
     let deleted = dvd_repo
         .delete(&user_id, &dvd_id)
         .await
         .expect("Failed to delete DVD");
 
     assert!(deleted, "DVD should be deleted");
-    println!("✓ DVD deleted");
 
     // Verify deletion
     let find_result = dvd_repo.find_by_id(&user_id, &dvd_id).await;
@@ -139,12 +120,11 @@ async fn test_dvd_full_lifecycle() {
         find_result.is_err(),
         "DVD should not be found after deletion"
     );
-    match find_result.unwrap_err() {
-        CollectionError::DvdNotFound { .. } => {
-            println!("✓ Verified: DVD no longer exists");
-        }
-        other => panic!("Expected DvdNotFound error, got: {:?}", other),
-    }
-
-    println!("\n=== DVD lifecycle test passed! ===\n");
+    assert!(
+        matches!(
+            find_result.unwrap_err(),
+            CollectionError::DvdNotFound { .. }
+        ),
+        "Expected DvdNotFound error after deletion"
+    );
 }

@@ -1,0 +1,85 @@
+/* ============================================
+   Logo Component Styles (Scoped)
+   ============================================ */
+
+/* ============================================
+   Main Logo Container
+   ============================================ */
+.logo {
+    position: absolute;
+    top: 16px;
+    left: 20px;
+    z-index: 30;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 6px 10px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    text-decoration: none;
+    transition: opacity var(--transition-fast);
+    -webkit-tap-highlight-color: transparent;
+}
+
+.logo:hover {
+    opacity: 0.8;
+}
+
+/* Focus styles for accessibility */
+.logo:focus,
+.logo:focus-visible {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 2px var(--color-primary);
+}
+
+@media (forced-colors: active) {
+    .logo:focus,
+    .logo:focus-visible {
+        outline: 2px solid CanvasText;
+    }
+}
+
+/* ============================================
+   Hexagon Icon Wrapper
+   ============================================ */
+.icon_wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+}
+
+/* ============================================
+   Hexagon SVG
+   ============================================ */
+.hexagon {
+    width: 32px;
+    height: 32px;
+    color: var(--color-primary);
+}
+
+/* ============================================
+   Letter "P" Inside Hexagon
+   ============================================ */
+.letter {
+    position: absolute;
+    font-size: 10px;
+    font-weight: 700;
+    font-family: var(--principal-font-family);
+    color: var(--color-primary);
+    user-select: none;
+}
+
+/* ============================================
+   Brand Name Text
+   ============================================ */
+.brand_name {
+    font-size: 1.125rem;
+    font-weight: 600;
+    font-family: var(--principal-font-family);
+    letter-spacing: -0.025em;
+    color: var(--color-text-primary);
+}

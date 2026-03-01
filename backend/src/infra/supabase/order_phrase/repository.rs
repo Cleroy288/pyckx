@@ -8,12 +8,15 @@
  */
 
 use super::types::{
-    level_from_db, level_to_db, OrderPhraseQuestionRow, OrderPhraseSetRow, OrderPhraseWordRow,
+    level_from_db, level_to_db, OrderPhraseQuestionRow, OrderPhraseSetRow,
+    OrderPhraseWordRow,
 };
-use crate::services::intello::{OrderPhraseQuestion, OrderPhraseSet, OrderPhraseWord};
-use crate::services::intello::error_domain::IntelloError;
 use crate::infra::database::GameSetRepository;
 use crate::infra::supabase::shared::{SupabaseError, SupabaseHttpClient};
+use crate::services::intello::error_domain::IntelloError;
+use crate::services::intello::{
+    OrderPhraseQuestion, OrderPhraseSet, OrderPhraseWord,
+};
 use async_trait::async_trait;
 use std::sync::Arc;
 use tracing::{info, instrument};
@@ -37,18 +40,23 @@ impl SupabaseOrderPhraseRepository {
         IntelloError::storage(err.to_string())
     }
 
-    async fn get_questions(&self, set_id: &str) -> Result<Vec<OrderPhraseQuestion>, IntelloError> {
-        let url = self
-            .client
-            .rest_url_with_query(TABLE_QUESTIONS, &format!("set_id=eq.{}", set_id));
+    async fn get_questions(
+        &self,
+        set_id: &str,
+    ) -> Result<Vec<OrderPhraseQuestion>, IntelloError> {
+        let url = self.client.rest_url_with_query(
+            TABLE_QUESTIONS,
+            &format!("set_id=eq.{}", set_id),
+        );
         let q_rows: Vec<OrderPhraseQuestionRow> =
             self.client.get(&url).await.map_err(Self::map_error)?;
 
         let mut questions = Vec::new();
         for q_row in q_rows {
-            let url = self
-                .client
-                .rest_url_with_query(TABLE_WORDS, &format!("question_id=eq.{}", q_row.id));
+            let url = self.client.rest_url_with_query(
+                TABLE_WORDS,
+                &format!("question_id=eq.{}", q_row.id),
+            );
             let w_rows: Vec<OrderPhraseWordRow> =
                 self.client.get(&url).await.map_err(Self::map_error)?;
 
@@ -71,7 +79,10 @@ impl SupabaseOrderPhraseRepository {
         Ok(questions)
     }
 
-    async fn row_to_domain(&self, row: OrderPhraseSetRow) -> Result<OrderPhraseSet, IntelloError> {
+    async fn row_to_domain(
+        &self,
+        row: OrderPhraseSetRow,
+    ) -> Result<OrderPhraseSet, IntelloError> {
         let questions = self.get_questions(&row.id).await?;
         Ok(OrderPhraseSet {
             id: row.id.into(),
@@ -89,7 +100,10 @@ impl SupabaseOrderPhraseRepository {
 #[async_trait]
 impl GameSetRepository<OrderPhraseSet> for SupabaseOrderPhraseRepository {
     #[instrument(skip(self, set), fields(set_id = %set.id))]
-    async fn insert(&self, set: &OrderPhraseSet) -> Result<OrderPhraseSet, IntelloError> {
+    async fn insert(
+        &self,
+        set: &OrderPhraseSet,
+    ) -> Result<OrderPhraseSet, IntelloError> {
         let payload = serde_json::json!({
             "p_set": {
                 "id": set.id,
@@ -126,10 +140,14 @@ impl GameSetRepository<OrderPhraseSet> for SupabaseOrderPhraseRepository {
     }
 
     #[instrument(skip(self), fields(user_id = %user_id))]
-    async fn find_by_user(&self, user_id: &str) -> Result<Vec<OrderPhraseSet>, IntelloError> {
+    async fn find_by_user(
+        &self,
+        user_id: &str,
+    ) -> Result<Vec<OrderPhraseSet>, IntelloError> {
         let query = format!("user_id=eq.{}", user_id);
         let url = self.client.rest_url_with_query(TABLE_SETS, &query);
-        let rows: Vec<OrderPhraseSetRow> = self.client.get(&url).await.map_err(Self::map_error)?;
+        let rows: Vec<OrderPhraseSetRow> =
+            self.client.get(&url).await.map_err(Self::map_error)?;
         let mut sets = Vec::new();
         for row in rows {
             sets.push(self.row_to_domain(row).await?);

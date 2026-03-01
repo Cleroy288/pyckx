@@ -2,13 +2,14 @@
 //!
 //! List and check/grade open questions.
 
-use crate::http_api::data_transfer_object::intello::{
-    CheckAnswersRequest, CheckAnswersResponse, GradedAnswerResponse, OpenQuestionSetListResponse,
-};
 use crate::app::App;
-use crate::shared::AppResult;
+use crate::http_api::data_transfer_object::intello::{
+    CheckAnswersRequest, CheckAnswersResponse, GradedAnswerResponse,
+    OpenQuestionSetListResponse,
+};
 use crate::infra::user::get_user_id_from_session;
 use crate::services::{CheckAnswersInput, UserAnswer};
+use crate::shared::AppResult;
 use actix_web::{get, post, web, HttpRequest, HttpResponse};
 use tracing::{info, instrument};
 
@@ -20,7 +21,10 @@ pub async fn list_open_questions_handler(
     req: HttpRequest,
 ) -> AppResult<HttpResponse> {
     let user_id = get_user_id_from_session(&app, &req)?;
-    let sets = app.intello_service.get_user_open_question_sets(&user_id).await?;
+    let sets = app
+        .intello_service
+        .get_user_open_question_sets(&user_id)
+        .await?;
     Ok(HttpResponse::Ok().json(OpenQuestionSetListResponse::from_sets(sets)))
 }
 
@@ -39,23 +43,31 @@ pub async fn check_open_questions_handler(
     // Build service input
     let input = CheckAnswersInput {
         set_id: body.set_id.clone(),
-        answers: body.answers.iter().map(|a| UserAnswer {
-            question_id: a.question_id.clone(),
-            user_answer: a.user_answer.clone(),
-        }).collect(),
+        answers: body
+            .answers
+            .iter()
+            .map(|a| UserAnswer {
+                question_id: a.question_id.clone(),
+                user_answer: a.user_answer.clone(),
+            })
+            .collect(),
     };
 
     // Call service directly
-    let results = app.intello_service.check_open_question_answers(&user_id, input).await?;
+    let results = app
+        .intello_service
+        .check_open_question_answers(&user_id, input)
+        .await?;
 
     // Build response
-    let grade_responses: Vec<GradedAnswerResponse> = results.iter().map(|g| {
-        GradedAnswerResponse {
+    let grade_responses: Vec<GradedAnswerResponse> = results
+        .iter()
+        .map(|g| GradedAnswerResponse {
             question_id: g.question_id.clone(),
             grade: format!("{:?}", g.grade).to_lowercase(),
             feedback: g.feedback.clone(),
-        }
-    }).collect();
+        })
+        .collect();
 
     Ok(HttpResponse::Ok().json(CheckAnswersResponse {
         success: true,

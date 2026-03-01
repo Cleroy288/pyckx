@@ -19,7 +19,7 @@ use actix_web::web;
 /// Note: Order matters! More specific routes must be registered first.
 pub fn init(cfg: &mut web::ServiceConfig) {
     auth::init(cfg);
-    apps::init(cfg);       // /api/user/apps BEFORE /api/user
+    apps::init(cfg); // /api/user/apps BEFORE /api/user
     user::init(cfg);
     collection::init(cfg);
     intello::init(cfg);

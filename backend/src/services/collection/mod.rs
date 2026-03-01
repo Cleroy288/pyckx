@@ -1,5 +1,5 @@
 //! Collection Service Module
-//! 
+//!
 //! Service for managing user collections (DVDs, Books, etc.).
 //!
 //! # Architecture
@@ -18,4 +18,3 @@ mod collection_service;
 mod dvd_service;
 
 pub use types_domain::CollectionService;
-

@@ -1,8 +1,9 @@
-use serde::{Deserialize, Serialize};
 use crate::shared::utils::deserialize_string_or_vec;
+use serde::{Deserialize, Serialize};
 
 // == KNOWLEDGE EXTRACTION DTOs // ==
 
+#[allow(dead_code)]
 #[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct DecryptedUserDemand {
     pub core_intent: String,
@@ -34,6 +35,7 @@ pub struct GenerateCourseRequest {
     pub keywords: Vec<String>,
     #[serde(default)]
     pub instructions: String,
+    #[allow(dead_code)]
     #[serde(default)]
     pub resource_ids: Vec<String>,
     #[serde(default)]
@@ -142,32 +144,38 @@ pub struct TrueFalseSetPayload {
 // == CONTENT BLOCK (7 types) // ==
 
 /// Content blocks for course modules
-/// 
+///
 /// Uses polymorphic deserialization for `content` fields to handle
 /// AI outputting arrays instead of strings.
 #[derive(Debug, Deserialize, Serialize, Clone)]
 #[serde(tag = "type", rename_all = "snake_case")]
 pub enum ContentBlock {
-    Title { 
+    Title {
         #[serde(default, deserialize_with = "deserialize_string_or_vec")]
-        content: String 
+        content: String,
     },
-    Subtitle { 
+    Subtitle {
         #[serde(default, deserialize_with = "deserialize_string_or_vec")]
-        content: String 
+        content: String,
     },
-    Text { 
+    Text {
         #[serde(default, deserialize_with = "deserialize_string_or_vec")]
-        content: String 
+        content: String,
     },
-    Schema { 
-        language: String, 
+    Schema {
+        language: String,
         #[serde(default, deserialize_with = "deserialize_string_or_vec")]
-        content: String 
+        content: String,
     },
-    QcmSet { data: QcmSetPayload },
-    TrueFalseSet { data: TrueFalseSetPayload },
-    FlashcardSet { data: FlashcardSetPayload },
+    QcmSet {
+        data: QcmSetPayload,
+    },
+    TrueFalseSet {
+        data: TrueFalseSetPayload,
+    },
+    FlashcardSet {
+        data: FlashcardSetPayload,
+    },
 }
 
 // == CORE EDUCATIONAL CONTENT // ==
@@ -176,18 +184,18 @@ pub enum ContentBlock {
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize, PartialEq)]
 pub struct ContentSection {
     pub title: String,
-    pub content: String,           // 400-600 words of detailed explanation
-    pub key_points: Vec<String>,   // 3-5 bullet points
-    pub examples: Vec<String>,     // 2-3 real-world examples
+    pub content: String, // 400-600 words of detailed explanation
+    pub key_points: Vec<String>, // 3-5 bullet points
+    pub examples: Vec<String>, // 2-3 real-world examples
 }
 
 /// Detailed educational content for the entire course (Stage 1.5 output)
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize, PartialEq)]
 pub struct DetailedCourseContent {
     pub title: String,
-    pub introduction: String,      // 200+ words course introduction
+    pub introduction: String, // 200+ words course introduction
     pub sections: Vec<ContentSection>,
-    pub conclusion: String,        // 100+ words wrap-up
+    pub conclusion: String, // 100+ words wrap-up
 }
 
 // == FULL GENERATION RESULT // ==

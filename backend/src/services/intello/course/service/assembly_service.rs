@@ -1,12 +1,16 @@
-use crate::http_api::data_transfer_object::intello::course::{ContentBlock, CourseMetadata, CourseModule, GeneratedCourse};
-use crate::services::intello::course::domain::{CoursePlan, ParsedSection, ParsedSynthesis};
+use crate::http_api::data_transfer_object::intello::course::{
+    ContentBlock, CourseMetadata, CourseModule, GeneratedCourse,
+};
+use crate::services::intello::course::domain::{
+    CoursePlan, ParsedSection, ParsedSynthesis,
+};
 use crate::services::intello::error_domain::IntelloError;
 
 // ** assemble_complete_course **
 // ==> Combines all generated parts into final GeneratedCourse structure
 //
 // @ course_plan : Original plan with metadata
-// @ parsed_sections : All generated sections  
+// @ parsed_sections : All generated sections
 // @ parsed_synthesis : Generated synthesis
 // @ returns : CompleteCourse matching existing DTO format
 // @ errors : ValidationFailed if assembly fails
@@ -61,7 +65,9 @@ pub fn assemble_complete_course(
 //
 // @ synthesis : ParsedSynthesis with summary and QCM
 // @ returns : Vec of ContentBlocks for synthesis module
-fn create_synthesis_blocks(synthesis: &ParsedSynthesis) -> Result<Vec<ContentBlock>, IntelloError> {
+fn create_synthesis_blocks(
+    synthesis: &ParsedSynthesis,
+) -> Result<Vec<ContentBlock>, IntelloError> {
     // Step 1: Create summary text block
     let mut blocks = vec![
         ContentBlock::Subtitle {
@@ -97,4 +103,3 @@ fn create_synthesis_blocks(synthesis: &ParsedSynthesis) -> Result<Vec<ContentBlo
     // Step 4: Return blocks
     Ok(blocks)
 }
-

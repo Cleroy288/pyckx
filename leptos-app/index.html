@@ -1,39 +1,29 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>pyckx</title>
+        <link data-trunk rel="copy-file" href="favicon.svg" />
+        <link rel="icon" type="image/svg+xml" href="favicon.svg" />
 
-<head>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<base href="/" />
-	<title>Intello - Learning Platform</title>
-	<link data-trunk rel="copy-dir" href="styles" />
-	<link rel="stylesheet" href="styles/main.css" />
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-</head>
+        <!-- Trunk: Compile Rust to WASM -->
+        <link data-trunk rel="rust" data-wasm-opt="0" />
 
-<body>
-	<script type="module">
-		import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        <!-- Fonts: VT323 (old tech) -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=VT323&display=swap"
+            rel="stylesheet"
+        />
 
-		mermaid.initialize({ startOnLoad: false });
+        <!-- Global styles (design tokens, reset, utilities) -->
+        <link data-trunk rel="css" href="styles/global.css" />
 
-		window.renderMermaid = async (element, content) => {
-			if (element) {
-				// Clear any previous mermaid artifacts
-				element.removeAttribute('data-processed');
-				// Set content (careful with direct HTML injection in production, but needed for mermaid source)
-				element.textContent = content; // Using textContent is safer for source code
-				try {
-					await mermaid.run({ nodes: [element] });
-				} catch (e) {
-					console.error("Mermaid rendering failed:", e);
-					element.innerHTML = `<div style="color:red; padding:10px; border:1px solid red;">Failed to render diagram: ${e.message}</div>`;
-				}
-			}
-		}
-	</script>
-</body>
+        <!-- Stylance bundle (scoped component CSS) -->
+        <link data-trunk rel="css" href="styles/bundle.css" />
+    </head>
 
+    <body></body>
 </html>

@@ -12,10 +12,10 @@ ing and retry logic.
  */
 
 use super::types::{level_from_db, level_to_db, FlashcardRow, FlashcardSetRow};
-use crate::services::intello::{Flashcard, FlashcardSet};
-use crate::services::intello::error_domain::IntelloError;
 use crate::infra::database::GameSetRepository;
 use crate::infra::supabase::shared::{SupabaseError, SupabaseHttpClient};
+use crate::services::intello::error_domain::IntelloError;
+use crate::services::intello::{Flashcard, FlashcardSet};
 use async_trait::async_trait;
 use std::sync::Arc;
 use tracing::{debug, info, instrument};
@@ -69,13 +69,17 @@ impl SupabaseFlashcardRepository {
     /*
      * Get flashcards for a set.
      */
-    async fn get_cards(&self, set_id: &str) -> Result<Vec<Flashcard>, IntelloError> {
+    async fn get_cards(
+        &self,
+        set_id: &str,
+    ) -> Result<Vec<Flashcard>, IntelloError> {
         let url = self
             .client
             .rest_url_with_query(TABLE_CARDS, &format!("set_id=eq.{}", set_id));
         debug!(url = %url, "Getting flashcards");
 
-        let rows: Vec<FlashcardRow> = self.client.get(&url).await.map_err(Self::map_error)?;
+        let rows: Vec<FlashcardRow> =
+            self.client.get(&url).await.map_err(Self::map_error)?;
 
         let cards = rows
             .into_iter()
@@ -96,7 +100,10 @@ impl SupabaseFlashcardRepository {
     /*
      * Convert database row to domain entity.
      */
-    async fn row_to_domain(&self, row: FlashcardSetRow) -> Result<FlashcardSet, IntelloError> {
+    async fn row_to_domain(
+        &self,
+        row: FlashcardSetRow,
+    ) -> Result<FlashcardSet, IntelloError> {
         let cards = self.get_cards(&row.id).await?;
 
         Ok(FlashcardSet {
@@ -126,7 +133,10 @@ impl GameSetRepository<FlashcardSet> for SupabaseFlashcardRepository {
      * Insert a new flashcard set with its cards atomically.
      */
     #[instrument(skip(self, set), fields(set_id = %set.id))]
-    async fn insert(&self, set: &FlashcardSet) -> Result<FlashcardSet, IntelloError> {
+    async fn insert(
+        &self,
+        set: &FlashcardSet,
+    ) -> Result<FlashcardSet, IntelloError> {
         let payload = serde_json::json!({
             "p_set": {
                 "id": set.id,
@@ -163,12 +173,16 @@ impl GameSetRepository<FlashcardSet> for SupabaseFlashcardRepository {
      * Find all flashcard sets belonging to a user.
      */
     #[instrument(skip(self), fields(user_id = %user_id))]
-    async fn find_by_user(&self, user_id: &str) -> Result<Vec<FlashcardSet>, IntelloError> {
+    async fn find_by_user(
+        &self,
+        user_id: &str,
+    ) -> Result<Vec<FlashcardSet>, IntelloError> {
         let query = format!("user_id=eq.{}", user_id);
         let url = self.client.rest_url_with_query(TABLE_SETS, &query);
         debug!(url = %url, "Finding flashcard sets by user");
 
-        let rows: Vec<FlashcardSetRow> = self.client.get(&url).await.map_err(Self::map_error)?;
+        let rows: Vec<FlashcardSetRow> =
+            self.client.get(&url).await.map_err(Self::map_error)?;
 
         let mut sets = Vec::with_capacity(rows.len());
         for row in rows {

@@ -5,6 +5,7 @@ mod response;
 
 pub use request::CreateFillBlankRequest;
 pub use response::{
-    CreateFillBlankResponse, FillBlankOptionResponse, FillBlankQuestionResponse,
-    FillBlankSetListResponse, FillBlankSetWithQuestionsResponse,
+    CreateFillBlankResponse, FillBlankOptionResponse,
+    FillBlankQuestionResponse, FillBlankSetListResponse,
+    FillBlankSetWithQuestionsResponse,
 };

@@ -29,7 +29,10 @@ pub fn validate_request<T: Validate>(req: &T) -> AppResult<()> {
                     _ => "unknown",
                 };
 
-                return Err(AppError::Validation(ValidationError::new(static_field, message)));
+                return Err(AppError::Validation(ValidationError::new(
+                    static_field,
+                    message,
+                )));
             }
         }
     }

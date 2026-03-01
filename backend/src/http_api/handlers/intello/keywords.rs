@@ -1,13 +1,13 @@
 //! Keywords handlers - API endpoints for Keywords game
 
 use super::helpers::parse_multipart;
-use crate::http_api::data_transfer_object::intello::{
-    CreateKeywordsRequest, CreateKeywordsResponse, KeywordQuestionResponse, KeywordResponse,
-    KeywordSetListResponse, KeywordSetWithQuestionsResponse,
-};
 use crate::app::App;
-use crate::shared::{AppError, AppResult};
+use crate::http_api::data_transfer_object::intello::{
+    CreateKeywordsRequest, CreateKeywordsResponse, KeywordQuestionResponse,
+    KeywordResponse, KeywordSetListResponse, KeywordSetWithQuestionsResponse,
+};
 use crate::infra::user::get_user_id_from_session;
+use crate::shared::{AppError, AppResult};
 use actix_multipart::Multipart;
 use actix_web::{get, post, web, HttpRequest, HttpResponse};
 use tracing::instrument;
@@ -23,12 +23,13 @@ pub async fn create_keywords_handler(
     let user_id = get_user_id_from_session(&app, &req)?;
 
     // Parse multipart form data
-    let (metadata, documents) = parse_multipart::<CreateKeywordsRequest>(payload).await?;
+    let (metadata, documents) =
+        parse_multipart::<CreateKeywordsRequest>(payload).await?;
 
     // Parse level (DTO validation)
     let level = metadata
         .parse_level()
-        .map_err(|e| AppError::validation("level", e))?;
+        .map_err(|err| AppError::validation("level", err))?;
 
     // Build service input
     let service_input = crate::services::GenerateContentInput {
@@ -43,7 +44,10 @@ pub async fn create_keywords_handler(
     };
 
     // Call service directly
-    let keyword_set = app.intello_service.generate_ai_keywords(&user_id, service_input).await?;
+    let keyword_set = app
+        .intello_service
+        .generate_ai_keywords(&user_id, service_input)
+        .await?;
 
     // Build response
     let question_responses: Vec<KeywordQuestionResponse> = keyword_set
@@ -96,7 +100,11 @@ pub async fn list_keyword_sets_handler(
                 .map(|q| KeywordQuestionResponse {
                     id: q.id.to_string(),
                     statement: q.statement.clone(),
-                    keywords: q.keywords.iter().map(KeywordResponse::from).collect(),
+                    keywords: q
+                        .keywords
+                        .iter()
+                        .map(KeywordResponse::from)
+                        .collect(),
                     explanation: q.explanation.clone(),
                 })
                 .collect(),

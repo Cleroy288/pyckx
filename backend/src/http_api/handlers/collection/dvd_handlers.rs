@@ -3,13 +3,13 @@
 //! Add, get, update, delete DVD operations.
 
 use super::helpers::validate_request;
-use crate::http_api::data_transfer_object::{
-    AddDvdRequest, DeleteResponse, DvdListResponse, DvdResponse, DvdSuccessResponse,
-    UpdateDvdRequest,
-};
 use crate::app::App;
-use crate::shared::{AppError, AppResult};
+use crate::http_api::data_transfer_object::{
+    AddDvdRequest, DeleteResponse, DvdListResponse, DvdResponse,
+    DvdSuccessResponse, UpdateDvdRequest,
+};
 use crate::infra::user::get_user_id_from_session;
+use crate::shared::{AppError, AppResult};
 use actix_web::{delete, get, post, put, web, HttpRequest, HttpResponse};
 use tracing::instrument;
 
@@ -28,17 +28,20 @@ pub async fn add_dvd_handler(
 
     let year = body
         .parse_year()
-        .map_err(|e| AppError::validation("year", e))?;
+        .map_err(|err| AppError::validation("year", err))?;
 
     // Call service directly
-    let dvd = app.collection_service.add_dvd(
-        &user_id,
-        body.name.clone(),
-        year,
-        body.realisator.clone(),
-        body.actors.clone(),
-        body.genre.clone(),
-    ).await?;
+    let dvd = app
+        .collection_service
+        .add_dvd(
+            &user_id,
+            body.name.clone(),
+            year,
+            body.realisator.clone(),
+            body.actors.clone(),
+            body.genre.clone(),
+        )
+        .await?;
 
     Ok(HttpResponse::Created().json(DvdSuccessResponse::created(dvd)))
 }
@@ -48,7 +51,10 @@ pub async fn add_dvd_handler(
 /// Get all DVDs for the current user.
 #[get("/dvds")]
 #[instrument(skip(app, req))]
-pub async fn get_user_dvds_handler(app: web::Data<App>, req: HttpRequest) -> AppResult<HttpResponse> {
+pub async fn get_user_dvds_handler(
+    app: web::Data<App>,
+    req: HttpRequest,
+) -> AppResult<HttpResponse> {
     let user_id = get_user_id_from_session(&app, &req)?;
 
     // Call service directly
@@ -69,7 +75,7 @@ pub async fn get_dvd_handler(
 ) -> AppResult<HttpResponse> {
     let user_id = get_user_id_from_session(&app, &req)?;
     let dvd_id = path.into_inner();
-    
+
     // Call service directly
     let dvd = app.collection_service.find_dvd(&user_id, &dvd_id).await?;
 
@@ -92,20 +98,23 @@ pub async fn update_dvd_handler(
 
     let year = body
         .parse_year()
-        .map_err(|e| AppError::validation("year", e))?;
+        .map_err(|err| AppError::validation("year", err))?;
 
     let dvd_id = path.into_inner();
 
     // Call service directly
-    let dvd = app.collection_service.update_dvd(
-        &user_id,
-        &dvd_id,
-        body.name.clone(),
-        year,
-        body.realisator.clone(),
-        body.actors.clone(),
-        body.genre.clone(),
-    ).await?;
+    let dvd = app
+        .collection_service
+        .update_dvd(
+            &user_id,
+            &dvd_id,
+            body.name.clone(),
+            year,
+            body.realisator.clone(),
+            body.actors.clone(),
+            body.genre.clone(),
+        )
+        .await?;
 
     Ok(HttpResponse::Ok().json(DvdSuccessResponse::updated(dvd)))
 }

@@ -51,3 +51,69 @@ impl UpdateApp {
         self
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    // -- CreateApp --
+
+    #[test]
+    fn test_create_app_new_maps_name() {
+        // arrange / act
+        let app = CreateApp::new("MyApp", None);
+
+        // assert
+        assert_eq!(app.name, "MyApp");
+        assert!(app.description.is_none());
+    }
+
+    #[test]
+    fn test_create_app_new_with_description() {
+        // arrange / act
+        let app = CreateApp::new(
+            "MyApp",
+            Some("A great app".into()),
+        );
+
+        // assert
+        assert_eq!(
+            app.description,
+            Some("A great app".into())
+        );
+    }
+
+    // -- UpdateApp --
+
+    #[test]
+    fn test_update_app_new_all_none() {
+        // arrange / act
+        let upd = UpdateApp::new();
+
+        // assert
+        assert!(upd.name.is_none());
+        assert!(upd.description.is_none());
+    }
+
+    #[test]
+    fn test_update_app_with_name() {
+        // arrange / act
+        let upd = UpdateApp::new().with_name("Renamed");
+
+        // assert
+        assert_eq!(upd.name, Some("Renamed".into()));
+    }
+
+    #[test]
+    fn test_update_app_with_description() {
+        // arrange / act
+        let upd = UpdateApp::new()
+            .with_description("New desc");
+
+        // assert
+        assert_eq!(
+            upd.description,
+            Some("New desc".into())
+        );
+    }
+}

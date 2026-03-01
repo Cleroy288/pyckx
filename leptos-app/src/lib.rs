@@ -1,6 +1,8 @@
-//! Leptos App - Module Declarations
+//! Leptos app — library root for tests and WASM targets
+#![allow(clippy::module_inception)]
 
-pub mod shared;
-pub mod home;
-pub mod intello;
-pub mod fallback;
+pub mod api;
+pub mod components;
+pub mod domain;
+pub mod pages;
+pub mod state;

@@ -1,0 +1,77 @@
+/* ============================================
+   ItemCard — Flat glass list-item card
+   ============================================
+   Shared shell for DVD cards, game-set cards,
+   and any future list-item cards.
+   No border-radius, no resize on hover.
+   ============================================ */
+
+.card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    padding: 1.5rem 1.5rem 0;
+    height: 100%;
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--color-border);
+    border-radius: 0;
+}
+
+.card:hover {
+    border-color: transparent;
+    border-image: conic-gradient(
+        from var(--border-angle),
+        var(--color-primary),
+        transparent 25%,
+        transparent 75%,
+        var(--color-primary)
+    ) 1;
+    animation: border-spin 3s linear infinite;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+.name {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    flex: 1;
+}
+
+/* ── Actions — full-width button row ───────
+   Top border separates from body.
+   Buttons stretch equally. Vertical line
+   between buttons via border-left.           */
+.actions {
+    display: flex;
+    margin: auto -1.5rem 0;
+    border-top: 1px solid var(--color-border);
+}
+
+.actions :global(button) {
+    flex: 1;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+}
+
+.actions :global(button + button) {
+    border-left: 1px solid var(--color-border);
+}

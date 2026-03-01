@@ -9,7 +9,7 @@ pub struct User {
     pub email: String,
     pub username: String,
     pub role: String,
-    pub access_token: String,  // JWT - stored server-side only
+    pub access_token: String, // JWT - stored server-side only
     pub refresh_token: String, // Refresh token - stored server-side only
     pub expires_at: u64,
 }

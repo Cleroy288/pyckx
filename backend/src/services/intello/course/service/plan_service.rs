@@ -1,6 +1,7 @@
+use crate::services::intello::ai_usage::ai_usage_domain::AiUsageInput;
 use crate::services::intello::course::domain::{CoursePlan, ExtractedIdeas};
-use crate::services::intello::course::prompt::build_course_plan_prompt;
 use crate::services::intello::course::parser::parse_course_plan;
+use crate::services::intello::course::prompt::build_course_plan_prompt;
 use crate::services::intello::error_domain::IntelloError;
 use crate::services::intello::IntelloService;
 use tracing::{info, instrument};
@@ -31,19 +32,23 @@ impl IntelloService {
             .openrouter_client
             .send_chat_request(&prompt, None)
             .await?;
-        
+
         // Step 2b: Track AI usage
         if let Some(usage) = &ai_result.usage {
-            self.try_log_ai_usage(
-                user_id, 
-                &ai_result.model, 
-                "course_plan_generation", 
-                usage.prompt_tokens, 
-                usage.completion_tokens
-            ).await;
+            self.try_log_ai_usage(AiUsageInput {
+                user_id,
+                model_id: &ai_result.model,
+                feature_type: "course_plan_generation",
+                input_tokens: usage.prompt_tokens,
+                output_tokens: usage.completion_tokens,
+            })
+            .await;
         }
 
-        info!(response_len = ai_result.content.len(), "AI response received");
+        info!(
+            response_len = ai_result.content.len(),
+            "AI response received"
+        );
 
         // Step 3: Parse AI response
         let plan = parse_course_plan(&ai_result.content)?;

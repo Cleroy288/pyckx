@@ -1,5 +1,9 @@
-use crate::http_api::data_transfer_object::intello::course::{ContentBlock, QcmSetPayload};
-use crate::services::intello::course::domain::{CoursePlan, ParsedSection, ParsedSynthesis};
+use crate::http_api::data_transfer_object::intello::course::{
+    ContentBlock, QcmSetPayload,
+};
+use crate::services::intello::course::domain::{
+    CoursePlan, ParsedSection, ParsedSynthesis,
+};
 use crate::services::intello::course::service::assembly_service::assemble_complete_course;
 
 #[test]
@@ -37,7 +41,8 @@ fn test_assembles_course() {
         },
     };
 
-    let course = assemble_complete_course(&plan, vec![section], synthesis).unwrap();
+    let course =
+        assemble_complete_course(&plan, vec![section], synthesis).unwrap();
     assert_eq!(course.course_metadata.title, "Test Course");
     assert_eq!(course.modules.len(), 1);
 }

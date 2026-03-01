@@ -1,8 +1,10 @@
 //! DVD edge case tests - error handling for non-existent DVDs
 
 use super::helpers::load_test_config;
+use crate::infra::{
+    DvdRepository, SupabaseDvdRepository, SupabaseHttpClient, UpdateDvd,
+};
 use crate::services::collection::error_domain::CollectionError;
-use crate::infra::{DvdRepository, SupabaseDvdRepository, SupabaseHttpClient, UpdateDvd};
 use std::sync::Arc;
 
 /// Test that non-existent DVD returns proper error
@@ -12,7 +14,6 @@ async fn test_find_nonexistent_dvd() {
     let config = match load_test_config() {
         Some(cfg) => cfg,
         None => {
-            eprintln!("Skipping test: Config not available");
             return;
         }
     };
@@ -20,7 +21,6 @@ async fn test_find_nonexistent_dvd() {
     let user_id = match config.get_test_user_id() {
         Some(id) => id.to_string(),
         None => {
-            eprintln!("Skipping test: TEST_USR_ID not set in config");
             return;
         }
     };
@@ -47,7 +47,6 @@ async fn test_update_nonexistent_dvd() {
     let config = match load_test_config() {
         Some(cfg) => cfg,
         None => {
-            eprintln!("Skipping test: Config not available");
             return;
         }
     };
@@ -55,7 +54,6 @@ async fn test_update_nonexistent_dvd() {
     let user_id = match config.get_test_user_id() {
         Some(id) => id.to_string(),
         None => {
-            eprintln!("Skipping test: TEST_USR_ID not set in config");
             return;
         }
     };
@@ -80,7 +78,6 @@ async fn test_delete_nonexistent_dvd() {
     let config = match load_test_config() {
         Some(cfg) => cfg,
         None => {
-            eprintln!("Skipping test: Config not available");
             return;
         }
     };
@@ -88,7 +85,6 @@ async fn test_delete_nonexistent_dvd() {
     let user_id = match config.get_test_user_id() {
         Some(id) => id.to_string(),
         None => {
-            eprintln!("Skipping test: TEST_USR_ID not set in config");
             return;
         }
     };
@@ -100,5 +96,8 @@ async fn test_delete_nonexistent_dvd() {
     let result = repo.delete(&user_id, &fake_id).await;
 
     assert!(result.is_ok(), "Delete should not error");
-    assert!(!result.unwrap(), "Delete should return false for non-existent DVD");
+    assert!(
+        !result.unwrap(),
+        "Delete should return false for non-existent DVD"
+    );
 }

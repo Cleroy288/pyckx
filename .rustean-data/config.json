@@ -1,0 +1,17 @@
+{
+  "claude": {
+    "model": "haiku",
+    "integration": "cli"
+  },
+  "agent": {
+    "kind": "claude_code"
+  },
+  "cache": {},
+  "setup": {
+    "credentials": true,
+    "agent": true,
+    "integration": true,
+    "repo_scan": true,
+    "indexing": false
+  }
+}

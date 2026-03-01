@@ -1,13 +1,14 @@
 //! True or False handlers - API endpoints for True/False game
 
 use super::helpers::parse_multipart;
-use crate::http_api::data_transfer_object::intello::{
-    CreateTrueOrFalseRequest, CreateTrueOrFalseResponse, TrueOrFalseSetListResponse,
-    TrueOrFalseSetWithStatementsResponse, TrueOrFalseStatementResponse,
-};
 use crate::app::App;
-use crate::shared::{AppError, AppResult};
+use crate::http_api::data_transfer_object::intello::{
+    CreateTrueOrFalseRequest, CreateTrueOrFalseResponse,
+    TrueOrFalseSetListResponse, TrueOrFalseSetWithStatementsResponse,
+    TrueOrFalseStatementResponse,
+};
 use crate::infra::user::get_user_id_from_session;
+use crate::shared::{AppError, AppResult};
 use actix_multipart::Multipart;
 use actix_web::{get, post, web, HttpRequest, HttpResponse};
 use tracing::instrument;
@@ -23,12 +24,13 @@ pub async fn create_true_false_handler(
     let user_id = get_user_id_from_session(&app, &req)?;
 
     // Parse multipart form data
-    let (metadata, documents) = parse_multipart::<CreateTrueOrFalseRequest>(payload).await?;
+    let (metadata, documents) =
+        parse_multipart::<CreateTrueOrFalseRequest>(payload).await?;
 
     // Parse level (DTO validation)
     let level = metadata
         .parse_level()
-        .map_err(|e| AppError::validation("level", e))?;
+        .map_err(|err| AppError::validation("level", err))?;
 
     // Build service input
     let service_input = crate::services::GenerateContentInput {
@@ -43,7 +45,10 @@ pub async fn create_true_false_handler(
     };
 
     // Call service directly
-    let true_false_set = app.intello_service.generate_ai_true_false(&user_id, service_input).await?;
+    let true_false_set = app
+        .intello_service
+        .generate_ai_true_false(&user_id, service_input)
+        .await?;
 
     // Build response
     let statement_responses: Vec<TrueOrFalseStatementResponse> = true_false_set

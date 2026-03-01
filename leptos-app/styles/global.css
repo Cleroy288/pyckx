@@ -1,0 +1,255 @@
+/* ============================================
+   GLOBAL DESIGN TOKENS
+   ============================================ */
+:root {
+    /* ── Palette CSS variables ──────────────────
+       Defaults = Teal Tech light mode (oklch).
+       Overridden at runtime by PaletteProvider.
+       ────────────────────────────────────────── */
+    --primary: oklch(0.55 0.18 190);
+    --primary-foreground: oklch(0.98 0 0);
+    --secondary: oklch(0.94 0.01 260);
+    --secondary-foreground: oklch(0.25 0.01 260);
+    --accent: oklch(0.55 0.18 190);
+    --accent-foreground: oklch(0.98 0 0);
+    --muted: oklch(0.92 0.008 260);
+    --muted-foreground: oklch(0.45 0.01 260);
+    --background: oklch(0.98 0.005 260);
+    --foreground: oklch(0.15 0.01 260);
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.15 0.01 260);
+    --border: oklch(0.88 0.01 260);
+    --input: oklch(0.94 0.008 260);
+    --ring: oklch(0.55 0.18 190);
+    --destructive: oklch(0.55 0.22 27);
+    --destructive-foreground: oklch(0.98 0 0);
+    --glow: oklch(0.55 0.18 190 / 0.25);
+    --grid: oklch(0.55 0.18 190);
+
+    /* ── Derived / convenience variables ─────── */
+    --grid-line: color-mix(
+        in srgb, var(--grid) 10%, transparent
+    );
+    --grid-dot: color-mix(
+        in srgb, var(--secondary) 15%, transparent
+    );
+
+    /* ── Aliases for backward compat ─────────── */
+    --color-primary: var(--primary);
+    --color-background: var(--background);
+    --color-secondary: var(--secondary);
+    --color-border: var(--border);
+    --color-surface: var(--card);
+    --color-surface-hover: var(--muted);
+    --color-text-primary: var(--foreground);
+    --color-text-secondary: var(--muted-foreground);
+    --color-text-tertiary: var(--muted-foreground);
+    --color-error: var(--destructive);
+    --color-success: oklch(0.55 0.18 145);
+    --color-warning: oklch(0.75 0.15 85);
+    --color-info: oklch(0.6 0.18 250);
+
+    /* transparency helpers (grid lines etc.) */
+    --transparency-low: 0.1;
+    --transparency-medium: 0.15;
+    --transparency-high: 0.9;
+
+    /* ── Typography ──────────────────────────── */
+    --principal-font-family:
+        -apple-system, BlinkMacSystemFont,
+        "Segoe UI", Roboto, "Helvetica Neue",
+        sans-serif;
+    --logo-font-family:
+        "VT323", var(--principal-font-family);
+
+    /* ── Border radius ───────────────────────── */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+    --radius-xl: 24px;
+    --radius-full: 9999px;
+
+    /* ── Shadows (palette-tinted) ────────────── */
+    --shadow-sm: 0 2px 10px color-mix(
+        in srgb, var(--primary) 15%, transparent
+    );
+    --shadow-md: 0 4px 20px color-mix(
+        in srgb, var(--primary) 20%, transparent
+    );
+    --shadow-lg: 0 8px 30px color-mix(
+        in srgb, var(--primary) 25%, transparent
+    );
+    --shadow-xl: 0 12px 40px color-mix(
+        in srgb, var(--primary) 30%, transparent
+    );
+
+    /* ── Transitions ─────────────────────────── */
+    --transition-fast: 0.2s ease;
+    --transition-base: 0.3s ease;
+    --transition-smooth:
+        0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: 0.4s ease;
+
+    /* ── Glassmorphism ───────────────────────── */
+    --glass-bg: rgba(255, 255, 255, 0.5);
+    --glass-bg-hover: rgba(255, 255, 255, 0.6);
+    --glass-blur: blur(20px);
+    --glass-blur-sm: blur(10px);
+    --glass-blur-lg: blur(24px);
+    --glass-border: 1px solid color-mix(
+        in srgb, var(--primary) 12%, transparent
+    );
+    --glass-border-hover: 1px solid color-mix(
+        in srgb, var(--primary) 20%, transparent
+    );
+
+    /* ── Status color derivatives ────────────── */
+    --color-success-bg: color-mix(
+        in srgb, var(--color-success) 15%, transparent
+    );
+    --color-success-border: color-mix(
+        in srgb, var(--color-success) 40%, transparent
+    );
+    --color-success-text: color-mix(
+        in srgb, var(--color-success) 60%, white
+    );
+    --color-warning-bg: color-mix(
+        in srgb, var(--color-warning) 15%, transparent
+    );
+    --color-warning-border: color-mix(
+        in srgb, var(--color-warning) 40%, transparent
+    );
+    --color-warning-text: color-mix(
+        in srgb, var(--color-warning) 60%, white
+    );
+    --color-info-bg: color-mix(
+        in srgb, var(--color-info) 15%, transparent
+    );
+    --color-info-border: color-mix(
+        in srgb, var(--color-info) 40%, transparent
+    );
+    --color-info-text: color-mix(
+        in srgb, var(--color-info) 60%, white
+    );
+    --color-error-bg: color-mix(
+        in srgb, var(--color-error) 15%, transparent
+    );
+    --color-error-border: color-mix(
+        in srgb, var(--color-error) 40%, transparent
+    );
+    --color-error-text: color-mix(
+        in srgb, var(--color-error) 60%, white
+    );
+
+    /* ── Selectable hover tint ───────────────── */
+    --primary-tint-subtle: color-mix(
+        in srgb, var(--primary) 3%, transparent
+    );
+    --primary-tint-light: color-mix(
+        in srgb, var(--primary) 8%, transparent
+    );
+    --primary-tint-medium: color-mix(
+        in srgb, var(--primary) 15%, transparent
+    );
+
+    /* ── Grid overlay background ─────────────── */
+    --grid-overlay-image:
+        linear-gradient(
+            to right,
+            var(--grid-line) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            to bottom,
+            var(--grid-line) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            45deg,
+            var(--grid-dot) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            -45deg,
+            var(--grid-dot) 1px,
+            transparent 1px
+        );
+    --grid-overlay-size:
+        16px 16px,
+        16px 16px,
+        24px 24px,
+        24px 24px;
+}
+
+/* ============================================
+   GLOBAL ANIMATIONS
+   ============================================ */
+
+/* Border-spin — animated conic-gradient border
+   Used by item_card, nav_card, vitrine cards.  */
+@property --border-angle {
+    syntax: "<angle>";
+    initial-value: 0deg;
+    inherits: false;
+}
+
+@keyframes border-spin {
+    to { --border-angle: 360deg; }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ============================================
+   CSS RESET / BASE STYLES
+   ============================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: auto;
+    /* Reserve scrollbar space so fixed elements
+       (top bar) and page content align.         */
+    scrollbar-gutter: stable;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    html {
+        scroll-behavior: smooth;
+    }
+}
+
+body {
+    font-family: var(--principal-font-family);
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+    min-height: 100vh;
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+/* Page container */
+.page-container {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    z-index: 1;
+    background: var(--color-background);
+}

@@ -1,0 +1,12 @@
+/* ============================================
+   DVD List — local styles
+   ============================================
+   Grid handled by CardGrid component.
+   Only list-wrapper layout lives here.
+   ============================================ */
+
+.list_wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}

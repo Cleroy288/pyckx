@@ -5,8 +5,8 @@ use serde::{Deserialize, Serialize};
 use tracing::info;
 
 use crate::app::App;
-use crate::shared::AppError;
 use crate::infra::user::get_user_id_from_session;
+use crate::shared::AppError;
 
 // -- Request DTOs --
 
@@ -140,9 +140,9 @@ pub async fn check_resource_exists(
     query: web::Query<std::collections::HashMap<String, String>>,
 ) -> Result<HttpResponse, AppError> {
     let user_id = get_user_id_from_session(&app, &req)?;
-    let filename = query
-        .get("filename")
-        .ok_or_else(|| AppError::validation("filename", "Missing filename parameter"))?;
+    let filename = query.get("filename").ok_or_else(|| {
+        AppError::validation("filename", "Missing filename parameter")
+    })?;
 
     info!(user_id = %user_id, filename = %filename, "Checking resource existence");
 
@@ -173,7 +173,12 @@ pub async fn create_user_resource(
 
     let resource = app
         .intello_service
-        .create_resource(&user_id, body.filename.clone(), body.content.clone(), body.token_count)
+        .create_resource(
+            &user_id,
+            body.filename.clone(),
+            body.content.clone(),
+            body.token_count,
+        )
         .await?;
 
     Ok(HttpResponse::Created().json(UserResourceResponse {

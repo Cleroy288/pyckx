@@ -2,7 +2,8 @@ use crate::services::intello::course::prompt::ideas_prompt::build_ideas_extracti
 
 #[test]
 fn test_builds_prompt_without_resources() {
-    let prompt = build_ideas_extraction_prompt("Learn Rust async programming", None);
+    let prompt =
+        build_ideas_extraction_prompt("Learn Rust async programming", None);
     assert!(prompt.contains("Learn Rust async programming"));
     assert!(prompt.contains("OUTPUT ONLY THE JSON"));
 }

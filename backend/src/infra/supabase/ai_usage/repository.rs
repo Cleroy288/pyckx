@@ -13,10 +13,12 @@ use std::sync::Arc;
 use tracing::info;
 use uuid::Uuid;
 
-use crate::services::intello::ai_usage::ai_usage_domain::{AiUsageLog, CreateAiUsageLog};
-use crate::shared::AppError;
 use crate::infra::database::AiUsageRepository;
 use crate::infra::supabase::shared::{SupabaseError, SupabaseHttpClient};
+use crate::services::intello::ai_usage::ai_usage_domain::{
+    AiUsageLog, CreateAiUsageLog,
+};
+use crate::shared::AppError;
 
 /* ============================================================================
  * CONSTANTS
@@ -96,7 +98,9 @@ impl SupabaseAiUsageRepository {
      * Convert SupabaseError to AppError.
      */
     fn map_error(err: SupabaseError) -> AppError {
-        AppError::Internal(crate::http_api::utils::InternalError::new(err.to_string()))
+        AppError::Internal(crate::http_api::utils::InternalError::new(
+            err.to_string(),
+        ))
     }
 
     /* ========================================================================
@@ -137,7 +141,10 @@ impl AiUsageRepository for SupabaseAiUsageRepository {
      *
      * Creates a usage log entry with token counts and calculated costs.
      */
-    async fn log_usage(&self, input: CreateAiUsageLog) -> Result<AiUsageLog, AppError> {
+    async fn log_usage(
+        &self,
+        input: CreateAiUsageLog,
+    ) -> Result<AiUsageLog, AppError> {
         let id = Uuid::new_v4().to_string();
         let row = InsertAiUsageRow {
             id: id.clone(),
@@ -158,10 +165,11 @@ impl AiUsageRepository for SupabaseAiUsageRepository {
             .await
             .map_err(Self::map_error)?;
 
-        let row = created
-            .into_iter()
-            .next()
-            .ok_or_else(|| AppError::Internal(crate::http_api::utils::InternalError::new("No usage returned".to_string())))?;
+        let row = created.into_iter().next().ok_or_else(|| {
+            AppError::Internal(crate::http_api::utils::InternalError::new(
+                "No usage returned".to_string(),
+            ))
+        })?;
 
         info!(
             model = %row.model_id,
@@ -184,11 +192,15 @@ impl AiUsageRepository for SupabaseAiUsageRepository {
      *
      * Returns usage history ordered by most recent first.
      */
-    async fn get_user_usage(&self, user_id: &str) -> Result<Vec<AiUsageLog>, AppError> {
+    async fn get_user_usage(
+        &self,
+        user_id: &str,
+    ) -> Result<Vec<AiUsageLog>, AppError> {
         let query = format!("user_id=eq.{}&order=created_at.desc", user_id);
         let url = self.client.rest_url_with_query(TABLE_AI_USAGE, &query);
 
-        let rows: Vec<AiUsageRow> = self.client.get(&url).await.map_err(Self::map_error)?;
+        let rows: Vec<AiUsageRow> =
+            self.client.get(&url).await.map_err(Self::map_error)?;
 
         Ok(rows.into_iter().map(Self::row_to_domain).collect())
     }
@@ -206,7 +218,8 @@ impl AiUsageRepository for SupabaseAiUsageRepository {
         let query = "order=created_at.desc";
         let url = self.client.rest_url_with_query(TABLE_AI_USAGE, query);
 
-        let rows: Vec<AiUsageRow> = self.client.get(&url).await.map_err(Self::map_error)?;
+        let rows: Vec<AiUsageRow> =
+            self.client.get(&url).await.map_err(Self::map_error)?;
 
         Ok(rows.into_iter().map(Self::row_to_domain).collect())
     }

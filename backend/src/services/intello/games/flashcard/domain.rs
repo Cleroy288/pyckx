@@ -16,9 +16,9 @@ use crate::services::intello::{Level, QuestionId, SetId};
 // @ back : Back side (answer/definition/explanation)
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Flashcard {
-    pub id: QuestionId,  // unique identifier
-    pub front: String,   // front side
-    pub back: String,    // back side
+    pub id: QuestionId, // unique identifier
+    pub front: String,  // front side
+    pub back: String,   // back side
 }
 
 // ** FlashcardSet **
@@ -34,12 +34,12 @@ pub struct Flashcard {
 // @ cards : The flashcards in this set
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct FlashcardSet {
-    pub id: SetId,              // unique identifier
-    pub user_id: UserId,        // owner
-    pub name: String,           // set name
-    pub description: String,    // description
-    pub level: Level,           // difficulty level
-    pub language: String,       // language code
-    pub subjects: Vec<String>,  // subject tags
-    pub cards: Vec<Flashcard>,  // flashcards
+    pub id: SetId,             // unique identifier
+    pub user_id: UserId,       // owner
+    pub name: String,          // set name
+    pub description: String,   // description
+    pub level: Level,          // difficulty level
+    pub language: String,      // language code
+    pub subjects: Vec<String>, // subject tags
+    pub cards: Vec<Flashcard>, // flashcards
 }

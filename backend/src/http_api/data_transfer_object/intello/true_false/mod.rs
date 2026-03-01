@@ -9,4 +9,3 @@ pub use response::{
     CreateTrueOrFalseResponse, TrueOrFalseSetListResponse,
     TrueOrFalseSetWithStatementsResponse, TrueOrFalseStatementResponse,
 };
-

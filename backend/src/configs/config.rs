@@ -72,16 +72,23 @@ impl Config {
             sp_service_role: required_env("SP_SERVICE_ROLE")?,
             secure_http: required_env("SECURE_HTTP")?,
             // Optional: Test user ID for integration tests
-            test_user_id: std::env::var("TEST_USR_ID").ok().filter(|s| !s.is_empty()),
+            test_user_id: std::env::var("TEST_USR_ID")
+                .ok()
+                .filter(|s| !s.is_empty()),
             // Frontend serving configuration (defaults for development)
             serve_frontend: std::env::var("SERVE_FRONTEND")
                 .map(|v| v.to_lowercase() == "true")
                 .unwrap_or(false),
-            static_dir: std::env::var("STATIC_DIR").unwrap_or_else(|_| "./static".to_string()),
+            static_dir: std::env::var("STATIC_DIR")
+                .unwrap_or_else(|_| "./static".to_string()),
             // OpenRouter API key (optional)
-            openrouter_api_key: std::env::var("OPENROUTER_API_KEY").ok().filter(|s| !s.is_empty()),
+            openrouter_api_key: std::env::var("OPENROUTER_API_KEY")
+                .ok()
+                .filter(|s| !s.is_empty()),
             // Google AI API key for Gemini models (optional, for higher rate limits)
-            google_ai_key: std::env::var("GOOGLE_AI_KEY").ok().filter(|s| !s.is_empty()),
+            google_ai_key: std::env::var("GOOGLE_AI_KEY")
+                .ok()
+                .filter(|s| !s.is_empty()),
         };
 
         info!(
@@ -156,5 +163,26 @@ mod tests {
             google_ai_key: None,
         };
         assert_eq!(config.get_test_user_id(), Some("user-uuid-123"));
+    }
+
+    #[test]
+    fn test_get_test_user_id_none_when_not_set() {
+        // arrange
+        let config = Config {
+            ip: "0.0.0.0".to_string(),
+            port: "3000".to_string(),
+            sp_url: "https://x.supabase.co".to_string(),
+            sp_anon: "anon".to_string(),
+            sp_service_role: "srv".to_string(),
+            secure_http: "false".to_string(),
+            test_user_id: None,
+            serve_frontend: false,
+            static_dir: "./static".to_string(),
+            openrouter_api_key: None,
+            google_ai_key: None,
+        };
+
+        // act / assert
+        assert_eq!(config.get_test_user_id(), None);
     }
 }

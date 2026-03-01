@@ -3,8 +3,8 @@
 //! Contains domain structures for document extraction functionality
 // ==> This file defines the core data structures used in document extraction
 
-use serde::{Deserialize, Serialize};
 use crate::services::intello::error_domain::IntelloError;
+use serde::{Deserialize, Serialize};
 
 // ** ExtractedContent **
 // Represents extracted content from a document with metadata
@@ -29,7 +29,10 @@ impl ExtractedContent {
     pub fn new(content: String) -> Self {
         // Rough token estimation: ~4 characters per token (common for English)
         let token_count = (content.len() as f64 / 4.0).ceil() as u32;
-        Self { content, token_count }
+        Self {
+            content,
+            token_count,
+        }
     }
 }
 
@@ -39,3 +42,67 @@ impl ExtractedContent {
 // @ T : The successful extraction result type
 // @ IntelloError : Error type for extraction failures
 pub type ExtractResult<T> = Result<T, IntelloError>;
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_new_calculates_token_count_for_short_text() {
+        // arrange
+        let text = "Hello world"; // 11 chars
+
+        // act
+        let content = ExtractedContent::new(text.to_string());
+
+        // assert - ceil(11 / 4.0) = 3
+        assert_eq!(content.token_count, 3);
+        assert_eq!(content.content, "Hello world");
+    }
+
+    #[test]
+    fn test_new_with_empty_string_returns_zero_tokens() {
+        // arrange / act
+        let content = ExtractedContent::new(String::new());
+
+        // assert
+        assert_eq!(content.token_count, 0);
+        assert_eq!(content.content, "");
+    }
+
+    #[test]
+    fn test_new_token_count_rounds_up() {
+        // arrange - 5 chars => ceil(5/4) = 2
+        let text = "abcde";
+
+        // act
+        let content = ExtractedContent::new(text.to_string());
+
+        // assert
+        assert_eq!(content.token_count, 2);
+    }
+
+    #[test]
+    fn test_new_exact_multiple_of_four() {
+        // arrange - 8 chars => ceil(8/4) = 2
+        let text = "abcdefgh";
+
+        // act
+        let content = ExtractedContent::new(text.to_string());
+
+        // assert
+        assert_eq!(content.token_count, 2);
+    }
+
+    #[test]
+    fn test_new_preserves_content() {
+        // arrange
+        let text = "Paragraph with\nnewlines and spaces.";
+
+        // act
+        let content = ExtractedContent::new(text.to_string());
+
+        // assert
+        assert_eq!(content.content, text);
+    }
+}

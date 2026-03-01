@@ -1,13 +1,14 @@
 //! Order Phrase handlers - API endpoints for Order Phrase game
 
 use super::helpers::parse_multipart;
-use crate::http_api::data_transfer_object::intello::{
-    CreateOrderPhraseRequest, CreateOrderPhraseResponse, OrderPhraseQuestionResponse,
-    OrderPhraseSetListResponse, OrderPhraseSetWithQuestionsResponse, OrderPhraseWordResponse,
-};
 use crate::app::App;
-use crate::shared::{AppError, AppResult};
+use crate::http_api::data_transfer_object::intello::{
+    CreateOrderPhraseRequest, CreateOrderPhraseResponse,
+    OrderPhraseQuestionResponse, OrderPhraseSetListResponse,
+    OrderPhraseSetWithQuestionsResponse, OrderPhraseWordResponse,
+};
 use crate::infra::user::get_user_id_from_session;
+use crate::shared::{AppError, AppResult};
 use actix_multipart::Multipart;
 use actix_web::{get, post, web, HttpRequest, HttpResponse};
 use tracing::instrument;
@@ -23,12 +24,13 @@ pub async fn create_order_phrase_handler(
     let user_id = get_user_id_from_session(&app, &req)?;
 
     // Parse multipart form data
-    let (metadata, documents) = parse_multipart::<CreateOrderPhraseRequest>(payload).await?;
+    let (metadata, documents) =
+        parse_multipart::<CreateOrderPhraseRequest>(payload).await?;
 
     // Parse level (DTO validation)
     let level = metadata
         .parse_level()
-        .map_err(|e| AppError::validation("level", e))?;
+        .map_err(|err| AppError::validation("level", err))?;
 
     // Build service input
     let service_input = crate::services::GenerateContentInput {
@@ -43,7 +45,10 @@ pub async fn create_order_phrase_handler(
     };
 
     // Call service directly
-    let order_phrase_set = app.intello_service.generate_ai_order_phrases(&user_id, service_input).await?;
+    let order_phrase_set = app
+        .intello_service
+        .generate_ai_order_phrases(&user_id, service_input)
+        .await?;
 
     // Build response
     let question_responses: Vec<OrderPhraseQuestionResponse> = order_phrase_set
@@ -99,7 +104,11 @@ pub async fn list_order_phrase_sets_handler(
                 .map(|q| OrderPhraseQuestionResponse {
                     id: q.id.to_string(),
                     original_phrase: q.original_phrase.clone(),
-                    words: q.words.iter().map(OrderPhraseWordResponse::from).collect(),
+                    words: q
+                        .words
+                        .iter()
+                        .map(OrderPhraseWordResponse::from)
+                        .collect(),
                     hint: q.hint.clone(),
                 })
                 .collect(),

@@ -1,8 +1,10 @@
 //! App management handlers (admin)
 
-use crate::http_api::data_transfer_object::{AppSuccessResponse, CreateAppRequest, SuccessResponse, UpdateAppRequest};
-use crate::http_api::utils::validation::validate_request;
 use crate::app::App;
+use crate::http_api::data_transfer_object::{
+    AppSuccessResponse, CreateAppRequest, SuccessResponse, UpdateAppRequest,
+};
+use crate::http_api::utils::validation::validate_request;
 use crate::shared::AppResult;
 use actix_web::{delete, post, put, web, HttpResponse};
 use tracing::instrument;

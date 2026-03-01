@@ -1,0 +1,16 @@
+/* ── Collection Page — local styles ──────────
+   Page layout handled by PageLayout.
+   Banner handled by HeroBanner.
+   Only collection-specific styles live here.  */
+
+/* ── Banner actions ─────────────────────────
+   Pinned to the bottom-left corner of the
+   hero banner. z-index:1 above the grid.      */
+.banner_actions {
+    position: absolute;
+    bottom: 0.75rem;
+    left: 1rem;
+    z-index: 1;
+    display: flex;
+    gap: 0.5rem;
+}

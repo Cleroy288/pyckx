@@ -36,12 +36,12 @@ pub struct TrueOrFalseStatement {
 // @ statements : The statements in this set
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct TrueOrFalseSet {
-    pub id: SetId,                            // unique identifier
-    pub user_id: UserId,                      // owner
-    pub name: String,                         // set name
-    pub description: String,                  // description
-    pub level: Level,                         // difficulty level
-    pub language: String,                     // language code
-    pub subjects: Vec<String>,                // subject tags
+    pub id: SetId,                             // unique identifier
+    pub user_id: UserId,                       // owner
+    pub name: String,                          // set name
+    pub description: String,                   // description
+    pub level: Level,                          // difficulty level
+    pub language: String,                      // language code
+    pub subjects: Vec<String>,                 // subject tags
     pub statements: Vec<TrueOrFalseStatement>, // statements
 }

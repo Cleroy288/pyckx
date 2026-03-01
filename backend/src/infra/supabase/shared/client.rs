@@ -112,7 +112,10 @@ impl SupabaseHttpClient {
      * Performs GET request and deserializes JSON response.
      * Includes automatic retry on transient failures.
      */
-    pub async fn get<T: DeserializeOwned>(&self, url: &str) -> Result<T, SupabaseError> {
+    pub async fn get<T: DeserializeOwned>(
+        &self,
+        url: &str,
+    ) -> Result<T, SupabaseError> {
         self.request_with_retry(Method::GET, url, None::<&()>).await
     }
 
@@ -122,7 +125,11 @@ impl SupabaseHttpClient {
      * Sends JSON body and deserializes JSON response.
      * Includes automatic retry on transient failures.
      */
-    pub async fn post<T, B>(&self, url: &str, body: &B) -> Result<T, SupabaseError>
+    pub async fn post<T, B>(
+        &self,
+        url: &str,
+        body: &B,
+    ) -> Result<T, SupabaseError>
     where
         T: DeserializeOwned,
         B: Serialize,
@@ -136,12 +143,17 @@ impl SupabaseHttpClient {
      * Sends JSON body and deserializes JSON response.
      * Includes automatic retry on transient failures.
      */
-    pub async fn patch<T, B>(&self, url: &str, body: &B) -> Result<T, SupabaseError>
+    pub async fn patch<T, B>(
+        &self,
+        url: &str,
+        body: &B,
+    ) -> Result<T, SupabaseError>
     where
         T: DeserializeOwned,
         B: Serialize,
     {
-        self.request_with_retry(Method::PATCH, url, Some(body)).await
+        self.request_with_retry(Method::PATCH, url, Some(body))
+            .await
     }
 
     /*
@@ -181,13 +193,13 @@ impl SupabaseHttpClient {
         for attempt in 0..3u32 {
             match self.execute_request(&method, url, body).await {
                 Ok(response) => return Ok(response),
-                Err(e) if e.is_retryable() && attempt < 2 => {
+                Err(err) if err.is_retryable() && attempt < 2 => {
                     let delay = Duration::from_millis(100 * (1 << attempt));
                     warn!(attempt = attempt + 1, delay_ms = ?delay.as_millis(), "Retrying request");
                     tokio::time::sleep(delay).await;
-                    last_error = e;
+                    last_error = err;
                 }
-                Err(e) => return Err(e),
+                Err(err) => return Err(err),
             }
         }
 
@@ -213,7 +225,10 @@ impl SupabaseHttpClient {
             .client
             .request(method.clone(), url)
             .header("apikey", &self.anon_key)
-            .header("Authorization", format!("Bearer {}", self.service_role_key))
+            .header(
+                "Authorization",
+                format!("Bearer {}", self.service_role_key),
+            )
             .header("Content-Type", "application/json")
             .header("Prefer", "return=representation");
 
@@ -221,11 +236,11 @@ impl SupabaseHttpClient {
             req = req.json(b);
         }
 
-        let response = req.send().await.map_err(|e| {
-            if e.is_timeout() {
+        let response = req.send().await.map_err(|err| {
+            if err.is_timeout() {
                 SupabaseError::Timeout
             } else {
-                SupabaseError::network(e.to_string())
+                SupabaseError::network(err.to_string())
             }
         })?;
 
@@ -238,12 +253,13 @@ impl SupabaseHttpClient {
         response
             .json()
             .await
-            .map_err(|e| SupabaseError::parse(e.to_string()))
+            .map_err(|err| SupabaseError::parse(err.to_string()))
     }
 
     /*
      * Execute DELETE request (no response body expected).
      */
+    #[allow(clippy::excessive_nesting)]
     async fn delete_internal(&self, url: &str) -> Result<(), SupabaseError> {
         debug!(url = %url, "Executing Supabase DELETE");
 
@@ -254,7 +270,10 @@ impl SupabaseHttpClient {
                 .client
                 .delete(url)
                 .header("apikey", &self.anon_key)
-                .header("Authorization", format!("Bearer {}", self.service_role_key));
+                .header(
+                    "Authorization",
+                    format!("Bearer {}", self.service_role_key),
+                );
 
             match req.send().await {
                 Ok(response) => {
@@ -274,11 +293,11 @@ impl SupabaseHttpClient {
                     }
                     return Err(err);
                 }
-                Err(e) => {
-                    let err = if e.is_timeout() {
+                Err(err) => {
+                    let err = if err.is_timeout() {
                         SupabaseError::Timeout
                     } else {
-                        SupabaseError::network(e.to_string())
+                        SupabaseError::network(err.to_string())
                     };
 
                     if err.is_retryable() && attempt < 2 {

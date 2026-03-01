@@ -1,13 +1,15 @@
 //! Open question operations
 
-
 use tracing::{info, instrument};
 
 use crate::infra::openrouter::DEFAULT_MODEL;
-use crate::services::intello::ai_usage::ai_usage_domain::feature_type;
+use crate::services::intello::ai_usage::ai_usage_domain::{
+    feature_type, AiUsageInput,
+};
 use crate::services::intello::error_domain::IntelloError;
 use crate::services::intello::types_domain::{
-    AnswerGrade, CheckAnswersInput, GenerateContentInput, GradingResult, IntelloService,
+    AnswerGrade, CheckAnswersInput, GenerateContentInput, GradingResult,
+    IntelloService,
 };
 use crate::services::intello::SetId;
 
@@ -35,10 +37,10 @@ impl IntelloService {
     ) -> Result<Vec<OpenQuestionSet>, IntelloError> {
         // Step 1: Validate user ID
         self.validate_user_id(user_id)?;
-        
+
         // Step 2: Query repository for all user sets
         let sets = self.open_question_repo.find_by_user(user_id).await?;
-        
+
         // Step 3: Log retrieval and return sets
         info!(count = sets.len(), "Retrieved user open question sets");
         Ok(sets)
@@ -62,7 +64,10 @@ impl IntelloService {
         // Step 1: Validate user ID and generation input
         self.validate_user_id(user_id)?;
         self.validate_generation_input(&input)?;
-        info!(num_questions = input.num_questions, "Generating AI open questions");
+        info!(
+            num_questions = input.num_questions,
+            "Generating AI open questions"
+        );
 
         // Step 2: Build prompt input from generation parameters
         let prompt_input = OpenQuestionPromptInput {
@@ -76,26 +81,32 @@ impl IntelloService {
             documents: input
                 .documents
                 .iter()
-                .map(|(filename, content, _)| (filename.clone(), content.clone()))
+                .map(|(filename, content, _)| {
+                    (filename.clone(), content.clone())
+                })
                 .collect(),
         };
 
         // Step 3: Build prompt and send request to AI service
         let prompt = build_open_question_prompt(&prompt_input);
-        let ai_result = self.openrouter_client.send_chat_request(&prompt, None).await?;
+        let ai_result = self
+            .openrouter_client
+            .send_chat_request(&prompt, None)
+            .await?;
 
         // Step 4: Parse AI response into open questions
-        let questions = parser::parse_open_question_response(&ai_result.content)?;
+        let questions =
+            parser::parse_open_question_response(&ai_result.content)?;
 
         // Step 5: Log AI usage (fire-and-forget)
         if let Some(usage) = ai_result.usage {
-            self.try_log_ai_usage(
+            self.try_log_ai_usage(AiUsageInput {
                 user_id,
-                DEFAULT_MODEL,
-                feature_type::OPEN_QUESTION,
-                usage.prompt_tokens,
-                usage.completion_tokens,
-            )
+                model_id: DEFAULT_MODEL,
+                feature_type: feature_type::OPEN_QUESTION,
+                input_tokens: usage.prompt_tokens,
+                output_tokens: usage.completion_tokens,
+            })
             .await;
         }
         info!(generated = questions.len(), "AI open questions generated");
@@ -112,10 +123,12 @@ impl IntelloService {
             subjects: input.subjects,
             questions,
         };
-        let created = self.open_question_repo.insert(&open_question_set).await?;
+        let created =
+            self.open_question_repo.insert(&open_question_set).await?;
 
         // Step 7: Cache source content for later grading
-        self.open_question_cache.store(user_id, &set_id, source_content);
+        self.open_question_cache
+            .store(user_id, &set_id, source_content);
         info!(set_id = %created.id, "AI open question set stored");
         Ok(created)
     }
@@ -142,8 +155,9 @@ impl IntelloService {
             .open_question_repo
             .find_by_id(&input.set_id, user_id)
             .await?;
-        let set =
-            set.ok_or_else(|| IntelloError::game_not_found("open_question_set", &input.set_id))?;
+        let set = set.ok_or_else(|| {
+            IntelloError::game_not_found("open_question_set", &input.set_id)
+        })?;
 
         // Step 3: Retrieve source content from cache for grading context
         let source_content = self
@@ -163,7 +177,10 @@ impl IntelloService {
                     question_id: question.id.to_string(),
                     question: question.question.clone(),
                     hint: question.hint.clone().unwrap_or_default(),
-                    expected_answer: question.expected_answer.clone().unwrap_or_default(),
+                    expected_answer: question
+                        .expected_answer
+                        .clone()
+                        .unwrap_or_default(),
                     user_answer: user_answer.user_answer.clone(),
                 });
             }
@@ -176,7 +193,10 @@ impl IntelloService {
                 "No valid answers to grade",
             ));
         }
-        info!(count = answers_to_grade.len(), "Grading open question answers");
+        info!(
+            count = answers_to_grade.len(),
+            "Grading open question answers"
+        );
 
         // Step 6: Build verification prompt with source content and answers
         let verification_input = VerificationPromptInput {
@@ -187,10 +207,15 @@ impl IntelloService {
         let prompt = build_verification_prompt(&verification_input);
 
         // Step 7: Send verification request to AI service
-        let ai_result = self.openrouter_client.send_chat_request(&prompt, None).await?;
+        let ai_result = self
+            .openrouter_client
+            .send_chat_request(&prompt, None)
+            .await?;
 
         // Step 8: Parse AI verification response into grades
-        let grades = super::verification::parser::parse_verification_response(&ai_result.content)?;
+        let grades = super::verification::parser::parse_verification_response(
+            &ai_result.content,
+        )?;
 
         // Step 9: Convert to GradingResult format
         let results: Vec<GradingResult> = grades

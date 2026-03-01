@@ -2,26 +2,21 @@
 // LAPP - Login Application
 // ============================================================================
 
-// Modules
-mod http_api;
-mod app;
-mod configs;
-mod infra;
-mod services;
-mod shared;
-
-#[cfg(test)]
-mod tests;
-
-// Imports
 use actix_cors::Cors;
 use actix_files::{Files, NamedFile};
 use actix_multipart::form::MultipartFormConfig;
-use actix_web::{http::header, middleware::Logger, rt::signal, web, App as ActixApp, HttpRequest, HttpServer};
-use app::App;
-use http_api::{RateLimitConfig, RateLimitMiddleware, RateLimiter};
+use actix_web::{
+    http::header,
+    middleware::{Compress, Logger},
+    rt::signal,
+    web, App as ActixApp, HttpRequest, HttpServer,
+};
+use LAPP::app::App;
+use LAPP::http_api::{RateLimitConfig, RateLimitMiddleware, RateLimiter};
 use tracing::{error, info, warn};
-use tracing_subscriber::{fmt, layer::SubscriberExt, util::SubscriberInitExt, EnvFilter};
+use tracing_subscriber::{
+    fmt, layer::SubscriberExt, util::SubscriberInitExt, EnvFilter,
+};
 
 // ============================================================================
 // MAIN
@@ -34,9 +29,9 @@ async fn main() -> std::io::Result<()> {
     // Initialize application
     let app = match App::new().await {
         Ok(app) => app,
-        Err(e) => {
-            error!("Failed to load configuration: {}", e);
-            eprintln!("\n❌ Configuration Error: {}", e);
+        Err(err) => {
+            error!("Failed to load configuration: {}", err);
+            eprintln!("\n❌ Configuration Error: {}", err);
             eprintln!("\nRequired env vars: IP, PORT, SP_ID, SP_URL, SP_ANON, SP_SERVICE_ROLE, SECURE_HTTP");
             std::process::exit(1);
         }
@@ -70,15 +65,22 @@ async fn main() -> std::io::Result<()> {
             .memory_limit(50 * 1024 * 1024);
 
         let json_config = web::JsonConfig::default().limit(10 * 1024 * 1024);
-        let payload_config = web::PayloadConfig::default().limit(100 * 1024 * 1024);
+        let payload_config =
+            web::PayloadConfig::default().limit(100 * 1024 * 1024);
 
         let cors = if serve_frontend {
             Cors::default()
         } else {
             Cors::default()
                 .allowed_origin("http://localhost:3000")
-                .allowed_methods(vec!["GET", "POST", "PUT", "DELETE", "OPTIONS"])
-                .allowed_headers(vec![header::CONTENT_TYPE, header::AUTHORIZATION, header::ACCEPT])
+                .allowed_methods(vec![
+                    "GET", "POST", "PUT", "DELETE", "OPTIONS",
+                ])
+                .allowed_headers(vec![
+                    header::CONTENT_TYPE,
+                    header::AUTHORIZATION,
+                    header::ACCEPT,
+                ])
                 .supports_credentials()
                 .max_age(3600)
         };
@@ -89,17 +91,16 @@ async fn main() -> std::io::Result<()> {
             .app_data(json_config)
             .app_data(payload_config)
             .wrap(cors)
+            .wrap(Compress::default())
             .wrap(RateLimitMiddleware::new(rate_limiter.clone()))
             .wrap(Logger::new("%a \"%r\" %s %b %Dms"))
-            .configure(http_api::init);
+            .configure(LAPP::http_api::init);
 
-        // Static file serving (production only)
+        // Static file serving (Leptos WASM app)
         if serve_frontend {
             let static_dir_clone = static_dir.clone();
             actix_app = actix_app
-                // Serve /_next/* for JS/CSS bundles
-                .service(Files::new("/_next", format!("{}/_next", static_dir)).prefer_utf8(true))
-                // Serve all static files with automatic index.html per directory
+                // Serve all static files with SPA fallback
                 .service(
                     Files::new("/", static_dir.clone())
                         .index_file("index.html")
@@ -107,7 +108,7 @@ async fn main() -> std::io::Result<()> {
                         .default_handler(web::to(move |req: HttpRequest| {
                             let static_dir = static_dir_clone.clone();
                             async move { spa_fallback(req, static_dir).await }
-                        }))
+                        })),
                 );
         }
 
@@ -115,6 +116,16 @@ async fn main() -> std::io::Result<()> {
     })
     .bind((app.config.ip.clone(), port))?
     .run();
+
+    let scheme = if app.config.secure_http == "true" {
+        "https"
+    } else {
+        "http"
+    };
+    println!(
+        "\n🌐 {} running at {}://{}:{}\n",
+        app.name, scheme, app.config.ip, port
+    );
 
     // Graceful shutdown
     let srv_handle = server.handle();
@@ -132,8 +143,9 @@ async fn main() -> std::io::Result<()> {
 // ============================================================================
 
 fn init_tracing() {
-    let filter = EnvFilter::try_from_default_env()
-        .unwrap_or_else(|_| EnvFilter::new("info,actix_web=info,actix_server=info"));
+    let filter = EnvFilter::try_from_default_env().unwrap_or_else(|_| {
+        EnvFilter::new("info,actix_web=info,actix_server=info")
+    });
 
     tracing_subscriber::registry()
         .with(filter)
@@ -143,14 +155,14 @@ fn init_tracing() {
 
 fn configure_rate_limiter() -> RateLimiter {
     let limiter = RateLimiter::with_default(RateLimitConfig::standard());
-    
+
     // Auth - strict limits
     limiter.configure("/api/auth/login", RateLimitConfig::strict());
     limiter.configure("/api/auth/register", RateLimitConfig::strict());
-    
+
     // Collection - relaxed limits
     limiter.configure("/api/collection/dvds", RateLimitConfig::relaxed());
-    
+
     // AI Generation - 1 per minute to prevent abuse
     let ai_config = RateLimitConfig::ai_generation();
     limiter.configure("/api/intello/qcm/generate", ai_config.clone());
@@ -161,12 +173,15 @@ fn configure_rate_limiter() -> RateLimiter {
     limiter.configure("/api/intello/order-phrases", ai_config.clone());
     limiter.configure("/api/intello/fill-blanks", ai_config.clone());
     limiter.configure("/api/intello/generate-course", ai_config);
-    
+
     limiter
 }
 
 /// SPA fallback - serves index.html for unmatched routes (client-side routing)
-async fn spa_fallback(req: HttpRequest, static_dir: String) -> actix_web::Result<NamedFile> {
+async fn spa_fallback(
+    req: HttpRequest,
+    static_dir: String,
+) -> actix_web::Result<NamedFile> {
     let path = req.path();
 
     // Reject API routes that fell through
@@ -176,7 +191,8 @@ async fn spa_fallback(req: HttpRequest, static_dir: String) -> actix_web::Result
     }
 
     // Try route-specific index.html (e.g., /intello -> /intello/index.html)
-    let route_index = format!("{}{}/index.html", static_dir, path.trim_end_matches('/'));
+    let route_index =
+        format!("{}{}/index.html", static_dir, path.trim_end_matches('/'));
     if let Ok(file) = NamedFile::open(&route_index) {
         return Ok(file);
     }
@@ -185,4 +201,3 @@ async fn spa_fallback(req: HttpRequest, static_dir: String) -> actix_web::Result
     NamedFile::open(format!("{}/index.html", static_dir))
         .map_err(|_| actix_web::error::ErrorNotFound("Frontend not found"))
 }
-

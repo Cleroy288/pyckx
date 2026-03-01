@@ -18,7 +18,7 @@ impl IntelloService {
         self.course_repo
             .get_course_resources(course_id)
             .await
-            .map_err(|e| IntelloError::storage(e.to_string()))
+            .map_err(|err| IntelloError::storage(err.to_string()))
     }
 
     /// List all resources for a user (summaries only, no content)
@@ -30,7 +30,7 @@ impl IntelloService {
         self.course_repo
             .get_user_resources(user_id)
             .await
-            .map_err(|e| IntelloError::storage(e.to_string()))
+            .map_err(|err| IntelloError::storage(err.to_string()))
     }
 
     /// Get full resource content with ownership check
@@ -44,7 +44,7 @@ impl IntelloService {
             .course_repo
             .get_resource_by_id(resource_id)
             .await
-            .map_err(|e| IntelloError::storage(e.to_string()))?
+            .map_err(|err| IntelloError::storage(err.to_string()))?
             .ok_or(IntelloError::NotFound)?;
 
         // Ownership check
@@ -65,10 +65,11 @@ impl IntelloService {
         self.course_repo
             .resource_exists(user_id, filename)
             .await
-            .map_err(|e| IntelloError::storage(e.to_string()))
+            .map_err(|err| IntelloError::storage(err.to_string()))
     }
 
     /// Create a new user resource
+    #[allow(clippy::too_many_arguments)]
     #[instrument(skip(self, content), fields(filename = %filename))]
     pub async fn create_resource(
         &self,
@@ -98,7 +99,7 @@ impl IntelloService {
             .course_repo
             .create_user_resource(&resource)
             .await
-            .map_err(|e| IntelloError::storage(e.to_string()))?;
+            .map_err(|err| IntelloError::storage(err.to_string()))?;
 
         info!(resource_id = %created.id, "User resource created");
         Ok(created)
@@ -125,7 +126,7 @@ impl IntelloService {
         self.course_repo
             .link_resource_to_course(course_id, resource_id)
             .await
-            .map_err(|e| IntelloError::storage(e.to_string()))?;
+            .map_err(|err| IntelloError::storage(err.to_string()))?;
 
         info!(course_id = %course_id, resource_id = %resource_id, "Resource linked to course");
         Ok(())

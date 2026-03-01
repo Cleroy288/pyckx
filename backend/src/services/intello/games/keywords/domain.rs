@@ -16,9 +16,9 @@ use crate::services::intello::{Level, OptionId, QuestionId, SetId};
 // @ is_correct : Whether this keyword is correctly related to the statement
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct Keyword {
-    pub id: OptionId,       // unique identifier
-    pub word: String,       // keyword word/phrase
-    pub is_correct: bool,   // correctness flag
+    pub id: OptionId,     // unique identifier
+    pub word: String,     // keyword word/phrase
+    pub is_correct: bool, // correctness flag
 }
 
 // ** KeywordQuestion **
@@ -30,10 +30,10 @@ pub struct Keyword {
 // @ explanation : Explanation of why correct keywords relate to statement
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct KeywordQuestion {
-    pub id: QuestionId,             // unique identifier
-    pub statement: String,          // statement to match
-    pub keywords: Vec<Keyword>,     // keyword options
-    pub explanation: String,        // explanation
+    pub id: QuestionId,         // unique identifier
+    pub statement: String,      // statement to match
+    pub keywords: Vec<Keyword>, // keyword options
+    pub explanation: String,    // explanation
 }
 
 // ** KeywordSet **
@@ -49,12 +49,12 @@ pub struct KeywordQuestion {
 // @ questions : The keyword questions in this set
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct KeywordSet {
-    pub id: SetId,                      // unique identifier
-    pub user_id: UserId,                // owner
-    pub name: String,                   // set name
-    pub description: String,            // description
-    pub level: Level,                   // difficulty level
-    pub language: String,               // language code
-    pub subjects: Vec<String>,          // subject tags
+    pub id: SetId,                       // unique identifier
+    pub user_id: UserId,                 // owner
+    pub name: String,                    // set name
+    pub description: String,             // description
+    pub level: Level,                    // difficulty level
+    pub language: String,                // language code
+    pub subjects: Vec<String>,           // subject tags
     pub questions: Vec<KeywordQuestion>, // questions
 }

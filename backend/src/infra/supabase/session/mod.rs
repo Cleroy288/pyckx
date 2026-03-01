@@ -2,4 +2,4 @@
 
 mod repository;
 
-pub use repository::{SupabaseSessionRepository, SessionRow};
+pub use repository::{SessionRow, SupabaseSessionRepository};

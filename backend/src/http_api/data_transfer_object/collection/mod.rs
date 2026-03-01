@@ -2,12 +2,12 @@
 //!
 //! Supports DVD collections.
 
+mod conversion;
 mod request;
 mod response;
-mod conversion;
 
-pub use request::{CreateCollectionRequest, AddDvdRequest, UpdateDvdRequest};
+pub use request::{AddDvdRequest, CreateCollectionRequest, UpdateDvdRequest};
 pub use response::{
-    DvdResponse, DvdListResponse, DvdSuccessResponse, DeleteResponse,
-    CollectionListResponse, CollectionItemsResponse, CollectionSuccessResponse
+    CollectionItemsResponse, CollectionListResponse, CollectionSuccessResponse,
+    DeleteResponse, DvdListResponse, DvdResponse, DvdSuccessResponse,
 };

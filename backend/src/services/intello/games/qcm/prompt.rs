@@ -11,8 +11,8 @@ use crate::services::intello::games::shared::prompt_helpers::{
 // @ custom_question : CustomQuestion with generation parameters
 // @ returns : Formatted prompt string for AI model
 pub fn build_qcm_prompt(custom_question: &CustomQuestion) -> String {
-    let game_format =
-        get_game_format(&custom_question.output_game).unwrap_or(&GAME_FORMATS[0]); // Default to QCM if not found
+    let game_format = get_game_format(&custom_question.output_game)
+        .unwrap_or(&GAME_FORMATS[0]); // Default to QCM if not found
 
     let subjects_list = if custom_question.subjects.is_empty() {
         "General topics from the provided content".to_string()
@@ -66,7 +66,9 @@ All content MUST be in {language}. This includes questions, answers, and explana
 
 **Name**: {name}
 **Description**: {description}
-**Number of Questions**: {num_questions} (generate EXACTLY this many)
+**Number of Questions**: {num_questions}
+
+⚠️ STRICT CONSTRAINT: You MUST generate EXACTLY {num_questions} questions. Not more, not fewer. If you generate any other number the output will be rejected.
 
 **User Instructions**: {instructions}
 
@@ -120,6 +122,7 @@ Respond with ONLY valid JSON:
 ## Final Check
 
 Before outputting, verify:
+✓ You have EXACTLY {num_questions} questions — count them
 ✓ All {num_questions} questions are specifically about {subjects}
 ✓ All questions match the {level} difficulty level
 ✓ All content is in {language}

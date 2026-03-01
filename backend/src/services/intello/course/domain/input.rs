@@ -1,4 +1,5 @@
 /// Input for generating a full AI course
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct GenerateCourseInput {
     pub topic: String,

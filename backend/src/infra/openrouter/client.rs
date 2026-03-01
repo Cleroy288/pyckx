@@ -4,7 +4,8 @@ use reqwest::Client;
 
 use super::models::DEFAULT_MODEL;
 use super::types::{
-    AiGenerationResult, ChatMessage, ChatRequest, ChatResponse, OPENROUTER_API_URL,
+    AiGenerationResult, ChatMessage, ChatRequest, ChatResponse,
+    OPENROUTER_API_URL,
 };
 use crate::services::intello::error_domain::IntelloError;
 
@@ -33,7 +34,10 @@ impl OpenRouterClient {
     }
 
     /// Create a new OpenRouter client with optional Google AI key
-    pub fn with_google_key(api_key: String, google_ai_key: Option<String>) -> Self {
+    pub fn with_google_key(
+        api_key: String,
+        google_ai_key: Option<String>,
+    ) -> Self {
         Self {
             client: Client::new(),
             api_key,
@@ -73,15 +77,15 @@ impl OpenRouterClient {
         // Add Google AI API key header if available and using a Google/Gemini model
         if let Some(ref google_key) = self.google_ai_key {
             if model_to_use.starts_with("google/") {
-                request_builder = request_builder.header("X-Google-AI-Key", google_key.as_str());
+                request_builder = request_builder
+                    .header("X-Google-AI-Key", google_key.as_str());
             }
         }
 
-        let response = request_builder
-            .json(&request)
-            .send()
-            .await
-            .map_err(|e| IntelloError::external("OpenRouter", e.to_string()))?;
+        let response =
+            request_builder.json(&request).send().await.map_err(|err| {
+                IntelloError::external("OpenRouter", err.to_string())
+            })?;
 
         if !response.status().is_success() {
             let status = response.status();
@@ -92,20 +96,70 @@ impl OpenRouterClient {
             ));
         }
 
-        let chat_response: ChatResponse = response.json().await.map_err(|e| {
-            IntelloError::external("OpenRouter", format!("Failed to parse response: {}", e))
-        })?;
+        let chat_response: ChatResponse =
+            response.json().await.map_err(|err| {
+                IntelloError::external(
+                    "OpenRouter",
+                    format!("Failed to parse response: {}", err),
+                )
+            })?;
 
         let content = chat_response
             .choices
             .first()
             .map(|c| c.message.content.clone())
-            .ok_or_else(|| IntelloError::external("OpenRouter", "No response content"))?;
+            .ok_or_else(|| {
+                IntelloError::external("OpenRouter", "No response content")
+            })?;
 
         Ok(AiGenerationResult {
-           content,
+            content,
             model: model_to_use.to_string(),
             usage: chat_response.usage,
         })
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_new_creates_client_with_api_key() {
+        // arrange / act
+        let client = OpenRouterClient::new("test-key".into());
+
+        // assert
+        assert_eq!(client.api_key, "test-key");
+        assert!(client.google_ai_key.is_none());
+    }
+
+    #[test]
+    fn test_with_google_key_stores_both_keys() {
+        // arrange / act
+        let client = OpenRouterClient::with_google_key(
+            "api-key".into(),
+            Some("google-key".into()),
+        );
+
+        // assert
+        assert_eq!(client.api_key, "api-key");
+        assert_eq!(
+            client.google_ai_key,
+            Some("google-key".to_string())
+        );
+    }
+
+    #[test]
+    fn test_with_google_key_none_has_no_google_key() {
+        // arrange / act
+        let client = OpenRouterClient::with_google_key(
+            "api-key".into(),
+            None,
+        );
+
+        // assert
+        assert_eq!(client.api_key, "api-key");
+        assert!(client.google_ai_key.is_none());
     }
 }

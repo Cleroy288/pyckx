@@ -1,6 +1,7 @@
+use crate::services::intello::ai_usage::ai_usage_domain::AiUsageInput;
 use crate::services::intello::course::domain::ExtractedIdeas;
-use crate::services::intello::course::prompt::build_ideas_extraction_prompt;
 use crate::services::intello::course::parser::parse_extracted_ideas;
+use crate::services::intello::course::prompt::build_ideas_extraction_prompt;
 use crate::services::intello::error_domain::IntelloError;
 use crate::services::intello::IntelloService;
 use tracing::{info, instrument};
@@ -23,7 +24,8 @@ impl IntelloService {
         info!("Starting ideas extraction");
 
         // Step 1: Build prompt for AI
-        let prompt = build_ideas_extraction_prompt(user_input, resources_content);
+        let prompt =
+            build_ideas_extraction_prompt(user_input, resources_content);
         info!(prompt_len = prompt.len(), "Ideas prompt built");
 
         // Step 2: Send to AI
@@ -31,26 +33,32 @@ impl IntelloService {
             .openrouter_client
             .send_chat_request(&prompt, None)
             .await?;
-        
+
         // Step 2b: Track AI usage
         if let Some(usage) = &ai_result.usage {
-            self.try_log_ai_usage(
-                user_id, 
-                &ai_result.model, 
-                "course_ideas_extraction", 
-                usage.prompt_tokens, 
-                usage.completion_tokens
-            ).await;
+            self.try_log_ai_usage(AiUsageInput {
+                user_id,
+                model_id: &ai_result.model,
+                feature_type: "course_ideas_extraction",
+                input_tokens: usage.prompt_tokens,
+                output_tokens: usage.completion_tokens,
+            })
+            .await;
         }
 
-        info!(response_len = ai_result.content.len(), "AI response received");
+        info!(
+            response_len = ai_result.content.len(),
+            "AI response received"
+        );
 
         // Step 3: Parse AI response
         let ideas = parse_extracted_ideas(&ai_result.content)?;
-        info!(mandatory_topics = ideas.mandatory_topics.len(), "Ideas extracted");
+        info!(
+            mandatory_topics = ideas.mandatory_topics.len(),
+            "Ideas extracted"
+        );
 
         // Step 4: Return extracted ideas
         Ok(ideas)
     }
 }
-

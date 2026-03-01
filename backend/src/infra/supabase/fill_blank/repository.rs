@@ -8,12 +8,15 @@
  */
 
 use super::types::{
-    level_from_db, level_to_db, FillBlankOptionRow, FillBlankQuestionRow, FillBlankSetRow,
+    level_from_db, level_to_db, FillBlankOptionRow, FillBlankQuestionRow,
+    FillBlankSetRow,
 };
-use crate::services::intello::{FillBlankOption, FillBlankQuestion, FillBlankSet};
-use crate::services::intello::error_domain::IntelloError;
 use crate::infra::database::GameSetRepository;
 use crate::infra::supabase::shared::{SupabaseError, SupabaseHttpClient};
+use crate::services::intello::error_domain::IntelloError;
+use crate::services::intello::{
+    FillBlankOption, FillBlankQuestion, FillBlankSet,
+};
 use async_trait::async_trait;
 use std::sync::Arc;
 use tracing::{info, instrument};
@@ -37,18 +40,23 @@ impl SupabaseFillBlankRepository {
         IntelloError::storage(err.to_string())
     }
 
-    async fn get_questions(&self, set_id: &str) -> Result<Vec<FillBlankQuestion>, IntelloError> {
-        let url = self
-            .client
-            .rest_url_with_query(TABLE_QUESTIONS, &format!("set_id=eq.{}", set_id));
+    async fn get_questions(
+        &self,
+        set_id: &str,
+    ) -> Result<Vec<FillBlankQuestion>, IntelloError> {
+        let url = self.client.rest_url_with_query(
+            TABLE_QUESTIONS,
+            &format!("set_id=eq.{}", set_id),
+        );
         let q_rows: Vec<FillBlankQuestionRow> =
             self.client.get(&url).await.map_err(Self::map_error)?;
 
         let mut questions = Vec::new();
         for q_row in q_rows {
-            let url = self
-                .client
-                .rest_url_with_query(TABLE_OPTIONS, &format!("question_id=eq.{}", q_row.id));
+            let url = self.client.rest_url_with_query(
+                TABLE_OPTIONS,
+                &format!("question_id=eq.{}", q_row.id),
+            );
             let w_rows: Vec<FillBlankOptionRow> =
                 self.client.get(&url).await.map_err(Self::map_error)?;
 
@@ -71,7 +79,10 @@ impl SupabaseFillBlankRepository {
         Ok(questions)
     }
 
-    async fn row_to_domain(&self, row: FillBlankSetRow) -> Result<FillBlankSet, IntelloError> {
+    async fn row_to_domain(
+        &self,
+        row: FillBlankSetRow,
+    ) -> Result<FillBlankSet, IntelloError> {
         let questions = self.get_questions(&row.id).await?;
         Ok(FillBlankSet {
             id: row.id.into(),
@@ -89,7 +100,10 @@ impl SupabaseFillBlankRepository {
 #[async_trait]
 impl GameSetRepository<FillBlankSet> for SupabaseFillBlankRepository {
     #[instrument(skip(self, set), fields(set_id = %set.id))]
-    async fn insert(&self, set: &FillBlankSet) -> Result<FillBlankSet, IntelloError> {
+    async fn insert(
+        &self,
+        set: &FillBlankSet,
+    ) -> Result<FillBlankSet, IntelloError> {
         let payload = serde_json::json!({
             "p_set": {
                 "id": set.id,
@@ -126,10 +140,14 @@ impl GameSetRepository<FillBlankSet> for SupabaseFillBlankRepository {
     }
 
     #[instrument(skip(self), fields(user_id = %user_id))]
-    async fn find_by_user(&self, user_id: &str) -> Result<Vec<FillBlankSet>, IntelloError> {
+    async fn find_by_user(
+        &self,
+        user_id: &str,
+    ) -> Result<Vec<FillBlankSet>, IntelloError> {
         let query = format!("user_id=eq.{}", user_id);
         let url = self.client.rest_url_with_query(TABLE_SETS, &query);
-        let rows: Vec<FillBlankSetRow> = self.client.get(&url).await.map_err(Self::map_error)?;
+        let rows: Vec<FillBlankSetRow> =
+            self.client.get(&url).await.map_err(Self::map_error)?;
         let mut sets = Vec::new();
         for row in rows {
             sets.push(self.row_to_domain(row).await?);

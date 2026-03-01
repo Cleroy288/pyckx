@@ -1,10 +1,14 @@
 //! Supabase HTTP client - Handles all Supabase API communication
 
-use super::types::{LoginBody, RegisterBody, RegisterMetadata, SupabaseAuthResponse};
+use super::types::{
+    LoginBody, RegisterBody, RegisterMetadata, SupabaseAuthResponse,
+};
 use crate::configs::Config;
-use crate::infra::User;
 use crate::infra::supabase::SupabaseError;
-use crate::shared::constants::urls::supabase::{SUPABASE_AUTH_PATH, SUPABASE_LOGOUT_PATH, SUPABASE_SIGNUP_PATH};
+use crate::infra::User;
+use crate::shared::constants::urls::supabase::{
+    SUPABASE_AUTH_PATH, SUPABASE_LOGOUT_PATH, SUPABASE_SIGNUP_PATH,
+};
 use reqwest::Client;
 use std::fmt;
 use tracing::{debug, info, instrument, warn};
@@ -27,7 +31,11 @@ impl SupabaseClient {
 
     /// Login with email and password
     #[instrument(skip(self, password), fields(email = %email))]
-    pub async fn login(&self, email: &str, password: &str) -> Result<User, SupabaseError> {
+    pub async fn login(
+        &self,
+        email: &str,
+        password: &str,
+    ) -> Result<User, SupabaseError> {
         let endpoint = format!("{}{}", self.url, SUPABASE_AUTH_PATH);
         debug!(endpoint = %endpoint, "Sending login request");
 
@@ -40,14 +48,15 @@ impl SupabaseClient {
             .await
             .map_err(SupabaseError::from_reqwest)?;
 
-        let parsed: SupabaseAuthResponse = SupabaseError::parse_response(response).await?;
+        let parsed: SupabaseAuthResponse =
+            SupabaseError::parse_response(response).await?;
         info!(user_id = %parsed.user.id, "Login successful");
         Ok(parsed.into())
     }
 
-
     /// Register a new user with profile data
     #[allow(dead_code)] // Registration route is disabled but kept for future use
+    #[allow(clippy::too_many_arguments)]
     #[instrument(skip(self, password), fields(email = %email, username = %username))]
     pub async fn register(
         &self,
@@ -77,7 +86,8 @@ impl SupabaseClient {
             .await
             .map_err(SupabaseError::from_reqwest)?;
 
-        let parsed: SupabaseAuthResponse = SupabaseError::parse_response(response).await?;
+        let parsed: SupabaseAuthResponse =
+            SupabaseError::parse_response(response).await?;
         info!(user_id = %parsed.user.id, "Registration successful");
         Ok(parsed.into())
     }
@@ -103,8 +113,8 @@ impl SupabaseClient {
             Ok(response) => {
                 warn!(status = %response.status(), "Supabase logout returned non-success status");
             }
-            Err(e) => {
-                warn!(error = %e, "Failed to notify Supabase of logout");
+            Err(err) => {
+                warn!(error = %err, "Failed to notify Supabase of logout");
             }
         }
     }

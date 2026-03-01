@@ -59,3 +59,43 @@ pub struct OrderPhraseSetWithQuestionsResponse {
     pub subjects: Vec<String>,
     pub questions: Vec<OrderPhraseQuestionResponse>,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::services::intello::OptionId;
+
+    #[test]
+    fn test_order_phrase_word_response_from() {
+        // arrange
+        let word = OrderPhraseWord {
+            id: OptionId::from_string("w-1".into()),
+            word: "hello".into(),
+            position: 0,
+        };
+
+        // act
+        let resp = OrderPhraseWordResponse::from(&word);
+
+        // assert
+        assert_eq!(resp.id, "w-1");
+        assert_eq!(resp.word, "hello");
+        assert_eq!(resp.position, 0);
+    }
+
+    #[test]
+    fn test_order_phrase_word_response_position() {
+        // arrange
+        let word = OrderPhraseWord {
+            id: OptionId::from_string("w-2".into()),
+            word: "world".into(),
+            position: 3,
+        };
+
+        // act
+        let resp = OrderPhraseWordResponse::from(&word);
+
+        // assert
+        assert_eq!(resp.position, 3);
+    }
+}

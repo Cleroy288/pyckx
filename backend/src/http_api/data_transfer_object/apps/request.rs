@@ -6,7 +6,11 @@ use validator::Validate;
 /// Request body for creating a new app
 #[derive(Debug, Deserialize, Validate)]
 pub struct CreateAppRequest {
-    #[validate(length(min = 1, max = 100, message = "Name must be 1-100 characters"))]
+    #[validate(length(
+        min = 1,
+        max = 100,
+        message = "Name must be 1-100 characters"
+    ))]
     pub name: String,
     pub description: Option<String>,
 }
@@ -20,6 +24,10 @@ pub struct UpdateAppRequest {
 /// Request body for adding an app to user's list
 #[derive(Debug, Deserialize, Validate)]
 pub struct AddUserAppRequest {
-    #[validate(length(min = 1, max = 100, message = "App name must be 1-100 characters"))]
+    #[validate(length(
+        min = 1,
+        max = 100,
+        message = "App name must be 1-100 characters"
+    ))]
     pub app_name: String,
 }

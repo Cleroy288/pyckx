@@ -10,12 +10,13 @@
  */
 
 use super::types::{
-    level_from_db, level_to_db, InsertQcmQuestionRow, QcmQuestionRow, QcmSetRow, UpdateQcmSetRow,
+    level_from_db, level_to_db, InsertQcmQuestionRow, QcmQuestionRow,
+    QcmSetRow, UpdateQcmSetRow,
 };
-use crate::services::intello::{QcmQuestion, QcmSet};
-use crate::services::intello::error_domain::IntelloError;
 use crate::infra::database::QcmRepository;
 use crate::infra::supabase::shared::{SupabaseError, SupabaseHttpClient};
+use crate::services::intello::error_domain::IntelloError;
+use crate::services::intello::{QcmQuestion, QcmSet};
 use async_trait::async_trait;
 use std::sync::Arc;
 use tracing::{debug, info, instrument};
@@ -118,13 +119,18 @@ impl SupabaseQcmRepository {
      *
      * Called internally when retrieving full set data.
      */
-    async fn get_questions(&self, set_id: &str) -> Result<Vec<QcmQuestion>, IntelloError> {
-        let url = self
-            .client
-            .rest_url_with_query(TABLE_QUESTIONS, &format!("set_id=eq.{}", set_id));
+    async fn get_questions(
+        &self,
+        set_id: &str,
+    ) -> Result<Vec<QcmQuestion>, IntelloError> {
+        let url = self.client.rest_url_with_query(
+            TABLE_QUESTIONS,
+            &format!("set_id=eq.{}", set_id),
+        );
         debug!(url = %url, "Getting QCM questions");
 
-        let rows: Vec<QcmQuestionRow> = self.client.get(&url).await.map_err(Self::map_error)?;
+        let rows: Vec<QcmQuestionRow> =
+            self.client.get(&url).await.map_err(Self::map_error)?;
 
         let questions = rows
             .into_iter()
@@ -146,9 +152,10 @@ impl SupabaseQcmRepository {
      * Called internally before set deletion or during update.
      */
     async fn delete_questions(&self, set_id: &str) -> Result<(), IntelloError> {
-        let url = self
-            .client
-            .rest_url_with_query(TABLE_QUESTIONS, &format!("set_id=eq.{}", set_id));
+        let url = self.client.rest_url_with_query(
+            TABLE_QUESTIONS,
+            &format!("set_id=eq.{}", set_id),
+        );
         debug!(url = %url, "Deleting QCM questions");
 
         self.client.delete(&url).await.map_err(Self::map_error)?;
@@ -164,7 +171,10 @@ impl SupabaseQcmRepository {
      *
      * Fetches associated questions and builds complete QcmSet.
      */
-    async fn row_to_domain(&self, row: QcmSetRow) -> Result<QcmSet, IntelloError> {
+    async fn row_to_domain(
+        &self,
+        row: QcmSetRow,
+    ) -> Result<QcmSet, IntelloError> {
         let questions = self.get_questions(&row.id).await?;
 
         Ok(QcmSet {
@@ -252,7 +262,8 @@ impl QcmRepository for SupabaseQcmRepository {
         let url = self.client.rest_url_with_query(TABLE_SETS, &query);
         debug!(url = %url, "Finding QCM set by ID");
 
-        let rows: Vec<QcmSetRow> = self.client.get(&url).await.map_err(Self::map_error)?;
+        let rows: Vec<QcmSetRow> =
+            self.client.get(&url).await.map_err(Self::map_error)?;
 
         let row = match rows.into_iter().next() {
             Some(r) => r,
@@ -278,12 +289,16 @@ impl QcmRepository for SupabaseQcmRepository {
      * Includes all associated questions for each set.
      */
     #[instrument(skip(self), fields(user_id = %user_id))]
-    async fn find_by_user(&self, user_id: &str) -> Result<Vec<QcmSet>, IntelloError> {
+    async fn find_by_user(
+        &self,
+        user_id: &str,
+    ) -> Result<Vec<QcmSet>, IntelloError> {
         let query = format!("user_id=eq.{}", user_id);
         let url = self.client.rest_url_with_query(TABLE_SETS, &query);
         debug!(url = %url, "Finding QCM sets by user");
 
-        let rows: Vec<QcmSetRow> = self.client.get(&url).await.map_err(Self::map_error)?;
+        let rows: Vec<QcmSetRow> =
+            self.client.get(&url).await.map_err(Self::map_error)?;
 
         let mut sets = Vec::with_capacity(rows.len());
         for row in rows {
@@ -322,7 +337,8 @@ impl QcmRepository for SupabaseQcmRepository {
             subjects: qcm_set.subjects.clone(),
         };
 
-        let query = format!("id=eq.{}&user_id=eq.{}", qcm_set.id, qcm_set.user_id);
+        let query =
+            format!("id=eq.{}&user_id=eq.{}", qcm_set.id, qcm_set.user_id);
         let url = self.client.rest_url_with_query(TABLE_SETS, &query);
         debug!(url = %url, "Updating QCM set");
 
@@ -351,7 +367,11 @@ impl QcmRepository for SupabaseQcmRepository {
      * Returns false if set not found.
      */
     #[instrument(skip(self), fields(set_id = %set_id))]
-    async fn delete(&self, set_id: &str, user_id: &str) -> Result<bool, IntelloError> {
+    async fn delete(
+        &self,
+        set_id: &str,
+        user_id: &str,
+    ) -> Result<bool, IntelloError> {
         /* Check existence first */
         let existing = self.find_by_id(set_id, user_id).await?;
         if existing.is_none() {

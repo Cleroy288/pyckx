@@ -3,14 +3,14 @@
 //! Create, get, update, delete QCM sets.
 
 use crate::app::App;
+use crate::http_api::data_transfer_object::intello::{
+    CreateQcmSetRequest, QcmSetListResponse, QcmSetResponse,
+    QcmSuccessResponse, UpdateQcmSetRequest,
+};
+use crate::infra::user::get_user_id_from_session;
 use crate::services::intello::{QcmQuestion, QcmSet};
 use crate::services::intello::{QuestionId, SetId};
 use crate::shared::{AppError, AppResult};
-use crate::http_api::data_transfer_object::intello::{
-    CreateQcmSetRequest, QcmSetListResponse, QcmSetResponse, QcmSuccessResponse,
-    UpdateQcmSetRequest,
-};
-use crate::infra::user::get_user_id_from_session;
 use actix_web::{delete, get, post, put, web, HttpRequest, HttpResponse};
 use tracing::instrument;
 
@@ -26,9 +26,9 @@ pub async fn create_qcmset_handler(
 
     let level = body
         .parse_level()
-        .map_err(|e| AppError::validation("level", e))?;
+        .map_err(|err| AppError::validation("level", err))?;
     body.validate_subjects()
-        .map_err(|e| AppError::validation("subjects", e))?;
+        .map_err(|err| AppError::validation("subjects", err))?;
 
     let qcmset = QcmSet {
         id: SetId::new(),
@@ -80,7 +80,9 @@ pub async fn get_qcmset_handler(
 
     match app.intello_service.get_qcm_set(&set_id, &user_id).await? {
         Some(s) => Ok(HttpResponse::Ok().json(QcmSetResponse::from(&s))),
-        None => Ok(HttpResponse::NotFound().json(QcmSuccessResponse::not_found())),
+        None => {
+            Ok(HttpResponse::NotFound().json(QcmSuccessResponse::not_found()))
+        }
     }
 }
 
@@ -96,17 +98,21 @@ pub async fn update_qcmset_handler(
     let user_id = get_user_id_from_session(&app, &req)?;
     let set_id = path.into_inner();
 
-    let existing = match app.intello_service.get_qcm_set(&set_id, &user_id).await? {
-        Some(s) => s,
-        None => return Ok(HttpResponse::NotFound().json(QcmSuccessResponse::not_found())),
-    };
+    let existing =
+        match app.intello_service.get_qcm_set(&set_id, &user_id).await? {
+            Some(s) => s,
+            None => {
+                return Ok(HttpResponse::NotFound()
+                    .json(QcmSuccessResponse::not_found()))
+            }
+        };
 
     let level = body
         .parse_level()
-        .map_err(|e| AppError::validation("level", e))?
+        .map_err(|err| AppError::validation("level", err))?
         .unwrap_or(existing.level.clone());
     body.validate_subjects()
-        .map_err(|e| AppError::validation("subjects", e))?;
+        .map_err(|err| AppError::validation("subjects", err))?;
 
     let updated_set = QcmSet {
         id: set_id.clone().into(),

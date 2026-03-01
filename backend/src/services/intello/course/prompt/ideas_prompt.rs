@@ -1,4 +1,3 @@
-
 // ** build_ideas_extraction_prompt **
 // ==> Builds AI prompt for extracting user demand ideas
 //
@@ -62,3 +61,54 @@ Respond with ONLY valid JSON:
     )
 }
 
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_build_ideas_prompt_contains_topic() {
+        // arrange / act
+        let result =
+            build_ideas_extraction_prompt("Learn Rust", None);
+
+        // assert
+        assert!(result.contains("Learn Rust"));
+    }
+
+    #[test]
+    fn test_build_ideas_prompt_without_resources() {
+        // arrange / act
+        let result =
+            build_ideas_extraction_prompt("Topic", None);
+
+        // assert - no resources section
+        assert!(!result.contains("Source Materials"));
+    }
+
+    #[test]
+    fn test_build_ideas_prompt_with_resources() {
+        // arrange
+        let resources = "Chapter 1 content here";
+
+        // act
+        let result = build_ideas_extraction_prompt(
+            "Topic",
+            Some(resources),
+        );
+
+        // assert
+        assert!(result.contains("Source Materials"));
+        assert!(result.contains("Chapter 1 content here"));
+    }
+
+    #[test]
+    fn test_build_ideas_prompt_contains_json_format() {
+        // arrange / act
+        let result =
+            build_ideas_extraction_prompt("Topic", None);
+
+        // assert
+        assert!(result.contains("core_intent"));
+        assert!(result.contains("target_level"));
+    }
+}

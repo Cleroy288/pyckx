@@ -18,11 +18,11 @@ use crate::services::intello::{Level, QuestionId, SetId};
 // @ hint : Optional hint for the user
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct OpenQuestion {
-    pub id: QuestionId,                    // unique identifier
-    pub question: String,                  // question text
-    pub user_answer: String,               // user's answer
-    pub expected_answer: Option<String>,   // expected answer
-    pub hint: Option<String>,              // optional hint
+    pub id: QuestionId,                  // unique identifier
+    pub question: String,                // question text
+    pub user_answer: String,             // user's answer
+    pub expected_answer: Option<String>, // expected answer
+    pub hint: Option<String>,            // optional hint
 }
 
 // ** OpenQuestionSet **
@@ -38,12 +38,12 @@ pub struct OpenQuestion {
 // @ questions : List of open questions in this set
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct OpenQuestionSet {
-    pub id: SetId,                      // unique identifier
-    pub user_id: UserId,                // owner
-    pub name: String,                   // set name
-    pub description: String,            // description
-    pub level: Level,                   // difficulty level
-    pub language: String,               // language code
-    pub subjects: Vec<String>,          // subject tags
-    pub questions: Vec<OpenQuestion>,   // questions
+    pub id: SetId,                    // unique identifier
+    pub user_id: UserId,              // owner
+    pub name: String,                 // set name
+    pub description: String,          // description
+    pub level: Level,                 // difficulty level
+    pub language: String,             // language code
+    pub subjects: Vec<String>,        // subject tags
+    pub questions: Vec<OpenQuestion>, // questions
 }

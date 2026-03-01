@@ -1,0 +1,6 @@
+/* TrueFalsePlayer — local-only styles */
+
+.actions {
+    display: flex;
+    gap: 1rem;
+}

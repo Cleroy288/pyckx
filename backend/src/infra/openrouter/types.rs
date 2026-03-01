@@ -3,7 +3,8 @@
 use serde::{Deserialize, Serialize};
 
 /// OpenRouter API endpoint
-pub const OPENROUTER_API_URL: &str = "https://openrouter.ai/api/v1/chat/completions";
+pub const OPENROUTER_API_URL: &str =
+    "https://openrouter.ai/api/v1/chat/completions";
 
 // ============================================================
 // REQUEST TYPES
@@ -69,6 +70,7 @@ pub struct AiGenerationResult {
 // ============================================================
 
 /// Usage data from all stages of course generation
+#[allow(dead_code)]
 #[derive(Debug, Clone, Default)]
 pub struct CourseGenerationUsage {
     /// Stage 0: Demand decryption
@@ -86,6 +88,7 @@ pub struct CourseGenerationUsage {
 }
 
 impl CourseGenerationUsage {
+    #[allow(dead_code)]
     pub fn new() -> Self {
         Self::default()
     }

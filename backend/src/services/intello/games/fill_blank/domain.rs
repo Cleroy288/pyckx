@@ -16,9 +16,9 @@ use crate::services::intello::{Level, OptionId, QuestionId, SetId};
 // @ is_correct : Whether this option is the correct answer
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct FillBlankOption {
-    pub id: OptionId,       // unique identifier
-    pub text: String,       // option text
-    pub is_correct: bool,   // correctness flag
+    pub id: OptionId,     // unique identifier
+    pub text: String,     // option text
+    pub is_correct: bool, // correctness flag
 }
 
 // ** FillBlankQuestion **
@@ -30,10 +30,10 @@ pub struct FillBlankOption {
 // @ explanation : Explanation of why the correct answer is right
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct FillBlankQuestion {
-    pub id: QuestionId,                 // unique identifier
-    pub phrase: String,                 // phrase with blank
-    pub options: Vec<FillBlankOption>,  // answer options
-    pub explanation: String,            // explanation
+    pub id: QuestionId,                // unique identifier
+    pub phrase: String,                // phrase with blank
+    pub options: Vec<FillBlankOption>, // answer options
+    pub explanation: String,           // explanation
 }
 
 // ** FillBlankSet **
@@ -49,12 +49,12 @@ pub struct FillBlankQuestion {
 // @ questions : The fill-in-the-blank questions in this set
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct FillBlankSet {
-    pub id: SetId,                          // unique identifier
-    pub user_id: UserId,                    // owner
-    pub name: String,                       // set name
-    pub description: String,                // description
-    pub level: Level,                       // difficulty level
-    pub language: String,                   // language code
-    pub subjects: Vec<String>,              // subject tags
-    pub questions: Vec<FillBlankQuestion>,  // questions
+    pub id: SetId,                         // unique identifier
+    pub user_id: UserId,                   // owner
+    pub name: String,                      // set name
+    pub description: String,               // description
+    pub level: Level,                      // difficulty level
+    pub language: String,                  // language code
+    pub subjects: Vec<String>,             // subject tags
+    pub questions: Vec<FillBlankQuestion>, // questions
 }

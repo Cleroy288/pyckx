@@ -1,10 +1,12 @@
 //! User apps handlers
 
-use crate::http_api::data_transfer_object::{AddUserAppRequest, AppListResponse, SuccessResponse, UserAppSuccessResponse};
-use crate::http_api::utils::validation::validate_request;
 use crate::app::App;
-use crate::shared::AppResult;
+use crate::http_api::data_transfer_object::{
+    AddUserAppRequest, AppListResponse, SuccessResponse, UserAppSuccessResponse,
+};
+use crate::http_api::utils::validation::validate_request;
 use crate::infra::user::get_user_id_from_session;
+use crate::shared::AppResult;
 use actix_web::{delete, get, post, web, HttpRequest, HttpResponse};
 use tracing::instrument;
 
@@ -12,7 +14,10 @@ use tracing::instrument;
 /// Get user's enabled apps
 #[get("")]
 #[instrument(skip(app, req))]
-pub async fn get_user_apps_handler(app: web::Data<App>, req: HttpRequest) -> AppResult<HttpResponse> {
+pub async fn get_user_apps_handler(
+    app: web::Data<App>,
+    req: HttpRequest,
+) -> AppResult<HttpResponse> {
     let user_id = get_user_id_from_session(&app, &req)?;
     let apps = app.app_service.get_user_apps(&user_id).await?;
     Ok(HttpResponse::Ok().json(AppListResponse::from_apps(apps)))

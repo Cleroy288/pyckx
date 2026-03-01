@@ -27,3 +27,42 @@ pub struct AvailableGamesResponse {
     pub games: Vec<GameResponse>,
     pub count: usize,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// A static test game for lifetime requirements
+    static TEST_GAME: GameInstance = GameInstance::new(
+        "test_game",
+        "Test Game",
+        "A game for testing",
+    );
+
+    #[test]
+    fn test_game_response_from_maps_id() {
+        // arrange / act
+        let resp = GameResponse::from(&TEST_GAME);
+
+        // assert
+        assert_eq!(resp.id, "test_game");
+    }
+
+    #[test]
+    fn test_game_response_from_maps_name() {
+        // arrange / act
+        let resp = GameResponse::from(&TEST_GAME);
+
+        // assert
+        assert_eq!(resp.name, "Test Game");
+    }
+
+    #[test]
+    fn test_game_response_from_maps_description() {
+        // arrange / act
+        let resp = GameResponse::from(&TEST_GAME);
+
+        // assert
+        assert_eq!(resp.description, "A game for testing");
+    }
+}

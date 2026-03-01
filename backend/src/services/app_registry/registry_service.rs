@@ -2,9 +2,11 @@
 //!
 //! Handles app CRUD operations, user app management, and registry validation.
 
-use crate::services::app_registry::registry_domain::{App, UserApp, AppInstance};
-use crate::services::app_registry::error_domain::AppError as AppsError;
 use crate::infra::{AppRepository, CreateApp, UpdateApp, UserAppRepository};
+use crate::services::app_registry::error_domain::AppError as AppsError;
+use crate::services::app_registry::registry_domain::{
+    App, AppInstance, UserApp,
+};
 use crate::shared::{AppError, AppResult};
 use std::fmt;
 use std::sync::Arc;
@@ -120,7 +122,9 @@ impl AppService {
         let all_apps = self.app_repo.find_all().await?;
         let apps: Vec<App> = user_apps
             .iter()
-            .filter_map(|ua| all_apps.iter().find(|a| a.id == ua.app_id).cloned())
+            .filter_map(|ua| {
+                all_apps.iter().find(|a| a.id == ua.app_id).cloned()
+            })
             .collect();
 
         info!(count = apps.len(), "Retrieved user apps");
@@ -131,11 +135,17 @@ impl AppService {
     ///
     /// Validates that the app exists in the registry before adding.
     #[instrument(skip(self), fields(user_id = %user_id, app_name = %app_name))]
-    pub async fn add_user_app(&self, user_id: &str, app_name: &str) -> AppResult<UserApp> {
+    pub async fn add_user_app(
+        &self,
+        user_id: &str,
+        app_name: &str,
+    ) -> AppResult<UserApp> {
         // First validate against the registry (source of truth)
         if !is_valid_app(app_name) {
             warn!(app_name = %app_name, "Attempted to add invalid app");
-            return Err(AppError::App(AppsError::NotFound(app_name.to_string())));
+            return Err(AppError::App(AppsError::NotFound(
+                app_name.to_string(),
+            )));
         }
 
         // Get app from database to get its ID
@@ -150,11 +160,17 @@ impl AppService {
     ///
     /// Validates that the app exists in the registry before removing.
     #[instrument(skip(self), fields(user_id = %user_id, app_name = %app_name))]
-    pub async fn remove_user_app(&self, user_id: &str, app_name: &str) -> AppResult<bool> {
+    pub async fn remove_user_app(
+        &self,
+        user_id: &str,
+        app_name: &str,
+    ) -> AppResult<bool> {
         // First validate against the registry (source of truth)
         if !is_valid_app(app_name) {
             warn!(app_name = %app_name, "Attempted to remove invalid app");
-            return Err(AppError::App(AppsError::NotFound(app_name.to_string())));
+            return Err(AppError::App(AppsError::NotFound(
+                app_name.to_string(),
+            )));
         }
 
         // Get app from database to get its ID
@@ -174,7 +190,11 @@ impl AppService {
     /// Check if user has a specific app by app_name
     #[allow(dead_code)]
     #[instrument(skip(self), fields(user_id = %user_id, app_name = %app_name))]
-    pub async fn user_has_app(&self, user_id: &str, app_name: &str) -> AppResult<bool> {
+    pub async fn user_has_app(
+        &self,
+        user_id: &str,
+        app_name: &str,
+    ) -> AppResult<bool> {
         let app = self.app_repo.find_by_name(app_name).await?;
         self.user_app_repo.has_app(user_id, app.id).await
     }

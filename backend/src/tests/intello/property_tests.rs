@@ -10,14 +10,14 @@ use super::helpers::{
     StubKeywordsRepository, StubOpenQuestionRepository, StubOrderPhraseRepository,
     StubQcmRepository, StubStudySessionRepository, StubTrueOrFalseRepository,
 };
-use crate::services::intello::QcmQuestion;
-use crate::services::intello::QcmSet;
-use crate::services::intello::enums_domain::Level;
-use crate::services::intello::error_domain::IntelloError;
 use crate::http_api::data_transfer_object::intello::CreateQcmSetRequest;
 use crate::infra::database::QcmRepository;
+use crate::services::intello::error_domain::IntelloError;
+use crate::services::intello::games::open_question::open_question_cache_service::OpenQuestionCache;
+use crate::services::intello::Level;
+use crate::services::intello::QcmQuestion;
+use crate::services::intello::QcmSet;
 use crate::services::intello::{IntelloRepositories, IntelloService};
-use crate::services::intello::open_question_cache_service::OpenQuestionCache;
 
 /// Create a test IntelloService with stub repositories
 fn create_test_intello_service() -> IntelloService {
@@ -37,10 +37,12 @@ fn create_test_intello_service() -> IntelloService {
 
     IntelloService::builder()
         .with_repositories(repos)
-        .with_openrouter(Arc::new(crate::infra::openrouter::OpenRouterClient::with_google_key(
-            String::new(),
-            None,
-        )))
+        .with_openrouter(Arc::new(
+            crate::infra::openrouter::OpenRouterClient::with_google_key(
+                String::new(),
+                None,
+            ),
+        ))
         .with_cache(Arc::new(OpenQuestionCache::new()))
         .build()
         .expect("Test IntelloService setup should not fail")
@@ -85,12 +87,14 @@ fn arb_qcm_question() -> impl Strategy<Value = QcmQuestion> {
         arb_non_empty_string(),
     )
         .prop_map(
-            |(id, question, wrong_answers, right_answer, explanation)| QcmQuestion {
-                id: id.into(),
-                question,
-                wrong_answers,
-                right_answer,
-                explanation,
+            |(id, question, wrong_answers, right_answer, explanation)| {
+                QcmQuestion {
+                    id: id.into(),
+                    question,
+                    wrong_answers,
+                    right_answer,
+                    explanation,
+                }
             },
         )
 }
@@ -118,7 +122,25 @@ fn arb_qcm_set() -> impl Strategy<Value = QcmSet> {
         prop::collection::vec(arb_qcm_question(), 0..5),
     )
         .prop_map(
-            |(id, user_id, name, description, level, subjects, language, questions)| QcmSet {
+            |(
+                id,
+                user_id,
+                name,
+                description,
+                level,
+                subjects,
+                language,
+                questions,
+            ): (
+                String,
+                String,
+                String,
+                String,
+                Level,
+                Vec<String>,
+                String,
+                Vec<QcmQuestion>,
+            )| QcmSet {
                 id: id.into(),
                 user_id: user_id.into(),
                 name,
@@ -137,11 +159,15 @@ fn arb_qcm_set() -> impl Strategy<Value = QcmSet> {
 fn arb_intello_error() -> impl Strategy<Value = IntelloError> {
     prop_oneof![
         // GameSetNotFound with arbitrary game_type and set_id
-        (arb_non_empty_string(), arb_non_empty_string())
-            .prop_map(|(game_type, set_id)| IntelloError::game_not_found(game_type, set_id)),
+        (arb_non_empty_string(), arb_non_empty_string()).prop_map(
+            |(game_type, set_id)| IntelloError::game_not_found(
+                game_type, set_id
+            )
+        ),
         // ValidationFailed with arbitrary field and message
-        (arb_non_empty_string(), arb_non_empty_string())
-            .prop_map(|(field, message)| IntelloError::validation(field, message)),
+        (arb_non_empty_string(), arb_non_empty_string()).prop_map(
+            |(field, message)| IntelloError::validation(field, message)
+        ),
         // StorageError with arbitrary message
         arb_non_empty_string().prop_map(IntelloError::storage),
     ]
@@ -155,7 +181,7 @@ proptest! {
     ///
     /// **Validates: Requirements 3.4**
     #[test]
-    fn prop_qcmset_serialization_roundtrip(qcm_set in arb_qcm_set()) {
+    fn test_qcmset_serialization_roundtrip(qcm_set in arb_qcm_set()) {
         // Serialize to JSON
         let json = serde_json::to_string(&qcm_set)
             .expect("QcmSet should serialize to JSON");
@@ -177,7 +203,7 @@ proptest! {
     ///
     /// **Validates: Requirements 6.3**
     #[test]
-    fn prop_intello_error_status_code_mapping(error in arb_intello_error()) {
+    fn test_intello_error_status_code_mapping(error in arb_intello_error()) {
         let status_code = error.status();
 
         match &error {
@@ -212,7 +238,7 @@ proptest! {
     ///
     /// **Validates: Requirements 2.3**
     #[test]
-    fn prop_repository_persistence_roundtrip(qcm_set in arb_qcm_set()) {
+    fn test_repository_persistence_roundtrip(qcm_set in arb_qcm_set()) {
         // Create stub repository for testing
         let repo = StubQcmRepository::new();
 
@@ -245,7 +271,7 @@ proptest! {
     ///
     /// **Validates: Requirements 5.1**
     #[test]
-    fn prop_service_validation_rejects_invalid_input(invalid_set in arb_invalid_qcm_set()) {
+    fn test_service_validation_rejects_invalid_input(invalid_set in arb_invalid_qcm_set()) {
         let service = create_test_intello_service();
 
         // Use tokio runtime to run async operations
@@ -295,7 +321,25 @@ fn arb_qcm_set_with_empty_name() -> impl Strategy<Value = QcmSet> {
         prop::collection::vec(arb_qcm_question(), 0..3),
     )
         .prop_map(
-            |(id, user_id, name, description, level, subjects, language, questions)| QcmSet {
+            |(
+                id,
+                user_id,
+                name,
+                description,
+                level,
+                subjects,
+                language,
+                questions,
+            ): (
+                String,
+                String,
+                String,
+                String,
+                Level,
+                Vec<String>,
+                String,
+                Vec<QcmQuestion>,
+            )| QcmSet {
                 id: id.into(),
                 user_id: user_id.into(),
                 name,
@@ -326,7 +370,25 @@ fn arb_qcm_set_with_empty_description() -> impl Strategy<Value = QcmSet> {
         prop::collection::vec(arb_qcm_question(), 0..3),
     )
         .prop_map(
-            |(id, user_id, name, description, level, subjects, language, questions)| QcmSet {
+            |(
+                id,
+                user_id,
+                name,
+                description,
+                level,
+                subjects,
+                language,
+                questions,
+            ): (
+                String,
+                String,
+                String,
+                String,
+                Level,
+                Vec<String>,
+                String,
+                Vec<QcmQuestion>,
+            )| QcmSet {
                 id: id.into(),
                 user_id: user_id.into(),
                 name,
@@ -340,7 +402,8 @@ fn arb_qcm_set_with_empty_description() -> impl Strategy<Value = QcmSet> {
 }
 
 /// Strategy for generating QcmQuestion with fewer than 3 wrong answers
-fn arb_qcm_question_with_invalid_wrong_answers() -> impl Strategy<Value = QcmQuestion> {
+fn arb_qcm_question_with_invalid_wrong_answers(
+) -> impl Strategy<Value = QcmQuestion> {
     (
         arb_uuid(),
         arb_non_empty_string(),
@@ -350,12 +413,14 @@ fn arb_qcm_question_with_invalid_wrong_answers() -> impl Strategy<Value = QcmQue
         arb_non_empty_string(),
     )
         .prop_map(
-            |(id, question, wrong_answers, right_answer, explanation)| QcmQuestion {
-                id: id.into(),
-                question,
-                wrong_answers,
-                right_answer,
-                explanation,
+            |(id, question, wrong_answers, right_answer, explanation)| {
+                QcmQuestion {
+                    id: id.into(),
+                    question,
+                    wrong_answers,
+                    right_answer,
+                    explanation,
+                }
             },
         )
 }
@@ -371,10 +436,31 @@ fn arb_qcm_set_with_invalid_questions() -> impl Strategy<Value = QcmSet> {
         prop::collection::vec(arb_subject(), 0..3),
         arb_language(),
         // At least one question with invalid wrong_answers count
-        prop::collection::vec(arb_qcm_question_with_invalid_wrong_answers(), 1..3),
+        prop::collection::vec(
+            arb_qcm_question_with_invalid_wrong_answers(),
+            1..3,
+        ),
     )
         .prop_map(
-            |(id, user_id, name, description, level, subjects, language, questions)| QcmSet {
+            |(
+                id,
+                user_id,
+                name,
+                description,
+                level,
+                subjects,
+                language,
+                questions,
+            ): (
+                String,
+                String,
+                String,
+                String,
+                Level,
+                Vec<String>,
+                String,
+                Vec<QcmQuestion>,
+            )| QcmSet {
                 id: id.into(),
                 user_id: user_id.into(),
                 name,
@@ -398,7 +484,8 @@ fn arb_invalid_qcm_set() -> impl Strategy<Value = QcmSet> {
 
 /// Strategy for generating two different user IDs
 fn arb_different_user_ids() -> impl Strategy<Value = (String, String)> {
-    (arb_uuid(), arb_uuid()).prop_filter("user IDs must be different", |(a, b)| a != b)
+    (arb_uuid(), arb_uuid())
+        .prop_filter("user IDs must be different", |(a, b)| a != b)
 }
 
 /// Strategy for generating invalid level strings (not "easy", "medium", or "hard")
@@ -419,7 +506,7 @@ proptest! {
     ///
     /// **Validates: Requirements 5.2**
     #[test]
-    fn prop_service_ownership_verification_on_update(
+    fn test_service_ownership_verification_on_update(
         qcm_set in arb_qcm_set(),
         (owner_id, attacker_id) in arb_different_user_ids()
     ) {
@@ -478,7 +565,7 @@ proptest! {
     ///
     /// **Validates: Requirements 5.3**
     #[test]
-    fn prop_service_ownership_verification_on_delete(
+    fn test_service_ownership_verification_on_delete(
         qcm_set in arb_qcm_set(),
         (owner_id, attacker_id) in arb_different_user_ids()
     ) {
@@ -554,7 +641,7 @@ proptest! {
     ///
     /// **Validates: Requirements 7.3**
     #[test]
-    fn prop_handler_validation_rejects_invalid_level(
+    fn test_handler_validation_rejects_invalid_level(
         invalid_level in arb_invalid_level_string(),
         name in arb_non_empty_string(),
         description in arb_non_empty_string(),
@@ -596,7 +683,7 @@ proptest! {
     ///
     /// **Validates: Requirements 7.3**
     #[test]
-    fn prop_handler_validation_accepts_valid_levels(
+    fn test_handler_validation_accepts_valid_levels(
         level_str in arb_valid_level_string(),
     ) {
         let request = CreateQcmSetRequest {

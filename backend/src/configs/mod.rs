@@ -9,7 +9,7 @@
 //! use crate::configs::{Config, ConfigError};
 //!
 //! fn main() {
-//!     let config = Config::from_env().unwrap_or_else(|e| {
+//!     let config = Config::from_env().unwrap_or_else(|err| {
 //!         eprintln!("Configuration error: {}", e);
 //!         std::process::exit(1);
 //!     });
@@ -22,4 +22,3 @@ pub mod error;
 
 pub use config::Config;
 pub use error::ConfigError;
-

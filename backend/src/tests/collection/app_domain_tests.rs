@@ -1,6 +1,6 @@
+use crate::services::app_registry::registry_domain::AppModule;
 use crate::services::collection::app_domain::CollectionApp;
 use crate::services::collection::collection_domain::CollectionItemType;
-use crate::services::app_registry::registry_domain::AppModule;
 
 #[test]
 fn test_collection_app_info() {

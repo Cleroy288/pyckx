@@ -1,0 +1,5047 @@
+{
+  "version": 1,
+  "root": "/Users/charlesleroy/Documents/LOCAL/PERSO/lapp-pyckx",
+  "last_updated": 1772040197,
+  "files": {
+    "backend/src/services/intello/games/flashcard/mod.rs": {
+      "path": "backend/src/services/intello/games/flashcard/mod.rs",
+      "mtime": 1770816305,
+      "size": 109,
+      "symbol_count": 4
+    },
+    "backend/src/infra/database/game_set.rs": {
+      "path": "backend/src/infra/database/game_set.rs",
+      "mtime": 1770816297,
+      "size": 1286,
+      "symbol_count": 2
+    },
+    "backend/src/tests/mod.rs": {
+      "path": "backend/src/tests/mod.rs",
+      "mtime": 1770816301,
+      "size": 621,
+      "symbol_count": 8
+    },
+    "leptos-app/src/pages/admin/admin.rs": {
+      "path": "leptos-app/src/pages/admin/admin.rs",
+      "mtime": 1771279162,
+      "size": 5949,
+      "symbol_count": 1
+    },
+    "leptos-app/src/state/palette_dom.rs": {
+      "path": "leptos-app/src/state/palette_dom.rs",
+      "mtime": 1771698275,
+      "size": 4150,
+      "symbol_count": 15
+    },
+    "leptos-app/src/components/ui/file_upload/mod.rs": {
+      "path": "leptos-app/src/components/ui/file_upload/mod.rs",
+      "mtime": 1770840606,
+      "size": 41,
+      "symbol_count": 1
+    },
+    "backend/src/services/intello/course/service/ideas_service.rs": {
+      "path": "backend/src/services/intello/course/service/ideas_service.rs",
+      "mtime": 1770822583,
+      "size": 2271,
+      "symbol_count": 3
+    },
+    "leptos-app/src/pages/intello/true_false/true_false_generate.rs": {
+      "path": "leptos-app/src/pages/intello/true_false/true_false_generate.rs",
+      "mtime": 1771157769,
+      "size": 805,
+      "symbol_count": 1
+    },
+    "backend/src/tests/intello/course/prompt/ideas_prompt_tests.rs": {
+      "path": "backend/src/tests/intello/course/prompt/ideas_prompt_tests.rs",
+      "mtime": 1770816301,
+      "size": 683,
+      "symbol_count": 2
+    },
+    "leptos-app/src/api/open_questions.rs": {
+      "path": "leptos-app/src/api/open_questions.rs",
+      "mtime": 1771441694,
+      "size": 938,
+      "symbol_count": 4
+    },
+    "backend/src/infra/supabase/user_app/repository.rs": {
+      "path": "backend/src/infra/supabase/user_app/repository.rs",
+      "mtime": 1770816298,
+      "size": 4762,
+      "symbol_count": 19
+    },
+    "leptos-app/src/components/intello/fill_blank/fill_blank_player.rs": {
+      "path": "leptos-app/src/components/intello/fill_blank/fill_blank_player.rs",
+      "mtime": 1771338359,
+      "size": 4315,
+      "symbol_count": 3
+    },
+    "backend/src/infra/database/flashcard/trait.rs": {
+      "path": "backend/src/infra/database/flashcard/trait.rs",
+      "mtime": 1770816297,
+      "size": 759,
+      "symbol_count": 3
+    },
+    "backend/src/http_api/data_transfer_object/intello/games.rs": {
+      "path": "backend/src/http_api/data_transfer_object/intello/games.rs",
+      "mtime": 1770824078,
+      "size": 1535,
+      "symbol_count": 16
+    },
+    "backend/src/services/intello/course/parser/mod.rs": {
+      "path": "backend/src/services/intello/course/parser/mod.rs",
+      "mtime": 1770816302,
+      "size": 448,
+      "symbol_count": 7
+    },
+    "backend/src/http_api/data_transfer_object/intello/qcm/mod.rs": {
+      "path": "backend/src/http_api/data_transfer_object/intello/qcm/mod.rs",
+      "mtime": 1770816299,
+      "size": 266,
+      "symbol_count": 4
+    },
+    "backend/src/services/intello/ai_usage/mod.rs": {
+      "path": "backend/src/services/intello/ai_usage/mod.rs",
+      "mtime": 1770816304,
+      "size": 51,
+      "symbol_count": 2
+    },
+    "backend/src/services/intello/games/shared/types.rs": {
+      "path": "backend/src/services/intello/games/shared/types.rs",
+      "mtime": 1770824028,
+      "size": 2452,
+      "symbol_count": 16
+    },
+    "dioxus-app/src/state/mod.rs": {
+      "path": "dioxus-app/src/state/mod.rs",
+      "mtime": 1772032120,
+      "size": 268,
+      "symbol_count": 7
+    },
+    "leptos-app/src/components/intello/keywords/keywords_player.rs": {
+      "path": "leptos-app/src/components/intello/keywords/keywords_player.rs",
+      "mtime": 1771338355,
+      "size": 5724,
+      "symbol_count": 3
+    },
+    "backend/src/services/intello/ai_usage/ai_usage_domain.rs": {
+      "path": "backend/src/services/intello/ai_usage/ai_usage_domain.rs",
+      "mtime": 1770822453,
+      "size": 1834,
+      "symbol_count": 37
+    },
+    "leptos-app/src/components/ui/page_layout/mod.rs": {
+      "path": "leptos-app/src/components/ui/page_layout/mod.rs",
+      "mtime": 1771184113,
+      "size": 41,
+      "symbol_count": 1
+    },
+    "dioxus-app/src/components/intello/mod.rs": {
+      "path": "dioxus-app/src/components/intello/mod.rs",
+      "mtime": 1772032233,
+      "size": 284,
+      "symbol_count": 11
+    },
+    "dioxus-app/src/pages/register/register.rs": {
+      "path": "dioxus-app/src/pages/register/register.rs",
+      "mtime": 1772034676,
+      "size": 8479,
+      "symbol_count": 16
+    },
+    "backend/tests/qcm_update_test.rs": {
+      "path": "backend/tests/qcm_update_test.rs",
+      "mtime": 1770828193,
+      "size": 2122,
+      "symbol_count": 7
+    },
+    "leptos-app/src/components/ui/select/mod.rs": {
+      "path": "leptos-app/src/components/ui/select/mod.rs",
+      "mtime": 1770239364,
+      "size": 53,
+      "symbol_count": 1
+    },
+    "dioxus-app/src/pages/vitrine/mod.rs": {
+      "path": "dioxus-app/src/pages/vitrine/mod.rs",
+      "mtime": 1772032296,
+      "size": 105,
+      "symbol_count": 4
+    },
+    "dioxus-app/src/domain/palette_types.rs": {
+      "path": "dioxus-app/src/domain/palette_types.rs",
+      "mtime": 1772031983,
+      "size": 3707,
+      "symbol_count": 39
+    },
+    "dioxus-app/src/components/intello/qcm/qcm_player.rs": {
+      "path": "dioxus-app/src/components/intello/qcm/qcm_player.rs",
+      "mtime": 1772035726,
+      "size": 6527,
+      "symbol_count": 11
+    },
+    "dioxus-app/src/domain/flashcard_types.rs": {
+      "path": "dioxus-app/src/domain/flashcard_types.rs",
+      "mtime": 1772033072,
+      "size": 2188,
+      "symbol_count": 28
+    },
+    "leptos-app/src/pages/intello/order_phrases/order_phrase_list.rs": {
+      "path": "leptos-app/src/pages/intello/order_phrases/order_phrase_list.rs",
+      "mtime": 1771277331,
+      "size": 656,
+      "symbol_count": 1
+    },
+    "dioxus-app/src/pages/intello/flashcards/mod.rs": {
+      "path": "dioxus-app/src/pages/intello/flashcards/mod.rs",
+      "mtime": 1772032551,
+      "size": 229,
+      "symbol_count": 4
+    },
+    "backend/doc/architecture/adding-features.md": {
+      "path": "backend/doc/architecture/adding-features.md",
+      "mtime": 1767644381,
+      "size": 6173,
+      "symbol_count": 23
+    },
+    "dioxus-app/src/components/intello/true_false/true_false_player.rs": {
+      "path": "dioxus-app/src/components/intello/true_false/true_false_player.rs",
+      "mtime": 1772035733,
+      "size": 3902,
+      "symbol_count": 6
+    },
+    "backend/doc/SUPABASE_ANALYSIS.md": {
+      "path": "backend/doc/SUPABASE_ANALYSIS.md",
+      "mtime": 1767644381,
+      "size": 17712,
+      "symbol_count": 39
+    },
+    "backend/src/tests/config/mod.rs": {
+      "path": "backend/src/tests/config/mod.rs",
+      "mtime": 1770816301,
+      "size": 1680,
+      "symbol_count": 9
+    },
+    "backend/src/tests/intello/course/parser/mod.rs": {
+      "path": "backend/src/tests/intello/course/parser/mod.rs",
+      "mtime": 1770816301,
+      "size": 101,
+      "symbol_count": 4
+    },
+    "dioxus-app/src/components/ui/spinner/spinner.rs": {
+      "path": "dioxus-app/src/components/ui/spinner/spinner.rs",
+      "mtime": 1772032454,
+      "size": 1124,
+      "symbol_count": 7
+    },
+    "backend/src/tests/collection/helpers.rs": {
+      "path": "backend/src/tests/collection/helpers.rs",
+      "mtime": 1770816301,
+      "size": 718,
+      "symbol_count": 3
+    },
+    "leptos-app/src/pages/intello/true_false/mod.rs": {
+      "path": "leptos-app/src/pages/intello/true_false/mod.rs",
+      "mtime": 1770841266,
+      "size": 207,
+      "symbol_count": 3
+    },
+    "backend/src/configs/mod.rs": {
+      "path": "backend/src/configs/mod.rs",
+      "mtime": 1770816302,
+      "size": 578,
+      "symbol_count": 3
+    },
+    "dioxus-app/src/pages/vitrine/components/mod.rs": {
+      "path": "dioxus-app/src/pages/vitrine/components/mod.rs",
+      "mtime": 1772037095,
+      "size": 32,
+      "symbol_count": 1
+    },
+    "backend/src/http_api/data_transfer_object/intello/course.rs": {
+      "path": "backend/src/http_api/data_transfer_object/intello/course.rs",
+      "mtime": 1770822102,
+      "size": 5995,
+      "symbol_count": 89
+    },
+    "leptos-app/src/components/ui/icon/mod.rs": {
+      "path": "leptos-app/src/components/ui/icon/mod.rs",
+      "mtime": 1769454990,
+      "size": 27,
+      "symbol_count": 1
+    },
+    "leptos-app/src/pages/intello/true_false/true_false_play.rs": {
+      "path": "leptos-app/src/pages/intello/true_false/true_false_play.rs",
+      "mtime": 1771277408,
+      "size": 1112,
+      "symbol_count": 1
+    },
+    "leptos-app/src/components/ui/section_divider/section_divider.rs": {
+      "path": "leptos-app/src/components/ui/section_divider/section_divider.rs",
+      "mtime": 1771318306,
+      "size": 585,
+      "symbol_count": 1
+    },
+    "leptos-app/src/domain/auth_types.rs": {
+      "path": "leptos-app/src/domain/auth_types.rs",
+      "mtime": 1770895296,
+      "size": 2213,
+      "symbol_count": 21
+    },
+    "backend/src/infra/session/mod.rs": {
+      "path": "backend/src/infra/session/mod.rs",
+      "mtime": 1770816298,
+      "size": 167,
+      "symbol_count": 3
+    },
+    "leptos-app/src/pages/intello/courses/mod.rs": {
+      "path": "leptos-app/src/pages/intello/courses/mod.rs",
+      "mtime": 1770841550,
+      "size": 294,
+      "symbol_count": 5
+    },
+    "backend/src/tests/collection/app_domain_tests.rs": {
+      "path": "backend/src/tests/collection/app_domain_tests.rs",
+      "mtime": 1770816301,
+      "size": 815,
+      "symbol_count": 3
+    },
+    "leptos-app/src/pages/vitrine/data.rs": {
+      "path": "leptos-app/src/pages/vitrine/data.rs",
+      "mtime": 1771269416,
+      "size": 1218,
+      "symbol_count": 11
+    },
+    "Pyckx-frontend/doc/collection-app.md": {
+      "path": "Pyckx-frontend/doc/collection-app.md",
+      "mtime": 1767644381,
+      "size": 4702,
+      "symbol_count": 13
+    },
+    "backend/src/services/intello/games/true_false/domain.rs": {
+      "path": "backend/src/services/intello/games/true_false/domain.rs",
+      "mtime": 1770816304,
+      "size": 1841,
+      "symbol_count": 15
+    },
+    "backend/src/shared/utils/mod.rs": {
+      "path": "backend/src/shared/utils/mod.rs",
+      "mtime": 1770816302,
+      "size": 195,
+      "symbol_count": 2
+    },
+    "dioxus-app/src/pages/intello/flashcards/flashcard_list.rs": {
+      "path": "dioxus-app/src/pages/intello/flashcards/flashcard_list.rs",
+      "mtime": 1772035210,
+      "size": 682,
+      "symbol_count": 2
+    },
+    "leptos-app/src/components/ui/modal/mod.rs": {
+      "path": "leptos-app/src/components/ui/modal/mod.rs",
+      "mtime": 1770840521,
+      "size": 29,
+      "symbol_count": 1
+    },
+    "leptos-app/src/domain/intello_types.rs": {
+      "path": "leptos-app/src/domain/intello_types.rs",
+      "mtime": 1770903212,
+      "size": 3934,
+      "symbol_count": 27
+    },
+    "dioxus-app/src/components/intello/shared/game_helpers.rs": {
+      "path": "dioxus-app/src/components/intello/shared/game_helpers.rs",
+      "mtime": 1772035658,
+      "size": 1352,
+      "symbol_count": 5
+    },
+    "backend/src/infra/database/course/trait.rs": {
+      "path": "backend/src/infra/database/course/trait.rs",
+      "mtime": 1770822113,
+      "size": 2200,
+      "symbol_count": 1
+    },
+    "dioxus-app/src/pages/vitrine/vitrine.rs": {
+      "path": "dioxus-app/src/pages/vitrine/vitrine.rs",
+      "mtime": 1772034709,
+      "size": 11185,
+      "symbol_count": 7
+    },
+    "leptos-app/src/components/intello/open_question/open_question_player.rs": {
+      "path": "leptos-app/src/components/intello/open_question/open_question_player.rs",
+      "mtime": 1771189117,
+      "size": 6711,
+      "symbol_count": 1
+    },
+    "backend/doc/db_shema/course.txt": {
+      "path": "backend/doc/db_shema/course.txt",
+      "mtime": 1767644381,
+      "size": 11585,
+      "symbol_count": 1
+    },
+    "dioxus-app/src/domain/auth_types.rs": {
+      "path": "dioxus-app/src/domain/auth_types.rs",
+      "mtime": 1772031983,
+      "size": 2213,
+      "symbol_count": 21
+    },
+    "leptos-app/src/state/auth.rs": {
+      "path": "leptos-app/src/state/auth.rs",
+      "mtime": 1770905843,
+      "size": 4519,
+      "symbol_count": 34
+    },
+    "backend/src/http_api/handlers/intello/admin.rs": {
+      "path": "backend/src/http_api/handlers/intello/admin.rs",
+      "mtime": 1770822667,
+      "size": 5814,
+      "symbol_count": 9
+    },
+    "backend/src/tests/app_registry/mod.rs": {
+      "path": "backend/src/tests/app_registry/mod.rs",
+      "mtime": 1770816302,
+      "size": 94,
+      "symbol_count": 5
+    },
+    "leptos-app/src/pages/intello/keywords/keyword_play.rs": {
+      "path": "leptos-app/src/pages/intello/keywords/keyword_play.rs",
+      "mtime": 1771277426,
+      "size": 1096,
+      "symbol_count": 1
+    },
+    "backend/src/http_api/data_transfer_object/intello/fill_blank/mod.rs": {
+      "path": "backend/src/http_api/data_transfer_object/intello/fill_blank/mod.rs",
+      "mtime": 1770816299,
+      "size": 270,
+      "symbol_count": 3
+    },
+    "backend/src/tests/intello/helpers.rs": {
+      "path": "backend/src/tests/intello/helpers.rs",
+      "mtime": 1770816301,
+      "size": 13270,
+      "symbol_count": 123
+    },
+    "dioxus-app/src/components/intello/manual_qcm_form.rs": {
+      "path": "dioxus-app/src/components/intello/manual_qcm_form.rs",
+      "mtime": 1772034698,
+      "size": 18299,
+      "symbol_count": 18
+    },
+    "dioxus-app/src/pages/intello/keywords/mod.rs": {
+      "path": "dioxus-app/src/pages/intello/keywords/mod.rs",
+      "mtime": 1772032592,
+      "size": 213,
+      "symbol_count": 4
+    },
+    "leptos-app/src/components/dashboard/mod.rs": {
+      "path": "leptos-app/src/components/dashboard/mod.rs",
+      "mtime": 1771689121,
+      "size": 409,
+      "symbol_count": 5
+    },
+    "leptos-app/src/api/endpoints.rs": {
+      "path": "leptos-app/src/api/endpoints.rs",
+      "mtime": 1771531318,
+      "size": 3037,
+      "symbol_count": 26
+    },
+    "backend/src/app.rs": {
+      "path": "backend/src/app.rs",
+      "mtime": 1770820651,
+      "size": 7796,
+      "symbol_count": 18
+    },
+    "backend/src/http_api/handlers/intello/order_phrase.rs": {
+      "path": "backend/src/http_api/handlers/intello/order_phrase.rs",
+      "mtime": 1770820651,
+      "size": 4103,
+      "symbol_count": 3
+    },
+    "backend/src/services/intello/games/keywords/service.rs": {
+      "path": "backend/src/services/intello/games/keywords/service.rs",
+      "mtime": 1770822667,
+      "size": 4299,
+      "symbol_count": 6
+    },
+    "leptos-app/src/components/intello/shared/game_progress.rs": {
+      "path": "leptos-app/src/components/intello/shared/game_progress.rs",
+      "mtime": 1770840855,
+      "size": 1014,
+      "symbol_count": 1
+    },
+    "leptos-app/src/pages/intello/flashcards/mod.rs": {
+      "path": "leptos-app/src/pages/intello/flashcards/mod.rs",
+      "mtime": 1770841266,
+      "size": 201,
+      "symbol_count": 3
+    },
+    "backend/src/services/intello/games/open_question/verification/mod.rs": {
+      "path": "backend/src/services/intello/games/open_question/verification/mod.rs",
+      "mtime": 1770816305,
+      "size": 32,
+      "symbol_count": 2
+    },
+    "dioxus-app/src/pages/intello/true_false/mod.rs": {
+      "path": "dioxus-app/src/pages/intello/true_false/mod.rs",
+      "mtime": 1772032565,
+      "size": 236,
+      "symbol_count": 4
+    },
+    "backend/src/infra/session/service.rs": {
+      "path": "backend/src/infra/session/service.rs",
+      "mtime": 1770824015,
+      "size": 9452,
+      "symbol_count": 39
+    },
+    "backend/src/http_api/handlers/intello/ai_generation.rs": {
+      "path": "backend/src/http_api/handlers/intello/ai_generation.rs",
+      "mtime": 1771535512,
+      "size": 7272,
+      "symbol_count": 5
+    },
+    "backend/src/services/intello/course/service/synthesis_service.rs": {
+      "path": "backend/src/services/intello/course/service/synthesis_service.rs",
+      "mtime": 1770822565,
+      "size": 2418,
+      "symbol_count": 3
+    },
+    "dioxus-app/src/pages/intello/courses/course_detail.rs": {
+      "path": "dioxus-app/src/pages/intello/courses/course_detail.rs",
+      "mtime": 1772034710,
+      "size": 5920,
+      "symbol_count": 3
+    },
+    "backend/src/http_api/middlewares/rate_limit/error.rs": {
+      "path": "backend/src/http_api/middlewares/rate_limit/error.rs",
+      "mtime": 1770823896,
+      "size": 4824,
+      "symbol_count": 26
+    },
+    "dioxus-app/src/pages/intello/order_phrases/order_phrase_generate.rs": {
+      "path": "dioxus-app/src/pages/intello/order_phrases/order_phrase_generate.rs",
+      "mtime": 1772035265,
+      "size": 851,
+      "symbol_count": 2
+    },
+    "leptos-app/src/api/user_apps.rs": {
+      "path": "leptos-app/src/api/user_apps.rs",
+      "mtime": 1771689039,
+      "size": 1044,
+      "symbol_count": 5
+    },
+    "leptos-app/src/components/logo/logo.rs": {
+      "path": "leptos-app/src/components/logo/logo.rs",
+      "mtime": 1769276778,
+      "size": 1274,
+      "symbol_count": 2
+    },
+    "leptos-app/src/pages/intello/intello.rs": {
+      "path": "leptos-app/src/pages/intello/intello.rs",
+      "mtime": 1770239676,
+      "size": 7181,
+      "symbol_count": 6
+    },
+    "leptos-app/tests/wasm_browser.rs": {
+      "path": "leptos-app/tests/wasm_browser.rs",
+      "mtime": 1771413225,
+      "size": 2489,
+      "symbol_count": 8
+    },
+    "backend/doc/apps/intello/open_question_service.md": {
+      "path": "backend/doc/apps/intello/open_question_service.md",
+      "mtime": 1767644381,
+      "size": 968,
+      "symbol_count": 5
+    },
+    "backend/src/infra/database/fill_blank/trait.rs": {
+      "path": "backend/src/infra/database/fill_blank/trait.rs",
+      "mtime": 1770816297,
+      "size": 763,
+      "symbol_count": 3
+    },
+    "backend/src/http_api/utils/validation/service.rs": {
+      "path": "backend/src/http_api/utils/validation/service.rs",
+      "mtime": 1770816300,
+      "size": 1294,
+      "symbol_count": 2
+    },
+    "leptos-app/src/domain/open_question_types.rs": {
+      "path": "leptos-app/src/domain/open_question_types.rs",
+      "mtime": 1770895331,
+      "size": 3197,
+      "symbol_count": 45
+    },
+    "leptos-app/src/components/intello/flashcard/flashcard_player.rs": {
+      "path": "leptos-app/src/components/intello/flashcard/flashcard_player.rs",
+      "mtime": 1771338353,
+      "size": 3621,
+      "symbol_count": 2
+    },
+    "backend/src/infra/supabase/client/auth.rs": {
+      "path": "backend/src/infra/supabase/client/auth.rs",
+      "mtime": 1770822425,
+      "size": 4245,
+      "symbol_count": 16
+    },
+    "backend/src/infra/database/app/mod.rs": {
+      "path": "backend/src/infra/database/app/mod.rs",
+      "mtime": 1770816296,
+      "size": 197,
+      "symbol_count": 3
+    },
+    "backend/src/services/intello/ai_response/fill_blank.rs": {
+      "path": "backend/src/services/intello/ai_response/fill_blank.rs",
+      "mtime": 1770816304,
+      "size": 441,
+      "symbol_count": 10
+    },
+    "leptos-app/src/components/dashboard/my_apps.rs": {
+      "path": "leptos-app/src/components/dashboard/my_apps.rs",
+      "mtime": 1771689115,
+      "size": 1720,
+      "symbol_count": 1
+    },
+    "backend/src/services/intello/games/true_false/prompt.rs": {
+      "path": "backend/src/services/intello/games/true_false/prompt.rs",
+      "mtime": 1770816305,
+      "size": 5196,
+      "symbol_count": 11
+    },
+    "leptos-app/src/components/ui/tabs/tabs.rs": {
+      "path": "leptos-app/src/components/ui/tabs/tabs.rs",
+      "mtime": 1770845946,
+      "size": 1836,
+      "symbol_count": 2
+    },
+    "backend/src/services/intello/ai_response/mod.rs": {
+      "path": "backend/src/services/intello/ai_response/mod.rs",
+      "mtime": 1770816304,
+      "size": 598,
+      "symbol_count": 9
+    },
+    "backend/src/services/collection/collection_service.rs": {
+      "path": "backend/src/services/collection/collection_service.rs",
+      "mtime": 1770816302,
+      "size": 2624,
+      "symbol_count": 10
+    },
+    "leptos-app/src/components/ui/card/card_grid.rs": {
+      "path": "leptos-app/src/components/ui/card/card_grid.rs",
+      "mtime": 1771188181,
+      "size": 444,
+      "symbol_count": 1
+    },
+    "leptos-app/src/components/intello/order_phrase/order_phrase_player.rs": {
+      "path": "leptos-app/src/components/intello/order_phrase/order_phrase_player.rs",
+      "mtime": 1771338357,
+      "size": 5691,
+      "symbol_count": 3
+    },
+    "leptos-app/src/api/admin.rs": {
+      "path": "leptos-app/src/api/admin.rs",
+      "mtime": 1770840704,
+      "size": 281,
+      "symbol_count": 2
+    },
+    "backend/src/configs/error.rs": {
+      "path": "backend/src/configs/error.rs",
+      "mtime": 1770824006,
+      "size": 3997,
+      "symbol_count": 17
+    },
+    "backend/src/infra/supabase/fill_blank/mod.rs": {
+      "path": "backend/src/infra/supabase/fill_blank/mod.rs",
+      "mtime": 1770816298,
+      "size": 109,
+      "symbol_count": 3
+    },
+    "backend/src/services/intello/games/true_false/mod.rs": {
+      "path": "backend/src/services/intello/games/true_false/mod.rs",
+      "mtime": 1770816305,
+      "size": 122,
+      "symbol_count": 4
+    },
+    "backend/src/http_api/data_transfer_object/collection/mod.rs": {
+      "path": "backend/src/http_api/data_transfer_object/collection/mod.rs",
+      "mtime": 1770816298,
+      "size": 397,
+      "symbol_count": 4
+    },
+    "backend/src/http_api/handlers/intello/games.rs": {
+      "path": "backend/src/http_api/handlers/intello/games.rs",
+      "mtime": 1770816300,
+      "size": 635,
+      "symbol_count": 2
+    },
+    "dioxus-app/src/pages/intello/qcm/qcm_generate.rs": {
+      "path": "dioxus-app/src/pages/intello/qcm/qcm_generate.rs",
+      "mtime": 1772035205,
+      "size": 1075,
+      "symbol_count": 2
+    },
+    "dioxus-app/src/components/intello/true_false/mod.rs": {
+      "path": "dioxus-app/src/components/intello/true_false/mod.rs",
+      "mtime": 1772032416,
+      "size": 27,
+      "symbol_count": 1
+    },
+    "backend/src/tests/auth/register.rs": {
+      "path": "backend/src/tests/auth/register.rs",
+      "mtime": 1770823817,
+      "size": 798,
+      "symbol_count": 2
+    },
+    "leptos-app/src/components/ui/button/button.rs": {
+      "path": "leptos-app/src/components/ui/button/button.rs",
+      "mtime": 1771315380,
+      "size": 3447,
+      "symbol_count": 13
+    },
+    "dioxus-app/src/pages/register/mod.rs": {
+      "path": "dioxus-app/src/pages/register/mod.rs",
+      "mtime": 1772032393,
+      "size": 73,
+      "symbol_count": 2
+    },
+    "dioxus-app/src/state/auth.rs": {
+      "path": "dioxus-app/src/state/auth.rs",
+      "mtime": 1772033094,
+      "size": 3364,
+      "symbol_count": 20
+    },
+    "dioxus-app/src/pages/intello/courses/mod.rs": {
+      "path": "dioxus-app/src/pages/intello/courses/mod.rs",
+      "mtime": 1772032629,
+      "size": 320,
+      "symbol_count": 6
+    },
+    "backend/doc/db_shema/qcm_flashcard_openquestion.txt": {
+      "path": "backend/doc/db_shema/qcm_flashcard_openquestion.txt",
+      "mtime": 1767644381,
+      "size": 5143,
+      "symbol_count": 1
+    },
+    "dioxus-app/src/api/auth.rs": {
+      "path": "dioxus-app/src/api/auth.rs",
+      "mtime": 1772032074,
+      "size": 1422,
+      "symbol_count": 5
+    },
+    "dioxus-app/src/components/intello/order_phrase/order_phrase_player.rs": {
+      "path": "dioxus-app/src/components/intello/order_phrase/order_phrase_player.rs",
+      "mtime": 1772034903,
+      "size": 5575,
+      "symbol_count": 7
+    },
+    "dioxus-app/src/components/ui/file_upload/file_upload.rs": {
+      "path": "dioxus-app/src/components/ui/file_upload/file_upload.rs",
+      "mtime": 1772040091,
+      "size": 2894,
+      "symbol_count": 4
+    },
+    "leptos-app/src/pages/collection/collection.rs": {
+      "path": "leptos-app/src/pages/collection/collection.rs",
+      "mtime": 1771321011,
+      "size": 4460,
+      "symbol_count": 1
+    },
+    "backend/src/http_api/data_transfer_object/intello/order_phrase/response.rs": {
+      "path": "backend/src/http_api/data_transfer_object/intello/order_phrase/response.rs",
+      "mtime": 1770824071,
+      "size": 2587,
+      "symbol_count": 34
+    },
+    "leptos-app/src/api/intello.rs": {
+      "path": "leptos-app/src/api/intello.rs",
+      "mtime": 1771531373,
+      "size": 3182,
+      "symbol_count": 7
+    },
+    "dioxus-app/src/components/ui/card/item_card.rs": {
+      "path": "dioxus-app/src/components/ui/card/item_card.rs",
+      "mtime": 1772032410,
+      "size": 1877,
+      "symbol_count": 4
+    },
+    "leptos-app/src/domain/true_false_types.rs": {
+      "path": "leptos-app/src/domain/true_false_types.rs",
+      "mtime": 1770895322,
+      "size": 2298,
+      "symbol_count": 28
+    },
+    "backend/src/services/intello/course/parser/block_parsers.rs": {
+      "path": "backend/src/services/intello/course/parser/block_parsers.rs",
+      "mtime": 1770823966,
+      "size": 6472,
+      "symbol_count": 17
+    },
+    "leptos-app/src/components/ui/card/nav_card.rs": {
+      "path": "leptos-app/src/components/ui/card/nav_card.rs",
+      "mtime": 1771189578,
+      "size": 1050,
+      "symbol_count": 1
+    },
+    "backend/tests/app_service_remove_user_app_test.rs": {
+      "path": "backend/tests/app_service_remove_user_app_test.rs",
+      "mtime": 1770828407,
+      "size": 2172,
+      "symbol_count": 8
+    },
+    "backend/src/shared/utils/string_or_vec_deserializer.rs": {
+      "path": "backend/src/shared/utils/string_or_vec_deserializer.rs",
+      "mtime": 1770823949,
+      "size": 4256,
+      "symbol_count": 14
+    },
+    "leptos-app/src/domain/app_types.rs": {
+      "path": "leptos-app/src/domain/app_types.rs",
+      "mtime": 1770895297,
+      "size": 2648,
+      "symbol_count": 28
+    },
+    "dioxus-app/src/components/collection/dvd_card.rs": {
+      "path": "dioxus-app/src/components/collection/dvd_card.rs",
+      "mtime": 1772032381,
+      "size": 2652,
+      "symbol_count": 2
+    },
+    "backend/tests/collection_crud_test.rs": {
+      "path": "backend/tests/collection_crud_test.rs",
+      "mtime": 1770827991,
+      "size": 2008,
+      "symbol_count": 7
+    },
+    "backend/doc/db_shema/user_profiles.txt": {
+      "path": "backend/doc/db_shema/user_profiles.txt",
+      "mtime": 1767644381,
+      "size": 1705,
+      "symbol_count": 1
+    },
+    "backend/src/services/intello/course/parser/ideas_parser.rs": {
+      "path": "backend/src/services/intello/course/parser/ideas_parser.rs",
+      "mtime": 1770824023,
+      "size": 3718,
+      "symbol_count": 8
+    },
+    "leptos-app/src/api/resources.rs": {
+      "path": "leptos-app/src/api/resources.rs",
+      "mtime": 1770840703,
+      "size": 1056,
+      "symbol_count": 6
+    },
+    "backend/src/http_api/data_transfer_object/intello/mod.rs": {
+      "path": "backend/src/http_api/data_transfer_object/intello/mod.rs",
+      "mtime": 1771531248,
+      "size": 2478,
+      "symbol_count": 14
+    },
+    "backend/src/infra/database/user_app/trait.rs": {
+      "path": "backend/src/infra/database/user_app/trait.rs",
+      "mtime": 1770816297,
+      "size": 1035,
+      "symbol_count": 2
+    },
+    "dioxus-app/src/domain/app_registry.rs": {
+      "path": "dioxus-app/src/domain/app_registry.rs",
+      "mtime": 1772033081,
+      "size": 1747,
+      "symbol_count": 14
+    },
+    "dioxus-app/src/components/ui/hero_banner/mod.rs": {
+      "path": "dioxus-app/src/components/ui/hero_banner/mod.rs",
+      "mtime": 1772032563,
+      "size": 41,
+      "symbol_count": 1
+    },
+    "dioxus-app/src/components/intello/shared/game_list_page.rs": {
+      "path": "dioxus-app/src/components/intello/shared/game_list_page.rs",
+      "mtime": 1772040196,
+      "size": 7076,
+      "symbol_count": 9
+    },
+    "backend/src/http_api/middlewares/mod.rs": {
+      "path": "backend/src/http_api/middlewares/mod.rs",
+      "mtime": 1770816300,
+      "size": 245,
+      "symbol_count": 2
+    },
+    "backend/doc/apps/intello/qcm_service.md": {
+      "path": "backend/doc/apps/intello/qcm_service.md",
+      "mtime": 1767644381,
+      "size": 1022,
+      "symbol_count": 8
+    },
+    "dioxus-app/src/components/logo/logo.rs": {
+      "path": "dioxus-app/src/components/logo/logo.rs",
+      "mtime": 1772032366,
+      "size": 2066,
+      "symbol_count": 2
+    },
+    "backend/src/services/collection/app_domain.rs": {
+      "path": "backend/src/services/collection/app_domain.rs",
+      "mtime": 1770816302,
+      "size": 1619,
+      "symbol_count": 18
+    },
+    "backend/src/http_api/data_transfer_object/intello/true_false/request.rs": {
+      "path": "backend/src/http_api/data_transfer_object/intello/true_false/request.rs",
+      "mtime": 1770816299,
+      "size": 806,
+      "symbol_count": 12
+    },
+    "backend/src/http_api/handlers/auth/logout.rs": {
+      "path": "backend/src/http_api/handlers/auth/logout.rs",
+      "mtime": 1770816300,
+      "size": 876,
+      "symbol_count": 2
+    },
+    "dioxus-app/src/domain/palette_data.rs": {
+      "path": "dioxus-app/src/domain/palette_data.rs",
+      "mtime": 1772031983,
+      "size": 10842,
+      "symbol_count": 7
+    },
+    "backend/src/http_api/handlers/mod.rs": {
+      "path": "backend/src/http_api/handlers/mod.rs",
+      "mtime": 1770816300,
+      "size": 747,
+      "symbol_count": 7
+    },
+    "leptos-app/src/domain/qcm_types.rs": {
+      "path": "leptos-app/src/domain/qcm_types.rs",
+      "mtime": 1771531348,
+      "size": 4757,
+      "symbol_count": 49
+    },
+    "dioxus-app/src/components/dashboard/palette_picker.rs": {
+      "path": "dioxus-app/src/components/dashboard/palette_picker.rs",
+      "mtime": 1772032545,
+      "size": 3857,
+      "symbol_count": 4
+    },
+    "backend/src/infra/database/app/types.rs": {
+      "path": "backend/src/infra/database/app/types.rs",
+      "mtime": 1770824119,
+      "size": 2813,
+      "symbol_count": 23
+    },
+    "leptos-app/src/pages/intello/courses/session_view.rs": {
+      "path": "leptos-app/src/pages/intello/courses/session_view.rs",
+      "mtime": 1771279492,
+      "size": 2157,
+      "symbol_count": 1
+    },
+    "leptos-app/src/pages/home/mod.rs": {
+      "path": "leptos-app/src/pages/home/mod.rs",
+      "mtime": 1769272879,
+      "size": 58,
+      "symbol_count": 2
+    },
+    "dioxus-app/src/pages/home/home.rs": {
+      "path": "dioxus-app/src/pages/home/home.rs",
+      "mtime": 1772032428,
+      "size": 2808,
+      "symbol_count": 2
+    },
+    "leptos-app/src/pages/intello/qcm/qcm_play.rs": {
+      "path": "leptos-app/src/pages/intello/qcm/qcm_play.rs",
+      "mtime": 1771277388,
+      "size": 941,
+      "symbol_count": 1
+    },
+    "dioxus-app/src/api/intello.rs": {
+      "path": "dioxus-app/src/api/intello.rs",
+      "mtime": 1772032109,
+      "size": 3182,
+      "symbol_count": 7
+    },
+    "backend/src/services/intello/games/open_question/domain.rs": {
+      "path": "backend/src/services/intello/games/open_question/domain.rs",
+      "mtime": 1770816305,
+      "size": 2059,
+      "symbol_count": 16
+    },
+    "backend/doc/apps/intello/order_phrase_domain.md": {
+      "path": "backend/doc/apps/intello/order_phrase_domain.md",
+      "mtime": 1767644381,
+      "size": 801,
+      "symbol_count": 3
+    },
+    "backend/src/services/intello/games/open_question/service.rs": {
+      "path": "backend/src/services/intello/games/open_question/service.rs",
+      "mtime": 1770822667,
+      "size": 9054,
+      "symbol_count": 8
+    },
+    "dioxus-app/src/components/ui/section_divider/mod.rs": {
+      "path": "dioxus-app/src/components/ui/section_divider/mod.rs",
+      "mtime": 1772032578,
+      "size": 49,
+      "symbol_count": 1
+    },
+    "backend/src/infra/supabase/keywords/repository.rs": {
+      "path": "backend/src/infra/supabase/keywords/repository.rs",
+      "mtime": 1770816298,
+      "size": 4955,
+      "symbol_count": 19
+    },
+    "backend/src/infra/supabase/app/types.rs": {
+      "path": "backend/src/infra/supabase/app/types.rs",
+      "mtime": 1770824130,
+      "size": 4882,
+      "symbol_count": 29
+    },
+    "leptos-app/src/pages/intello/order_phrases/order_phrase_play.rs": {
+      "path": "leptos-app/src/pages/intello/order_phrases/order_phrase_play.rs",
+      "mtime": 1771277436,
+      "size": 1132,
+      "symbol_count": 1
+    },
+    "leptos-app/src/components/ui/textarea/textarea.rs": {
+      "path": "leptos-app/src/components/ui/textarea/textarea.rs",
+      "mtime": 1770847520,
+      "size": 2083,
+      "symbol_count": 2
+    },
+    "backend/src/tests/intello/crud_tests.rs": {
+      "path": "backend/src/tests/intello/crud_tests.rs",
+      "mtime": 1770816301,
+      "size": 302,
+      "symbol_count": 2
+    },
+    "backend/src/http_api/data_transfer_object/intello/fill_blank/request.rs": {
+      "path": "backend/src/http_api/data_transfer_object/intello/fill_blank/request.rs",
+      "mtime": 1770816299,
+      "size": 798,
+      "symbol_count": 12
+    },
+    "backend/src/http_api/data_transfer_object/intello/keywords/mod.rs": {
+      "path": "backend/src/http_api/data_transfer_object/intello/keywords/mod.rs",
+      "mtime": 1770816300,
+      "size": 248,
+      "symbol_count": 3
+    },
+    "backend/src/services/collection/error_domain.rs": {
+      "path": "backend/src/services/collection/error_domain.rs",
+      "mtime": 1770823890,
+      "size": 7237,
+      "symbol_count": 36
+    },
+    "dioxus-app/src/pages/home/mod.rs": {
+      "path": "dioxus-app/src/pages/home/mod.rs",
+      "mtime": 1772032418,
+      "size": 57,
+      "symbol_count": 2
+    },
+    "leptos-app/src/pages/intello/qcm/qcm_generate.rs": {
+      "path": "leptos-app/src/pages/intello/qcm/qcm_generate.rs",
+      "mtime": 1771157771,
+      "size": 1042,
+      "symbol_count": 1
+    },
+    "backend/src/http_api/handlers/intello/flashcard.rs": {
+      "path": "backend/src/http_api/handlers/intello/flashcard.rs",
+      "mtime": 1770816300,
+      "size": 778,
+      "symbol_count": 2
+    },
+    "leptos-app/src/domain/palette_data.rs": {
+      "path": "leptos-app/src/domain/palette_data.rs",
+      "mtime": 1771413192,
+      "size": 10842,
+      "symbol_count": 7
+    },
+    "backend/doc/apps/intello/flashcard_domain.md": {
+      "path": "backend/doc/apps/intello/flashcard_domain.md",
+      "mtime": 1767644381,
+      "size": 566,
+      "symbol_count": 3
+    },
+    "backend/src/infra/database/keywords/trait.rs": {
+      "path": "backend/src/infra/database/keywords/trait.rs",
+      "mtime": 1770816297,
+      "size": 738,
+      "symbol_count": 3
+    },
+    "dioxus-app/src/components/ui/spinner/mod.rs": {
+      "path": "dioxus-app/src/components/ui/spinner/mod.rs",
+      "mtime": 1772032447,
+      "size": 33,
+      "symbol_count": 1
+    },
+    "backend/src/http_api/data_transfer_object/auth/request.rs": {
+      "path": "backend/src/http_api/data_transfer_object/auth/request.rs",
+      "mtime": 1770816298,
+      "size": 1244,
+      "symbol_count": 10
+    },
+    "backend/src/infra/supabase/flashcard/mod.rs": {
+      "path": "backend/src/infra/supabase/flashcard/mod.rs",
+      "mtime": 1770816298,
+      "size": 136,
+      "symbol_count": 3
+    },
+    "leptos-app/src/components/ui/empty_state/mod.rs": {
+      "path": "leptos-app/src/components/ui/empty_state/mod.rs",
+      "mtime": 1770840621,
+      "size": 41,
+      "symbol_count": 1
+    },
+    "backend/src/infra/supabase/open_question/types.rs": {
+      "path": "backend/src/infra/supabase/open_question/types.rs",
+      "mtime": 1770816298,
+      "size": 1592,
+      "symbol_count": 18
+    },
+    "leptos-app/src/components/collection/dvd_form.rs": {
+      "path": "leptos-app/src/components/collection/dvd_form.rs",
+      "mtime": 1771321610,
+      "size": 5821,
+      "symbol_count": 16
+    },
+    "backend/tests/helpers/stub_dvd_repo.rs": {
+      "path": "backend/tests/helpers/stub_dvd_repo.rs",
+      "mtime": 1770827932,
+      "size": 4260,
+      "symbol_count": 25
+    },
+    "backend/src/http_api/handlers/intello/course_generation.rs": {
+      "path": "backend/src/http_api/handlers/intello/course_generation.rs",
+      "mtime": 1770820651,
+      "size": 2214,
+      "symbol_count": 2
+    },
+    "dioxus-app/src/pages/intello/courses/course_list.rs": {
+      "path": "dioxus-app/src/pages/intello/courses/course_list.rs",
+      "mtime": 1772034711,
+      "size": 3703,
+      "symbol_count": 2
+    },
+    "backend/src/services/intello/course/domain/entities.rs": {
+      "path": "backend/src/services/intello/course/domain/entities.rs",
+      "mtime": 1770816303,
+      "size": 1090,
+      "symbol_count": 22
+    },
+    "backend/src/tests/app_registry/domain_tests.rs": {
+      "path": "backend/src/tests/app_registry/domain_tests.rs",
+      "mtime": 1770816301,
+      "size": 263,
+      "symbol_count": 1
+    },
+    "backend/src/services/intello/games/keywords/mod.rs": {
+      "path": "backend/src/services/intello/games/keywords/mod.rs",
+      "mtime": 1770816305,
+      "size": 122,
+      "symbol_count": 4
+    },
+    "leptos-app/src/pages/intello/keywords/keyword_list.rs": {
+      "path": "leptos-app/src/pages/intello/keywords/keyword_list.rs",
+      "mtime": 1771277322,
+      "size": 619,
+      "symbol_count": 1
+    },
+    "dioxus-app/src/components/ui/hero_banner/hero_banner.rs": {
+      "path": "dioxus-app/src/components/ui/hero_banner/hero_banner.rs",
+      "mtime": 1772032574,
+      "size": 1431,
+      "symbol_count": 4
+    },
+    "backend/src/services/intello/course/service/crud.rs": {
+      "path": "backend/src/services/intello/course/service/crud.rs",
+      "mtime": 1770820651,
+      "size": 3072,
+      "symbol_count": 8
+    },
+    "backend/src/tests/utils/document_extractor.rs": {
+      "path": "backend/src/tests/utils/document_extractor.rs",
+      "mtime": 1770816301,
+      "size": 1062,
+      "symbol_count": 5
+    },
+    "backend/src/shared/constants/mod.rs": {
+      "path": "backend/src/shared/constants/mod.rs",
+      "mtime": 1770816302,
+      "size": 311,
+      "symbol_count": 3
+    },
+    "dioxus-app/src/api/types.rs": {
+      "path": "dioxus-app/src/api/types.rs",
+      "mtime": 1772032042,
+      "size": 112,
+      "symbol_count": 1
+    },
+    "backend/src/infra/supabase/course/repository.rs": {
+      "path": "backend/src/infra/supabase/course/repository.rs",
+      "mtime": 1770816297,
+      "size": 7732,
+      "symbol_count": 56
+    },
+    "backend/src/infra/supabase/collection/mod.rs": {
+      "path": "backend/src/infra/supabase/collection/mod.rs",
+      "mtime": 1770816297,
+      "size": 127,
+      "symbol_count": 2
+    },
+    "leptos-app/src/api/helpers.rs": {
+      "path": "leptos-app/src/api/helpers.rs",
+      "mtime": 1771441679,
+      "size": 4075,
+      "symbol_count": 10
+    },
+    "leptos-app/src/components/intello/keywords/mod.rs": {
+      "path": "leptos-app/src/components/intello/keywords/mod.rs",
+      "mtime": 1770840980,
+      "size": 25,
+      "symbol_count": 1
+    },
+    "backend/src/services/intello/course/domain/output.rs": {
+      "path": "backend/src/services/intello/course/domain/output.rs",
+      "mtime": 1770816303,
+      "size": 261,
+      "symbol_count": 0
+    },
+    "dioxus-app/src/api/fill_blanks.rs": {
+      "path": "dioxus-app/src/api/fill_blanks.rs",
+      "mtime": 1772032088,
+      "size": 658,
+      "symbol_count": 3
+    },
+    "backend/src/services/intello/games/fill_blank/service.rs": {
+      "path": "backend/src/services/intello/games/fill_blank/service.rs",
+      "mtime": 1770822667,
+      "size": 4395,
+      "symbol_count": 6
+    },
+    "dioxus-app/src/pages/intello/intello_home.rs": {
+      "path": "dioxus-app/src/pages/intello/intello_home.rs",
+      "mtime": 1772035691,
+      "size": 2688,
+      "symbol_count": 8
+    },
+    "backend/src/services/intello/app/app_domain.rs": {
+      "path": "backend/src/services/intello/app/app_domain.rs",
+      "mtime": 1770823982,
+      "size": 2146,
+      "symbol_count": 19
+    },
+    "backend/src/tests/openrouter/mod.rs": {
+      "path": "backend/src/tests/openrouter/mod.rs",
+      "mtime": 1770816301,
+      "size": 23,
+      "symbol_count": 1
+    },
+    "backend/src/services/intello/games/flashcard/domain.rs": {
+      "path": "backend/src/services/intello/games/flashcard/domain.rs",
+      "mtime": 1770816305,
+      "size": 1603,
+      "symbol_count": 14
+    },
+    "backend/src/services/intello/document_extractor/document_extractor_service.rs": {
+      "path": "backend/src/services/intello/document_extractor/document_extractor_service.rs",
+      "mtime": 1770823952,
+      "size": 10338,
+      "symbol_count": 13
+    },
+    "dioxus-app/src/api/courses.rs": {
+      "path": "dioxus-app/src/api/courses.rs",
+      "mtime": 1772032086,
+      "size": 2326,
+      "symbol_count": 10
+    },
+    "backend/doc/architecture/use-cases.md": {
+      "path": "backend/doc/architecture/use-cases.md",
+      "mtime": 1767644381,
+      "size": 4270,
+      "symbol_count": 13
+    },
+    "leptos-app/src/pages/mod.rs": {
+      "path": "leptos-app/src/pages/mod.rs",
+      "mtime": 1770845781,
+      "size": 337,
+      "symbol_count": 8
+    },
+    "backend/src/infra/database/app/trait.rs": {
+      "path": "backend/src/infra/database/app/trait.rs",
+      "mtime": 1770816296,
+      "size": 1077,
+      "symbol_count": 2
+    },
+    "backend/src/http_api/handlers/intello/helpers.rs": {
+      "path": "backend/src/http_api/handlers/intello/helpers.rs",
+      "mtime": 1770822667,
+      "size": 6197,
+      "symbol_count": 5
+    },
+    "backend/src/tests/intello/mod.rs": {
+      "path": "backend/src/tests/intello/mod.rs",
+      "mtime": 1770816301,
+      "size": 133,
+      "symbol_count": 6
+    },
+    "backend/tests/helpers/factories.rs": {
+      "path": "backend/tests/helpers/factories.rs",
+      "mtime": 1770827893,
+      "size": 2444,
+      "symbol_count": 6
+    },
+    "leptos-app/src/domain/keywords_types.rs": {
+      "path": "leptos-app/src/domain/keywords_types.rs",
+      "mtime": 1770895342,
+      "size": 2138,
+      "symbol_count": 31
+    },
+    "backend/src/infra/supabase/shared/client.rs": {
+      "path": "backend/src/infra/supabase/shared/client.rs",
+      "mtime": 1770822505,
+      "size": 9733,
+      "symbol_count": 28
+    },
+    "backend/src/infra/supabase/qcm/mod.rs": {
+      "path": "backend/src/infra/supabase/qcm/mod.rs",
+      "mtime": 1770816298,
+      "size": 124,
+      "symbol_count": 3
+    },
+    "backend/src/services/intello/course/domain/section_domain.rs": {
+      "path": "backend/src/services/intello/course/domain/section_domain.rs",
+      "mtime": 1770816303,
+      "size": 602,
+      "symbol_count": 5
+    },
+    "backend/doc/apps/intello/fill_blank_domain.md": {
+      "path": "backend/doc/apps/intello/fill_blank_domain.md",
+      "mtime": 1767644381,
+      "size": 809,
+      "symbol_count": 3
+    },
+    "backend/tests/qcm_delete_test.rs": {
+      "path": "backend/tests/qcm_delete_test.rs",
+      "mtime": 1770828200,
+      "size": 1991,
+      "symbol_count": 7
+    },
+    "dioxus-app/src/components/top_bar/page_nav.rs": {
+      "path": "dioxus-app/src/components/top_bar/page_nav.rs",
+      "mtime": 1772040196,
+      "size": 5291,
+      "symbol_count": 12
+    },
+    "dioxus-app/src/components/intello/shared/game_set_card.rs": {
+      "path": "dioxus-app/src/components/intello/shared/game_set_card.rs",
+      "mtime": 1772032292,
+      "size": 2122,
+      "symbol_count": 1
+    },
+    "backend/src/http_api/data_transfer_object/intello/admin.rs": {
+      "path": "backend/src/http_api/data_transfer_object/intello/admin.rs",
+      "mtime": 1770816300,
+      "size": 895,
+      "symbol_count": 22
+    },
+    "leptos-app/src/main.rs": {
+      "path": "leptos-app/src/main.rs",
+      "mtime": 1771698287,
+      "size": 5132,
+      "symbol_count": 4
+    },
+    "backend/src/http_api/handlers/collection/mod.rs": {
+      "path": "backend/src/http_api/handlers/collection/mod.rs",
+      "mtime": 1770816300,
+      "size": 942,
+      "symbol_count": 5
+    },
+    "dioxus-app/src/components/ui/progress/progress.rs": {
+      "path": "dioxus-app/src/components/ui/progress/progress.rs",
+      "mtime": 1772040049,
+      "size": 1776,
+      "symbol_count": 4
+    },
+    "backend/src/infra/supabase/session/mod.rs": {
+      "path": "backend/src/infra/supabase/session/mod.rs",
+      "mtime": 1770816298,
+      "size": 127,
+      "symbol_count": 2
+    },
+    "backend/tests/helpers/stub_collection_repo.rs": {
+      "path": "backend/tests/helpers/stub_collection_repo.rs",
+      "mtime": 1770827920,
+      "size": 3369,
+      "symbol_count": 20
+    },
+    "dioxus-app/src/components/ui/mod.rs": {
+      "path": "dioxus-app/src/components/ui/mod.rs",
+      "mtime": 1772032250,
+      "size": 408,
+      "symbol_count": 21
+    },
+    "dioxus-app/src/components/top_bar/mod.rs": {
+      "path": "dioxus-app/src/components/top_bar/mod.rs",
+      "mtime": 1772032300,
+      "size": 103,
+      "symbol_count": 3
+    },
+    "backend/doc/db_shema/keywords.txt": {
+      "path": "backend/doc/db_shema/keywords.txt",
+      "mtime": 1767644381,
+      "size": 3292,
+      "symbol_count": 1
+    },
+    "backend/src/infra/supabase/true_false/types.rs": {
+      "path": "backend/src/infra/supabase/true_false/types.rs",
+      "mtime": 1770816297,
+      "size": 1561,
+      "symbol_count": 17
+    },
+    "backend/src/http_api/handlers/auth/register.rs": {
+      "path": "backend/src/http_api/handlers/auth/register.rs",
+      "mtime": 1770816300,
+      "size": 1371,
+      "symbol_count": 2
+    },
+    "backend/doc/apps/intello/true_false_domain.md": {
+      "path": "backend/doc/apps/intello/true_false_domain.md",
+      "mtime": 1767644381,
+      "size": 694,
+      "symbol_count": 3
+    },
+    "Pyckx-frontend/doc/theming.md": {
+      "path": "Pyckx-frontend/doc/theming.md",
+      "mtime": 1767644381,
+      "size": 4079,
+      "symbol_count": 20
+    },
+    "backend/src/infra/supabase/client/mod.rs": {
+      "path": "backend/src/infra/supabase/client/mod.rs",
+      "mtime": 1770816298,
+      "size": 198,
+      "symbol_count": 3
+    },
+    "backend/src/tests/intello/course/parser/synthesis_parser_tests.rs": {
+      "path": "backend/src/tests/intello/course/parser/synthesis_parser_tests.rs",
+      "mtime": 1770816301,
+      "size": 1893,
+      "symbol_count": 3
+    },
+    "leptos-app/src/components/ui/section_divider/mod.rs": {
+      "path": "leptos-app/src/components/ui/section_divider/mod.rs",
+      "mtime": 1771318309,
+      "size": 63,
+      "symbol_count": 1
+    },
+    "Pyckx-frontend/doc/authentication.md": {
+      "path": "Pyckx-frontend/doc/authentication.md",
+      "mtime": 1767644381,
+      "size": 4010,
+      "symbol_count": 19
+    },
+    "backend/src/services/intello/crud/mod.rs": {
+      "path": "backend/src/services/intello/crud/mod.rs",
+      "mtime": 1770816304,
+      "size": 260,
+      "symbol_count": 2
+    },
+    "backend/src/services/intello/utils/input_validation.rs": {
+      "path": "backend/src/services/intello/utils/input_validation.rs",
+      "mtime": 1770816303,
+      "size": 5934,
+      "symbol_count": 10
+    },
+    "leptos-app/src/components/ui/input/input.rs": {
+      "path": "leptos-app/src/components/ui/input/input.rs",
+      "mtime": 1770845806,
+      "size": 2133,
+      "symbol_count": 1
+    },
+    "dioxus-app/src/state/palette.rs": {
+      "path": "dioxus-app/src/state/palette.rs",
+      "mtime": 1772035738,
+      "size": 2392,
+      "symbol_count": 19
+    },
+    "backend/src/services/auth/mod.rs": {
+      "path": "backend/src/services/auth/mod.rs",
+      "mtime": 1770816302,
+      "size": 313,
+      "symbol_count": 4
+    },
+    "dioxus-app/src/pages/collection/dvd_add.rs": {
+      "path": "dioxus-app/src/pages/collection/dvd_add.rs",
+      "mtime": 1772032479,
+      "size": 1407,
+      "symbol_count": 2
+    },
+    "backend/src/services/intello/games/open_question/prompt.rs": {
+      "path": "backend/src/services/intello/games/open_question/prompt.rs",
+      "mtime": 1770816305,
+      "size": 6202,
+      "symbol_count": 11
+    },
+    "backend/src/tests/intello/qcm_validation.rs": {
+      "path": "backend/src/tests/intello/qcm_validation.rs",
+      "mtime": 1770816301,
+      "size": 11174,
+      "symbol_count": 10
+    },
+    "backend/src/http_api/handlers/intello/open_question.rs": {
+      "path": "backend/src/http_api/handlers/intello/open_question.rs",
+      "mtime": 1770816300,
+      "size": 2460,
+      "symbol_count": 3
+    },
+    "backend/src/infra/database/true_false/trait.rs": {
+      "path": "backend/src/infra/database/true_false/trait.rs",
+      "mtime": 1770816296,
+      "size": 784,
+      "symbol_count": 3
+    },
+    "backend/src/infra/database/ai_usage/mod.rs": {
+      "path": "backend/src/infra/database/ai_usage/mod.rs",
+      "mtime": 1770816297,
+      "size": 82,
+      "symbol_count": 2
+    },
+    "leptos-app/src/pages/intello/qcm/quick_form.rs": {
+      "path": "leptos-app/src/pages/intello/qcm/quick_form.rs",
+      "mtime": 1771534489,
+      "size": 6377,
+      "symbol_count": 13
+    },
+    "leptos-app/src/domain/fill_blank_types.rs": {
+      "path": "leptos-app/src/domain/fill_blank_types.rs",
+      "mtime": 1770895336,
+      "size": 2229,
+      "symbol_count": 31
+    },
+    "backend/src/tests/intello/error_tests.rs": {
+      "path": "backend/src/tests/intello/error_tests.rs",
+      "mtime": 1770816301,
+      "size": 973,
+      "symbol_count": 3
+    },
+    "backend/src/services/intello/games/order_phrase/prompt.rs": {
+      "path": "backend/src/services/intello/games/order_phrase/prompt.rs",
+      "mtime": 1770816305,
+      "size": 5194,
+      "symbol_count": 11
+    },
+    "backend/src/tests/app_registry/user_apps.rs": {
+      "path": "backend/src/tests/app_registry/user_apps.rs",
+      "mtime": 1770823867,
+      "size": 2790,
+      "symbol_count": 2
+    },
+    "backend/src/infra/supabase/keywords/mod.rs": {
+      "path": "backend/src/infra/supabase/keywords/mod.rs",
+      "mtime": 1770816298,
+      "size": 106,
+      "symbol_count": 3
+    },
+    "backend/src/infra/supabase/order_phrase/types.rs": {
+      "path": "backend/src/infra/supabase/order_phrase/types.rs",
+      "mtime": 1770816298,
+      "size": 1865,
+      "symbol_count": 21
+    },
+    "backend/src/tests/intello/course/prompt/synthesis_prompt_tests.rs": {
+      "path": "backend/src/tests/intello/course/prompt/synthesis_prompt_tests.rs",
+      "mtime": 1770816301,
+      "size": 58,
+      "symbol_count": 0
+    },
+    "leptos-app/src/pages/intello/order_phrases/order_phrase_generate.rs": {
+      "path": "leptos-app/src/pages/intello/order_phrases/order_phrase_generate.rs",
+      "mtime": 1771157776,
+      "size": 847,
+      "symbol_count": 1
+    },
+    "backend/src/shared/constants/errors/global.rs": {
+      "path": "backend/src/shared/constants/errors/global.rs",
+      "mtime": 1770823937,
+      "size": 10845,
+      "symbol_count": 74
+    },
+    "backend/src/http_api/middlewares/rate_limit/middleware.rs": {
+      "path": "backend/src/http_api/middlewares/rate_limit/middleware.rs",
+      "mtime": 1770820651,
+      "size": 3876,
+      "symbol_count": 22
+    },
+    "leptos-app/src/api/keywords.rs": {
+      "path": "leptos-app/src/api/keywords.rs",
+      "mtime": 1771441694,
+      "size": 626,
+      "symbol_count": 3
+    },
+    "leptos-app/src/components/intello/shared/game_player_state.rs": {
+      "path": "leptos-app/src/components/intello/shared/game_player_state.rs",
+      "mtime": 1771336751,
+      "size": 2808,
+      "symbol_count": 21
+    },
+    "backend/src/http_api/data_transfer_object/intello/true_false/mod.rs": {
+      "path": "backend/src/http_api/data_transfer_object/intello/true_false/mod.rs",
+      "mtime": 1770816299,
+      "size": 272,
+      "symbol_count": 4
+    },
+    "backend/src/services/intello/learn_mode/mod.rs": {
+      "path": "backend/src/services/intello/learn_mode/mod.rs",
+      "mtime": 1770816303,
+      "size": 55,
+      "symbol_count": 2
+    },
+    "backend/src/infra/supabase/dvd/repository.rs": {
+      "path": "backend/src/infra/supabase/dvd/repository.rs",
+      "mtime": 1770820651,
+      "size": 11785,
+      "symbol_count": 62
+    },
+    "Pyckx-frontend/doc/security-configuration.md": {
+      "path": "Pyckx-frontend/doc/security-configuration.md",
+      "mtime": 1767644381,
+      "size": 3702,
+      "symbol_count": 18
+    },
+    "backend/src/http_api/data_transfer_object/intello/keywords/response.rs": {
+      "path": "backend/src/http_api/data_transfer_object/intello/keywords/response.rs",
+      "mtime": 1770824063,
+      "size": 2449,
+      "symbol_count": 34
+    },
+    "backend/src/http_api/data_transfer_object/intello/quick_qcm.rs": {
+      "path": "backend/src/http_api/data_transfer_object/intello/quick_qcm.rs",
+      "mtime": 1771534537,
+      "size": 4017,
+      "symbol_count": 22
+    },
+    "backend/src/infra/user/mod.rs": {
+      "path": "backend/src/infra/user/mod.rs",
+      "mtime": 1770816297,
+      "size": 243,
+      "symbol_count": 4
+    },
+    "leptos-app/src/pages/intello/courses/course_detail.rs": {
+      "path": "leptos-app/src/pages/intello/courses/course_detail.rs",
+      "mtime": 1771442261,
+      "size": 6662,
+      "symbol_count": 3
+    },
+    "leptos-app/src/components/collection/dvd_list.rs": {
+      "path": "leptos-app/src/components/collection/dvd_list.rs",
+      "mtime": 1771188221,
+      "size": 3078,
+      "symbol_count": 1
+    },
+    "backend/src/http_api/handlers/collection/dvd_handlers.rs": {
+      "path": "backend/src/http_api/handlers/collection/dvd_handlers.rs",
+      "mtime": 1770820651,
+      "size": 3859,
+      "symbol_count": 6
+    },
+    "dioxus-app/src/components/intello/open_question/open_question_player.rs": {
+      "path": "dioxus-app/src/components/intello/open_question/open_question_player.rs",
+      "mtime": 1772032450,
+      "size": 4867,
+      "symbol_count": 3
+    },
+    "backend/doc/apps/intello/ai_usage_service.md": {
+      "path": "backend/doc/apps/intello/ai_usage_service.md",
+      "mtime": 1767644381,
+      "size": 743,
+      "symbol_count": 5
+    },
+    "leptos-app/src/components/dashboard/app_store.rs": {
+      "path": "leptos-app/src/components/dashboard/app_store.rs",
+      "mtime": 1771689102,
+      "size": 2109,
+      "symbol_count": 2
+    },
+    "backend/src/infra/supabase/qcm/types.rs": {
+      "path": "backend/src/infra/supabase/qcm/types.rs",
+      "mtime": 1770816298,
+      "size": 2074,
+      "symbol_count": 31
+    },
+    "dioxus-app/src/pages/vitrine/components/section_header.rs": {
+      "path": "dioxus-app/src/pages/vitrine/components/section_header.rs",
+      "mtime": 1772032311,
+      "size": 933,
+      "symbol_count": 2
+    },
+    "backend/src/http_api/data_transfer_object/apps/conversion.rs": {
+      "path": "backend/src/http_api/data_transfer_object/apps/conversion.rs",
+      "mtime": 1770824154,
+      "size": 5399,
+      "symbol_count": 35
+    },
+    "backend/src/services/intello/course/domain/input.rs": {
+      "path": "backend/src/services/intello/course/domain/input.rs",
+      "mtime": 1770822144,
+      "size": 345,
+      "symbol_count": 8
+    },
+    "backend/src/services/intello/ai_response/qcm.rs": {
+      "path": "backend/src/services/intello/ai_response/qcm.rs",
+      "mtime": 1770816304,
+      "size": 331,
+      "symbol_count": 8
+    },
+    "backend/tests/collection_delete_test.rs": {
+      "path": "backend/tests/collection_delete_test.rs",
+      "mtime": 1770828502,
+      "size": 3211,
+      "symbol_count": 7
+    },
+    "backend/src/services/app_registry/error_domain.rs": {
+      "path": "backend/src/services/app_registry/error_domain.rs",
+      "mtime": 1770823918,
+      "size": 6572,
+      "symbol_count": 25
+    },
+    "backend/src/tests/intello/property_tests.rs": {
+      "path": "backend/src/tests/intello/property_tests.rs",
+      "mtime": 1770823808,
+      "size": 24134,
+      "symbol_count": 18
+    },
+    "backend/src/tests/intello/course/service/mod.rs": {
+      "path": "backend/src/tests/intello/course/service/mod.rs",
+      "mtime": 1770816301,
+      "size": 28,
+      "symbol_count": 1
+    },
+    "backend/src/infra/openrouter/types.rs": {
+      "path": "backend/src/infra/openrouter/types.rs",
+      "mtime": 1770822131,
+      "size": 2598,
+      "symbol_count": 34
+    },
+    "backend/src/infra/supabase/course/mod.rs": {
+      "path": "backend/src/infra/supabase/course/mod.rs",
+      "mtime": 1770816297,
+      "size": 63,
+      "symbol_count": 1
+    },
+    "backend/src/infra/supabase/flashcard/repository.rs": {
+      "path": "backend/src/infra/supabase/flashcard/repository.rs",
+      "mtime": 1770816298,
+      "size": 6305,
+      "symbol_count": 18
+    },
+    "leptos-app/src/pages/intello/true_false/true_false_list.rs": {
+      "path": "leptos-app/src/pages/intello/true_false/true_false_list.rs",
+      "mtime": 1771441160,
+      "size": 636,
+      "symbol_count": 1
+    },
+    "backend/src/services/intello/domain/error_domain.rs": {
+      "path": "backend/src/services/intello/domain/error_domain.rs",
+      "mtime": 1770823818,
+      "size": 12327,
+      "symbol_count": 47
+    },
+    "backend/src/http_api/data_transfer_object/intello/keywords/request.rs": {
+      "path": "backend/src/http_api/data_transfer_object/intello/keywords/request.rs",
+      "mtime": 1770816300,
+      "size": 791,
+      "symbol_count": 12
+    },
+    "leptos-app/src/components/collection/mod.rs": {
+      "path": "leptos-app/src/components/collection/mod.rs",
+      "mtime": 1770840799,
+      "size": 54,
+      "symbol_count": 3
+    },
+    "backend/src/infra/supabase/open_question/repository.rs": {
+      "path": "backend/src/infra/supabase/open_question/repository.rs",
+      "mtime": 1770816298,
+      "size": 5877,
+      "symbol_count": 20
+    },
+    "backend/src/infra/database/fill_blank/mod.rs": {
+      "path": "backend/src/infra/database/fill_blank/mod.rs",
+      "mtime": 1770816297,
+      "size": 86,
+      "symbol_count": 2
+    },
+    "backend/doc/apps/intello/keywords_service.md": {
+      "path": "backend/doc/apps/intello/keywords_service.md",
+      "mtime": 1767644381,
+      "size": 731,
+      "symbol_count": 3
+    },
+    "dioxus-app/src/components/intello/shared/game_play_page.rs": {
+      "path": "dioxus-app/src/components/intello/shared/game_play_page.rs",
+      "mtime": 1772035166,
+      "size": 2340,
+      "symbol_count": 5
+    },
+    "backend/src/http_api/handlers/user/me.rs": {
+      "path": "backend/src/http_api/handlers/user/me.rs",
+      "mtime": 1770816300,
+      "size": 706,
+      "symbol_count": 2
+    },
+    "dioxus-app/src/components/mod.rs": {
+      "path": "dioxus-app/src/components/mod.rs",
+      "mtime": 1772032217,
+      "size": 149,
+      "symbol_count": 7
+    },
+    "backend/src/infra/openrouter/utils.rs": {
+      "path": "backend/src/infra/openrouter/utils.rs",
+      "mtime": 1770823919,
+      "size": 10009,
+      "symbol_count": 22
+    },
+    "backend/src/tests/utils/mod.rs": {
+      "path": "backend/src/tests/utils/mod.rs",
+      "mtime": 1770816301,
+      "size": 84,
+      "symbol_count": 2
+    },
+    "dioxus-app/src/pages/intello/courses/session_view.rs": {
+      "path": "dioxus-app/src/pages/intello/courses/session_view.rs",
+      "mtime": 1772032684,
+      "size": 1545,
+      "symbol_count": 2
+    },
+    "dioxus-app/src/pages/mod.rs": {
+      "path": "dioxus-app/src/pages/mod.rs",
+      "mtime": 1772032295,
+      "size": 166,
+      "symbol_count": 8
+    },
+    "backend/src/http_api/data_transfer_object/apps/request.rs": {
+      "path": "backend/src/http_api/data_transfer_object/apps/request.rs",
+      "mtime": 1770816300,
+      "size": 779,
+      "symbol_count": 8
+    },
+    "leptos-app/src/api/collection.rs": {
+      "path": "leptos-app/src/api/collection.rs",
+      "mtime": 1770840674,
+      "size": 973,
+      "symbol_count": 5
+    },
+    "dioxus-app/src/domain/order_phrase_types.rs": {
+      "path": "dioxus-app/src/domain/order_phrase_types.rs",
+      "mtime": 1772033078,
+      "size": 2303,
+      "symbol_count": 31
+    },
+    "dioxus-app/src/components/intello/shared/mod.rs": {
+      "path": "dioxus-app/src/components/intello/shared/mod.rs",
+      "mtime": 1772032235,
+      "size": 234,
+      "symbol_count": 10
+    },
+    "leptos-app/src/pages/intello/open_questions/open_question_list.rs": {
+      "path": "leptos-app/src/pages/intello/open_questions/open_question_list.rs",
+      "mtime": 1771277315,
+      "size": 664,
+      "symbol_count": 1
+    },
+    "backend/src/services/intello/document_extractor/document_extractor_domain.rs": {
+      "path": "backend/src/services/intello/document_extractor/document_extractor_domain.rs",
+      "mtime": 1770823851,
+      "size": 3243,
+      "symbol_count": 14
+    },
+    "backend/src/http_api/handlers/intello/mod.rs": {
+      "path": "backend/src/http_api/handlers/intello/mod.rs",
+      "mtime": 1771531281,
+      "size": 4324,
+      "symbol_count": 16
+    },
+    "dioxus-app/src/pages/admin/mod.rs": {
+      "path": "dioxus-app/src/pages/admin/mod.rs",
+      "mtime": 1772032432,
+      "size": 61,
+      "symbol_count": 2
+    },
+    "backend/src/infra/database/true_false/mod.rs": {
+      "path": "backend/src/infra/database/true_false/mod.rs",
+      "mtime": 1770816296,
+      "size": 91,
+      "symbol_count": 2
+    },
+    "backend/src/http_api/data_transfer_object/intello/open_question/conversion.rs": {
+      "path": "backend/src/http_api/data_transfer_object/intello/open_question/conversion.rs",
+      "mtime": 1770824047,
+      "size": 5494,
+      "symbol_count": 23
+    },
+    "backend/src/http_api/data_transfer_object/auth/response.rs": {
+      "path": "backend/src/http_api/data_transfer_object/auth/response.rs",
+      "mtime": 1770823918,
+      "size": 1975,
+      "symbol_count": 14
+    },
+    "backend/src/http_api/data_transfer_object/intello/custom_question.rs": {
+      "path": "backend/src/http_api/data_transfer_object/intello/custom_question.rs",
+      "mtime": 1770816299,
+      "size": 1335,
+      "symbol_count": 20
+    },
+    "backend/src/infra/database/order_phrase/trait.rs": {
+      "path": "backend/src/infra/database/order_phrase/trait.rs",
+      "mtime": 1770816297,
+      "size": 789,
+      "symbol_count": 3
+    },
+    "leptos-app/src/components/ui/icon/icon.rs": {
+      "path": "leptos-app/src/components/ui/icon/icon.rs",
+      "mtime": 1771704565,
+      "size": 6509,
+      "symbol_count": 1
+    },
+    "backend/src/infra/supabase/dvd/mod.rs": {
+      "path": "backend/src/infra/supabase/dvd/mod.rs",
+      "mtime": 1770816298,
+      "size": 113,
+      "symbol_count": 2
+    },
+    "backend/src/services/intello/ai_response/verification.rs": {
+      "path": "backend/src/services/intello/ai_response/verification.rs",
+      "mtime": 1770816304,
+      "size": 305,
+      "symbol_count": 7
+    },
+    "leptos-app/src/pages/intello/fill_blanks/fill_blank_play.rs": {
+      "path": "leptos-app/src/pages/intello/fill_blanks/fill_blank_play.rs",
+      "mtime": 1771277448,
+      "size": 1114,
+      "symbol_count": 1
+    },
+    "backend/src/services/collection/dvd_service.rs": {
+      "path": "backend/src/services/collection/dvd_service.rs",
+      "mtime": 1770822433,
+      "size": 3845,
+      "symbol_count": 16
+    },
+    "backend/src/infra/supabase/session/repository.rs": {
+      "path": "backend/src/infra/supabase/session/repository.rs",
+      "mtime": 1770822135,
+      "size": 3739,
+      "symbol_count": 33
+    },
+    "leptos-app/src/components/ui/input/mod.rs": {
+      "path": "leptos-app/src/components/ui/input/mod.rs",
+      "mtime": 1769455041,
+      "size": 29,
+      "symbol_count": 1
+    },
+    "backend/src/services/intello/course/parser/plan_parser.rs": {
+      "path": "backend/src/services/intello/course/parser/plan_parser.rs",
+      "mtime": 1770824033,
+      "size": 4790,
+      "symbol_count": 9
+    },
+    "dioxus-app/src/pages/intello/mod.rs": {
+      "path": "dioxus-app/src/pages/intello/mod.rs",
+      "mtime": 1772032484,
+      "size": 263,
+      "symbol_count": 10
+    },
+    "backend/src/services/intello/games/keywords/prompt.rs": {
+      "path": "backend/src/services/intello/games/keywords/prompt.rs",
+      "mtime": 1770816305,
+      "size": 4913,
+      "symbol_count": 11
+    },
+    "backend/src/services/intello/course/domain/mod.rs": {
+      "path": "backend/src/services/intello/course/domain/mod.rs",
+      "mtime": 1770816303,
+      "size": 491,
+      "symbol_count": 7
+    },
+    "backend/src/services/intello/domain/types_domain.rs": {
+      "path": "backend/src/services/intello/domain/types_domain.rs",
+      "mtime": 1770823841,
+      "size": 10108,
+      "symbol_count": 85
+    },
+    "leptos-app/src/components/intello/shared/game_helpers.rs": {
+      "path": "leptos-app/src/components/intello/shared/game_helpers.rs",
+      "mtime": 1771753677,
+      "size": 1391,
+      "symbol_count": 5
+    },
+    "leptos-app/src/api/types.rs": {
+      "path": "leptos-app/src/api/types.rs",
+      "mtime": 1770845759,
+      "size": 112,
+      "symbol_count": 1
+    },
+    "backend/src/services/intello/games/open_question/open_question_cache_service.rs": {
+      "path": "backend/src/services/intello/games/open_question/open_question_cache_service.rs",
+      "mtime": 1770816305,
+      "size": 2027,
+      "symbol_count": 14
+    },
+    "backend/src/services/intello/games/qcm/generation.rs": {
+      "path": "backend/src/services/intello/games/qcm/generation.rs",
+      "mtime": 1771535470,
+      "size": 4370,
+      "symbol_count": 9
+    },
+    "backend/src/services/intello/course/parser/metadata_parser.rs": {
+      "path": "backend/src/services/intello/course/parser/metadata_parser.rs",
+      "mtime": 1770823976,
+      "size": 2530,
+      "symbol_count": 7
+    },
+    "backend/src/http_api/data_transfer_object/intello/open_question/request.rs": {
+      "path": "backend/src/http_api/data_transfer_object/intello/open_question/request.rs",
+      "mtime": 1770816299,
+      "size": 1124,
+      "symbol_count": 18
+    },
+    "dioxus-app/src/components/intello/fill_blank/mod.rs": {
+      "path": "dioxus-app/src/components/intello/fill_blank/mod.rs",
+      "mtime": 1772032496,
+      "size": 27,
+      "symbol_count": 1
+    },
+    "leptos-app/src/pages/intello/open_questions/open_question_play.rs": {
+      "path": "leptos-app/src/pages/intello/open_questions/open_question_play.rs",
+      "mtime": 1771277418,
+      "size": 1141,
+      "symbol_count": 1
+    },
+    "backend/src/tests/collection/error_tests.rs": {
+      "path": "backend/src/tests/collection/error_tests.rs",
+      "mtime": 1770816300,
+      "size": 1173,
+      "symbol_count": 4
+    },
+    "backend/tests/helpers/stub_intello.rs": {
+      "path": "backend/tests/helpers/stub_intello.rs",
+      "mtime": 1770828160,
+      "size": 10044,
+      "symbol_count": 104
+    },
+    "backend/src/services/intello/games/flashcard/parser.rs": {
+      "path": "backend/src/services/intello/games/flashcard/parser.rs",
+      "mtime": 1770824052,
+      "size": 3028,
+      "symbol_count": 7
+    },
+    "leptos-app/src/state/mod.rs": {
+      "path": "leptos-app/src/state/mod.rs",
+      "mtime": 1771277209,
+      "size": 268,
+      "symbol_count": 7
+    },
+    "backend/doc/architecture/end-to-end-feature.md": {
+      "path": "backend/doc/architecture/end-to-end-feature.md",
+      "mtime": 1767644381,
+      "size": 13975,
+      "symbol_count": 33
+    },
+    "backend/src/http_api/handlers/intello/fill_blank.rs": {
+      "path": "backend/src/http_api/handlers/intello/fill_blank.rs",
+      "mtime": 1770820651,
+      "size": 4108,
+      "symbol_count": 3
+    },
+    "leptos-app/src/pages/login/mod.rs": {
+      "path": "leptos-app/src/pages/login/mod.rs",
+      "mtime": 1769272854,
+      "size": 62,
+      "symbol_count": 2
+    },
+    "backend/src/services/intello/document_extractor/document_extractor_utils.rs": {
+      "path": "backend/src/services/intello/document_extractor/document_extractor_utils.rs",
+      "mtime": 1770823940,
+      "size": 3206,
+      "symbol_count": 8
+    },
+    "leptos-app/src/components/ui/textarea/mod.rs": {
+      "path": "leptos-app/src/components/ui/textarea/mod.rs",
+      "mtime": 1770239375,
+      "size": 43,
+      "symbol_count": 1
+    },
+    "dioxus-app/src/pages/intello/qcm/mod.rs": {
+      "path": "dioxus-app/src/pages/intello/qcm/mod.rs",
+      "mtime": 1772032501,
+      "size": 308,
+      "symbol_count": 8
+    },
+    "dioxus-app/src/components/intello/course/session_card.rs": {
+      "path": "dioxus-app/src/components/intello/course/session_card.rs",
+      "mtime": 1772032546,
+      "size": 1809,
+      "symbol_count": 1
+    },
+    "dioxus-app/src/components/intello/keywords/mod.rs": {
+      "path": "dioxus-app/src/components/intello/keywords/mod.rs",
+      "mtime": 1772032454,
+      "size": 25,
+      "symbol_count": 1
+    },
+    "backend/src/infra/user/service.rs": {
+      "path": "backend/src/infra/user/service.rs",
+      "mtime": 1770816297,
+      "size": 463,
+      "symbol_count": 9
+    },
+    "leptos-app/src/state/user_apps.rs": {
+      "path": "leptos-app/src/state/user_apps.rs",
+      "mtime": 1771774853,
+      "size": 3849,
+      "symbol_count": 26
+    },
+    "backend/src/services/intello/course/service/plan_service.rs": {
+      "path": "backend/src/services/intello/course/service/plan_service.rs",
+      "mtime": 1770822555,
+      "size": 2202,
+      "symbol_count": 3
+    },
+    "dioxus-app/src/components/dashboard/app_card.rs": {
+      "path": "dioxus-app/src/components/dashboard/app_card.rs",
+      "mtime": 1772032269,
+      "size": 1685,
+      "symbol_count": 2
+    },
+    "backend/src/tests/intello/course/mod.rs": {
+      "path": "backend/src/tests/intello/course/mod.rs",
+      "mtime": 1770816301,
+      "size": 37,
+      "symbol_count": 3
+    },
+    "leptos-app/src/pages/intello/flashcards/flashcard_list.rs": {
+      "path": "leptos-app/src/pages/intello/flashcards/flashcard_list.rs",
+      "mtime": 1771277298,
+      "size": 632,
+      "symbol_count": 1
+    },
+    "backend/src/services/intello/games/shared/mod.rs": {
+      "path": "backend/src/services/intello/games/shared/mod.rs",
+      "mtime": 1770816305,
+      "size": 90,
+      "symbol_count": 3
+    },
+    "backend/doc/apps/intello/fill_blank_service.md": {
+      "path": "backend/doc/apps/intello/fill_blank_service.md",
+      "mtime": 1767644381,
+      "size": 1112,
+      "symbol_count": 5
+    },
+    "backend/src/services/auth/error_domain.rs": {
+      "path": "backend/src/services/auth/error_domain.rs",
+      "mtime": 1770823906,
+      "size": 6259,
+      "symbol_count": 36
+    },
+    "Pyckx-frontend/doc/architecture.md": {
+      "path": "Pyckx-frontend/doc/architecture.md",
+      "mtime": 1767644381,
+      "size": 5768,
+      "symbol_count": 17
+    },
+    "backend/src/services/intello/course/service/section_service.rs": {
+      "path": "backend/src/services/intello/course/service/section_service.rs",
+      "mtime": 1770822574,
+      "size": 2601,
+      "symbol_count": 3
+    },
+    "backend/src/infra/supabase/qcm/repository.rs": {
+      "path": "backend/src/infra/supabase/qcm/repository.rs",
+      "mtime": 1770816298,
+      "size": 13645,
+      "symbol_count": 28
+    },
+    "backend/src/services/intello/app/games_registry_domain.rs": {
+      "path": "backend/src/services/intello/app/games_registry_domain.rs",
+      "mtime": 1770823981,
+      "size": 3757,
+      "symbol_count": 18
+    },
+    "backend/src/http_api/utils/internal/error.rs": {
+      "path": "backend/src/http_api/utils/internal/error.rs",
+      "mtime": 1770824046,
+      "size": 2054,
+      "symbol_count": 21
+    },
+    "backend/src/services/intello/course/prompt/section_prompt.rs": {
+      "path": "backend/src/services/intello/course/prompt/section_prompt.rs",
+      "mtime": 1770824144,
+      "size": 6409,
+      "symbol_count": 7
+    },
+    "backend/src/services/intello/games/mod.rs": {
+      "path": "backend/src/services/intello/games/mod.rs",
+      "mtime": 1770816305,
+      "size": 197,
+      "symbol_count": 9
+    },
+    "backend/src/services/intello/games/order_phrase/domain.rs": {
+      "path": "backend/src/services/intello/games/order_phrase/domain.rs",
+      "mtime": 1770816305,
+      "size": 2321,
+      "symbol_count": 19
+    },
+    "dioxus-app/src/api/keywords.rs": {
+      "path": "dioxus-app/src/api/keywords.rs",
+      "mtime": 1772032110,
+      "size": 626,
+      "symbol_count": 3
+    },
+    "backend/src/services/intello/games/keywords/parser.rs": {
+      "path": "backend/src/services/intello/games/keywords/parser.rs",
+      "mtime": 1770824069,
+      "size": 3806,
+      "symbol_count": 7
+    },
+    "backend/src/services/intello/crud/crud_service.rs": {
+      "path": "backend/src/services/intello/crud/crud_service.rs",
+      "mtime": 1770823994,
+      "size": 3572,
+      "symbol_count": 9
+    },
+    "dioxus-app/src/pages/intello/order_phrases/mod.rs": {
+      "path": "dioxus-app/src/pages/intello/order_phrases/mod.rs",
+      "mtime": 1772032604,
+      "size": 257,
+      "symbol_count": 4
+    },
+    "dioxus-app/src/components/intello/shared/generate_form.rs": {
+      "path": "dioxus-app/src/components/intello/shared/generate_form.rs",
+      "mtime": 1772035677,
+      "size": 6343,
+      "symbol_count": 10
+    },
+    "dioxus-app/src/domain/true_false_types.rs": {
+      "path": "dioxus-app/src/domain/true_false_types.rs",
+      "mtime": 1772033078,
+      "size": 2342,
+      "symbol_count": 28
+    },
+    "leptos-app/src/components/intello/manual_qcm_form.rs": {
+      "path": "leptos-app/src/components/intello/manual_qcm_form.rs",
+      "mtime": 1771320502,
+      "size": 15090,
+      "symbol_count": 16
+    },
+    "leptos-app/src/pages/vitrine/components/section_header.rs": {
+      "path": "leptos-app/src/pages/vitrine/components/section_header.rs",
+      "mtime": 1770930342,
+      "size": 563,
+      "symbol_count": 1
+    },
+    "leptos-app/src/pages/intello/keywords/mod.rs": {
+      "path": "leptos-app/src/pages/intello/keywords/mod.rs",
+      "mtime": 1770841266,
+      "size": 186,
+      "symbol_count": 3
+    },
+    "backend/src/services/app_registry/mod.rs": {
+      "path": "backend/src/services/app_registry/mod.rs",
+      "mtime": 1770816305,
+      "size": 578,
+      "symbol_count": 4
+    },
+    "dioxus-app/src/components/ui/empty_state/mod.rs": {
+      "path": "dioxus-app/src/components/ui/empty_state/mod.rs",
+      "mtime": 1772032510,
+      "size": 41,
+      "symbol_count": 1
+    },
+    "dioxus-app/src/api/flashcards.rs": {
+      "path": "dioxus-app/src/api/flashcards.rs",
+      "mtime": 1772032093,
+      "size": 1681,
+      "symbol_count": 6
+    },
+    "backend/doc/deployment/frontend.md": {
+      "path": "backend/doc/deployment/frontend.md",
+      "mtime": 1767644381,
+      "size": 5084,
+      "symbol_count": 29
+    },
+    "backend/src/http_api/data_transfer_object/apps/mod.rs": {
+      "path": "backend/src/http_api/data_transfer_object/apps/mod.rs",
+      "mtime": 1770816300,
+      "size": 297,
+      "symbol_count": 4
+    },
+    "dioxus-app/src/components/ui/loading_boundary.rs": {
+      "path": "dioxus-app/src/components/ui/loading_boundary.rs",
+      "mtime": 1772032612,
+      "size": 739,
+      "symbol_count": 2
+    },
+    "leptos-app/src/lib.rs": {
+      "path": "leptos-app/src/lib.rs",
+      "mtime": 1771158468,
+      "size": 175,
+      "symbol_count": 6
+    },
+    "backend/src/infra/database/qcm/mod.rs": {
+      "path": "backend/src/infra/database/qcm/mod.rs",
+      "mtime": 1770816296,
+      "size": 73,
+      "symbol_count": 2
+    },
+    "leptos-app/src/components/ui/toast/toast.rs": {
+      "path": "leptos-app/src/components/ui/toast/toast.rs",
+      "mtime": 1771535803,
+      "size": 5683,
+      "symbol_count": 37
+    },
+    "backend/src/services/intello/study_session/mod.rs": {
+      "path": "backend/src/services/intello/study_session/mod.rs",
+      "mtime": 1770816304,
+      "size": 61,
+      "symbol_count": 2
+    },
+    "backend/src/services/intello/course/service/assembly_service.rs": {
+      "path": "backend/src/services/intello/course/service/assembly_service.rs",
+      "mtime": 1770816303,
+      "size": 3242,
+      "symbol_count": 2
+    },
+    "dioxus-app/src/api/mod.rs": {
+      "path": "dioxus-app/src/api/mod.rs",
+      "mtime": 1772032041,
+      "size": 392,
+      "symbol_count": 17
+    },
+    "leptos-app/tests/wasm_integration.rs": {
+      "path": "leptos-app/tests/wasm_integration.rs",
+      "mtime": 1770897840,
+      "size": 2042,
+      "symbol_count": 6
+    },
+    "leptos-app/src/api/flashcards.rs": {
+      "path": "leptos-app/src/api/flashcards.rs",
+      "mtime": 1771441866,
+      "size": 1681,
+      "symbol_count": 6
+    },
+    "backend/src/services/intello/games/qcm/service.rs": {
+      "path": "backend/src/services/intello/games/qcm/service.rs",
+      "mtime": 1770822667,
+      "size": 9793,
+      "symbol_count": 16
+    },
+    "backend/src/tests/app_registry/helpers.rs": {
+      "path": "backend/src/tests/app_registry/helpers.rs",
+      "mtime": 1770816301,
+      "size": 200,
+      "symbol_count": 2
+    },
+    "leptos-app/src/api/true_false.rs": {
+      "path": "leptos-app/src/api/true_false.rs",
+      "mtime": 1771441691,
+      "size": 663,
+      "symbol_count": 3
+    },
+    "leptos-app/src/components/intello/shared/mod.rs": {
+      "path": "leptos-app/src/components/intello/shared/mod.rs",
+      "mtime": 1771336740,
+      "size": 234,
+      "symbol_count": 10
+    },
+    "backend/src/infra/openrouter/mod.rs": {
+      "path": "backend/src/infra/openrouter/mod.rs",
+      "mtime": 1770816297,
+      "size": 394,
+      "symbol_count": 5
+    },
+    "backend/doc/db_shema/order_phrase.txt": {
+      "path": "backend/doc/db_shema/order_phrase.txt",
+      "mtime": 1767644381,
+      "size": 3486,
+      "symbol_count": 1
+    },
+    "dioxus-app/src/components/ui/textarea/mod.rs": {
+      "path": "dioxus-app/src/components/ui/textarea/mod.rs",
+      "mtime": 1772032293,
+      "size": 35,
+      "symbol_count": 1
+    },
+    "backend/src/http_api/middlewares/rate_limit/store.rs": {
+      "path": "backend/src/http_api/middlewares/rate_limit/store.rs",
+      "mtime": 1770823884,
+      "size": 12367,
+      "symbol_count": 60
+    },
+    "dioxus-app/src/state/palette_provider.rs": {
+      "path": "dioxus-app/src/state/palette_provider.rs",
+      "mtime": 1772032170,
+      "size": 1201,
+      "symbol_count": 3
+    },
+    "backend/src/http_api/data_transfer_object/collection/conversion.rs": {
+      "path": "backend/src/http_api/data_transfer_object/collection/conversion.rs",
+      "mtime": 1770823935,
+      "size": 7442,
+      "symbol_count": 42
+    },
+    "backend/src/services/intello/course/prompt/plan_prompt.rs": {
+      "path": "backend/src/services/intello/course/prompt/plan_prompt.rs",
+      "mtime": 1770824133,
+      "size": 3457,
+      "symbol_count": 6
+    },
+    "backend/src/services/intello/games/open_question/parser.rs": {
+      "path": "backend/src/services/intello/games/open_question/parser.rs",
+      "mtime": 1770824094,
+      "size": 3457,
+      "symbol_count": 7
+    },
+    "backend/src/services/intello/games/qcm/prompt.rs": {
+      "path": "backend/src/services/intello/games/qcm/prompt.rs",
+      "mtime": 1771753660,
+      "size": 4924,
+      "symbol_count": 2
+    },
+    "dioxus-app/src/components/intello/course/course_card.rs": {
+      "path": "dioxus-app/src/components/intello/course/course_card.rs",
+      "mtime": 1772032541,
+      "size": 2031,
+      "symbol_count": 1
+    },
+    "leptos-app/src/components/ui/hero_banner/mod.rs": {
+      "path": "leptos-app/src/components/ui/hero_banner/mod.rs",
+      "mtime": 1771184142,
+      "size": 41,
+      "symbol_count": 1
+    },
+    "dioxus-app/src/state/palette_dom.rs": {
+      "path": "dioxus-app/src/state/palette_dom.rs",
+      "mtime": 1772032137,
+      "size": 4107,
+      "symbol_count": 15
+    },
+    "backend/src/services/intello/course/service/generation.rs": {
+      "path": "backend/src/services/intello/course/service/generation.rs",
+      "mtime": 1770820651,
+      "size": 3713,
+      "symbol_count": 4
+    },
+    "dioxus-app/src/domain/course_types.rs": {
+      "path": "dioxus-app/src/domain/course_types.rs",
+      "mtime": 1772033078,
+      "size": 6855,
+      "symbol_count": 93
+    },
+    "backend/src/services/intello/games/fill_blank/mod.rs": {
+      "path": "backend/src/services/intello/games/fill_blank/mod.rs",
+      "mtime": 1770816305,
+      "size": 134,
+      "symbol_count": 4
+    },
+    "backend/src/services/intello/ai_usage/ai_usage_service.rs": {
+      "path": "backend/src/services/intello/ai_usage/ai_usage_service.rs",
+      "mtime": 1770822667,
+      "size": 3040,
+      "symbol_count": 8
+    },
+    "backend/src/http_api/handlers/user/helpers.rs": {
+      "path": "backend/src/http_api/handlers/user/helpers.rs",
+      "mtime": 1770816300,
+      "size": 321,
+      "symbol_count": 2
+    },
+    "leptos-app/src/components/intello/course/session_card.rs": {
+      "path": "leptos-app/src/components/intello/course/session_card.rs",
+      "mtime": 1771189125,
+      "size": 1464,
+      "symbol_count": 1
+    },
+    "backend/src/services/intello/games/order_phrase/mod.rs": {
+      "path": "backend/src/services/intello/games/order_phrase/mod.rs",
+      "mtime": 1770816305,
+      "size": 138,
+      "symbol_count": 4
+    },
+    "backend/src/services/app_registry/registry_service.rs": {
+      "path": "backend/src/services/app_registry/registry_service.rs",
+      "mtime": 1770816305,
+      "size": 6842,
+      "symbol_count": 33
+    },
+    "backend/src/infra/supabase/true_false/repository.rs": {
+      "path": "backend/src/infra/supabase/true_false/repository.rs",
+      "mtime": 1770816297,
+      "size": 4945,
+      "symbol_count": 18
+    },
+    "leptos-app/src/pages/vitrine/mod.rs": {
+      "path": "leptos-app/src/pages/vitrine/mod.rs",
+      "mtime": 1768850357,
+      "size": 66,
+      "symbol_count": 3
+    },
+    "backend/src/infra/user/user_id.rs": {
+      "path": "backend/src/infra/user/user_id.rs",
+      "mtime": 1770823960,
+      "size": 2739,
+      "symbol_count": 35
+    },
+    "backend/src/http_api/data_transfer_object/intello/true_false/response.rs": {
+      "path": "backend/src/http_api/data_transfer_object/intello/true_false/response.rs",
+      "mtime": 1770816299,
+      "size": 1180,
+      "symbol_count": 24
+    },
+    "backend/src/http_api/data_transfer_object/intello/validation.rs": {
+      "path": "backend/src/http_api/data_transfer_object/intello/validation.rs",
+      "mtime": 1770823979,
+      "size": 5157,
+      "symbol_count": 22
+    },
+    "backend/src/http_api/handlers/intello/qcm_handlers.rs": {
+      "path": "backend/src/http_api/handlers/intello/qcm_handlers.rs",
+      "mtime": 1770820651,
+      "size": 5699,
+      "symbol_count": 6
+    },
+    "leptos-app/src/pages/vitrine/components/mod.rs": {
+      "path": "leptos-app/src/pages/vitrine/components/mod.rs",
+      "mtime": 1771269265,
+      "size": 99,
+      "symbol_count": 1
+    },
+    "dioxus-app/src/components/intello/course/mod.rs": {
+      "path": "dioxus-app/src/components/intello/course/mod.rs",
+      "mtime": 1772032514,
+      "size": 279,
+      "symbol_count": 5
+    },
+    "dioxus-app/src/pages/intello/qcm/quick_form.rs": {
+      "path": "dioxus-app/src/pages/intello/qcm/quick_form.rs",
+      "mtime": 1772035326,
+      "size": 5113,
+      "symbol_count": 3
+    },
+    "leptos-app/src/components/top_bar/page_nav.rs": {
+      "path": "leptos-app/src/components/top_bar/page_nav.rs",
+      "mtime": 1771694596,
+      "size": 4947,
+      "symbol_count": 5
+    },
+    "backend/src/services/intello/ai_response/true_false.rs": {
+      "path": "backend/src/services/intello/ai_response/true_false.rs",
+      "mtime": 1770816304,
+      "size": 322,
+      "symbol_count": 7
+    },
+    "leptos-app/src/domain/app_registry.rs": {
+      "path": "leptos-app/src/domain/app_registry.rs",
+      "mtime": 1771689023,
+      "size": 1726,
+      "symbol_count": 14
+    },
+    "backend/src/tests/intello/course/service/assembly_service_tests.rs": {
+      "path": "backend/src/tests/intello/course/service/assembly_service_tests.rs",
+      "mtime": 1770816301,
+      "size": 1483,
+      "symbol_count": 1
+    },
+    "backend/doc/apps/intello/keywords_domain.md": {
+      "path": "backend/doc/apps/intello/keywords_domain.md",
+      "mtime": 1767644381,
+      "size": 771,
+      "symbol_count": 3
+    },
+    "backend/src/infra/database/study_session/trait_def.rs": {
+      "path": "backend/src/infra/database/study_session/trait_def.rs",
+      "mtime": 1770816297,
+      "size": 1052,
+      "symbol_count": 1
+    },
+    "backend/src/http_api/handlers/intello/resource_handlers.rs": {
+      "path": "backend/src/http_api/handlers/intello/resource_handlers.rs",
+      "mtime": 1770816300,
+      "size": 6278,
+      "symbol_count": 34
+    },
+    "leptos-app/src/components/dashboard/welcome_header.rs": {
+      "path": "leptos-app/src/components/dashboard/welcome_header.rs",
+      "mtime": 1771184249,
+      "size": 850,
+      "symbol_count": 1
+    },
+    "backend/src/http_api/handlers/apps/user_apps.rs": {
+      "path": "backend/src/http_api/handlers/apps/user_apps.rs",
+      "mtime": 1770816300,
+      "size": 1873,
+      "symbol_count": 4
+    },
+    "leptos-app/src/pages/intello/qcm/qcm_create.rs": {
+      "path": "leptos-app/src/pages/intello/qcm/qcm_create.rs",
+      "mtime": 1771185616,
+      "size": 761,
+      "symbol_count": 1
+    },
+    "dioxus-app/src/components/ui/icon/mod.rs": {
+      "path": "dioxus-app/src/components/ui/icon/mod.rs",
+      "mtime": 1772032330,
+      "size": 27,
+      "symbol_count": 1
+    },
+    "backend/src/services/collection/types_domain.rs": {
+      "path": "backend/src/services/collection/types_domain.rs",
+      "mtime": 1770816302,
+      "size": 1260,
+      "symbol_count": 13
+    },
+    "backend/src/http_api/handlers/auth/login.rs": {
+      "path": "backend/src/http_api/handlers/auth/login.rs",
+      "mtime": 1770816300,
+      "size": 1116,
+      "symbol_count": 2
+    },
+    "dioxus-app/src/components/ui/select/select.rs": {
+      "path": "dioxus-app/src/components/ui/select/select.rs",
+      "mtime": 1772032828,
+      "size": 3870,
+      "symbol_count": 12
+    },
+    "leptos-app/src/pages/intello/qcm/mod.rs": {
+      "path": "leptos-app/src/pages/intello/qcm/mod.rs",
+      "mtime": 1771534445,
+      "size": 286,
+      "symbol_count": 7
+    },
+    "leptos-app/src/components/ui/progress/mod.rs": {
+      "path": "leptos-app/src/components/ui/progress/mod.rs",
+      "mtime": 1770840571,
+      "size": 35,
+      "symbol_count": 1
+    },
+    "leptos-app/src/pages/intello/courses/course_list.rs": {
+      "path": "leptos-app/src/pages/intello/courses/course_list.rs",
+      "mtime": 1771442242,
+      "size": 4928,
+      "symbol_count": 2
+    },
+    "leptos-app/src/components/intello/open_question/mod.rs": {
+      "path": "leptos-app/src/components/intello/open_question/mod.rs",
+      "mtime": 1770840961,
+      "size": 30,
+      "symbol_count": 1
+    },
+    "backend/src/infra/supabase/ai_usage/mod.rs": {
+      "path": "backend/src/infra/supabase/ai_usage/mod.rs",
+      "mtime": 1770816298,
+      "size": 105,
+      "symbol_count": 2
+    },
+    "backend/src/infra/supabase/app/repository.rs": {
+      "path": "backend/src/infra/supabase/app/repository.rs",
+      "mtime": 1770816298,
+      "size": 8708,
+      "symbol_count": 23
+    },
+    "backend/src/services/intello/games/open_question/mod.rs": {
+      "path": "backend/src/services/intello/games/open_question/mod.rs",
+      "mtime": 1770816305,
+      "size": 174,
+      "symbol_count": 6
+    },
+    "dioxus-app/src/domain/collection_types.rs": {
+      "path": "dioxus-app/src/domain/collection_types.rs",
+      "mtime": 1772033078,
+      "size": 3324,
+      "symbol_count": 36
+    },
+    "backend/src/http_api/utils/validation/error.rs": {
+      "path": "backend/src/http_api/utils/validation/error.rs",
+      "mtime": 1770824040,
+      "size": 2330,
+      "symbol_count": 23
+    },
+    "leptos-app/src/components/collection/dvd_card.rs": {
+      "path": "leptos-app/src/components/collection/dvd_card.rs",
+      "mtime": 1771187403,
+      "size": 2288,
+      "symbol_count": 1
+    },
+    "backend/src/infra/supabase/client/types.rs": {
+      "path": "backend/src/infra/supabase/client/types.rs",
+      "mtime": 1770816298,
+      "size": 2473,
+      "symbol_count": 32
+    },
+    "backend/src/services/intello/course/parser/section_parser.rs": {
+      "path": "backend/src/services/intello/course/parser/section_parser.rs",
+      "mtime": 1770824003,
+      "size": 6340,
+      "symbol_count": 8
+    },
+    "backend/src/http_api/handlers/intello/course_crud.rs": {
+      "path": "backend/src/http_api/handlers/intello/course_crud.rs",
+      "mtime": 1770822109,
+      "size": 14080,
+      "symbol_count": 65
+    },
+    "backend/src/infra/database/open_question/trait.rs": {
+      "path": "backend/src/infra/database/open_question/trait.rs",
+      "mtime": 1770816297,
+      "size": 733,
+      "symbol_count": 2
+    },
+    "leptos-app/src/pages/intello/qcm/qcm_list.rs": {
+      "path": "leptos-app/src/pages/intello/qcm/qcm_list.rs",
+      "mtime": 1771531454,
+      "size": 856,
+      "symbol_count": 1
+    },
+    "backend/src/services/intello/tracking/tracking_service.rs": {
+      "path": "backend/src/services/intello/tracking/tracking_service.rs",
+      "mtime": 1770822180,
+      "size": 258,
+      "symbol_count": 1
+    },
+    "backend/tests/dvd_count_test.rs": {
+      "path": "backend/tests/dvd_count_test.rs",
+      "mtime": 1770828024,
+      "size": 1544,
+      "symbol_count": 6
+    },
+    "backend/src/services/intello/ai_response/flashcard.rs": {
+      "path": "backend/src/services/intello/ai_response/flashcard.rs",
+      "mtime": 1770816304,
+      "size": 267,
+      "symbol_count": 6
+    },
+    "backend/src/services/intello/games/shared/parsing.rs": {
+      "path": "backend/src/services/intello/games/shared/parsing.rs",
+      "mtime": 1770824114,
+      "size": 2280,
+      "symbol_count": 6
+    },
+    "leptos-app/src/components/intello/qcm/mod.rs": {
+      "path": "leptos-app/src/components/intello/qcm/mod.rs",
+      "mtime": 1770840905,
+      "size": 20,
+      "symbol_count": 1
+    },
+    "leptos-app/src/pages/register/register.rs": {
+      "path": "leptos-app/src/pages/register/register.rs",
+      "mtime": 1771278879,
+      "size": 8984,
+      "symbol_count": 15
+    },
+    "backend/doc/apps/intello/ai-models.md": {
+      "path": "backend/doc/apps/intello/ai-models.md",
+      "mtime": 1767644381,
+      "size": 1877,
+      "symbol_count": 6
+    },
+    "backend/src/tests/intello/course/parser/section_parser_tests.rs": {
+      "path": "backend/src/tests/intello/course/parser/section_parser_tests.rs",
+      "mtime": 1770816301,
+      "size": 1242,
+      "symbol_count": 2
+    },
+    "backend/src/tests/openrouter/service_tests.rs": {
+      "path": "backend/src/tests/openrouter/service_tests.rs",
+      "mtime": 1770816301,
+      "size": 5343,
+      "symbol_count": 14
+    },
+    "backend/src/infra/supabase/study_session/mod.rs": {
+      "path": "backend/src/infra/supabase/study_session/mod.rs",
+      "mtime": 1770816298,
+      "size": 68,
+      "symbol_count": 1
+    },
+    "backend/src/infra/database/dvd/mod.rs": {
+      "path": "backend/src/infra/database/dvd/mod.rs",
+      "mtime": 1770816297,
+      "size": 123,
+      "symbol_count": 3
+    },
+    "backend/src/infra/database/dvd/types.rs": {
+      "path": "backend/src/infra/database/dvd/types.rs",
+      "mtime": 1770824110,
+      "size": 6207,
+      "symbol_count": 41
+    },
+    "leptos-app/src/pages/intello/flashcards/flashcard_play.rs": {
+      "path": "leptos-app/src/pages/intello/flashcards/flashcard_play.rs",
+      "mtime": 1771277399,
+      "size": 1108,
+      "symbol_count": 1
+    },
+    "leptos-app/src/pages/intello/fill_blanks/fill_blank_generate.rs": {
+      "path": "leptos-app/src/pages/intello/fill_blanks/fill_blank_generate.rs",
+      "mtime": 1771157773,
+      "size": 808,
+      "symbol_count": 1
+    },
+    "leptos-app/src/api/courses.rs": {
+      "path": "leptos-app/src/api/courses.rs",
+      "mtime": 1771883392,
+      "size": 2326,
+      "symbol_count": 10
+    },
+    "leptos-app/src/components/intello/shared/set_list.rs": {
+      "path": "leptos-app/src/components/intello/shared/set_list.rs",
+      "mtime": 1771190795,
+      "size": 1717,
+      "symbol_count": 1
+    },
+    "leptos-app/src/pages/intello/courses/session_create.rs": {
+      "path": "leptos-app/src/pages/intello/courses/session_create.rs",
+      "mtime": 1771279008,
+      "size": 5088,
+      "symbol_count": 1
+    },
+    "backend/src/services/intello/course/prompt/mod.rs": {
+      "path": "backend/src/services/intello/course/prompt/mod.rs",
+      "mtime": 1770816303,
+      "size": 319,
+      "symbol_count": 4
+    },
+    "leptos-app/src/domain/mod.rs": {
+      "path": "leptos-app/src/domain/mod.rs",
+      "mtime": 1771689028,
+      "size": 489,
+      "symbol_count": 18
+    },
+    "backend/src/shared/constants/urls/supabase.rs": {
+      "path": "backend/src/shared/constants/urls/supabase.rs",
+      "mtime": 1770816302,
+      "size": 412,
+      "symbol_count": 4
+    },
+    "Pyckx-frontend/doc/api-configuration.md": {
+      "path": "Pyckx-frontend/doc/api-configuration.md",
+      "mtime": 1767644381,
+      "size": 2006,
+      "symbol_count": 6
+    },
+    "leptos-app/src/domain/admin_types.rs": {
+      "path": "leptos-app/src/domain/admin_types.rs",
+      "mtime": 1770895297,
+      "size": 1585,
+      "symbol_count": 16
+    },
+    "backend/doc/db_shema/true_false.txt": {
+      "path": "backend/doc/db_shema/true_false.txt",
+      "mtime": 1767644381,
+      "size": 2378,
+      "symbol_count": 1
+    },
+    "dioxus-app/src/components/ui/modal/mod.rs": {
+      "path": "dioxus-app/src/components/ui/modal/mod.rs",
+      "mtime": 1772032427,
+      "size": 29,
+      "symbol_count": 1
+    },
+    "leptos-app/src/components/ui/loading_boundary.rs": {
+      "path": "leptos-app/src/components/ui/loading_boundary.rs",
+      "mtime": 1771279224,
+      "size": 797,
+      "symbol_count": 1
+    },
+    "backend/doc/apps/intello/flashcard_service.md": {
+      "path": "backend/doc/apps/intello/flashcard_service.md",
+      "mtime": 1767644381,
+      "size": 654,
+      "symbol_count": 3
+    },
+    "dioxus-app/src/components/collection/dvd_form.rs": {
+      "path": "dioxus-app/src/components/collection/dvd_form.rs",
+      "mtime": 1772034666,
+      "size": 7454,
+      "symbol_count": 20
+    },
+    "dioxus-app/src/pages/intello/flashcards/flashcard_play.rs": {
+      "path": "dioxus-app/src/pages/intello/flashcards/flashcard_play.rs",
+      "mtime": 1772035216,
+      "size": 1200,
+      "symbol_count": 2
+    },
+    "backend/src/http_api/handlers/collection/collection_handlers.rs": {
+      "path": "backend/src/http_api/handlers/collection/collection_handlers.rs",
+      "mtime": 1771161753,
+      "size": 3419,
+      "symbol_count": 5
+    },
+    "backend/src/tests/collection/dvd_edge_cases.rs": {
+      "path": "backend/src/tests/collection/dvd_edge_cases.rs",
+      "mtime": 1770823812,
+      "size": 2884,
+      "symbol_count": 4
+    },
+    "dioxus-app/src/pages/intello/true_false/true_false_generate.rs": {
+      "path": "dioxus-app/src/pages/intello/true_false/true_false_generate.rs",
+      "mtime": 1772035236,
+      "size": 834,
+      "symbol_count": 2
+    },
+    "leptos-app/src/components/ui/tabs/mod.rs": {
+      "path": "leptos-app/src/components/ui/tabs/mod.rs",
+      "mtime": 1770840580,
+      "size": 27,
+      "symbol_count": 1
+    },
+    "backend/src/services/intello/ai_response/open_question.rs": {
+      "path": "backend/src/services/intello/ai_response/open_question.rs",
+      "mtime": 1770816304,
+      "size": 328,
+      "symbol_count": 7
+    },
+    "leptos-app/src/components/ui/spinner/spinner.rs": {
+      "path": "leptos-app/src/components/ui/spinner/spinner.rs",
+      "mtime": 1770840549,
+      "size": 949,
+      "symbol_count": 5
+    },
+    "backend/src/http_api/data_transfer_object/intello/true_false/conversion.rs": {
+      "path": "backend/src/http_api/data_transfer_object/intello/true_false/conversion.rs",
+      "mtime": 1770824032,
+      "size": 1632,
+      "symbol_count": 7
+    },
+    "backend/src/services/intello/course/service/resources.rs": {
+      "path": "backend/src/services/intello/course/service/resources.rs",
+      "mtime": 1770822438,
+      "size": 4084,
+      "symbol_count": 14
+    },
+    "backend/src/services/intello/app/mod.rs": {
+      "path": "backend/src/services/intello/app/mod.rs",
+      "mtime": 1770816303,
+      "size": 282,
+      "symbol_count": 2
+    },
+    "backend/src/infra/database/flashcard/mod.rs": {
+      "path": "backend/src/infra/database/flashcard/mod.rs",
+      "mtime": 1770816297,
+      "size": 85,
+      "symbol_count": 2
+    },
+    "backend/src/tests/intello/course/parser/ideas_parser_tests.rs": {
+      "path": "backend/src/tests/intello/course/parser/ideas_parser_tests.rs",
+      "mtime": 1770816301,
+      "size": 962,
+      "symbol_count": 3
+    },
+    "backend/src/services/intello/course/domain/synthesis_domain.rs": {
+      "path": "backend/src/services/intello/course/domain/synthesis_domain.rs",
+      "mtime": 1770816303,
+      "size": 504,
+      "symbol_count": 4
+    },
+    "dioxus-app/src/pages/intello/fill_blanks/mod.rs": {
+      "path": "dioxus-app/src/pages/intello/fill_blanks/mod.rs",
+      "mtime": 1772032616,
+      "size": 237,
+      "symbol_count": 4
+    },
+    "dioxus-app/src/api/open_questions.rs": {
+      "path": "dioxus-app/src/api/open_questions.rs",
+      "mtime": 1772032114,
+      "size": 938,
+      "symbol_count": 4
+    },
+    "dioxus-app/src/components/ui/badge/mod.rs": {
+      "path": "dioxus-app/src/components/ui/badge/mod.rs",
+      "mtime": 1772032414,
+      "size": 29,
+      "symbol_count": 1
+    },
+    "leptos-app/src/components/intello/course/mod.rs": {
+      "path": "leptos-app/src/components/intello/course/mod.rs",
+      "mtime": 1770841498,
+      "size": 279,
+      "symbol_count": 5
+    },
+    "dioxus-app/src/pages/collection/collection.rs": {
+      "path": "dioxus-app/src/pages/collection/collection.rs",
+      "mtime": 1772035751,
+      "size": 3935,
+      "symbol_count": 2
+    },
+    "backend/src/services/intello/course/parser/module_parser.rs": {
+      "path": "backend/src/services/intello/course/parser/module_parser.rs",
+      "mtime": 1770823987,
+      "size": 4874,
+      "symbol_count": 9
+    },
+    "dioxus-app/src/components/ui/select/mod.rs": {
+      "path": "dioxus-app/src/components/ui/select/mod.rs",
+      "mtime": 1772032309,
+      "size": 31,
+      "symbol_count": 1
+    },
+    "dioxus-app/src/pages/intello/courses/course_create.rs": {
+      "path": "dioxus-app/src/pages/intello/courses/course_create.rs",
+      "mtime": 1772034688,
+      "size": 2937,
+      "symbol_count": 2
+    },
+    "dioxus-app/src/components/dashboard/app_store.rs": {
+      "path": "dioxus-app/src/components/dashboard/app_store.rs",
+      "mtime": 1772032260,
+      "size": 3324,
+      "symbol_count": 3
+    },
+    "dioxus-app/src/components/ui/button/mod.rs": {
+      "path": "dioxus-app/src/components/ui/button/mod.rs",
+      "mtime": 1772032254,
+      "size": 31,
+      "symbol_count": 1
+    },
+    "backend/src/services/intello/mod.rs": {
+      "path": "backend/src/services/intello/mod.rs",
+      "mtime": 1771535528,
+      "size": 2422,
+      "symbol_count": 13
+    },
+    "leptos-app/src/components/ui/empty_state/empty_state.rs": {
+      "path": "leptos-app/src/components/ui/empty_state/empty_state.rs",
+      "mtime": 1770840617,
+      "size": 1241,
+      "symbol_count": 1
+    },
+    "backend/src/infra/database/user_app/mod.rs": {
+      "path": "backend/src/infra/database/user_app/mod.rs",
+      "mtime": 1770816297,
+      "size": 82,
+      "symbol_count": 2
+    },
+    "backend/doc/db_shema/apps.txt": {
+      "path": "backend/doc/db_shema/apps.txt",
+      "mtime": 1767644381,
+      "size": 362,
+      "symbol_count": 1
+    },
+    "leptos-app/src/components/ui/toast/mod.rs": {
+      "path": "leptos-app/src/components/ui/toast/mod.rs",
+      "mtime": 1770840542,
+      "size": 29,
+      "symbol_count": 1
+    },
+    "dioxus-app/src/components/ui/input/input.rs": {
+      "path": "dioxus-app/src/components/ui/input/input.rs",
+      "mtime": 1772033040,
+      "size": 3043,
+      "symbol_count": 4
+    },
+    "backend/src/services/intello/learn_mode/learn_mode_service.rs": {
+      "path": "backend/src/services/intello/learn_mode/learn_mode_service.rs",
+      "mtime": 1770822446,
+      "size": 6685,
+      "symbol_count": 12
+    },
+    "dioxus-app/src/pages/collection/mod.rs": {
+      "path": "dioxus-app/src/pages/collection/mod.rs",
+      "mtime": 1772032460,
+      "size": 123,
+      "symbol_count": 3
+    },
+    "dioxus-app/src/components/ui/form_field/mod.rs": {
+      "path": "dioxus-app/src/components/ui/form_field/mod.rs",
+      "mtime": 1772037116,
+      "size": 16,
+      "symbol_count": 1
+    },
+    "leptos-app/src/domain/course_types.rs": {
+      "path": "leptos-app/src/domain/course_types.rs",
+      "mtime": 1771883383,
+      "size": 6690,
+      "symbol_count": 93
+    },
+    "dioxus-app/src/domain/admin_types.rs": {
+      "path": "dioxus-app/src/domain/admin_types.rs",
+      "mtime": 1772031983,
+      "size": 1585,
+      "symbol_count": 16
+    },
+    "dioxus-app/src/components/ui/card/nav_card.rs": {
+      "path": "dioxus-app/src/components/ui/card/nav_card.rs",
+      "mtime": 1772032390,
+      "size": 1935,
+      "symbol_count": 4
+    },
+    "backend/src/infra/supabase/order_phrase/mod.rs": {
+      "path": "backend/src/infra/supabase/order_phrase/mod.rs",
+      "mtime": 1770816298,
+      "size": 113,
+      "symbol_count": 3
+    },
+    "backend/doc/db_shema/ai_usage.txt": {
+      "path": "backend/doc/db_shema/ai_usage.txt",
+      "mtime": 1767644381,
+      "size": 1248,
+      "symbol_count": 1
+    },
+    "backend/src/services/collection/dvd_domain.rs": {
+      "path": "backend/src/services/collection/dvd_domain.rs",
+      "mtime": 1770823875,
+      "size": 3647,
+      "symbol_count": 26
+    },
+    "backend/src/http_api/data_transfer_object/intello/flashcard/mod.rs": {
+      "path": "backend/src/http_api/data_transfer_object/intello/flashcard/mod.rs",
+      "mtime": 1770816299,
+      "size": 214,
+      "symbol_count": 4
+    },
+    "dioxus-app/src/components/ui/section_divider/section_divider.rs": {
+      "path": "dioxus-app/src/components/ui/section_divider/section_divider.rs",
+      "mtime": 1772032585,
+      "size": 794,
+      "symbol_count": 2
+    },
+    "backend/src/http_api/handlers/auth/helpers.rs": {
+      "path": "backend/src/http_api/handlers/auth/helpers.rs",
+      "mtime": 1770816300,
+      "size": 321,
+      "symbol_count": 2
+    },
+    "dioxus-app/src/pages/intello/true_false/true_false_list.rs": {
+      "path": "dioxus-app/src/pages/intello/true_false/true_false_list.rs",
+      "mtime": 1772035225,
+      "size": 687,
+      "symbol_count": 2
+    },
+    "backend/src/tests/app_registry/app_crud.rs": {
+      "path": "backend/src/tests/app_registry/app_crud.rs",
+      "mtime": 1770823930,
+      "size": 2719,
+      "symbol_count": 3
+    },
+    "dioxus-app/src/pages/intello/courses/session_create.rs": {
+      "path": "dioxus-app/src/pages/intello/courses/session_create.rs",
+      "mtime": 1772034683,
+      "size": 4411,
+      "symbol_count": 2
+    },
+    "dioxus-app/src/components/ui/file_upload/mod.rs": {
+      "path": "dioxus-app/src/components/ui/file_upload/mod.rs",
+      "mtime": 1772032588,
+      "size": 41,
+      "symbol_count": 1
+    },
+    "dioxus-app/src/pages/intello/qcm/qcm_list.rs": {
+      "path": "dioxus-app/src/pages/intello/qcm/qcm_list.rs",
+      "mtime": 1772035186,
+      "size": 971,
+      "symbol_count": 2
+    },
+    "dioxus-app/src/domain/game_set_trait.rs": {
+      "path": "dioxus-app/src/domain/game_set_trait.rs",
+      "mtime": 1772031983,
+      "size": 5499,
+      "symbol_count": 24
+    },
+    "backend/src/services/auth/auth_service.rs": {
+      "path": "backend/src/services/auth/auth_service.rs",
+      "mtime": 1770822429,
+      "size": 2655,
+      "symbol_count": 10
+    },
+    "backend/src/services/intello/domain/ids_domain.rs": {
+      "path": "backend/src/services/intello/domain/ids_domain.rs",
+      "mtime": 1770823834,
+      "size": 7681,
+      "symbol_count": 108
+    },
+    "backend/src/services/intello/utils/mod.rs": {
+      "path": "backend/src/services/intello/utils/mod.rs",
+      "mtime": 1770816303,
+      "size": 137,
+      "symbol_count": 1
+    },
+    "backend/doc/db_shema/collection_types.txt": {
+      "path": "backend/doc/db_shema/collection_types.txt",
+      "mtime": 1767644381,
+      "size": 685,
+      "symbol_count": 1
+    },
+    "backend/src/services/intello/games/qcm/mod.rs": {
+      "path": "backend/src/services/intello/games/qcm/mod.rs",
+      "mtime": 1771535499,
+      "size": 222,
+      "symbol_count": 6
+    },
+    "dioxus-app/src/components/intello/flashcard/flashcard_player.rs": {
+      "path": "dioxus-app/src/components/intello/flashcard/flashcard_player.rs",
+      "mtime": 1772034839,
+      "size": 5546,
+      "symbol_count": 4
+    },
+    "leptos-app/src/domain/flashcard_types.rs": {
+      "path": "leptos-app/src/domain/flashcard_types.rs",
+      "mtime": 1770895316,
+      "size": 2166,
+      "symbol_count": 28
+    },
+    "dioxus-app/src/api/helpers.rs": {
+      "path": "dioxus-app/src/api/helpers.rs",
+      "mtime": 1772032068,
+      "size": 4075,
+      "symbol_count": 10
+    },
+    "dioxus-app/src/components/ui/textarea/textarea.rs": {
+      "path": "dioxus-app/src/components/ui/textarea/textarea.rs",
+      "mtime": 1772032304,
+      "size": 3016,
+      "symbol_count": 4
+    },
+    "dioxus-app/src/domain/intello_types.rs": {
+      "path": "dioxus-app/src/domain/intello_types.rs",
+      "mtime": 1772031983,
+      "size": 3934,
+      "symbol_count": 27
+    },
+    "leptos-app/src/components/ui/badge/mod.rs": {
+      "path": "leptos-app/src/components/ui/badge/mod.rs",
+      "mtime": 1770840592,
+      "size": 29,
+      "symbol_count": 1
+    },
+    "dioxus-app/src/api/order_phrases.rs": {
+      "path": "dioxus-app/src/api/order_phrases.rs",
+      "mtime": 1772032116,
+      "size": 684,
+      "symbol_count": 3
+    },
+    "backend/doc/apps/collection/README.md": {
+      "path": "backend/doc/apps/collection/README.md",
+      "mtime": 1767644381,
+      "size": 2154,
+      "symbol_count": 9
+    },
+    "backend/src/infra/supabase/error/supabase_error.rs": {
+      "path": "backend/src/infra/supabase/error/supabase_error.rs",
+      "mtime": 1770824066,
+      "size": 9360,
+      "symbol_count": 43
+    },
+    "backend/src/http_api/data_transfer_object/intello/qcm/response.rs": {
+      "path": "backend/src/http_api/data_transfer_object/intello/qcm/response.rs",
+      "mtime": 1770824001,
+      "size": 2039,
+      "symbol_count": 31
+    },
+    "backend/tests/qcm_read_test.rs": {
+      "path": "backend/tests/qcm_read_test.rs",
+      "mtime": 1770828186,
+      "size": 1938,
+      "symbol_count": 7
+    },
+    "leptos-app/src/components/dashboard/app_card.rs": {
+      "path": "leptos-app/src/components/dashboard/app_card.rs",
+      "mtime": 1770235723,
+      "size": 901,
+      "symbol_count": 2
+    },
+    "backend/src/http_api/data_transfer_object/intello/qcm/request.rs": {
+      "path": "backend/src/http_api/data_transfer_object/intello/qcm/request.rs",
+      "mtime": 1770824013,
+      "size": 4159,
+      "symbol_count": 38
+    },
+    "backend/src/services/intello/ai_response/order_phrase.rs": {
+      "path": "backend/src/services/intello/ai_response/order_phrase.rs",
+      "mtime": 1770816304,
+      "size": 445,
+      "symbol_count": 10
+    },
+    "backend/src/services/intello/games/qcm/crud.rs": {
+      "path": "backend/src/services/intello/games/qcm/crud.rs",
+      "mtime": 1771531190,
+      "size": 3889,
+      "symbol_count": 12
+    },
+    "backend/doc/apps/intello/true_false_service.md": {
+      "path": "backend/doc/apps/intello/true_false_service.md",
+      "mtime": 1767644381,
+      "size": 699,
+      "symbol_count": 3
+    },
+    "backend/src/tests/collection/collection_lifecycle.rs": {
+      "path": "backend/src/tests/collection/collection_lifecycle.rs",
+      "mtime": 1770823756,
+      "size": 2013,
+      "symbol_count": 2
+    },
+    "backend/README.md": {
+      "path": "backend/README.md",
+      "mtime": 1767644381,
+      "size": 2299,
+      "symbol_count": 16
+    },
+    "leptos-app/src/components/intello/shared/game_generate_page.rs": {
+      "path": "leptos-app/src/components/intello/shared/game_generate_page.rs",
+      "mtime": 1771359529,
+      "size": 3262,
+      "symbol_count": 3
+    },
+    "dioxus-app/src/components/collection/dvd_list.rs": {
+      "path": "dioxus-app/src/components/collection/dvd_list.rs",
+      "mtime": 1772034667,
+      "size": 3738,
+      "symbol_count": 9
+    },
+    "dioxus-app/src/components/intello/order_phrase/mod.rs": {
+      "path": "dioxus-app/src/components/intello/order_phrase/mod.rs",
+      "mtime": 1772032476,
+      "size": 29,
+      "symbol_count": 1
+    },
+    "leptos-app/src/pages/intello/intello_home.rs": {
+      "path": "leptos-app/src/pages/intello/intello_home.rs",
+      "mtime": 1771189584,
+      "size": 2980,
+      "symbol_count": 7
+    },
+    "leptos-app/src/components/ui/form_field/mod.rs": {
+      "path": "leptos-app/src/components/ui/form_field/mod.rs",
+      "mtime": 1770847502,
+      "size": 64,
+      "symbol_count": 1
+    },
+    "backend/src/http_api/handlers/intello/keywords.rs": {
+      "path": "backend/src/http_api/handlers/intello/keywords.rs",
+      "mtime": 1770820651,
+      "size": 3929,
+      "symbol_count": 3
+    },
+    "backend/src/infra/supabase/shared/error.rs": {
+      "path": "backend/src/infra/supabase/shared/error.rs",
+      "mtime": 1770823918,
+      "size": 6436,
+      "symbol_count": 34
+    },
+    "backend/src/services/intello/course/domain/plan_domain.rs": {
+      "path": "backend/src/services/intello/course/domain/plan_domain.rs",
+      "mtime": 1770816303,
+      "size": 798,
+      "symbol_count": 9
+    },
+    "backend/tests/app_service_add_user_app_test.rs": {
+      "path": "backend/tests/app_service_add_user_app_test.rs",
+      "mtime": 1770827955,
+      "size": 2156,
+      "symbol_count": 8
+    },
+    "leptos-app/src/components/intello/shared/game_play_page.rs": {
+      "path": "leptos-app/src/components/intello/shared/game_play_page.rs",
+      "mtime": 1771359538,
+      "size": 2408,
+      "symbol_count": 3
+    },
+    "leptos-app/src/components/intello/order_phrase/mod.rs": {
+      "path": "leptos-app/src/components/intello/order_phrase/mod.rs",
+      "mtime": 1770840998,
+      "size": 29,
+      "symbol_count": 1
+    },
+    "dioxus-app/src/components/ui/modal/modal.rs": {
+      "path": "dioxus-app/src/components/ui/modal/modal.rs",
+      "mtime": 1772032443,
+      "size": 3117,
+      "symbol_count": 6
+    },
+    "backend/src/services/intello/games/keywords/domain.rs": {
+      "path": "backend/src/services/intello/games/keywords/domain.rs",
+      "mtime": 1770816305,
+      "size": 2299,
+      "symbol_count": 19
+    },
+    "dioxus-app/src/pages/vitrine/data.rs": {
+      "path": "dioxus-app/src/pages/vitrine/data.rs",
+      "mtime": 1772032303,
+      "size": 1489,
+      "symbol_count": 12
+    },
+    "dioxus-app/src/components/intello/flashcard/mod.rs": {
+      "path": "dioxus-app/src/components/intello/flashcard/mod.rs",
+      "mtime": 1772032398,
+      "size": 26,
+      "symbol_count": 1
+    },
+    "dioxus-app/src/pages/intello/qcm/qcm_create.rs": {
+      "path": "dioxus-app/src/pages/intello/qcm/qcm_create.rs",
+      "mtime": 1772032508,
+      "size": 675,
+      "symbol_count": 2
+    },
+    "leptos-app/src/api/mod.rs": {
+      "path": "leptos-app/src/api/mod.rs",
+      "mtime": 1770840709,
+      "size": 392,
+      "symbol_count": 17
+    },
+    "leptos-app/src/components/ui/spinner/mod.rs": {
+      "path": "leptos-app/src/components/ui/spinner/mod.rs",
+      "mtime": 1770840553,
+      "size": 33,
+      "symbol_count": 1
+    },
+    "backend/src/http_api/handlers/auth/mod.rs": {
+      "path": "backend/src/http_api/handlers/auth/mod.rs",
+      "mtime": 1770816300,
+      "size": 478,
+      "symbol_count": 6
+    },
+    "backend/src/infra/database/qcm/trait.rs": {
+      "path": "backend/src/infra/database/qcm/trait.rs",
+      "mtime": 1770816296,
+      "size": 835,
+      "symbol_count": 2
+    },
+    "leptos-app/src/components/ui/form_field/form_field.rs": {
+      "path": "leptos-app/src/components/ui/form_field/form_field.rs",
+      "mtime": 1770840610,
+      "size": 1036,
+      "symbol_count": 1
+    },
+    "dioxus-app/src/components/ui/card/mod.rs": {
+      "path": "dioxus-app/src/components/ui/card/mod.rs",
+      "mtime": 1772032365,
+      "size": 136,
+      "symbol_count": 4
+    },
+    "backend/src/infra/database/keywords/mod.rs": {
+      "path": "backend/src/infra/database/keywords/mod.rs",
+      "mtime": 1770816297,
+      "size": 83,
+      "symbol_count": 2
+    },
+    "backend/src/services/intello/games/shared/prompt_helpers.rs": {
+      "path": "backend/src/services/intello/games/shared/prompt_helpers.rs",
+      "mtime": 1770816305,
+      "size": 10437,
+      "symbol_count": 9
+    },
+    "dioxus-app/src/pages/admin/admin.rs": {
+      "path": "dioxus-app/src/pages/admin/admin.rs",
+      "mtime": 1772037098,
+      "size": 5708,
+      "symbol_count": 2
+    },
+    "dioxus-app/src/components/dashboard/mod.rs": {
+      "path": "dioxus-app/src/components/dashboard/mod.rs",
+      "mtime": 1772037097,
+      "size": 437,
+      "symbol_count": 7
+    },
+    "leptos-app/src/pages/intello/flashcards/flashcard_generate.rs": {
+      "path": "leptos-app/src/pages/intello/flashcards/flashcard_generate.rs",
+      "mtime": 1771157767,
+      "size": 819,
+      "symbol_count": 1
+    },
+    "dioxus-app/src/pages/login/mod.rs": {
+      "path": "dioxus-app/src/pages/login/mod.rs",
+      "mtime": 1772032372,
+      "size": 61,
+      "symbol_count": 2
+    },
+    "backend/src/infra/user/get_user_id_from_session.rs": {
+      "path": "backend/src/infra/user/get_user_id_from_session.rs",
+      "mtime": 1770816297,
+      "size": 928,
+      "symbol_count": 2
+    },
+    "backend/src/services/intello/games/flashcard/prompt.rs": {
+      "path": "backend/src/services/intello/games/flashcard/prompt.rs",
+      "mtime": 1770816305,
+      "size": 4864,
+      "symbol_count": 11
+    },
+    "leptos-app/src/components/intello/true_false/mod.rs": {
+      "path": "leptos-app/src/components/intello/true_false/mod.rs",
+      "mtime": 1770840941,
+      "size": 27,
+      "symbol_count": 1
+    },
+    "leptos-app/src/pages/intello/qcm/quick_form_options.rs": {
+      "path": "leptos-app/src/pages/intello/qcm/quick_form_options.rs",
+      "mtime": 1771534440,
+      "size": 823,
+      "symbol_count": 3
+    },
+    "backend/src/services/intello/document_extractor/mod.rs": {
+      "path": "backend/src/services/intello/document_extractor/mod.rs",
+      "mtime": 1770816302,
+      "size": 569,
+      "symbol_count": 4
+    },
+    "dioxus-app/src/api/endpoints.rs": {
+      "path": "dioxus-app/src/api/endpoints.rs",
+      "mtime": 1772032053,
+      "size": 3037,
+      "symbol_count": 26
+    },
+    "leptos-app/src/components/logo/mod.rs": {
+      "path": "leptos-app/src/components/logo/mod.rs",
+      "mtime": 1769276797,
+      "size": 58,
+      "symbol_count": 2
+    },
+    "backend/src/shared/constants/errors/mod.rs": {
+      "path": "backend/src/shared/constants/errors/mod.rs",
+      "mtime": 1770816302,
+      "size": 174,
+      "symbol_count": 2
+    },
+    "backend/src/infra/database/course/mod.rs": {
+      "path": "backend/src/infra/database/course/mod.rs",
+      "mtime": 1770816296,
+      "size": 49,
+      "symbol_count": 1
+    },
+    "backend/src/infra/session/session_error.rs": {
+      "path": "backend/src/infra/session/session_error.rs",
+      "mtime": 1770823904,
+      "size": 3088,
+      "symbol_count": 24
+    },
+    "dioxus-app/src/components/intello/qcm/mod.rs": {
+      "path": "dioxus-app/src/components/intello/qcm/mod.rs",
+      "mtime": 1772032366,
+      "size": 20,
+      "symbol_count": 1
+    },
+    "backend/src/services/intello/course/service/mod.rs": {
+      "path": "backend/src/services/intello/course/service/mod.rs",
+      "mtime": 1770816303,
+      "size": 414,
+      "symbol_count": 8
+    },
+    "leptos-app/src/components/intello/true_false/true_false_player.rs": {
+      "path": "leptos-app/src/components/intello/true_false/true_false_player.rs",
+      "mtime": 1771338352,
+      "size": 3367,
+      "symbol_count": 2
+    },
+    "Pyckx-frontend/doc/intello-app.md": {
+      "path": "Pyckx-frontend/doc/intello-app.md",
+      "mtime": 1767644381,
+      "size": 12826,
+      "symbol_count": 43
+    },
+    "leptos-app/src/pages/login/login.rs": {
+      "path": "leptos-app/src/pages/login/login.rs",
+      "mtime": 1771278862,
+      "size": 4704,
+      "symbol_count": 1
+    },
+    "dioxus-app/src/pages/login/login.rs": {
+      "path": "dioxus-app/src/pages/login/login.rs",
+      "mtime": 1772034703,
+      "size": 5214,
+      "symbol_count": 2
+    },
+    "backend/src/services/collection/mod.rs": {
+      "path": "backend/src/services/collection/mod.rs",
+      "mtime": 1770816302,
+      "size": 435,
+      "symbol_count": 8
+    },
+    "leptos-app/src/components/ui/badge/badge.rs": {
+      "path": "leptos-app/src/components/ui/badge/badge.rs",
+      "mtime": 1770840588,
+      "size": 1078,
+      "symbol_count": 7
+    },
+    "dioxus-app/src/pages/intello/open_questions/open_question_list.rs": {
+      "path": "dioxus-app/src/pages/intello/open_questions/open_question_list.rs",
+      "mtime": 1772035286,
+      "size": 719,
+      "symbol_count": 2
+    },
+    "leptos-app/src/components/ui/select/select.rs": {
+      "path": "leptos-app/src/components/ui/select/select.rs",
+      "mtime": 1771754711,
+      "size": 2751,
+      "symbol_count": 11
+    },
+    "backend/doc/database/schema.md": {
+      "path": "backend/doc/database/schema.md",
+      "mtime": 1767644381,
+      "size": 6029,
+      "symbol_count": 36
+    },
+    "leptos-app/src/domain/collection_types.rs": {
+      "path": "leptos-app/src/domain/collection_types.rs",
+      "mtime": 1770895297,
+      "size": 3280,
+      "symbol_count": 36
+    },
+    "backend/src/http_api/handlers/intello/true_false.rs": {
+      "path": "backend/src/http_api/handlers/intello/true_false.rs",
+      "mtime": 1770820651,
+      "size": 3490,
+      "symbol_count": 3
+    },
+    "backend/src/http_api/handlers/apps/manage_apps.rs": {
+      "path": "backend/src/http_api/handlers/apps/manage_apps.rs",
+      "mtime": 1770816300,
+      "size": 1766,
+      "symbol_count": 4
+    },
+    "backend/src/http_api/utils/internal/mod.rs": {
+      "path": "backend/src/http_api/utils/internal/mod.rs",
+      "mtime": 1770816300,
+      "size": 112,
+      "symbol_count": 2
+    },
+    "dioxus-app/src/main.rs": {
+      "path": "dioxus-app/src/main.rs",
+      "mtime": 1772037094,
+      "size": 9107,
+      "symbol_count": 83
+    },
+    "backend/tests/qcm_create_test.rs": {
+      "path": "backend/tests/qcm_create_test.rs",
+      "mtime": 1770828178,
+      "size": 1582,
+      "symbol_count": 6
+    },
+    "backend/src/infra/supabase/order_phrase/repository.rs": {
+      "path": "backend/src/infra/supabase/order_phrase/repository.rs",
+      "mtime": 1770816298,
+      "size": 5102,
+      "symbol_count": 19
+    },
+    "leptos-app/src/pages/intello/fill_blanks/mod.rs": {
+      "path": "leptos-app/src/pages/intello/fill_blanks/mod.rs",
+      "mtime": 1770841266,
+      "size": 207,
+      "symbol_count": 3
+    },
+    "backend/doc/apps/intello/course_domain.md": {
+      "path": "backend/doc/apps/intello/course_domain.md",
+      "mtime": 1767644381,
+      "size": 908,
+      "symbol_count": 6
+    },
+    "leptos-app/src/components/ui/skeleton/skeleton.rs": {
+      "path": "leptos-app/src/components/ui/skeleton/skeleton.rs",
+      "mtime": 1770840558,
+      "size": 1332,
+      "symbol_count": 2
+    },
+    "backend/src/services/intello/games/fill_blank/parser.rs": {
+      "path": "backend/src/services/intello/games/fill_blank/parser.rs",
+      "mtime": 1770824061,
+      "size": 3888,
+      "symbol_count": 7
+    },
+    "dioxus-app/src/pages/intello/keywords/keyword_play.rs": {
+      "path": "dioxus-app/src/pages/intello/keywords/keyword_play.rs",
+      "mtime": 1772035246,
+      "size": 1187,
+      "symbol_count": 2
+    },
+    "backend/src/services/intello/games/true_false/service.rs": {
+      "path": "backend/src/services/intello/games/true_false/service.rs",
+      "mtime": 1770822667,
+      "size": 4389,
+      "symbol_count": 6
+    },
+    "backend/src/services/intello/study_session/study_session_domain.rs": {
+      "path": "backend/src/services/intello/study_session/study_session_domain.rs",
+      "mtime": 1770816304,
+      "size": 940,
+      "symbol_count": 18
+    },
+    "dioxus-app/src/pages/intello/fill_blanks/fill_blank_list.rs": {
+      "path": "dioxus-app/src/pages/intello/fill_blanks/fill_blank_list.rs",
+      "mtime": 1772035269,
+      "size": 692,
+      "symbol_count": 2
+    },
+    "backend/doc/architecture/overview.md": {
+      "path": "backend/doc/architecture/overview.md",
+      "mtime": 1767644381,
+      "size": 14832,
+      "symbol_count": 24
+    },
+    "backend/src/http_api/data_transfer_object/intello/flashcard/response.rs": {
+      "path": "backend/src/http_api/data_transfer_object/intello/flashcard/response.rs",
+      "mtime": 1770816299,
+      "size": 978,
+      "symbol_count": 24
+    },
+    "backend/src/http_api/middlewares/rate_limit/mod.rs": {
+      "path": "backend/src/http_api/middlewares/rate_limit/mod.rs",
+      "mtime": 1770816300,
+      "size": 627,
+      "symbol_count": 5
+    },
+    "backend/src/http_api/data_transfer_object/apps/response.rs": {
+      "path": "backend/src/http_api/data_transfer_object/apps/response.rs",
+      "mtime": 1770823908,
+      "size": 2282,
+      "symbol_count": 33
+    },
+    "backend/doc/db_shema/dvd.txt": {
+      "path": "backend/doc/db_shema/dvd.txt",
+      "mtime": 1767644381,
+      "size": 2283,
+      "symbol_count": 1
+    },
+    "leptos-app/src/domain/palette_types.rs": {
+      "path": "leptos-app/src/domain/palette_types.rs",
+      "mtime": 1770903219,
+      "size": 3707,
+      "symbol_count": 39
+    },
+    "dioxus-app/src/domain/mod.rs": {
+      "path": "dioxus-app/src/domain/mod.rs",
+      "mtime": 1772031983,
+      "size": 489,
+      "symbol_count": 18
+    },
+    "backend/src/infra/openrouter/client.rs": {
+      "path": "backend/src/infra/openrouter/client.rs",
+      "mtime": 1770824036,
+      "size": 4859,
+      "symbol_count": 16
+    },
+    "backend/src/services/collection/collection_domain.rs": {
+      "path": "backend/src/services/collection/collection_domain.rs",
+      "mtime": 1771161770,
+      "size": 4311,
+      "symbol_count": 30
+    },
+    "backend/src/infra/supabase/shared/mod.rs": {
+      "path": "backend/src/infra/supabase/shared/mod.rs",
+      "mtime": 1770816298,
+      "size": 326,
+      "symbol_count": 2
+    },
+    "dioxus-app/src/components/ui/card/card.rs": {
+      "path": "dioxus-app/src/components/ui/card/card.rs",
+      "mtime": 1772032378,
+      "size": 1950,
+      "symbol_count": 8
+    },
+    "leptos-app/src/state/palette.rs": {
+      "path": "leptos-app/src/state/palette.rs",
+      "mtime": 1771883468,
+      "size": 3827,
+      "symbol_count": 32
+    },
+    "backend/src/http_api/data_transfer_object/intello/open_question/mod.rs": {
+      "path": "backend/src/http_api/data_transfer_object/intello/open_question/mod.rs",
+      "mtime": 1770816299,
+      "size": 342,
+      "symbol_count": 4
+    },
+    "leptos-app/src/pages/intello/qcm/qcm_quick.rs": {
+      "path": "leptos-app/src/pages/intello/qcm/qcm_quick.rs",
+      "mtime": 1771534412,
+      "size": 1582,
+      "symbol_count": 1
+    },
+    "leptos-app/src/domain/order_phrase_types.rs": {
+      "path": "leptos-app/src/domain/order_phrase_types.rs",
+      "mtime": 1770895346,
+      "size": 2248,
+      "symbol_count": 31
+    },
+    "backend/src/infra/supabase/ai_usage/repository.rs": {
+      "path": "backend/src/infra/supabase/ai_usage/repository.rs",
+      "mtime": 1770816298,
+      "size": 7652,
+      "symbol_count": 38
+    },
+    "backend/src/infra/supabase/open_question/mod.rs": {
+      "path": "backend/src/infra/supabase/open_question/mod.rs",
+      "mtime": 1770816298,
+      "size": 143,
+      "symbol_count": 3
+    },
+    "leptos-app/src/pages/intello/mod.rs": {
+      "path": "leptos-app/src/pages/intello/mod.rs",
+      "mtime": 1771275149,
+      "size": 263,
+      "symbol_count": 10
+    },
+    "leptos-app/src/components/ui/file_upload/file_upload.rs": {
+      "path": "leptos-app/src/components/ui/file_upload/file_upload.rs",
+      "mtime": 1771190791,
+      "size": 2673,
+      "symbol_count": 1
+    },
+    "leptos-app/src/components/ui/modal/modal.rs": {
+      "path": "leptos-app/src/components/ui/modal/modal.rs",
+      "mtime": 1771182423,
+      "size": 2252,
+      "symbol_count": 2
+    },
+    "leptos-app/src/components/ui/card/item_card.rs": {
+      "path": "leptos-app/src/components/ui/card/item_card.rs",
+      "mtime": 1771186907,
+      "size": 1131,
+      "symbol_count": 1
+    },
+    "backend/src/http_api/handlers/apps/mod.rs": {
+      "path": "backend/src/http_api/handlers/apps/mod.rs",
+      "mtime": 1770816300,
+      "size": 731,
+      "symbol_count": 5
+    },
+    "backend/src/lib.rs": {
+      "path": "backend/src/lib.rs",
+      "mtime": 1771161745,
+      "size": 365,
+      "symbol_count": 7
+    },
+    "backend/src/tests/collection/mod.rs": {
+      "path": "backend/src/tests/collection/mod.rs",
+      "mtime": 1770816301,
+      "size": 141,
+      "symbol_count": 6
+    },
+    "backend/src/services/auth/types_domain.rs": {
+      "path": "backend/src/services/auth/types_domain.rs",
+      "mtime": 1770816302,
+      "size": 739,
+      "symbol_count": 10
+    },
+    "backend/doc/README.md": {
+      "path": "backend/doc/README.md",
+      "mtime": 1767644381,
+      "size": 3605,
+      "symbol_count": 11
+    },
+    "leptos-app/src/components/ui/progress/progress.rs": {
+      "path": "leptos-app/src/components/ui/progress/progress.rs",
+      "mtime": 1770840567,
+      "size": 1295,
+      "symbol_count": 1
+    },
+    "backend/src/infra/database/mod.rs": {
+      "path": "backend/src/infra/database/mod.rs",
+      "mtime": 1770816297,
+      "size": 1846,
+      "symbol_count": 16
+    },
+    "backend/doc/apps/intello/openrouter.md": {
+      "path": "backend/doc/apps/intello/openrouter.md",
+      "mtime": 1767644381,
+      "size": 2431,
+      "symbol_count": 8
+    },
+    "leptos-app/src/domain/game_set_trait.rs": {
+      "path": "leptos-app/src/domain/game_set_trait.rs",
+      "mtime": 1771441832,
+      "size": 5499,
+      "symbol_count": 24
+    },
+    "backend/tests/dvd_add_test.rs": {
+      "path": "backend/tests/dvd_add_test.rs",
+      "mtime": 1770828010,
+      "size": 2626,
+      "symbol_count": 7
+    },
+    "backend/src/http_api/data_transfer_object/user/mod.rs": {
+      "path": "backend/src/http_api/data_transfer_object/user/mod.rs",
+      "mtime": 1770816299,
+      "size": 98,
+      "symbol_count": 2
+    },
+    "dioxus-app/src/pages/intello/flashcards/flashcard_generate.rs": {
+      "path": "dioxus-app/src/pages/intello/flashcards/flashcard_generate.rs",
+      "mtime": 1772035221,
+      "size": 832,
+      "symbol_count": 2
+    },
+    "dioxus-app/src/domain/keywords_types.rs": {
+      "path": "dioxus-app/src/domain/keywords_types.rs",
+      "mtime": 1772033078,
+      "size": 2193,
+      "symbol_count": 31
+    },
+    "dioxus-app/src/pages/intello/fill_blanks/fill_blank_generate.rs": {
+      "path": "dioxus-app/src/pages/intello/fill_blanks/fill_blank_generate.rs",
+      "mtime": 1772035281,
+      "size": 837,
+      "symbol_count": 2
+    },
+    "backend/src/http_api/data_transfer_object/collection/request.rs": {
+      "path": "backend/src/http_api/data_transfer_object/collection/request.rs",
+      "mtime": 1771161786,
+      "size": 7776,
+      "symbol_count": 36
+    },
+    "backend/src/http_api/data_transfer_object/intello/fill_blank/response.rs": {
+      "path": "backend/src/http_api/data_transfer_object/intello/fill_blank/response.rs",
+      "mtime": 1770824056,
+      "size": 2574,
+      "symbol_count": 34
+    },
+    "leptos-app/src/pages/home/home.rs": {
+      "path": "leptos-app/src/pages/home/home.rs",
+      "mtime": 1771776198,
+      "size": 3131,
+      "symbol_count": 2
+    },
+    "backend/src/services/intello/games/flashcard/service.rs": {
+      "path": "backend/src/services/intello/games/flashcard/service.rs",
+      "mtime": 1770822667,
+      "size": 4267,
+      "symbol_count": 6
+    },
+    "dioxus-app/src/pages/intello/fill_blanks/fill_blank_play.rs": {
+      "path": "dioxus-app/src/pages/intello/fill_blanks/fill_blank_play.rs",
+      "mtime": 1772035275,
+      "size": 1207,
+      "symbol_count": 2
+    },
+    "dioxus-app/src/components/logo/mod.rs": {
+      "path": "dioxus-app/src/components/logo/mod.rs",
+      "mtime": 1772037115,
+      "size": 37,
+      "symbol_count": 2
+    },
+    "dioxus-app/src/pages/intello/order_phrases/order_phrase_list.rs": {
+      "path": "dioxus-app/src/pages/intello/order_phrases/order_phrase_list.rs",
+      "mtime": 1772035254,
+      "size": 710,
+      "symbol_count": 2
+    },
+    "backend/src/services/intello/domain/mod.rs": {
+      "path": "backend/src/services/intello/domain/mod.rs",
+      "mtime": 1770816304,
+      "size": 255,
+      "symbol_count": 5
+    },
+    "dioxus-app/src/pages/intello/open_questions/open_question_generate.rs": {
+      "path": "dioxus-app/src/pages/intello/open_questions/open_question_generate.rs",
+      "mtime": 1772035296,
+      "size": 858,
+      "symbol_count": 2
+    },
+    "dioxus-app/src/pages/intello/keywords/keyword_list.rs": {
+      "path": "dioxus-app/src/pages/intello/keywords/keyword_list.rs",
+      "mtime": 1772035240,
+      "size": 668,
+      "symbol_count": 2
+    },
+    "leptos-app/src/components/intello/qcm/qcm_player.rs": {
+      "path": "leptos-app/src/components/intello/qcm/qcm_player.rs",
+      "mtime": 1771442210,
+      "size": 6408,
+      "symbol_count": 10
+    },
+    "backend/src/http_api/handlers/apps/get_apps.rs": {
+      "path": "backend/src/http_api/handlers/apps/get_apps.rs",
+      "mtime": 1770816300,
+      "size": 905,
+      "symbol_count": 3
+    },
+    "backend/src/http_api/data_transfer_object/mod.rs": {
+      "path": "backend/src/http_api/data_transfer_object/mod.rs",
+      "mtime": 1770816300,
+      "size": 983,
+      "symbol_count": 6
+    },
+    "Pyckx-frontend/doc/environment-variables.md": {
+      "path": "Pyckx-frontend/doc/environment-variables.md",
+      "mtime": 1767644381,
+      "size": 4150,
+      "symbol_count": 25
+    },
+    "leptos-app/src/components/ui/card/card.rs": {
+      "path": "leptos-app/src/components/ui/card/card.rs",
+      "mtime": 1769455014,
+      "size": 847,
+      "symbol_count": 5
+    },
+    "dioxus-app/src/components/dashboard/app_grid.rs": {
+      "path": "dioxus-app/src/components/dashboard/app_grid.rs",
+      "mtime": 1772032277,
+      "size": 932,
+      "symbol_count": 2
+    },
+    "backend/doc/apps/intello/order_phrase_service.md": {
+      "path": "backend/doc/apps/intello/order_phrase_service.md",
+      "mtime": 1767644381,
+      "size": 1125,
+      "symbol_count": 5
+    },
+    "leptos-app/src/components/intello/shared/game_results.rs": {
+      "path": "leptos-app/src/components/intello/shared/game_results.rs",
+      "mtime": 1771189114,
+      "size": 3076,
+      "symbol_count": 5
+    },
+    "dioxus-app/src/state/hooks.rs": {
+      "path": "dioxus-app/src/state/hooks.rs",
+      "mtime": 1772034956,
+      "size": 5036,
+      "symbol_count": 19
+    },
+    "backend/src/http_api/utils/validation/mod.rs": {
+      "path": "backend/src/http_api/utils/validation/mod.rs",
+      "mtime": 1770816300,
+      "size": 167,
+      "symbol_count": 3
+    },
+    "dioxus-app/src/components/intello/shared/game_player_state.rs": {
+      "path": "dioxus-app/src/components/intello/shared/game_player_state.rs",
+      "mtime": 1772034816,
+      "size": 3037,
+      "symbol_count": 21
+    },
+    "backend/src/http_api/data_transfer_object/intello/flashcard/request.rs": {
+      "path": "backend/src/http_api/data_transfer_object/intello/flashcard/request.rs",
+      "mtime": 1770816299,
+      "size": 787,
+      "symbol_count": 12
+    },
+    "dioxus-app/src/components/ui/tabs/tabs.rs": {
+      "path": "dioxus-app/src/components/ui/tabs/tabs.rs",
+      "mtime": 1772032533,
+      "size": 2061,
+      "symbol_count": 5
+    },
+    "backend/src/services/intello/course/parser/synthesis_parser.rs": {
+      "path": "backend/src/services/intello/course/parser/synthesis_parser.rs",
+      "mtime": 1770824014,
+      "size": 5626,
+      "symbol_count": 8
+    },
+    "backend/src/services/intello/games/open_question/verification/parser.rs": {
+      "path": "backend/src/services/intello/games/open_question/verification/parser.rs",
+      "mtime": 1770824103,
+      "size": 3487,
+      "symbol_count": 7
+    },
+    "backend/src/infra/database/study_session/mod.rs": {
+      "path": "backend/src/infra/database/study_session/mod.rs",
+      "mtime": 1770816297,
+      "size": 58,
+      "symbol_count": 1
+    },
+    "leptos-app/src/pages/intello/open_questions/mod.rs": {
+      "path": "leptos-app/src/pages/intello/open_questions/mod.rs",
+      "mtime": 1770841266,
+      "size": 234,
+      "symbol_count": 3
+    },
+    "leptos-app/src/components/dashboard/palette_picker.rs": {
+      "path": "leptos-app/src/components/dashboard/palette_picker.rs",
+      "mtime": 1771413485,
+      "size": 2949,
+      "symbol_count": 4
+    },
+    "dioxus-app/src/api/admin.rs": {
+      "path": "dioxus-app/src/api/admin.rs",
+      "mtime": 1772032069,
+      "size": 281,
+      "symbol_count": 2
+    },
+    "backend/src/services/intello/course/domain/ideas_domain.rs": {
+      "path": "backend/src/services/intello/course/domain/ideas_domain.rs",
+      "mtime": 1770816303,
+      "size": 599,
+      "symbol_count": 6
+    },
+    "backend/src/http_api/data_transfer_object/auth/mod.rs": {
+      "path": "backend/src/http_api/data_transfer_object/auth/mod.rs",
+      "mtime": 1770816298,
+      "size": 179,
+      "symbol_count": 3
+    },
+    "leptos-app/src/components/intello/shared/generate_form.rs": {
+      "path": "leptos-app/src/components/intello/shared/generate_form.rs",
+      "mtime": 1771441489,
+      "size": 8001,
+      "symbol_count": 23
+    },
+    "backend/src/services/intello/course/mod.rs": {
+      "path": "backend/src/services/intello/course/mod.rs",
+      "mtime": 1770816302,
+      "size": 434,
+      "symbol_count": 5
+    },
+    "leptos-app/src/components/intello/shared/game_list_page.rs": {
+      "path": "leptos-app/src/components/intello/shared/game_list_page.rs",
+      "mtime": 1771531449,
+      "size": 5892,
+      "symbol_count": 10
+    },
+    "dioxus-app/src/state/user_apps.rs": {
+      "path": "dioxus-app/src/state/user_apps.rs",
+      "mtime": 1772037138,
+      "size": 3351,
+      "symbol_count": 17
+    },
+    "backend/doc/apps/intello/course_service.md": {
+      "path": "backend/doc/apps/intello/course_service.md",
+      "mtime": 1767644381,
+      "size": 2073,
+      "symbol_count": 10
+    },
+    "leptos-app/src/components/ui/card/mod.rs": {
+      "path": "leptos-app/src/components/ui/card/mod.rs",
+      "mtime": 1771189477,
+      "size": 136,
+      "symbol_count": 4
+    },
+    "dioxus-app/src/components/ui/toast/mod.rs": {
+      "path": "dioxus-app/src/components/ui/toast/mod.rs",
+      "mtime": 1772032486,
+      "size": 29,
+      "symbol_count": 1
+    },
+    "leptos-app/src/pages/vitrine/vitrine.rs": {
+      "path": "leptos-app/src/pages/vitrine/vitrine.rs",
+      "mtime": 1771357715,
+      "size": 6027,
+      "symbol_count": 6
+    },
+    "backend/tests/helpers/stub_user_app_repo.rs": {
+      "path": "backend/tests/helpers/stub_user_app_repo.rs",
+      "mtime": 1770827911,
+      "size": 2656,
+      "symbol_count": 18
+    },
+    "dioxus-app/src/domain/fill_blank_types.rs": {
+      "path": "dioxus-app/src/domain/fill_blank_types.rs",
+      "mtime": 1772033078,
+      "size": 2284,
+      "symbol_count": 31
+    },
+    "leptos-app/src/state/palette_provider.rs": {
+      "path": "leptos-app/src/state/palette_provider.rs",
+      "mtime": 1771413137,
+      "size": 1237,
+      "symbol_count": 3
+    },
+    "leptos-app/src/pages/intello/keywords/keyword_generate.rs": {
+      "path": "leptos-app/src/pages/intello/keywords/keyword_generate.rs",
+      "mtime": 1771157778,
+      "size": 790,
+      "symbol_count": 1
+    },
+    "dioxus-app/src/components/dashboard/my_apps.rs": {
+      "path": "dioxus-app/src/components/dashboard/my_apps.rs",
+      "mtime": 1772032244,
+      "size": 1739,
+      "symbol_count": 2
+    },
+    "backend/tests/app_service_user_has_app_test.rs": {
+      "path": "backend/tests/app_service_user_has_app_test.rs",
+      "mtime": 1770827977,
+      "size": 1522,
+      "symbol_count": 6
+    },
+    "dioxus-app/src/pages/intello/keywords/keyword_generate.rs": {
+      "path": "dioxus-app/src/pages/intello/keywords/keyword_generate.rs",
+      "mtime": 1772035250,
+      "size": 822,
+      "symbol_count": 2
+    },
+    "leptos-app/src/pages/collection/mod.rs": {
+      "path": "leptos-app/src/pages/collection/mod.rs",
+      "mtime": 1771320981,
+      "size": 95,
+      "symbol_count": 2
+    },
+    "backend/src/http_api/data_transfer_object/intello/order_phrase/mod.rs": {
+      "path": "backend/src/http_api/data_transfer_object/intello/order_phrase/mod.rs",
+      "mtime": 1770816300,
+      "size": 282,
+      "symbol_count": 3
+    },
+    "leptos-app/src/components/top_bar/mod.rs": {
+      "path": "leptos-app/src/components/top_bar/mod.rs",
+      "mtime": 1771176463,
+      "size": 103,
+      "symbol_count": 3
+    },
+    "backend/src/main.rs": {
+      "path": "backend/src/main.rs",
+      "mtime": 1771710606,
+      "size": 7003,
+      "symbol_count": 4
+    },
+    "backend/doc/db_shema/fill_blank.txt": {
+      "path": "backend/doc/db_shema/fill_blank.txt",
+      "mtime": 1767644381,
+      "size": 3410,
+      "symbol_count": 1
+    },
+    "dioxus-app/src/components/ui/badge/badge.rs": {
+      "path": "dioxus-app/src/components/ui/badge/badge.rs",
+      "mtime": 1772032423,
+      "size": 1653,
+      "symbol_count": 10
+    },
+    "dioxus-app/src/components/intello/keywords/keywords_player.rs": {
+      "path": "dioxus-app/src/components/intello/keywords/keywords_player.rs",
+      "mtime": 1772034864,
+      "size": 5562,
+      "symbol_count": 8
+    },
+    "dioxus-app/src/components/dashboard/welcome_header.rs": {
+      "path": "dioxus-app/src/components/dashboard/welcome_header.rs",
+      "mtime": 1772032233,
+      "size": 1358,
+      "symbol_count": 2
+    },
+    "dioxus-app/src/components/ui/icon/icon.rs": {
+      "path": "dioxus-app/src/components/ui/icon/icon.rs",
+      "mtime": 1772032360,
+      "size": 7160,
+      "symbol_count": 19
+    },
+    "backend/tests/app_service_crud_test.rs": {
+      "path": "backend/tests/app_service_crud_test.rs",
+      "mtime": 1770827947,
+      "size": 2208,
+      "symbol_count": 8
+    },
+    "backend/src/infra/database/collection/trait.rs": {
+      "path": "backend/src/infra/database/collection/trait.rs",
+      "mtime": 1770816296,
+      "size": 1695,
+      "symbol_count": 2
+    },
+    "backend/src/tests/app_registry/registry.rs": {
+      "path": "backend/src/tests/app_registry/registry.rs",
+      "mtime": 1770816301,
+      "size": 674,
+      "symbol_count": 4
+    },
+    "backend/src/services/app_registry/registry_domain.rs": {
+      "path": "backend/src/services/app_registry/registry_domain.rs",
+      "mtime": 1770824032,
+      "size": 4719,
+      "symbol_count": 36
+    },
+    "backend/src/http_api/middlewares/rate_limit/config.rs": {
+      "path": "backend/src/http_api/middlewares/rate_limit/config.rs",
+      "mtime": 1770823869,
+      "size": 7116,
+      "symbol_count": 49
+    },
+    "leptos-app/src/components/intello/course/resource_list.rs": {
+      "path": "leptos-app/src/components/intello/course/resource_list.rs",
+      "mtime": 1771190863,
+      "size": 2207,
+      "symbol_count": 1
+    },
+    "backend/src/services/intello/course/prompt/synthesis_prompt.rs": {
+      "path": "backend/src/services/intello/course/prompt/synthesis_prompt.rs",
+      "mtime": 1770824161,
+      "size": 6152,
+      "symbol_count": 7
+    },
+    "backend/doc/apps/intello/qcm_domain.md": {
+      "path": "backend/doc/apps/intello/qcm_domain.md",
+      "mtime": 1767644381,
+      "size": 918,
+      "symbol_count": 5
+    },
+    "backend/src/services/intello/games/open_question/verification/prompt.rs": {
+      "path": "backend/src/services/intello/games/open_question/verification/prompt.rs",
+      "mtime": 1770816305,
+      "size": 4014,
+      "symbol_count": 12
+    },
+    "dioxus-app/src/components/ui/skeleton/skeleton.rs": {
+      "path": "dioxus-app/src/components/ui/skeleton/skeleton.rs",
+      "mtime": 1772032469,
+      "size": 1638,
+      "symbol_count": 4
+    },
+    "backend/src/infra/database/ai_usage/trait.rs": {
+      "path": "backend/src/infra/database/ai_usage/trait.rs",
+      "mtime": 1770816297,
+      "size": 733,
+      "symbol_count": 2
+    },
+    "backend/src/infra/supabase/flashcard/types.rs": {
+      "path": "backend/src/infra/supabase/flashcard/types.rs",
+      "mtime": 1770816298,
+      "size": 1493,
+      "symbol_count": 16
+    },
+    "backend/src/services/intello/games/order_phrase/service.rs": {
+      "path": "backend/src/services/intello/games/order_phrase/service.rs",
+      "mtime": 1770822667,
+      "size": 4422,
+      "symbol_count": 6
+    },
+    "dioxus-app/src/components/intello/shared/set_list.rs": {
+      "path": "dioxus-app/src/components/intello/shared/set_list.rs",
+      "mtime": 1772032285,
+      "size": 1091,
+      "symbol_count": 1
+    },
+    "dioxus-app/src/components/ui/tabs/mod.rs": {
+      "path": "dioxus-app/src/components/ui/tabs/mod.rs",
+      "mtime": 1772032522,
+      "size": 27,
+      "symbol_count": 1
+    },
+    "leptos-app/src/components/intello/shared/game_set_card.rs": {
+      "path": "leptos-app/src/components/intello/shared/game_set_card.rs",
+      "mtime": 1771187408,
+      "size": 2547,
+      "symbol_count": 2
+    },
+    "dioxus-app/src/domain/app_types.rs": {
+      "path": "dioxus-app/src/domain/app_types.rs",
+      "mtime": 1772033145,
+      "size": 2659,
+      "symbol_count": 28
+    },
+    "leptos-app/src/pages/admin/mod.rs": {
+      "path": "leptos-app/src/pages/admin/mod.rs",
+      "mtime": 1770841652,
+      "size": 37,
+      "symbol_count": 1
+    },
+    "leptos-app/src/components/mod.rs": {
+      "path": "leptos-app/src/components/mod.rs",
+      "mtime": 1770840825,
+      "size": 149,
+      "symbol_count": 7
+    },
+    "backend/src/http_api/data_transfer_object/intello/order_phrase/request.rs": {
+      "path": "backend/src/http_api/data_transfer_object/intello/order_phrase/request.rs",
+      "mtime": 1770816299,
+      "size": 806,
+      "symbol_count": 12
+    },
+    "dioxus-app/src/lib.rs": {
+      "path": "dioxus-app/src/lib.rs",
+      "mtime": 1772037092,
+      "size": 166,
+      "symbol_count": 5
+    },
+    "dioxus-app/src/pages/intello/qcm/qcm_play.rs": {
+      "path": "dioxus-app/src/pages/intello/qcm/qcm_play.rs",
+      "mtime": 1772035193,
+      "size": 1063,
+      "symbol_count": 2
+    },
+    "backend/src/services/intello/learn_mode/learn_mode_domain.rs": {
+      "path": "backend/src/services/intello/learn_mode/learn_mode_domain.rs",
+      "mtime": 1770822171,
+      "size": 4492,
+      "symbol_count": 31
+    },
+    "leptos-app/src/pages/intello/fill_blanks/fill_blank_list.rs": {
+      "path": "leptos-app/src/pages/intello/fill_blanks/fill_blank_list.rs",
+      "mtime": 1771277339,
+      "size": 640,
+      "symbol_count": 1
+    },
+    "dioxus-app/src/components/collection/mod.rs": {
+      "path": "dioxus-app/src/components/collection/mod.rs",
+      "mtime": 1772032370,
+      "size": 110,
+      "symbol_count": 4
+    },
+    "leptos-app/src/components/intello/fill_blank/mod.rs": {
+      "path": "leptos-app/src/components/intello/fill_blank/mod.rs",
+      "mtime": 1770841012,
+      "size": 27,
+      "symbol_count": 1
+    },
+    "backend/src/infra/supabase/fill_blank/types.rs": {
+      "path": "backend/src/infra/supabase/fill_blank/types.rs",
+      "mtime": 1770816298,
+      "size": 1856,
+      "symbol_count": 21
+    },
+    "backend/src/tests/intello/course/prompt/mod.rs": {
+      "path": "backend/src/tests/intello/course/prompt/mod.rs",
+      "mtime": 1770816301,
+      "size": 101,
+      "symbol_count": 4
+    },
+    "backend/src/services/intello/course/prompt/ideas_prompt.rs": {
+      "path": "backend/src/services/intello/course/prompt/ideas_prompt.rs",
+      "mtime": 1770824124,
+      "size": 3203,
+      "symbol_count": 6
+    },
+    "backend/src/infra/supabase/keywords/types.rs": {
+      "path": "backend/src/infra/supabase/keywords/types.rs",
+      "mtime": 1770816298,
+      "size": 1829,
+      "symbol_count": 21
+    },
+    "backend/src/tests/collection/dvd_lifecycle.rs": {
+      "path": "backend/src/tests/collection/dvd_lifecycle.rs",
+      "mtime": 1770823802,
+      "size": 3975,
+      "symbol_count": 2
+    },
+    "leptos-app/src/pages/collection/dvd_add.rs": {
+      "path": "leptos-app/src/pages/collection/dvd_add.rs",
+      "mtime": 1771321035,
+      "size": 1860,
+      "symbol_count": 1
+    },
+    "backend/src/services/intello/tracking/mod.rs": {
+      "path": "backend/src/services/intello/tracking/mod.rs",
+      "mtime": 1770816304,
+      "size": 140,
+      "symbol_count": 1
+    },
+    "backend/src/http_api/data_transfer_object/intello/qcm/conversion.rs": {
+      "path": "backend/src/http_api/data_transfer_object/intello/qcm/conversion.rs",
+      "mtime": 1770823994,
+      "size": 5078,
+      "symbol_count": 25
+    },
+    "dioxus-app/src/components/intello/course/content_renderer.rs": {
+      "path": "dioxus-app/src/components/intello/course/content_renderer.rs",
+      "mtime": 1772032532,
+      "size": 5885,
+      "symbol_count": 3
+    },
+    "leptos-app/src/components/top_bar/top_bar.rs": {
+      "path": "leptos-app/src/components/top_bar/top_bar.rs",
+      "mtime": 1772026926,
+      "size": 4221,
+      "symbol_count": 4
+    },
+    "backend/src/http_api/data_transfer_object/collection/response.rs": {
+      "path": "backend/src/http_api/data_transfer_object/collection/response.rs",
+      "mtime": 1770823965,
+      "size": 2923,
+      "symbol_count": 45
+    },
+    "backend/src/infra/supabase/study_session/repository.rs": {
+      "path": "backend/src/infra/supabase/study_session/repository.rs",
+      "mtime": 1770822140,
+      "size": 9517,
+      "symbol_count": 52
+    },
+    "backend/doc/architecture/rate-limiting.md": {
+      "path": "backend/doc/architecture/rate-limiting.md",
+      "mtime": 1767644381,
+      "size": 3608,
+      "symbol_count": 15
+    },
+    "backend/tests/app_service_get_user_apps_test.rs": {
+      "path": "backend/tests/app_service_get_user_apps_test.rs",
+      "mtime": 1770827972,
+      "size": 2682,
+      "symbol_count": 6
+    },
+    "backend/doc/apps/intello/ai_usage_domain.md": {
+      "path": "backend/doc/apps/intello/ai_usage_domain.md",
+      "mtime": 1767644381,
+      "size": 795,
+      "symbol_count": 3
+    },
+    "backend/src/infra/supabase/mod.rs": {
+      "path": "backend/src/infra/supabase/mod.rs",
+      "mtime": 1770816298,
+      "size": 1992,
+      "symbol_count": 19
+    },
+    "dioxus-app/src/components/ui/page_layout/mod.rs": {
+      "path": "dioxus-app/src/components/ui/page_layout/mod.rs",
+      "mtime": 1772032549,
+      "size": 41,
+      "symbol_count": 1
+    },
+    "dioxus-app/src/components/ui/skeleton/mod.rs": {
+      "path": "dioxus-app/src/components/ui/skeleton/mod.rs",
+      "mtime": 1772032459,
+      "size": 35,
+      "symbol_count": 1
+    },
+    "leptos-app/src/components/intello/course/content_renderer.rs": {
+      "path": "leptos-app/src/components/intello/course/content_renderer.rs",
+      "mtime": 1770841537,
+      "size": 3258,
+      "symbol_count": 3
+    },
+    "backend/src/infra/database/collection/mod.rs": {
+      "path": "backend/src/infra/database/collection/mod.rs",
+      "mtime": 1770816296,
+      "size": 87,
+      "symbol_count": 2
+    },
+    "dioxus-app/src/components/ui/input/mod.rs": {
+      "path": "dioxus-app/src/components/ui/input/mod.rs",
+      "mtime": 1772032274,
+      "size": 29,
+      "symbol_count": 1
+    },
+    "backend/doc/apps/intello/README.md": {
+      "path": "backend/doc/apps/intello/README.md",
+      "mtime": 1767644381,
+      "size": 1849,
+      "symbol_count": 13
+    },
+    "dioxus-app/src/pages/intello/true_false/true_false_play.rs": {
+      "path": "dioxus-app/src/pages/intello/true_false/true_false_play.rs",
+      "mtime": 1772035231,
+      "size": 1205,
+      "symbol_count": 2
+    },
+    "dioxus-app/src/api/resources.rs": {
+      "path": "dioxus-app/src/api/resources.rs",
+      "mtime": 1772032121,
+      "size": 1056,
+      "symbol_count": 6
+    },
+    "dioxus-app/src/pages/intello/order_phrases/order_phrase_play.rs": {
+      "path": "dioxus-app/src/pages/intello/order_phrases/order_phrase_play.rs",
+      "mtime": 1772035260,
+      "size": 1227,
+      "symbol_count": 2
+    },
+    "backend/tests/dvd_crud_test.rs": {
+      "path": "backend/tests/dvd_crud_test.rs",
+      "mtime": 1770828019,
+      "size": 2548,
+      "symbol_count": 8
+    },
+    "leptos-app/src/components/ui/page_layout/page_layout.rs": {
+      "path": "leptos-app/src/components/ui/page_layout/page_layout.rs",
+      "mtime": 1771184113,
+      "size": 511,
+      "symbol_count": 1
+    },
+    "backend/src/infra/supabase/fill_blank/repository.rs": {
+      "path": "backend/src/infra/supabase/fill_blank/repository.rs",
+      "mtime": 1770816298,
+      "size": 5042,
+      "symbol_count": 19
+    },
+    "dioxus-app/src/components/top_bar/top_bar.rs": {
+      "path": "dioxus-app/src/components/top_bar/top_bar.rs",
+      "mtime": 1772032620,
+      "size": 5548,
+      "symbol_count": 10
+    },
+    "backend/src/services/intello/domain/enums_domain.rs": {
+      "path": "backend/src/services/intello/domain/enums_domain.rs",
+      "mtime": 1770824044,
+      "size": 1744,
+      "symbol_count": 11
+    },
+    "dioxus-app/src/components/ui/card/card_grid.rs": {
+      "path": "dioxus-app/src/components/ui/card/card_grid.rs",
+      "mtime": 1772032395,
+      "size": 434,
+      "symbol_count": 2
+    },
+    "backend/src/infra/openrouter/models.rs": {
+      "path": "backend/src/infra/openrouter/models.rs",
+      "mtime": 1770823944,
+      "size": 5176,
+      "symbol_count": 28
+    },
+    "backend/src/services/intello/games/fill_blank/domain.rs": {
+      "path": "backend/src/services/intello/games/fill_blank/domain.rs",
+      "mtime": 1770816305,
+      "size": 2404,
+      "symbol_count": 19
+    },
+    "backend/src/infra/supabase/user_app/types.rs": {
+      "path": "backend/src/infra/supabase/user_app/types.rs",
+      "mtime": 1770824138,
+      "size": 2668,
+      "symbol_count": 17
+    },
+    "backend/src/http_api/data_transfer_object/intello/flashcard/conversion.rs": {
+      "path": "backend/src/http_api/data_transfer_object/intello/flashcard/conversion.rs",
+      "mtime": 1770824024,
+      "size": 3457,
+      "symbol_count": 18
+    },
+    "backend/src/infra/mod.rs": {
+      "path": "backend/src/infra/mod.rs",
+      "mtime": 1770816298,
+      "size": 1681,
+      "symbol_count": 6
+    },
+    "backend/src/infra/database/dvd/trait.rs": {
+      "path": "backend/src/infra/database/dvd/trait.rs",
+      "mtime": 1770816297,
+      "size": 1327,
+      "symbol_count": 2
+    },
+    "backend/doc/SUPABASE_IDIOMATIC_ANALYSIS.md": {
+      "path": "backend/doc/SUPABASE_IDIOMATIC_ANALYSIS.md",
+      "mtime": 1767644381,
+      "size": 4813,
+      "symbol_count": 23
+    },
+    "backend/src/services/intello/games/true_false/parser.rs": {
+      "path": "backend/src/services/intello/games/true_false/parser.rs",
+      "mtime": 1770824085,
+      "size": 3242,
+      "symbol_count": 7
+    },
+    "backend/src/http_api/data_transfer_object/intello/open_question/response.rs": {
+      "path": "backend/src/http_api/data_transfer_object/intello/open_question/response.rs",
+      "mtime": 1770816299,
+      "size": 1614,
+      "symbol_count": 35
+    },
+    "dioxus-app/src/components/ui/progress/mod.rs": {
+      "path": "dioxus-app/src/components/ui/progress/mod.rs",
+      "mtime": 1772032473,
+      "size": 35,
+      "symbol_count": 1
+    },
+    "dioxus-app/src/pages/intello/open_questions/mod.rs": {
+      "path": "dioxus-app/src/pages/intello/open_questions/mod.rs",
+      "mtime": 1772032579,
+      "size": 267,
+      "symbol_count": 4
+    },
+    "backend/src/http_api/handlers/user/mod.rs": {
+      "path": "backend/src/http_api/handlers/user/mod.rs",
+      "mtime": 1770816300,
+      "size": 233,
+      "symbol_count": 4
+    },
+    "dioxus-app/src/components/ui/empty_state/empty_state.rs": {
+      "path": "dioxus-app/src/components/ui/empty_state/empty_state.rs",
+      "mtime": 1772032518,
+      "size": 1479,
+      "symbol_count": 2
+    },
+    "dioxus-app/src/components/intello/shared/game_progress.rs": {
+      "path": "dioxus-app/src/components/intello/shared/game_progress.rs",
+      "mtime": 1772032265,
+      "size": 937,
+      "symbol_count": 1
+    },
+    "backend/src/services/intello/ai_response/keywords.rs": {
+      "path": "backend/src/services/intello/ai_response/keywords.rs",
+      "mtime": 1770816304,
+      "size": 440,
+      "symbol_count": 10
+    },
+    "dioxus-app/src/components/ui/page_layout/page_layout.rs": {
+      "path": "dioxus-app/src/components/ui/page_layout/page_layout.rs",
+      "mtime": 1772032559,
+      "size": 1032,
+      "symbol_count": 4
+    },
+    "backend/src/services/intello/study_session/study_session_service.rs": {
+      "path": "backend/src/services/intello/study_session/study_session_service.rs",
+      "mtime": 1770820651,
+      "size": 4432,
+      "symbol_count": 8
+    },
+    "leptos-app/src/components/dashboard/app_grid.rs": {
+      "path": "leptos-app/src/components/dashboard/app_grid.rs",
+      "mtime": 1770930306,
+      "size": 603,
+      "symbol_count": 2
+    },
+    "backend/src/services/intello/games/service.rs": {
+      "path": "backend/src/services/intello/games/service.rs",
+      "mtime": 1770816305,
+      "size": 303,
+      "symbol_count": 4
+    },
+    "backend/src/tests/auth/mod.rs": {
+      "path": "backend/src/tests/auth/mod.rs",
+      "mtime": 1770816301,
+      "size": 90,
+      "symbol_count": 3
+    },
+    "dioxus-app/src/api/collection.rs": {
+      "path": "dioxus-app/src/api/collection.rs",
+      "mtime": 1772032078,
+      "size": 973,
+      "symbol_count": 5
+    },
+    "backend/src/services/intello/games/order_phrase/parser.rs": {
+      "path": "backend/src/services/intello/games/order_phrase/parser.rs",
+      "mtime": 1770824077,
+      "size": 3931,
+      "symbol_count": 7
+    },
+    "backend/src/services/intello/games/qcm/parser.rs": {
+      "path": "backend/src/services/intello/games/qcm/parser.rs",
+      "mtime": 1770824044,
+      "size": 4171,
+      "symbol_count": 8
+    },
+    "backend/src/http_api/handlers/collection/helpers.rs": {
+      "path": "backend/src/http_api/handlers/collection/helpers.rs",
+      "mtime": 1770816300,
+      "size": 983,
+      "symbol_count": 2
+    },
+    "leptos-app/src/components/ui/mod.rs": {
+      "path": "leptos-app/src/components/ui/mod.rs",
+      "mtime": 1771318314,
+      "size": 360,
+      "symbol_count": 20
+    },
+    "backend/src/tests/intello/course/prompt/section_prompt_tests.rs": {
+      "path": "backend/src/tests/intello/course/prompt/section_prompt_tests.rs",
+      "mtime": 1770816301,
+      "size": 56,
+      "symbol_count": 0
+    },
+    "dioxus-app/src/components/intello/open_question/mod.rs": {
+      "path": "dioxus-app/src/components/intello/open_question/mod.rs",
+      "mtime": 1772032432,
+      "size": 30,
+      "symbol_count": 1
+    },
+    "leptos-app/src/api/auth.rs": {
+      "path": "leptos-app/src/api/auth.rs",
+      "mtime": 1770845754,
+      "size": 1422,
+      "symbol_count": 5
+    },
+    "leptos-app/src/components/intello/flashcard/mod.rs": {
+      "path": "leptos-app/src/components/intello/flashcard/mod.rs",
+      "mtime": 1770840923,
+      "size": 26,
+      "symbol_count": 1
+    },
+    "backend/src/infra/supabase/true_false/mod.rs": {
+      "path": "backend/src/infra/supabase/true_false/mod.rs",
+      "mtime": 1770816297,
+      "size": 114,
+      "symbol_count": 3
+    },
+    "dioxus-app/src/components/ui/button/button.rs": {
+      "path": "dioxus-app/src/components/ui/button/button.rs",
+      "mtime": 1772040049,
+      "size": 2963,
+      "symbol_count": 13
+    },
+    "leptos-app/src/pages/register/mod.rs": {
+      "path": "leptos-app/src/pages/register/mod.rs",
+      "mtime": 1770841633,
+      "size": 46,
+      "symbol_count": 1
+    },
+    "leptos-app/src/pages/intello/courses/course_create.rs": {
+      "path": "leptos-app/src/pages/intello/courses/course_create.rs",
+      "mtime": 1771278992,
+      "size": 3604,
+      "symbol_count": 1
+    },
+    "backend/src/shared/mod.rs": {
+      "path": "backend/src/shared/mod.rs",
+      "mtime": 1770816302,
+      "size": 243,
+      "symbol_count": 3
+    },
+    "dioxus-app/src/components/intello/course/resource_list.rs": {
+      "path": "dioxus-app/src/components/intello/course/resource_list.rs",
+      "mtime": 1772032558,
+      "size": 2679,
+      "symbol_count": 1
+    },
+    "backend/src/services/intello/games/qcm/quick_generation.rs": {
+      "path": "backend/src/services/intello/games/qcm/quick_generation.rs",
+      "mtime": 1771535877,
+      "size": 5139,
+      "symbol_count": 14
+    },
+    "dioxus-app/src/api/user_apps.rs": {
+      "path": "dioxus-app/src/api/user_apps.rs",
+      "mtime": 1772032127,
+      "size": 1044,
+      "symbol_count": 5
+    },
+    "backend/doc/architecture/repo-explanation.md": {
+      "path": "backend/doc/architecture/repo-explanation.md",
+      "mtime": 1767644381,
+      "size": 4741,
+      "symbol_count": 7
+    },
+    "dioxus-app/src/domain/open_question_types.rs": {
+      "path": "dioxus-app/src/domain/open_question_types.rs",
+      "mtime": 1772033078,
+      "size": 3263,
+      "symbol_count": 45
+    },
+    "backend/src/infra/supabase/error/mod.rs": {
+      "path": "backend/src/infra/supabase/error/mod.rs",
+      "mtime": 1770816298,
+      "size": 90,
+      "symbol_count": 2
+    },
+    "leptos-app/src/state/hooks.rs": {
+      "path": "leptos-app/src/state/hooks.rs",
+      "mtime": 1771698296,
+      "size": 5261,
+      "symbol_count": 20
+    },
+    "README.md": {
+      "path": "README.md",
+      "mtime": 1768079526,
+      "size": 3620,
+      "symbol_count": 17
+    },
+    "backend/src/tests/intello/course/parser/plan_parser_tests.rs": {
+      "path": "backend/src/tests/intello/course/parser/plan_parser_tests.rs",
+      "mtime": 1770816301,
+      "size": 1225,
+      "symbol_count": 3
+    },
+    "dioxus-app/src/components/intello/shared/game_results.rs": {
+      "path": "dioxus-app/src/components/intello/shared/game_results.rs",
+      "mtime": 1772033116,
+      "size": 3366,
+      "symbol_count": 6
+    },
+    "backend/src/infra/supabase/user_app/mod.rs": {
+      "path": "backend/src/infra/supabase/user_app/mod.rs",
+      "mtime": 1770816298,
+      "size": 133,
+      "symbol_count": 3
+    },
+    "dioxus-app/src/pages/intello/qcm/qcm_quick.rs": {
+      "path": "dioxus-app/src/pages/intello/qcm/qcm_quick.rs",
+      "mtime": 1772034712,
+      "size": 1662,
+      "symbol_count": 2
+    },
+    "backend/src/services/mod.rs": {
+      "path": "backend/src/services/mod.rs",
+      "mtime": 1770816305,
+      "size": 411,
+      "symbol_count": 5
+    },
+    "leptos-app/src/api/order_phrases.rs": {
+      "path": "leptos-app/src/api/order_phrases.rs",
+      "mtime": 1771441695,
+      "size": 684,
+      "symbol_count": 3
+    },
+    "backend/src/infra/supabase/app/mod.rs": {
+      "path": "backend/src/infra/supabase/app/mod.rs",
+      "mtime": 1770816297,
+      "size": 124,
+      "symbol_count": 3
+    },
+    "backend/src/shared/constants/urls/mod.rs": {
+      "path": "backend/src/shared/constants/urls/mod.rs",
+      "mtime": 1770816302,
+      "size": 85,
+      "symbol_count": 2
+    },
+    "backend/src/infra/database/order_phrase/mod.rs": {
+      "path": "backend/src/infra/database/order_phrase/mod.rs",
+      "mtime": 1770816297,
+      "size": 90,
+      "symbol_count": 2
+    },
+    "dioxus-app/src/components/intello/shared/game_generate_page.rs": {
+      "path": "dioxus-app/src/components/intello/shared/game_generate_page.rs",
+      "mtime": 1772035683,
+      "size": 3391,
+      "symbol_count": 6
+    },
+    "leptos-app/src/components/intello/mod.rs": {
+      "path": "leptos-app/src/components/intello/mod.rs",
+      "mtime": 1770841679,
+      "size": 284,
+      "symbol_count": 11
+    },
+    "backend/src/services/intello/domain/custom_question_domain.rs": {
+      "path": "backend/src/services/intello/domain/custom_question_domain.rs",
+      "mtime": 1770816304,
+      "size": 3035,
+      "symbol_count": 24
+    },
+    "backend/doc/db_shema/user_apps.txt": {
+      "path": "backend/doc/db_shema/user_apps.txt",
+      "mtime": 1767644381,
+      "size": 584,
+      "symbol_count": 1
+    },
+    "dioxus-app/src/components/ui/form_field/form_field.rs": {
+      "path": "dioxus-app/src/components/ui/form_field/form_field.rs",
+      "mtime": 1772032545,
+      "size": 995,
+      "symbol_count": 2
+    },
+    "backend/src/http_api/data_transfer_object/user/response.rs": {
+      "path": "backend/src/http_api/data_transfer_object/user/response.rs",
+      "mtime": 1770816299,
+      "size": 448,
+      "symbol_count": 8
+    },
+    "backend/tests/helpers/mod.rs": {
+      "path": "backend/tests/helpers/mod.rs",
+      "mtime": 1770828167,
+      "size": 192,
+      "symbol_count": 7
+    },
+    "dioxus-app/src/pages/intello/qcm/quick_form_options.rs": {
+      "path": "dioxus-app/src/pages/intello/qcm/quick_form_options.rs",
+      "mtime": 1772032527,
+      "size": 789,
+      "symbol_count": 4
+    },
+    "backend/src/tests/intello/open_question_cache_tests.rs": {
+      "path": "backend/src/tests/intello/open_question_cache_tests.rs",
+      "mtime": 1770816301,
+      "size": 918,
+      "symbol_count": 3
+    },
+    "backend/src/infra/database/open_question/mod.rs": {
+      "path": "backend/src/infra/database/open_question/mod.rs",
+      "mtime": 1770816297,
+      "size": 92,
+      "symbol_count": 2
+    },
+    "dioxus-app/src/components/ui/toast/toast.rs": {
+      "path": "dioxus-app/src/components/ui/toast/toast.rs",
+      "mtime": 1772032833,
+      "size": 5007,
+      "symbol_count": 32
+    },
+    "dioxus-app/src/components/intello/fill_blank/fill_blank_player.rs": {
+      "path": "dioxus-app/src/components/intello/fill_blank/fill_blank_player.rs",
+      "mtime": 1772035719,
+      "size": 4429,
+      "symbol_count": 7
+    },
+    "backend/src/tests/intello/course/prompt/plan_prompt_tests.rs": {
+      "path": "backend/src/tests/intello/course/prompt/plan_prompt_tests.rs",
+      "mtime": 1770816301,
+      "size": 53,
+      "symbol_count": 0
+    },
+    "backend/src/infra/supabase/collection/repository.rs": {
+      "path": "backend/src/infra/supabase/collection/repository.rs",
+      "mtime": 1771161755,
+      "size": 11752,
+      "symbol_count": 51
+    },
+    "leptos-app/src/pages/intello/open_questions/open_question_generate.rs": {
+      "path": "leptos-app/src/pages/intello/open_questions/open_question_generate.rs",
+      "mtime": 1771157780,
+      "size": 855,
+      "symbol_count": 1
+    },
+    "leptos-app/src/components/intello/course/course_card.rs": {
+      "path": "leptos-app/src/components/intello/course/course_card.rs",
+      "mtime": 1771189127,
+      "size": 1621,
+      "symbol_count": 1
+    },
+    "backend/doc/apps/intello/open_question_domain.md": {
+      "path": "backend/doc/apps/intello/open_question_domain.md",
+      "mtime": 1767644381,
+      "size": 675,
+      "symbol_count": 3
+    },
+    "dioxus-app/src/pages/intello/open_questions/open_question_play.rs": {
+      "path": "dioxus-app/src/pages/intello/open_questions/open_question_play.rs",
+      "mtime": 1772035292,
+      "size": 1237,
+      "symbol_count": 2
+    },
+    "backend/src/http_api/utils/mod.rs": {
+      "path": "backend/src/http_api/utils/mod.rs",
+      "mtime": 1770816300,
+      "size": 213,
+      "symbol_count": 3
+    },
+    "backend/src/configs/config.rs": {
+      "path": "backend/src/configs/config.rs",
+      "mtime": 1770824016,
+      "size": 6185,
+      "symbol_count": 26
+    },
+    "leptos-app/src/api/fill_blanks.rs": {
+      "path": "leptos-app/src/api/fill_blanks.rs",
+      "mtime": 1771441696,
+      "size": 658,
+      "symbol_count": 3
+    },
+    "backend/doc/db_shema/user_collections.txt": {
+      "path": "backend/doc/db_shema/user_collections.txt",
+      "mtime": 1767644381,
+      "size": 1341,
+      "symbol_count": 1
+    },
+    "backend/src/http_api/mod.rs": {
+      "path": "backend/src/http_api/mod.rs",
+      "mtime": 1770816300,
+      "size": 611,
+      "symbol_count": 5
+    },
+    "leptos-app/src/components/ui/button/mod.rs": {
+      "path": "leptos-app/src/components/ui/button/mod.rs",
+      "mtime": 1769454934,
+      "size": 31,
+      "symbol_count": 1
+    },
+    "dioxus-app/src/domain/qcm_types.rs": {
+      "path": "dioxus-app/src/domain/qcm_types.rs",
+      "mtime": 1772033064,
+      "size": 4779,
+      "symbol_count": 49
+    },
+    "dioxus-app/src/api/true_false.rs": {
+      "path": "dioxus-app/src/api/true_false.rs",
+      "mtime": 1772032123,
+      "size": 663,
+      "symbol_count": 3
+    },
+    "backend/src/tests/auth/login.rs": {
+      "path": "backend/src/tests/auth/login.rs",
+      "mtime": 1770823823,
+      "size": 728,
+      "symbol_count": 2
+    },
+    "leptos-app/src/pages/intello/order_phrases/mod.rs": {
+      "path": "leptos-app/src/pages/intello/order_phrases/mod.rs",
+      "mtime": 1770841266,
+      "size": 225,
+      "symbol_count": 3
+    },
+    "leptos-app/src/components/ui/hero_banner/hero_banner.rs": {
+      "path": "leptos-app/src/components/ui/hero_banner/hero_banner.rs",
+      "mtime": 1771184142,
+      "size": 804,
+      "symbol_count": 1
+    },
+    "backend/tests/helpers/stub_app_repo.rs": {
+      "path": "backend/tests/helpers/stub_app_repo.rs",
+      "mtime": 1770827904,
+      "size": 2947,
+      "symbol_count": 22
+    },
+    "backend/src/services/intello/games/fill_blank/prompt.rs": {
+      "path": "backend/src/services/intello/games/fill_blank/prompt.rs",
+      "mtime": 1770816305,
+      "size": 5258,
+      "symbol_count": 11
+    },
+    "leptos-app/src/components/ui/skeleton/mod.rs": {
+      "path": "leptos-app/src/components/ui/skeleton/mod.rs",
+      "mtime": 1770840562,
+      "size": 35,
+      "symbol_count": 1
+    },
+    "backend/src/services/intello/games/qcm/domain.rs": {
+      "path": "backend/src/services/intello/games/qcm/domain.rs",
+      "mtime": 1770816305,
+      "size": 1896,
+      "symbol_count": 16
+    }
+  }
+}

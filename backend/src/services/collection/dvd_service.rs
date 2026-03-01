@@ -3,16 +3,17 @@
 //! CRUD operations for DVDs within a collection.
 
 use super::CollectionService;
+use crate::infra::{CreateDvd, UpdateDvd};
 use crate::services::collection::collection_domain::CollectionItemType;
 use crate::services::collection::dvd_domain::Dvd;
-use crate::shared::AppResult;
 use crate::services::collection::error_domain::CollectionError;
-use crate::infra::{CreateDvd, UpdateDvd};
+use crate::shared::AppResult;
 use chrono::{DateTime, Utc};
 use tracing::{info, instrument};
 
 impl CollectionService {
     /// Add a new DVD to a user's collection
+    #[allow(clippy::too_many_arguments)]
     #[instrument(skip(self), fields(user_id = %user_id, dvd_name = %name))]
     pub async fn add_dvd(
         &self,
@@ -53,7 +54,11 @@ impl CollectionService {
 
     /// Find a specific DVD by ID
     #[instrument(skip(self), fields(user_id = %user_id, dvd_id = %dvd_id))]
-    pub async fn find_dvd(&self, user_id: &str, dvd_id: &str) -> AppResult<Dvd> {
+    pub async fn find_dvd(
+        &self,
+        user_id: &str,
+        dvd_id: &str,
+    ) -> AppResult<Dvd> {
         let dvd = self.dvd_repo.find_by_id(user_id, dvd_id).await?;
         Ok(dvd)
     }
@@ -86,7 +91,11 @@ impl CollectionService {
 
     /// Delete a DVD from a user's collection
     #[instrument(skip(self), fields(user_id = %user_id, dvd_id = %dvd_id))]
-    pub async fn delete_dvd(&self, user_id: &str, dvd_id: &str) -> AppResult<bool> {
+    pub async fn delete_dvd(
+        &self,
+        user_id: &str,
+        dvd_id: &str,
+    ) -> AppResult<bool> {
         let deleted = self.dvd_repo.delete(user_id, dvd_id).await?;
 
         if !deleted {
@@ -99,7 +108,10 @@ impl CollectionService {
 
     /// Get all DVDs for a user (collection items)
     #[instrument(skip(self), fields(user_id = %user_id))]
-    pub async fn get_collection_dvds(&self, user_id: &str) -> AppResult<Vec<Dvd>> {
+    pub async fn get_collection_dvds(
+        &self,
+        user_id: &str,
+    ) -> AppResult<Vec<Dvd>> {
         let dvds = self.dvd_repo.find_all(user_id).await?;
         Ok(dvds)
     }

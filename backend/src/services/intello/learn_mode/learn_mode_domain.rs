@@ -1,3 +1,4 @@
+#![allow(dead_code)]
 /*
  *
  * le mode learn c'est quand un user veut apprendre un truc
@@ -29,9 +30,9 @@
  *
  */
 
-use serde::{Deserialize, Serialize};
-use chrono::{DateTime, Utc};
 use crate::http_api::data_transfer_object::intello::course::CourseModule;
+use chrono::{DateTime, Utc};
+use serde::{Deserialize, Serialize};
 
 /// Represents a Learn Mode session for a specific user and course.
 /// Tracks the user's progress through multiple learning rounds.

@@ -3,3 +3,14 @@
 .vscode
 .ignore
 WARP.md
+target
+.cursor
+.zed
+Cargo.lock
+notes
+
+# Code indexer cache (contains absolute paths)
+.code-indexer-cache/
+
+# Logs (contain machine-specific data)
+logs/

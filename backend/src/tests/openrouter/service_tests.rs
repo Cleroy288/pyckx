@@ -2,11 +2,9 @@
 //!
 //! Tests for JSON extraction, sanitization, and course parsing
 
-use crate::infra::openrouter::{
-    extract_json_from_response, 
-    sanitize_json_duplicates,
-};
 use crate::http_api::data_transfer_object::intello::course::GeneratedCourse;
+use crate::infra::openrouter::extract_json_from_response;
+use crate::infra::openrouter::utils::sanitize_json_duplicates;
 
 // =============================================================================
 // JSON EXTRACTION TESTS

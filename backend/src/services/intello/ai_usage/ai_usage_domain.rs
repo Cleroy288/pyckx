@@ -30,6 +30,21 @@ pub struct CreateAiUsageLog {
     pub total_cost_usd: f64,
 }
 
+/// Input parameters for logging AI usage
+#[derive(Debug, Clone)]
+pub struct AiUsageInput<'a> {
+    /// The user who initiated the AI request
+    pub user_id: &'a str,
+    /// The AI model used (e.g., "gpt-4")
+    pub model_id: &'a str,
+    /// Feature that used AI (e.g., "flashcard", "qcm")
+    pub feature_type: &'a str,
+    /// Number of input tokens consumed
+    pub input_tokens: u32,
+    /// Number of output tokens generated
+    pub output_tokens: u32,
+}
+
 /// Feature types for AI usage tracking
 #[allow(dead_code)] // Some constants for future course tracking features
 pub mod feature_type {

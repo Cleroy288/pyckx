@@ -54,7 +54,9 @@ impl fmt::Display for AppError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             Self::NotFound(name) => write!(f, "App '{}' not found", name),
-            Self::AlreadyExists(name) => write!(f, "App '{}' already exists", name),
+            Self::AlreadyExists(name) => {
+                write!(f, "App '{}' already exists", name)
+            }
             Self::UserAppAlreadyAdded { user_id, app_name } => {
                 write!(f, "User '{}' already has app '{}'", user_id, app_name)
             }
@@ -66,3 +68,178 @@ impl fmt::Display for AppError {
 }
 
 impl std::error::Error for AppError {}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    // -- code() tests --
+
+    #[test]
+    fn test_code_scenarios() {
+        let cases = vec![
+            (
+                AppError::NotFound("x".into()),
+                "APP_NOT_FOUND",
+            ),
+            (
+                AppError::AlreadyExists("x".into()),
+                "APP_ALREADY_EXISTS",
+            ),
+            (
+                AppError::UserAppAlreadyAdded {
+                    user_id: "u".into(),
+                    app_name: "a".into(),
+                },
+                "USER_APP_ALREADY_ADDED",
+            ),
+            (
+                AppError::UserAppNotFound {
+                    user_id: "u".into(),
+                    app_name: "a".into(),
+                },
+                "USER_APP_NOT_FOUND",
+            ),
+        ];
+        for (err, expected) in cases {
+            assert_eq!(
+                err.code(),
+                expected,
+                "code() for {:?}",
+                err
+            );
+        }
+    }
+
+    // -- message() tests --
+
+    #[test]
+    fn test_message_scenarios() {
+        let cases = vec![
+            (
+                AppError::NotFound("x".into()),
+                "App not found",
+            ),
+            (
+                AppError::AlreadyExists("x".into()),
+                "App already exists",
+            ),
+            (
+                AppError::UserAppAlreadyAdded {
+                    user_id: "u".into(),
+                    app_name: "a".into(),
+                },
+                "User already has this app",
+            ),
+            (
+                AppError::UserAppNotFound {
+                    user_id: "u".into(),
+                    app_name: "a".into(),
+                },
+                "User doesn't have this app",
+            ),
+        ];
+        for (err, expected) in cases {
+            assert_eq!(
+                err.message(),
+                expected,
+                "message() for {:?}",
+                err
+            );
+        }
+    }
+
+    // -- status() tests --
+
+    #[test]
+    fn test_status_scenarios() {
+        let cases = vec![
+            (
+                AppError::NotFound("x".into()),
+                StatusCode::NOT_FOUND,
+            ),
+            (
+                AppError::AlreadyExists("x".into()),
+                StatusCode::CONFLICT,
+            ),
+            (
+                AppError::UserAppAlreadyAdded {
+                    user_id: "u".into(),
+                    app_name: "a".into(),
+                },
+                StatusCode::CONFLICT,
+            ),
+            (
+                AppError::UserAppNotFound {
+                    user_id: "u".into(),
+                    app_name: "a".into(),
+                },
+                StatusCode::NOT_FOUND,
+            ),
+        ];
+        for (err, expected) in cases {
+            assert_eq!(
+                err.status(),
+                expected,
+                "status() for {:?}",
+                err
+            );
+        }
+    }
+
+    // -- Display tests --
+
+    #[test]
+    fn test_display_not_found() {
+        // arrange
+        let err = AppError::NotFound("intello".into());
+
+        // act / assert
+        assert_eq!(
+            err.to_string(),
+            "App 'intello' not found"
+        );
+    }
+
+    #[test]
+    fn test_display_already_exists() {
+        // arrange
+        let err = AppError::AlreadyExists("intello".into());
+
+        // act / assert
+        assert_eq!(
+            err.to_string(),
+            "App 'intello' already exists"
+        );
+    }
+
+    #[test]
+    fn test_display_user_app_already_added() {
+        // arrange
+        let err = AppError::UserAppAlreadyAdded {
+            user_id: "u-1".into(),
+            app_name: "intello".into(),
+        };
+
+        // act / assert
+        assert_eq!(
+            err.to_string(),
+            "User 'u-1' already has app 'intello'"
+        );
+    }
+
+    #[test]
+    fn test_display_user_app_not_found() {
+        // arrange
+        let err = AppError::UserAppNotFound {
+            user_id: "u-2".into(),
+            app_name: "quiz".into(),
+        };
+
+        // act / assert
+        assert_eq!(
+            err.to_string(),
+            "User 'u-2' doesn't have app 'quiz'"
+        );
+    }
+}

@@ -11,10 +11,12 @@ use async_trait::async_trait;
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 
-use crate::services::intello::course::domain::{Course, ResourceSummary, UserResource};
-use crate::shared::AppError;
 use crate::infra::database::course::CourseRepository;
 use crate::infra::supabase::shared::{SupabaseError, SupabaseHttpClient};
+use crate::services::intello::course::domain::{
+    Course, ResourceSummary, UserResource,
+};
+use crate::shared::AppError;
 
 const TABLE_COURSES: &str = "intello_courses";
 const TABLE_RESOURCES: &str = "intello_user_resources";
@@ -57,7 +59,9 @@ impl SupabaseCourseRepository {
     }
 
     fn map_error(err: SupabaseError) -> AppError {
-        AppError::Internal(crate::http_api::utils::InternalError::new(err.to_string()))
+        AppError::Internal(crate::http_api::utils::InternalError::new(
+            err.to_string(),
+        ))
     }
 }
 
@@ -70,19 +74,26 @@ impl CourseRepository for SupabaseCourseRepository {
             .post(&url, course)
             .await
             .map_err(Self::map_error)?;
-        created
-            .into_iter()
-            .next()
-            .ok_or_else(|| AppError::Internal(crate::http_api::utils::InternalError::new("No course returned".to_string())))
+        created.into_iter().next().ok_or_else(|| {
+            AppError::Internal(crate::http_api::utils::InternalError::new(
+                "No course returned".to_string(),
+            ))
+        })
     }
 
-    async fn get_user_courses(&self, user_id: &str) -> Result<Vec<Course>, AppError> {
+    async fn get_user_courses(
+        &self,
+        user_id: &str,
+    ) -> Result<Vec<Course>, AppError> {
         let query = format!("user_id=eq.{}&order=created_at.desc", user_id);
         let url = self.client.rest_url_with_query(TABLE_COURSES, &query);
         self.client.get(&url).await.map_err(Self::map_error)
     }
 
-    async fn get_course_resources(&self, course_id: &str) -> Result<Vec<UserResource>, AppError> {
+    async fn get_course_resources(
+        &self,
+        course_id: &str,
+    ) -> Result<Vec<UserResource>, AppError> {
         let query = format!("course_id=eq.{}&select=resource_id", course_id);
         let url = self.client.rest_url_with_query(TABLE_LINKS, &query);
 
@@ -91,7 +102,8 @@ impl CourseRepository for SupabaseCourseRepository {
             resource_id: String,
         }
 
-        let links: Vec<LinkRow> = self.client.get(&url).await.map_err(Self::map_error)?;
+        let links: Vec<LinkRow> =
+            self.client.get(&url).await.map_err(Self::map_error)?;
 
         let mut resources = Vec::new();
         for link in links {
@@ -115,7 +127,10 @@ impl CourseRepository for SupabaseCourseRepository {
         Ok(resources)
     }
 
-    async fn get_user_resources(&self, user_id: &str) -> Result<Vec<ResourceSummary>, AppError> {
+    async fn get_user_resources(
+        &self,
+        user_id: &str,
+    ) -> Result<Vec<ResourceSummary>, AppError> {
         let query = format!(
             "user_id=eq.{}&select=id,filename,token_count,created_at&order=created_at.desc",
             user_id
@@ -142,8 +157,15 @@ impl CourseRepository for SupabaseCourseRepository {
         }))
     }
 
-    async fn resource_exists(&self, user_id: &str, filename: &str) -> Result<bool, AppError> {
-        let query = format!("user_id=eq.{}&filename=eq.{}&select=id", user_id, filename);
+    async fn resource_exists(
+        &self,
+        user_id: &str,
+        filename: &str,
+    ) -> Result<bool, AppError> {
+        let query = format!(
+            "user_id=eq.{}&filename=eq.{}&select=id",
+            user_id, filename
+        );
         let url = self.client.rest_url_with_query(TABLE_RESOURCES, &query);
 
         #[derive(Deserialize)]
@@ -152,7 +174,8 @@ impl CourseRepository for SupabaseCourseRepository {
             id: String,
         }
 
-        let rows: Vec<IdOnly> = self.client.get(&url).await.map_err(Self::map_error)?;
+        let rows: Vec<IdOnly> =
+            self.client.get(&url).await.map_err(Self::map_error)?;
         Ok(!rows.is_empty())
     }
 
@@ -173,10 +196,11 @@ impl CourseRepository for SupabaseCourseRepository {
             .post(&url, &row)
             .await
             .map_err(Self::map_error)?;
-        let row = created
-            .into_iter()
-            .next()
-            .ok_or_else(|| AppError::Internal(crate::http_api::utils::InternalError::new("No resource returned".to_string())))?;
+        let row = created.into_iter().next().ok_or_else(|| {
+            AppError::Internal(crate::http_api::utils::InternalError::new(
+                "No resource returned".to_string(),
+            ))
+        })?;
         Ok(UserResource {
             id: row.id,
             user_id: row.user_id,
@@ -198,7 +222,10 @@ impl CourseRepository for SupabaseCourseRepository {
             resource_id: resource_id.to_string(),
         };
         let url = self.client.rest_url(TABLE_LINKS);
-        self.client.post::<(), _>(&url, &link).await.map_err(Self::map_error)?;
+        self.client
+            .post::<(), _>(&url, &link)
+            .await
+            .map_err(Self::map_error)?;
         Ok(())
     }
 
@@ -209,7 +236,10 @@ impl CourseRepository for SupabaseCourseRepository {
         Ok(())
     }
 
-    async fn delete_resource_links(&self, course_id: &str) -> Result<(), AppError> {
+    async fn delete_resource_links(
+        &self,
+        course_id: &str,
+    ) -> Result<(), AppError> {
         let query = format!("course_id=eq.{}", course_id);
         let url = self.client.rest_url_with_query(TABLE_LINKS, &query);
         self.client.delete(&url).await.map_err(Self::map_error)?;

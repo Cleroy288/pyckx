@@ -57,14 +57,14 @@ pub async fn generate_course(
                 course,
             }))
         }
-        Err(e) => {
+        Err(err) => {
             error!(
                 user_id = %user_id,
-                error = %e,
+                error = %err,
                 "Course generation failed"
             );
             Ok(HttpResponse::InternalServerError().json(serde_json::json!({
-                "error": format!("Failed to generate course: {}", e)
+                "error": format!("Failed to generate course: {}", err)
             })))
         }
     }

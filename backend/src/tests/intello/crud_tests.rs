@@ -1,4 +1,4 @@
-use crate::services::intello::crud_service::validate_user_id;
+use crate::services::intello::crud::crud_service::validate_user_id;
 
 #[test]
 fn test_validate_user_id_empty() {

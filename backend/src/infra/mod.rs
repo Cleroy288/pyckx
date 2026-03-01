@@ -11,10 +11,10 @@
 //! - `session` - Session management with CSV persistence
 
 pub mod database;
-pub mod openrouter;  // OpenRouter HTTP client
+pub mod openrouter; // OpenRouter HTTP client
+pub mod session;
 pub mod supabase;
 pub mod user;
-pub mod session;
 
 // Session and User
 pub use session::SessionStore;
@@ -22,20 +22,22 @@ pub use user::User;
 
 // Repository traits
 pub use database::{
-    AiUsageRepository, AppRepository, CollectionRepository, CreateApp, CreateDvd, 
-    DvdRepository, FillBlankRepository, FlashcardRepository, GameSetRepository, 
-    KeywordsRepository, OpenQuestionRepository, OrderPhraseRepository, QcmRepository, 
-    StudySessionRepository, TrueOrFalseRepository, UpdateApp, UpdateDvd, UserAppRepository,
-    CourseRepository,
+    AiUsageRepository, AppRepository, CollectionRepository, CourseRepository,
+    CreateApp, CreateDvd, DvdRepository, FillBlankRepository,
+    FlashcardRepository, GameSetRepository, KeywordsRepository,
+    OpenQuestionRepository, OrderPhraseRepository, QcmRepository,
+    StudySessionRepository, TrueOrFalseRepository, UpdateApp, UpdateDvd,
+    UserAppRepository,
 };
 
 // Supabase implementations
 pub use supabase::{
-    SupabaseAiUsageRepository, SupabaseAppRepository, SupabaseClient, SupabaseCollectionRepository, 
-    SupabaseDvdRepository, SupabaseFillBlankRepository, SupabaseHttpClient,
-    SupabaseFlashcardRepository, SupabaseKeywordsRepository, SupabaseOpenQuestionRepository, 
-    SupabaseOrderPhraseRepository, SupabaseQcmRepository, SupabaseSessionRepository,
-    SupabaseStudySessionRepository, SupabaseTrueOrFalseRepository, SupabaseUserAppRepository, 
-    SupabaseCourseRepository,
+    SupabaseAiUsageRepository, SupabaseAppRepository, SupabaseClient,
+    SupabaseCollectionRepository, SupabaseCourseRepository,
+    SupabaseDvdRepository, SupabaseFillBlankRepository,
+    SupabaseFlashcardRepository, SupabaseHttpClient,
+    SupabaseKeywordsRepository, SupabaseOpenQuestionRepository,
+    SupabaseOrderPhraseRepository, SupabaseQcmRepository,
+    SupabaseSessionRepository, SupabaseStudySessionRepository,
+    SupabaseTrueOrFalseRepository, SupabaseUserAppRepository,
 };
-

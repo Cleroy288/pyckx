@@ -1,0 +1,347 @@
+/* ============================================
+   Vitrine (Landing) Page Styles
+   Flat angular design: border-spin hover,
+   grid-line hero pattern, vertical side lines,
+   no rounded corners anywhere.
+   ============================================ */
+
+/* ── Main Container + Side Lines ─────────── */
+
+.vitrine {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 80px 2rem 4rem;
+    z-index: 1;
+    background: var(--color-background);
+    contain: layout style;
+}
+
+/* ── Content wrapper ───────────────────────
+   Centered column at max 1200px.
+   Matches the side lines position.          */
+.content {
+    position: relative;
+    flex: 1;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.vitrine::before,
+.vitrine::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--color-border);
+    pointer-events: none;
+    z-index: 2;
+}
+
+.vitrine::before { left: calc(50% - 600px); }
+.vitrine::after { right: calc(50% - 600px); }
+
+/* ── Hero Banner Wrapper ─────────────────── */
+
+.hero_section {
+    width: 100%;
+    animation: fadeInUp 0.6s ease both;
+}
+
+/* ── Hero Content (inside HeroBanner) ────── */
+
+.hero_tagline {
+    font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+    color: var(--color-text-secondary);
+    margin-bottom: 3rem;
+    line-height: 1.6;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+}
+
+.hero_cta {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+/* ── Vitrine Card (shared glass tile) ────── */
+
+.vitrine_card {
+    position: relative;
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--color-border);
+    border-radius: 0;
+    padding: 2.5rem 2rem;
+    overflow: hidden;
+    transition:
+        border-color var(--transition-fast);
+}
+
+.vitrine_card:hover {
+    border-color: transparent;
+    border-image: conic-gradient(
+        from var(--border-angle),
+        var(--color-primary),
+        transparent 25%,
+        transparent 75%,
+        var(--color-primary)
+    ) 1;
+    animation: border-spin 3s linear infinite;
+}
+
+/* ── Shared Card Text ────────────────────── */
+
+.card_title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: 1rem;
+    letter-spacing: -0.01em;
+}
+
+.card_content {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    margin: 0;
+}
+
+/* ── Tagline Section ────────────────────── */
+
+.tagline {
+    width: 100%;
+    padding: 3rem 0 3rem 15%;
+    margin-bottom: 2rem;
+    animation: fadeInUp 0.6s ease both;
+    animation-delay: 0.15s;
+}
+
+.tagline_text {
+    border-left: 2px solid var(--color-primary);
+    padding-left: 1.5rem;
+}
+
+.tagline_line {
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.8;
+    font-weight: 400;
+}
+
+/* ── Apps Section ────────────────────────── */
+
+.apps {
+    width: 100%;
+    margin-bottom: 4rem;
+    animation: fadeInUp 0.6s ease both;
+    animation-delay: 0.25s;
+}
+
+.apps_grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+}
+
+/* App card — vertical, full-width */
+.app_card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 2.5rem 2rem;
+}
+
+.app_card_icon {
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: color-mix(
+        in srgb, var(--primary) 8%, transparent
+    );
+    border: 1px solid color-mix(
+        in srgb, var(--primary) 15%, transparent
+    );
+    border-radius: 0;
+    color: var(--color-primary);
+    margin-bottom: 1.5rem;
+    transition: background var(--transition-fast);
+}
+
+.vitrine_card:hover .app_card_icon {
+    background: color-mix(
+        in srgb, var(--primary) 18%, transparent
+    );
+}
+
+.app_card_icon svg {
+    width: 28px;
+    height: 28px;
+}
+
+/* ── Pricing Section ─────────────────────── */
+
+.pricing {
+    width: 100%;
+    margin-bottom: 2rem;
+    animation: fadeInUp 0.6s ease both;
+    animation-delay: 0.35s;
+}
+
+.pricing_grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    align-items: stretch;
+}
+
+.pricing_card_content {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    min-height: 350px;
+}
+
+.pricing_name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: 1rem;
+    margin-top: 0.5rem;
+}
+
+.pricing_price {
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 0.25rem;
+    flex-wrap: wrap;
+}
+
+.pricing_amount {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--color-primary);
+    line-height: 1;
+}
+
+.pricing_period {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+}
+
+.pricing_features {
+    list-style: none;
+    margin: 0 0 2rem 0;
+    padding: 0;
+    text-align: left;
+    flex: 1;
+}
+
+.pricing_features li {
+    padding: 0.75rem 0;
+    color: var(--color-text-secondary);
+    border-bottom: 1px solid color-mix(
+        in srgb, var(--primary) 5%, transparent
+    );
+    font-size: 0.95rem;
+    line-height: 1.4;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.pricing_features li:last-child {
+    border-bottom: none;
+}
+
+.pricing_button {
+    margin-top: auto;
+    width: 100%;
+}
+
+/* ── Start Now Section ───────────────────── */
+
+.start_now {
+    width: 100%;
+    margin-top: 2rem;
+    border: 1px solid transparent;
+    border-image: conic-gradient(
+        from var(--border-angle),
+        var(--color-primary),
+        transparent 25%,
+        transparent 75%,
+        var(--color-primary)
+    ) 1;
+    animation:
+        fadeInUp 0.6s ease both,
+        border-spin 3s linear 0.6s infinite;
+}
+
+.start_now_cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 2rem 0;
+}
+
+.start_now_note {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    margin: 0;
+}
+
+/* ── Responsive ──────────────────────────── */
+
+@media (max-width: 1264px) {
+    .vitrine::before { left: 2rem; }
+    .vitrine::after { right: 2rem; }
+}
+
+@media (max-width: 768px) {
+    .vitrine {
+        padding: 80px 1.5rem 3rem;
+    }
+
+    .vitrine::before { left: 1.5rem; }
+    .vitrine::after { right: 1.5rem; }
+
+    .hero_tagline { margin-bottom: 2.5rem; }
+
+    .hero_cta {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .apps_grid { grid-template-columns: 1fr; }
+    .app_card { padding: 2rem 1.5rem; }
+
+    .pricing_grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+    .vitrine {
+        padding: 70px 1rem 2rem;
+    }
+
+    .vitrine::before,
+    .vitrine::after { display: none; }
+
+    .hero_cta { gap: 0.75rem; }
+
+    .app_card { padding: 1.5rem 1rem; }
+}

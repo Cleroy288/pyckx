@@ -1,6 +1,8 @@
 //! App registry tests - validation and listing
 
-use crate::services::app_registry::{is_valid_app, AVAILABLE_APPS};
+use crate::services::app_registry::registry_service::{
+    is_valid_app, AVAILABLE_APPS,
+};
 
 #[test]
 fn test_is_valid_app() {

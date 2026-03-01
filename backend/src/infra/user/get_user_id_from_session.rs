@@ -14,7 +14,10 @@ use actix_web::HttpRequest;
 /// # Returns
 /// - `Ok(String)` with user ID if session is valid
 /// - `Err(AppError)` if session is not found or invalid
-pub fn get_user_id_from_session(app: &App, req: &HttpRequest) -> AppResult<String> {
+pub fn get_user_id_from_session(
+    app: &App,
+    req: &HttpRequest,
+) -> AppResult<String> {
     let session_id = req
         .cookie("session_id")
         .map(|c| c.value().to_string())

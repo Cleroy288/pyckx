@@ -1,0 +1,164 @@
+{
+  "index_settings": {
+    "docstore_compression": "lz4",
+    "docstore_blocksize": 16384
+  },
+  "segments": [
+    {
+      "segment_id": "7d474473-bbe3-4ed2-b8fd-b57a6d629fb3",
+      "max_doc": 1,
+      "deletes": null
+    },
+    {
+      "segment_id": "d4b629fd-19fb-49b7-a5e6-eac1e7cbc33a",
+      "max_doc": 1,
+      "deletes": null
+    },
+    {
+      "segment_id": "3ba19a14-9872-4653-acf0-6a223e3c0516",
+      "max_doc": 1,
+      "deletes": null
+    },
+    {
+      "segment_id": "fac375a8-04c8-4188-851c-4806b4d32814",
+      "max_doc": 1,
+      "deletes": null
+    },
+    {
+      "segment_id": "a58e4b17-2e26-4bc0-995f-522432f64c06",
+      "max_doc": 1,
+      "deletes": null
+    },
+    {
+      "segment_id": "8bc5de3d-3c0f-4b5f-a8ff-922ecf0f89d3",
+      "max_doc": 1,
+      "deletes": null
+    },
+    {
+      "segment_id": "86ff036c-3117-4ffa-b08d-ccd5dcaa81b2",
+      "max_doc": 1,
+      "deletes": null
+    },
+    {
+      "segment_id": "fe2a4819-3c12-42a2-81b3-5581cbd51d02",
+      "max_doc": 1,
+      "deletes": null
+    },
+    {
+      "segment_id": "661ea256-1cb5-48be-9ebe-88b3b3985d04",
+      "max_doc": 1,
+      "deletes": null
+    },
+    {
+      "segment_id": "62674a48-dadc-45ca-9ab9-fc5c69753b4e",
+      "max_doc": 1,
+      "deletes": null
+    },
+    {
+      "segment_id": "2e017013-54c3-4c28-8d53-31b882e35769",
+      "max_doc": 1,
+      "deletes": null
+    },
+    {
+      "segment_id": "76ba59fd-d8b4-45f3-b211-f1782cfeb338",
+      "max_doc": 1,
+      "deletes": null
+    },
+    {
+      "segment_id": "2515a01b-31cd-48e6-8dce-12a928ab8087",
+      "max_doc": 1,
+      "deletes": null
+    }
+  ],
+  "schema": [
+    {
+      "name": "id",
+      "type": "text",
+      "options": {
+        "indexing": {
+          "record": "basic",
+          "fieldnorms": true,
+          "tokenizer": "raw"
+        },
+        "stored": true,
+        "fast": false
+      }
+    },
+    {
+      "name": "session_id",
+      "type": "text",
+      "options": {
+        "indexing": {
+          "record": "basic",
+          "fieldnorms": true,
+          "tokenizer": "raw"
+        },
+        "stored": true,
+        "fast": false
+      }
+    },
+    {
+      "name": "timestamp",
+      "type": "u64",
+      "options": {
+        "indexed": true,
+        "fieldnorms": true,
+        "fast": false,
+        "stored": true
+      }
+    },
+    {
+      "name": "input_text",
+      "type": "text",
+      "options": {
+        "indexing": {
+          "record": "position",
+          "fieldnorms": true,
+          "tokenizer": "default"
+        },
+        "stored": true,
+        "fast": false
+      }
+    },
+    {
+      "name": "response_text",
+      "type": "text",
+      "options": {
+        "indexing": {
+          "record": "position",
+          "fieldnorms": true,
+          "tokenizer": "default"
+        },
+        "stored": true,
+        "fast": false
+      }
+    },
+    {
+      "name": "response_type",
+      "type": "text",
+      "options": {
+        "indexing": {
+          "record": "basic",
+          "fieldnorms": true,
+          "tokenizer": "raw"
+        },
+        "stored": true,
+        "fast": false
+      }
+    },
+    {
+      "name": "files",
+      "type": "text",
+      "options": {
+        "indexing": {
+          "record": "position",
+          "fieldnorms": true,
+          "tokenizer": "default"
+        },
+        "stored": true,
+        "fast": false
+      }
+    }
+  ],
+  "opstamp": 26
+}

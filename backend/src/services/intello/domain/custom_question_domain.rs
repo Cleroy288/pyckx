@@ -4,8 +4,8 @@
 //! Users can upload multiple documents (PDF, Word, TXT) and the system
 //! will extract text and send it to an AI model to generate questions.
 
-use serde::{Deserialize, Serialize};
 use super::enums_domain::Level;
+use serde::{Deserialize, Serialize};
 
 // ** DocumentType **
 // ==> Supported document types for content extraction
@@ -32,10 +32,10 @@ pub enum DocumentType {
 // @ token_count : Estimated token count for this document
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct CustomQuestionDocument {
-    pub filename: String,      // original filename
+    pub filename: String,       // original filename
     pub doc_type: DocumentType, // document type
-    pub content: String,       // extracted text
-    pub token_count: u32,      // token count
+    pub content: String,        // extracted text
+    pub token_count: u32,       // token count
 }
 
 // ** CustomQuestion **
@@ -55,16 +55,16 @@ pub struct CustomQuestionDocument {
 // @ total_token_count : Total token count across all documents
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct CustomQuestion {
-    pub id: String,                               // unique identifier
-    pub user_id: String,                          // owner
-    pub name: String,                             // set name
-    pub description: String,                      // description
-    pub instructions: String,                     // AI instructions
-    pub language: String,                         // language code
-    pub level: Level,                             // difficulty level
-    pub output_game: String,                      // target game type
-    pub subjects: Vec<String>,                    // subject tags
-    pub num_questions: u8,                        // question count
-    pub documents: Vec<CustomQuestionDocument>,   // attached documents
-    pub total_token_count: u32,                   // total tokens
+    pub id: String,                             // unique identifier
+    pub user_id: String,                        // owner
+    pub name: String,                           // set name
+    pub description: String,                    // description
+    pub instructions: String,                   // AI instructions
+    pub language: String,                       // language code
+    pub level: Level,                           // difficulty level
+    pub output_game: String,                    // target game type
+    pub subjects: Vec<String>,                  // subject tags
+    pub num_questions: u8,                      // question count
+    pub documents: Vec<CustomQuestionDocument>, // attached documents
+    pub total_token_count: u32,                 // total tokens
 }

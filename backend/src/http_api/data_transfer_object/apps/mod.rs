@@ -1,8 +1,11 @@
 //! Apps DTOs - Request and Response types for apps API
 
+mod conversion;
 mod request;
 mod response;
-mod conversion;
 
-pub use request::{CreateAppRequest, UpdateAppRequest, AddUserAppRequest};
-pub use response::{AppResponse, AppListResponse, AppSuccessResponse, UserAppSuccessResponse, SuccessResponse};
+pub use request::{AddUserAppRequest, CreateAppRequest, UpdateAppRequest};
+pub use response::{
+    AppListResponse, AppResponse, AppSuccessResponse, SuccessResponse,
+    UserAppSuccessResponse,
+};

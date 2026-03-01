@@ -1,0 +1,18 @@
+/* FormField wrapper styles */
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+}
+
+.label {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--color-text-secondary, #999);
+}
+
+.error {
+    font-size: 0.75rem;
+    color: var(--color-error);
+}

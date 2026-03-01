@@ -17,11 +17,11 @@ use crate::services::intello::{Level, QuestionId, SetId};
 // @ explanation : Explanation of why the answer is correct
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct QcmQuestion {
-    pub id: QuestionId,           // unique identifier
-    pub question: String,         // question text
+    pub id: QuestionId,             // unique identifier
+    pub question: String,           // question text
     pub wrong_answers: Vec<String>, // list of 3 wrong answers
-    pub right_answer: String,     // correct answer
-    pub explanation: String,      // explanation of correctness
+    pub right_answer: String,       // correct answer
+    pub explanation: String,        // explanation of correctness
 }
 
 // ** QcmSet **
@@ -37,12 +37,12 @@ pub struct QcmQuestion {
 // @ questions : List of questions in this set
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 pub struct QcmSet {
-    pub id: SetId,                  // unique identifier
-    pub user_id: UserId,            // owner
-    pub name: String,               // name of the set
-    pub description: String,        // description
-    pub level: Level,               // difficulty level
-    pub language: String,           // language code
-    pub subjects: Vec<String>,      // covered subjects
+    pub id: SetId,                   // unique identifier
+    pub user_id: UserId,             // owner
+    pub name: String,                // name of the set
+    pub description: String,         // description
+    pub level: Level,                // difficulty level
+    pub language: String,            // language code
+    pub subjects: Vec<String>,       // covered subjects
     pub questions: Vec<QcmQuestion>, // questions in set
 }

@@ -12,7 +12,7 @@
 mod app_registry;
 mod auth;
 mod collection;
+pub mod config;
 mod intello;
 mod openrouter;
 mod utils;
-pub mod config;

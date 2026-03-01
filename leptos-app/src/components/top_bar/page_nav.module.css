@@ -1,0 +1,158 @@
+/* ============================================
+   Page Navigator — Top Bar Sub-component
+   ============================================
+   Compact < PageName > arrows centered in the
+   app bar. Click the label to open a dropdown
+   with all available pages.
+   ============================================ */
+
+/* ── Container ───────────────────────────────
+   Absolutely centered in the nav_content.
+   Opaque background hides the grid overlay.
+   Full rectangle border.
+   ::before / ::after are horizontal connector
+   lines extending left to logo and right to
+   the profile button.                         */
+.page_nav {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 0;
+    display: flex;
+    align-items: center;
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+}
+
+/* ── Horizontal connector lines ──────────────
+   Extend from the rectangle edges toward the
+   logo (left) and buttons (right).
+   The top bar overflow:hidden clips them.     */
+/* Line width: from page_nav edge to the page
+   content side line (1200px / 2 = 600px from
+   center). The page_nav center sits at 50% of
+   nav_content which includes 2rem padding, so
+   subtract 2rem to align with the content edge.
+   On narrow screens, cap at 50vw - 2rem padding
+   minus the page_nav half-width.                */
+.page_nav::before,
+.page_nav::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    height: 1px;
+    width: min(
+        calc(600px - 5.5rem - 2rem),
+        calc(50vw - 5.5rem - 2rem)
+    );
+    background: var(--color-border);
+    pointer-events: none;
+}
+
+.page_nav::before {
+    right: 100%;
+}
+
+.page_nav::after {
+    left: 100%;
+}
+
+/* ── Arrow buttons ───────────────────────────
+   Compact clickable areas. Hover changes
+   text color only.                            */
+.arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    padding: 0.25rem 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    transition: color var(--transition-fast);
+}
+
+.arrow:hover {
+    color: var(--color-primary);
+}
+
+/* ── Page label (clickable) ──────────────────
+   Fixed width, centered text. Vertical
+   separators on each side. Click to toggle
+   the dropdown menu.                          */
+.label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 7rem;
+    padding: 0.25rem 0;
+    border: none;
+    border-left: 1px solid var(--color-border);
+    border-right: 1px solid var(--color-border);
+    background: none;
+    cursor: pointer;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    transition: color var(--transition-fast);
+}
+
+.label:hover {
+    color: var(--color-primary);
+}
+
+/* ── Dropdown menu ───────────────────────────
+   Positioned below the page_nav rectangle.
+   Same opaque background and border style.    */
+.dropdown {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    min-width: 100%;
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-top: none;
+}
+
+/* ── Dropdown item ───────────────────────────
+   Full-width clickable rows. Border between
+   items as separator.                         */
+.dropdown_item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1rem;
+    background: none;
+    border: none;
+    border-top: 1px solid var(--color-border);
+    cursor: pointer;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    transition: color var(--transition-fast);
+}
+
+.dropdown_item:hover {
+    color: var(--color-primary);
+}
+
+/* ── Active page indicator ───────────────────
+   Highlights the current page in the
+   dropdown list.                              */
+.active {
+    color: var(--color-primary);
+}

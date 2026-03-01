@@ -7,11 +7,13 @@
  * Tables: intello_keyword_sets, intello_keyword_questions, intello_keywords
  */
 
-use super::types::{level_from_db, level_to_db, KeywordQuestionRow, KeywordRow, KeywordSetRow};
-use crate::services::intello::{Keyword, KeywordQuestion, KeywordSet};
-use crate::services::intello::error_domain::IntelloError;
+use super::types::{
+    level_from_db, level_to_db, KeywordQuestionRow, KeywordRow, KeywordSetRow,
+};
 use crate::infra::database::GameSetRepository;
 use crate::infra::supabase::shared::{SupabaseError, SupabaseHttpClient};
+use crate::services::intello::error_domain::IntelloError;
+use crate::services::intello::{Keyword, KeywordQuestion, KeywordSet};
 use async_trait::async_trait;
 use std::sync::Arc;
 use tracing::{info, instrument};
@@ -35,19 +37,25 @@ impl SupabaseKeywordsRepository {
         IntelloError::storage(err.to_string())
     }
 
-    async fn get_questions(&self, set_id: &str) -> Result<Vec<KeywordQuestion>, IntelloError> {
-        let url = self
-            .client
-            .rest_url_with_query(TABLE_QUESTIONS, &format!("set_id=eq.{}", set_id));
+    async fn get_questions(
+        &self,
+        set_id: &str,
+    ) -> Result<Vec<KeywordQuestion>, IntelloError> {
+        let url = self.client.rest_url_with_query(
+            TABLE_QUESTIONS,
+            &format!("set_id=eq.{}", set_id),
+        );
         let q_rows: Vec<KeywordQuestionRow> =
             self.client.get(&url).await.map_err(Self::map_error)?;
 
         let mut questions = Vec::new();
         for q_row in q_rows {
-            let url = self
-                .client
-                .rest_url_with_query(TABLE_KEYWORDS, &format!("question_id=eq.{}", q_row.id));
-            let k_rows: Vec<KeywordRow> = self.client.get(&url).await.map_err(Self::map_error)?;
+            let url = self.client.rest_url_with_query(
+                TABLE_KEYWORDS,
+                &format!("question_id=eq.{}", q_row.id),
+            );
+            let k_rows: Vec<KeywordRow> =
+                self.client.get(&url).await.map_err(Self::map_error)?;
 
             let keywords = k_rows
                 .into_iter()
@@ -68,7 +76,10 @@ impl SupabaseKeywordsRepository {
         Ok(questions)
     }
 
-    async fn row_to_domain(&self, row: KeywordSetRow) -> Result<KeywordSet, IntelloError> {
+    async fn row_to_domain(
+        &self,
+        row: KeywordSetRow,
+    ) -> Result<KeywordSet, IntelloError> {
         let questions = self.get_questions(&row.id).await?;
         Ok(KeywordSet {
             id: row.id.into(),
@@ -86,7 +97,10 @@ impl SupabaseKeywordsRepository {
 #[async_trait]
 impl GameSetRepository<KeywordSet> for SupabaseKeywordsRepository {
     #[instrument(skip(self, set), fields(set_id = %set.id))]
-    async fn insert(&self, set: &KeywordSet) -> Result<KeywordSet, IntelloError> {
+    async fn insert(
+        &self,
+        set: &KeywordSet,
+    ) -> Result<KeywordSet, IntelloError> {
         let payload = serde_json::json!({
             "p_set": {
                 "id": set.id,
@@ -123,10 +137,14 @@ impl GameSetRepository<KeywordSet> for SupabaseKeywordsRepository {
     }
 
     #[instrument(skip(self), fields(user_id = %user_id))]
-    async fn find_by_user(&self, user_id: &str) -> Result<Vec<KeywordSet>, IntelloError> {
+    async fn find_by_user(
+        &self,
+        user_id: &str,
+    ) -> Result<Vec<KeywordSet>, IntelloError> {
         let query = format!("user_id=eq.{}", user_id);
         let url = self.client.rest_url_with_query(TABLE_SETS, &query);
-        let rows: Vec<KeywordSetRow> = self.client.get(&url).await.map_err(Self::map_error)?;
+        let rows: Vec<KeywordSetRow> =
+            self.client.get(&url).await.map_err(Self::map_error)?;
         let mut sets = Vec::new();
         for row in rows {
             sets.push(self.row_to_domain(row).await?);

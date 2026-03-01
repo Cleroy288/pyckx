@@ -2,10 +2,10 @@
 //!
 //! List flashcard sets.
 
-use crate::http_api::data_transfer_object::intello::FlashcardSetListResponse;
 use crate::app::App;
-use crate::shared::AppResult;
+use crate::http_api::data_transfer_object::intello::FlashcardSetListResponse;
 use crate::infra::user::get_user_id_from_session;
+use crate::shared::AppResult;
 use actix_web::{get, web, HttpRequest, HttpResponse};
 use tracing::instrument;
 
@@ -17,6 +17,9 @@ pub async fn list_flashcards_handler(
     req: HttpRequest,
 ) -> AppResult<HttpResponse> {
     let user_id = get_user_id_from_session(&app, &req)?;
-    let sets = app.intello_service.get_user_flashcard_sets(&user_id).await?;
+    let sets = app
+        .intello_service
+        .get_user_flashcard_sets(&user_id)
+        .await?;
     Ok(HttpResponse::Ok().json(FlashcardSetListResponse::from_sets(sets)))
 }

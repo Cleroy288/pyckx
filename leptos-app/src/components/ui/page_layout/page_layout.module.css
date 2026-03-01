@@ -1,0 +1,102 @@
+/* ============================================
+   PageLayout — Shared page container
+   ============================================
+   Full-height wrapper with opaque background,
+   vertical side lines aligned with the 1200px
+   content area, and centered content column.
+   ============================================ */
+
+/* ── Page container ─────────────────────────
+   padding-top accounts for the fixed TopBar
+   (~60px height + breathing room).
+   Uses flexbox so .content stretches to fill
+   the full page height.                       */
+.page {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: 100vh;
+    padding: 100px 2rem 4rem;
+    background: var(--color-background);
+}
+
+/* ── Side lines ─────────────────────────────
+   Vertical lines aligned with the content
+   edges (1200px centered). They sit on
+   .page so they span the FULL page height.
+   - Left  : calc(50% - 600px)
+   - Right : calc(50% + 600px)
+   - Colour: var(--color-border)
+   - Width : 1px                               */
+.page::before,
+.page::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--color-border);
+    pointer-events: none;
+    z-index: 2;
+}
+
+.page::before {
+    left: calc(50% - 600px);
+}
+
+.page::after {
+    right: calc(50% - 600px);
+}
+
+/* ── Content wrapper ────────────────────────
+   Centered column at max 1200px.
+   flex:1 makes it fill remaining height.      */
+.content {
+    position: relative;
+    flex: 1;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* ── Responsive ─────────────────────────────
+   On narrow screens the content fills the
+   viewport — lines move to the padding edges.
+   Below 480px, hide them entirely.            */
+
+@media (max-width: 1264px) {
+    .page::before {
+        left: 2rem;
+    }
+
+    .page::after {
+        right: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .page {
+        padding: 80px 1.5rem 3rem;
+    }
+
+    .page::before {
+        left: 1.5rem;
+    }
+
+    .page::after {
+        right: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .page {
+        padding: 70px 1rem 2rem;
+    }
+
+    .page::before,
+    .page::after {
+        display: none;
+    }
+}

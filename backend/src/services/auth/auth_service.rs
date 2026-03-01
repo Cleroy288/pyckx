@@ -4,8 +4,8 @@
 
 use super::types_domain::AuthService;
 use crate::infra::User;
-use crate::shared::{AppError, AppResult};
 use crate::services::auth::error_domain::AuthError;
+use crate::shared::{AppError, AppResult};
 use tracing::{info, instrument};
 
 impl AuthService {
@@ -17,7 +17,7 @@ impl AuthService {
             .supabase
             .login(email, password)
             .await
-            .map_err(|e| AppError::Auth(AuthError::from(e)))?;
+            .map_err(|err| AppError::Auth(AuthError::from(err)))?;
 
         self.sessions.create_session(user.clone());
         info!(user_id = %user.id, "User logged in");
@@ -45,6 +45,7 @@ impl AuthService {
     /// Register a new user with profile data
     /// NOTE: Registration route is disabled - users are added via Supabase Dashboard
     #[allow(dead_code)]
+    #[allow(clippy::too_many_arguments)]
     #[instrument(skip(self, password), fields(email = %email, username = %username))]
     pub async fn register(
         &self,
@@ -56,9 +57,15 @@ impl AuthService {
     ) -> AppResult<User> {
         let user = self
             .supabase
-            .register(email, password, username, phone_country_code, phone_number)
+            .register(
+                email,
+                password,
+                username,
+                phone_country_code,
+                phone_number,
+            )
             .await
-            .map_err(|e| AppError::Auth(AuthError::from(e)))?;
+            .map_err(|err| AppError::Auth(AuthError::from(err)))?;
 
         self.sessions.create_session(user.clone());
         info!(user_id = %user.id, "User registered");

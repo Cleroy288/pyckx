@@ -9,10 +9,10 @@ use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 use tracing::info;
 
-use crate::services::intello::study_session::study_session_domain::StudySession;
-use crate::shared::AppError;
 use crate::infra::database::StudySessionRepository;
 use crate::infra::supabase::shared::SupabaseHttpClient;
+use crate::services::intello::study_session::study_session_domain::StudySession;
+use crate::shared::AppError;
 
 const TABLE_SESSIONS: &str = "intello_study_sessions";
 
@@ -86,13 +86,14 @@ impl SupabaseStudySessionRepository {
             created_at: row.created_at,
         }
     }
-
-
 }
 
 #[async_trait]
 impl StudySessionRepository for SupabaseStudySessionRepository {
-    async fn create(&self, session: &StudySession) -> Result<StudySession, AppError> {
+    async fn create(
+        &self,
+        session: &StudySession,
+    ) -> Result<StudySession, AppError> {
         let row = InsertSessionRow {
             id: session.id.clone(),
             course_id: session.course_id.clone(),
@@ -108,30 +109,36 @@ impl StudySessionRepository for SupabaseStudySessionRepository {
         };
 
         let url = self.client.rest_url(TABLE_SESSIONS);
-        let rows: Vec<SessionRow> = self
-            .client
-            .post(&url, &row)
-            .await
-            .map_err(|e| AppError::Internal(crate::http_api::utils::InternalError::new(e.to_string())))?;
+        let rows: Vec<SessionRow> =
+            self.client.post(&url, &row).await.map_err(|err| {
+                AppError::Internal(crate::http_api::utils::InternalError::new(
+                    err.to_string(),
+                ))
+            })?;
 
-        let created = rows
-            .into_iter()
-            .next()
-            .ok_or_else(|| AppError::Internal(crate::http_api::utils::InternalError::new("No session returned".to_string())))?;
+        let created = rows.into_iter().next().ok_or_else(|| {
+            AppError::Internal(crate::http_api::utils::InternalError::new(
+                "No session returned".to_string(),
+            ))
+        })?;
 
         info!(session_id = %created.id, "Study session created");
         Ok(Self::row_to_domain(created))
     }
 
-    async fn list_by_course(&self, course_id: &str) -> Result<Vec<StudySession>, AppError> {
+    async fn list_by_course(
+        &self,
+        course_id: &str,
+    ) -> Result<Vec<StudySession>, AppError> {
         let query = format!("course_id=eq.{}&order=created_at.desc", course_id);
         let url = self.client.rest_url_with_query(TABLE_SESSIONS, &query);
 
-        let rows: Vec<SessionRow> = self
-            .client
-            .get(&url)
-            .await
-            .map_err(|e| AppError::Internal(crate::http_api::utils::InternalError::new(e.to_string())))?;
+        let rows: Vec<SessionRow> =
+            self.client.get(&url).await.map_err(|err| {
+                AppError::Internal(crate::http_api::utils::InternalError::new(
+                    err.to_string(),
+                ))
+            })?;
 
         Ok(rows.into_iter().map(Self::row_to_domain).collect())
     }
@@ -140,22 +147,33 @@ impl StudySessionRepository for SupabaseStudySessionRepository {
         let query = format!("id=eq.{}", session_id);
         let url = self.client.rest_url_with_query(TABLE_SESSIONS, &query);
 
-        let rows: Vec<SessionRow> = self
-            .client
-            .get(&url)
-            .await
-            .map_err(|e| AppError::Internal(crate::http_api::utils::InternalError::new(e.to_string())))?;
+        let rows: Vec<SessionRow> =
+            self.client.get(&url).await.map_err(|err| {
+                AppError::Internal(crate::http_api::utils::InternalError::new(
+                    err.to_string(),
+                ))
+            })?;
 
         let session = rows.into_iter().next().ok_or_else(|| {
-             AppError::Internal(crate::http_api::utils::InternalError::new("Session not found".to_string()))
+            AppError::Internal(crate::http_api::utils::InternalError::new(
+                "Session not found".to_string(),
+            ))
         })?;
 
         Ok(Self::row_to_domain(session))
     }
 
-    async fn save_session_content(&self, session_id: &str, content: &serde_json::Value) -> Result<(), AppError> {
-        let url = self.client.rest_url_with_query(TABLE_SESSIONS, &format!("id=eq.{}", session_id));
+    async fn save_session_content(
+        &self,
+        session_id: &str,
+        content: &serde_json::Value,
+    ) -> Result<(), AppError> {
+        let url = self.client.rest_url_with_query(
+            TABLE_SESSIONS,
+            &format!("id=eq.{}", session_id),
+        );
 
+        #[allow(dead_code)]
         #[derive(Serialize)]
         struct UpdateContent<'a> {
             generated_content: &'a serde_json::Value,
@@ -169,39 +187,47 @@ impl StudySessionRepository for SupabaseStudySessionRepository {
         // If it fails (legacy or partial), we just save it as generated_content
         use crate::http_api::data_transfer_object::intello::course::CourseGenerationResult;
 
-        let update = if let Ok(full_result) = serde_json::from_value::<CourseGenerationResult>(content.clone()) {
-             // Convert intermediate structs to Values for storage
-             let _extracted_json = serde_json::to_value(&full_result.extracted_knowledge).ok();
-             let _edu_json = serde_json::to_value(&full_result.educational_content).ok();
-             let _course_json = serde_json::to_value(&full_result.course).ok();
+        let update = if let Ok(full_result) =
+            serde_json::from_value::<CourseGenerationResult>(content.clone())
+        {
+            // Convert intermediate structs to Values for storage
+            let _extracted_json =
+                serde_json::to_value(&full_result.extracted_knowledge).ok();
+            let _edu_json =
+                serde_json::to_value(&full_result.educational_content).ok();
+            let _course_json = serde_json::to_value(&full_result.course).ok();
 
-             // We construct a new UpdateContent holding references or owned values converted to references
-             // But since we can't sustain references to local variables in the generic structure easily here without complex lifetime handling,
-             // let's simplify by using options.
+            // We construct a new UpdateContent holding references or owned values converted to references
+            // But since we can't sustain references to local variables in the generic structure easily here without complex lifetime handling,
+            // let's simplify by using options.
 
-             // Actually, the simplest way given `content` is passed as Value is to just construct the JSON body dynamically
-             // But to keep type safety, let's redefine the struct or use serde_json::json!
+            // Actually, the simplest way given `content` is passed as Value is to just construct the JSON body dynamically
+            // But to keep type safety, let's redefine the struct or use serde_json::json!
 
-             let update_json = serde_json::json!({
-                 "generated_content": full_result.course,
-                 "extracted_knowledge": full_result.extracted_knowledge,
-                 "educational_content": full_result.educational_content,
-                 "expanded_knowledge": full_result.expanded_knowledge,
-                 "status": "completed"
-             });
-             update_json
+            let update_json = serde_json::json!({
+                "generated_content": full_result.course,
+                "extracted_knowledge": full_result.extracted_knowledge,
+                "educational_content": full_result.educational_content,
+                "expanded_knowledge": full_result.expanded_knowledge,
+                "status": "completed"
+            });
+            update_json
         } else {
             // Fallback for simple content
-             serde_json::json!({
-                 "generated_content": content,
-                 "status": "completed"
-             })
+            serde_json::json!({
+                "generated_content": content,
+                "status": "completed"
+            })
         };
 
         self.client
             .patch::<serde_json::Value, _>(&url, &update)
             .await
-            .map_err(|e| AppError::Internal(crate::http_api::utils::InternalError::new(e.to_string())))?;
+            .map_err(|err| {
+                AppError::Internal(crate::http_api::utils::InternalError::new(
+                    err.to_string(),
+                ))
+            })?;
 
         info!(session_id = %session_id, "Saved generated content and artifacts to session");
         Ok(())
@@ -211,10 +237,11 @@ impl StudySessionRepository for SupabaseStudySessionRepository {
         let query = format!("course_id=eq.{}", course_id);
         let url = self.client.rest_url_with_query(TABLE_SESSIONS, &query);
 
-        self.client
-            .delete(&url)
-            .await
-            .map_err(|e| AppError::Internal(crate::http_api::utils::InternalError::new(e.to_string())))?;
+        self.client.delete(&url).await.map_err(|err| {
+            AppError::Internal(crate::http_api::utils::InternalError::new(
+                err.to_string(),
+            ))
+        })?;
 
         info!(course_id = %course_id, "Deleted all study sessions for course");
         Ok(())
@@ -224,10 +251,11 @@ impl StudySessionRepository for SupabaseStudySessionRepository {
         let query = format!("id=eq.{}", session_id);
         let url = self.client.rest_url_with_query(TABLE_SESSIONS, &query);
 
-        self.client
-            .delete(&url)
-            .await
-            .map_err(|e| AppError::Internal(crate::http_api::utils::InternalError::new(e.to_string())))?;
+        self.client.delete(&url).await.map_err(|err| {
+            AppError::Internal(crate::http_api::utils::InternalError::new(
+                err.to_string(),
+            ))
+        })?;
 
         info!(session_id = %session_id, "Deleted study session");
         Ok(())

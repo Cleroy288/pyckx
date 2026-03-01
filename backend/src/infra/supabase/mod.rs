@@ -20,6 +20,7 @@ mod client;
 mod collection;
 mod course;
 mod dvd;
+pub mod error;
 mod fill_blank;
 mod flashcard;
 mod keywords;
@@ -31,10 +32,9 @@ pub mod shared;
 mod study_session;
 mod true_false;
 mod user_app;
-pub mod error;
 
-pub use shared::SupabaseHttpClient;
 pub use error::SupabaseError;
+pub use shared::SupabaseHttpClient;
 
 pub use ai_usage::SupabaseAiUsageRepository;
 pub use app::SupabaseAppRepository;
