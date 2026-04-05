@@ -44,9 +44,9 @@ impl PaletteState {
         (self.palette_id)()
     }
 
-    /// Whether dark mode is active (untracked read)
+    /// Whether dark mode is active (tracked read)
     pub fn is_dark(&self) -> bool {
-        self.is_dark.peek().clone()
+        (self.is_dark)()
     }
 
     /// Switch to a different palette by id
@@ -60,39 +60,3 @@ impl PaletteState {
         self.is_dark.set(!current);
     }
 }
-
-// TODO: Tests commented out — Dioxus signals require
-// a component runtime. PaletteState::new() used
-// RwSignal::new() outside components.
-//
-// #[cfg(test)]
-// mod tests {
-//     use super::*;
-//
-//     #[test]
-//     fn test_new_returns_given_id() { ... }
-//
-//     #[test]
-//     fn test_new_dark_mode_flag() { ... }
-//
-//     #[test]
-//     fn test_default_uses_teal_tech() { ... }
-//
-//     #[test]
-//     fn test_palette_returns_correct_palette() { ... }
-//
-//     #[test]
-//     fn test_palette_unknown_id_fallback() { ... }
-//
-//     #[test]
-//     fn test_set_palette_changes_id() { ... }
-//
-//     #[test]
-//     fn test_toggle_dark_flips_mode() { ... }
-//
-//     #[test]
-//     fn test_colors_light_mode() { ... }
-//
-//     #[test]
-//     fn test_colors_dark_mode() { ... }
-// }

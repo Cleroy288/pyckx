@@ -1,0 +1,23 @@
+{
+  "name": "pyckx-editor",
+  "private": true,
+  "scripts": {
+    "build": "esbuild src/codemirror_bridge.ts --bundle --format=iife --outfile=../assets/js/codemirror.bundle.js --minify",
+    "watch": "esbuild src/codemirror_bridge.ts --bundle --format=iife --outfile=../assets/js/codemirror.bundle.js --watch"
+  },
+  "dependencies": {
+    "@codemirror/view": "^6",
+    "@codemirror/state": "^6",
+    "@codemirror/commands": "^6",
+    "@codemirror/language": "^6",
+    "@codemirror/lang-javascript": "^6",
+    "@codemirror/lang-python": "^6",
+    "@codemirror/lang-go": "^6",
+    "@codemirror/lang-rust": "^6",
+    "@codemirror/theme-one-dark": "^6"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24",
+    "typescript": "^5.7"
+  }
+}
