@@ -3,11 +3,11 @@
 use crate::components::game_shared::{
     game_set_card::GameSetCard, set_list::SetList,
 };
-use crate::components::top_bar::HomeTopBar;
-use crate::components::ui::button::{
+use crate::home::HomeTopBar;
+use crate::ui::{
     Button, ButtonVariant,
 };
-use crate::components::ui::toast::use_toast;
+use crate::ui::use_toast;
 use crate::domain::game_set_trait::GameSetInfo;
 use crate::state::auth::use_auth_guard;
 use dioxus::prelude::*;
@@ -209,7 +209,7 @@ struct CardCtx<T: 'static> {
     /// Optional delete function
     delete_fn: Option<DeleteFn>,
     /// Toast state for notifications
-    toast: crate::components::ui::toast::ToastState,
+    toast: crate::ui::ToastState,
 }
 
 /// Render the list of game set cards
@@ -217,7 +217,7 @@ fn render_cards<T>(
     sets: Signal<Vec<T>>,
     play_prefix: String,
     delete_fn: Option<DeleteFn>,
-    toast: crate::components::ui::toast::ToastState,
+    toast: crate::ui::ToastState,
 ) -> Element
 where
     T: GameSetInfo + Send + Sync + 'static,

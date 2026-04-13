@@ -1,10 +1,10 @@
 //! CourseCard — uses ItemCard shell like game set cards
 
-use crate::components::ui::badge::Badge;
-use crate::components::ui::button::{
+use crate::ui::Badge;
+use crate::ui::{
     Button, ButtonSize, ButtonVariant,
 };
-use crate::components::ui::card::ItemCard;
+use crate::ui::ItemCard;
 use dioxus::prelude::*;
 
 /// Course card with name, description, actions

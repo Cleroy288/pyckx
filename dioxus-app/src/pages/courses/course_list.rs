@@ -2,13 +2,13 @@
 
 use crate::api;
 use crate::components::course::CourseCard;
-use crate::components::top_bar::HomeTopBar;
-use crate::components::ui::button::Button;
-use crate::components::ui::card::CardGrid;
-use crate::components::ui::empty_state::EmptyState;
-use crate::components::ui::hero_banner::HeroBanner;
-use crate::components::ui::loading_boundary::LoadingBoundary;
-use crate::components::ui::page_layout::PageLayout;
+use crate::home::HomeTopBar;
+use crate::ui::Button;
+use crate::ui::CardGrid;
+use crate::ui::EmptyState;
+use crate::ui::HeroBanner;
+use crate::ui::LoadingBoundary;
+use crate::ui::PageLayout;
 use crate::domain::course_types::CourseData;
 use crate::state::hooks::{
     use_fetch_on_mount, FetchFn,

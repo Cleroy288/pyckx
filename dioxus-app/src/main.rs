@@ -7,9 +7,9 @@
 
 use dioxus::prelude::*;
 
-use dioxus_app::components;
 use dioxus_app::routes::Route;
 use dioxus_app::state;
+use dioxus_app::ui;
 
 /// Grid-line background wrapper
 #[component]
@@ -64,7 +64,7 @@ fn App() -> Element {
         let _ = js_sys::eval(TRACK_PAGE_JS);
     });
     rsx! {
-        components::ui::toast::ToastProvider {
+        ui::ToastProvider {
             state::PaletteProvider {
                 state::AuthProvider {
                     state::UserAppsProvider {

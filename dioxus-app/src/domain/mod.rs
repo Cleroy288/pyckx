@@ -1,6 +1,5 @@
 //! Domain layer — pure business types, zero framework deps
 
-pub mod admin_types;
 pub mod app_registry;
 pub mod app_types;
 pub mod auth_types;

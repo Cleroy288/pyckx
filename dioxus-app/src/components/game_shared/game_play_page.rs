@@ -1,9 +1,9 @@
 // ** game_play_page.rs **
 // ==> Shared play page: fetch set by id, show player
 
-use crate::components::top_bar::HomeTopBar;
-use crate::components::ui::page_layout::PageLayout;
-use crate::components::ui::spinner::Spinner;
+use crate::home::HomeTopBar;
+use crate::ui::PageLayout;
+use crate::ui::Spinner;
 use crate::state::auth::use_auth_guard;
 use dioxus::prelude::*;
 use std::future::Future;

@@ -1,9 +1,9 @@
 // ** set_list.rs **
 // ==> Generic set list with loading/empty states
 
-use crate::components::ui::card::CardGrid;
-use crate::components::ui::empty_state::EmptyState;
-use crate::components::ui::skeleton::SkeletonCard;
+use crate::ui::CardGrid;
+use crate::ui::EmptyState;
+use crate::ui::SkeletonCard;
 use dioxus::prelude::*;
 
 /// Generic list container for game sets

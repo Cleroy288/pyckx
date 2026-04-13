@@ -1,14 +1,14 @@
 // ** game_set_card.rs **
 // ==> Generic card for any game set (QCM, flashcard...)
 
-use crate::components::ui::badge::{
+use crate::ui::{
     Badge, BadgeVariant,
 };
-use crate::components::ui::button::{
+use crate::ui::{
     Button, ButtonSize, ButtonVariant,
 };
-use crate::components::ui::card::ItemCard;
-use crate::components::ui::modal::ConfirmDialog;
+use crate::ui::ItemCard;
+use crate::ui::ConfirmDialog;
 use dioxus::prelude::*;
 
 /// Generic game set card

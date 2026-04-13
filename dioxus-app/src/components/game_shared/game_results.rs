@@ -1,7 +1,7 @@
 //! Score display + per-question breakdown
 
-use crate::components::ui::badge::{Badge, BadgeVariant};
-use crate::components::ui::button::{
+use crate::ui::{Badge, BadgeVariant};
+use crate::ui::{
     Button, ButtonVariant,
 };
 use dioxus::prelude::*;

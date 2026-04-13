@@ -3,10 +3,10 @@
 use crate::components::game_shared::{
     generate_form::{GenerateForm, GenerateFormData},
 };
-use crate::components::top_bar::HomeTopBar;
-use crate::components::ui::hero_banner::HeroBanner;
-use crate::components::ui::page_layout::PageLayout;
-use crate::components::ui::toast::use_toast;
+use crate::home::HomeTopBar;
+use crate::ui::HeroBanner;
+use crate::ui::PageLayout;
+use crate::ui::use_toast;
 use crate::state::auth::use_auth_guard;
 use dioxus::prelude::*;
 use std::future::Future;

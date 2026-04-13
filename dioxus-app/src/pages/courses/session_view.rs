@@ -2,9 +2,9 @@
 
 use crate::api;
 use crate::components::course::ContentRenderer;
-use crate::components::top_bar::HomeTopBar;
-use crate::components::ui::loading_boundary::LoadingBoundary;
-use crate::components::ui::page_layout::PageLayout;
+use crate::home::HomeTopBar;
+use crate::ui::LoadingBoundary;
+use crate::ui::PageLayout;
 use crate::domain::course_types::SessionData;
 use crate::state::hooks::{use_fetch_on_mount, FetchFn};
 use crate::state::use_auth_guard;

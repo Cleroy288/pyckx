@@ -4,12 +4,12 @@ use crate::api;
 use crate::components::course::{
     ResourceList, SessionCard,
 };
-use crate::components::top_bar::HomeTopBar;
-use crate::components::ui::button::Button;
-use crate::components::ui::hero_banner::HeroBanner;
-use crate::components::ui::loading_boundary::LoadingBoundary;
-use crate::components::ui::page_layout::PageLayout;
-use crate::components::ui::tabs::{TabPanel, Tabs};
+use crate::home::HomeTopBar;
+use crate::ui::Button;
+use crate::ui::HeroBanner;
+use crate::ui::LoadingBoundary;
+use crate::ui::PageLayout;
+use crate::ui::{TabPanel, Tabs};
 use crate::domain::course_types::{
     ResourceData, SessionData,
 };

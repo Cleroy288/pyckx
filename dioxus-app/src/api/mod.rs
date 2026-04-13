@@ -1,6 +1,5 @@
 //! API module — HTTP client for backend communication
 
-pub mod admin;
 pub mod auth;
 pub mod coding;
 pub mod collection;
@@ -14,7 +13,6 @@ pub mod study;
 pub mod log;
 pub mod keywords;
 pub mod open_questions;
-pub mod order_phrases;
 pub mod resources;
 pub mod true_false;
 pub mod types;

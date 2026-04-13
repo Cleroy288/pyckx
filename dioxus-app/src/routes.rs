@@ -1,10 +1,9 @@
-//! Route enum and thin route-wrapper components
-
-use dioxus::prelude::*;
+//! Route enum and thin wrappers mapping URLs to page components.
 
 use crate::pages;
+use dioxus::prelude::*;
 
-/// All application routes
+/// All application routes.
 #[derive(Routable, Clone, PartialEq)]
 #[rustfmt::skip]
 pub enum Route {
@@ -77,288 +76,160 @@ pub enum Route {
     #[route("/courses/:course_id/session/create")]
     SessionCreate { course_id: String },
     #[route("/courses/:course_id/session/:sid")]
-    SessionView {
-        course_id: String,
-        sid: String,
-    },
-    #[route("/demo/a")]
-    DemoA {},
-    #[route("/demo/b")]
-    DemoB {},
-    #[route("/demo/c")]
-    DemoC {},
-    #[route("/demo/d")]
-    DemoD {},
-    #[route("/demo/e")]
-    DemoE {},
-    #[route("/demo/f")]
-    DemoF {},
-    #[route("/demo/g")]
-    DemoG {},
-    #[route("/demo/h")]
-    DemoH {},
+    SessionView { course_id: String, sid: String },
+    #[route("/demo/a")] DemoA {},
+    #[route("/demo/b")] DemoB {},
+    #[route("/demo/c")] DemoC {},
+    #[route("/demo/d")] DemoD {},
+    #[route("/demo/e")] DemoE {},
+    #[route("/demo/f")] DemoF {},
+    #[route("/demo/g")] DemoG {},
+    #[route("/demo/h")] DemoH {},
     #[route("/testing-ui")]
     TestingUi {},
-    #[route("/:..segments")]
-    NotFound { segments: Vec<String> },
     #[route("/code/generate")]
     CodingGenerate {},
     #[route("/code/play")]
     CodingPlay {},
+    #[route("/:..segments")]
+    NotFound { segments: Vec<String> },
 }
 
-/// Landing page
-fn Vitrine() -> Element {
-    pages::vitrine::VitrinePage()
-}
+fn Vitrine() -> Element { crate::vitrine::VitrinePage() }
+fn Login() -> Element { crate::auth::LoginPage() }
+fn Register() -> Element { crate::auth::RegisterPage() }
+fn Home() -> Element { crate::home::HomePage() }
+fn Admin() -> Element { crate::admin::AdminPage() }
+fn Collection() -> Element { crate::collection::CollectionPage() }
+fn CollectionAdd() -> Element { crate::collection::DvdAddPage() }
 
-/// Login page
-fn Login() -> Element {
-    pages::login::LoginPage()
-}
+fn QcmList() -> Element { crate::qcm::QcmListPage() }
+fn QcmCreate() -> Element { crate::qcm::QcmCreatePage() }
+fn QcmGenerate() -> Element { crate::qcm::QcmGeneratePage() }
+fn QcmQuick() -> Element { crate::qcm::QcmQuickPage() }
 
-/// Register page
-fn Register() -> Element {
-    pages::register::RegisterPage()
-}
-
-/// Dashboard home
-fn Home() -> Element {
-    pages::home::HomePage()
-}
-
-/// Admin dashboard
-fn Admin() -> Element {
-    pages::admin::AdminPage()
-}
-
-/// DVD collection page
-fn Collection() -> Element {
-    pages::collection::CollectionPage()
-}
-
-/// Add DVD page
-fn CollectionAdd() -> Element {
-    pages::collection::DvdAddPage()
-}
-
-/// QCM list
-fn QcmList() -> Element {
-    pages::qcm::QcmListPage()
-}
-
-/// QCM manual create
-fn QcmCreate() -> Element {
-    pages::qcm::QcmCreatePage()
-}
-
-/// QCM AI generate
-fn QcmGenerate() -> Element {
-    pages::qcm::QcmGeneratePage()
-}
-
-/// QCM quick play
-fn QcmQuick() -> Element {
-    pages::qcm::QcmQuickPage()
-}
-
-/// QCM play by ID
 #[component]
 fn QcmPlay(id: String) -> Element {
-    pages::qcm::QcmPlayPage(id)
+    crate::qcm::QcmPlayPage(id)
 }
 
-/// Flashcard list
 fn FlashcardList() -> Element {
-    pages::flashcards::FlashcardListPage()
+    crate::flashcards::FlashcardListPage()
 }
-
-/// Flashcard generate
 fn FlashcardGenerate() -> Element {
-    pages::flashcards::FlashcardGeneratePage()
+    crate::flashcards::FlashcardGeneratePage()
 }
 
-/// Flashcard play by ID
 #[component]
 fn FlashcardPlay(id: String) -> Element {
-    pages::flashcards::FlashcardPlayPage(id)
+    crate::flashcards::FlashcardPlayPage(id)
 }
 
-/// True/False list
 fn TrueFalseList() -> Element {
-    pages::true_false::TrueFalseListPage()
+    crate::true_false::TrueFalseListPage()
 }
-
-/// True/False generate
 fn TrueFalseGenerate() -> Element {
-    pages::true_false::TrueFalseGeneratePage()
+    crate::true_false::TrueFalseGeneratePage()
 }
 
-/// True/False play by ID
 #[component]
 fn TrueFalsePlay(id: String) -> Element {
-    pages::true_false::TrueFalsePlayPage(id)
+    crate::true_false::TrueFalsePlayPage(id)
 }
 
-/// Open question list
 fn OpenQuestionList() -> Element {
-    pages::open_questions::OpenQuestionListPage()
+    crate::open_questions::OpenQuestionListPage()
 }
-
-/// Open question generate
 fn OpenQuestionGenerate() -> Element {
-    pages::open_questions::OpenQuestionGeneratePage()
+    crate::open_questions::OpenQuestionGeneratePage()
 }
 
-/// Open question play by ID
 #[component]
 fn OpenQuestionPlay(id: String) -> Element {
-    pages::open_questions::OpenQuestionPlayPage(id)
+    crate::open_questions::OpenQuestionPlayPage(id)
 }
 
-/// Keywords list
 fn KeywordsList() -> Element {
-    pages::keywords::KeywordsListPage()
+    crate::keywords::KeywordsListPage()
 }
-
-/// Keywords generate
 fn KeywordsGenerate() -> Element {
-    pages::keywords::KeywordsGeneratePage()
+    crate::keywords::KeywordsGeneratePage()
 }
 
-/// Keywords play by ID
 #[component]
 fn KeywordsPlay(id: String) -> Element {
-    pages::keywords::KeywordsPlayPage(id)
+    crate::keywords::KeywordsPlayPage(id)
 }
 
-/// Order phrase list
 fn OrderPhraseList() -> Element {
-    pages::order_phrases::OrderPhraseListPage()
+    crate::order_phrases::OrderPhraseListPage()
 }
-
-/// Order phrase generate
 fn OrderPhraseGenerate() -> Element {
-    pages::order_phrases::OrderPhraseGeneratePage()
+    crate::order_phrases::OrderPhraseGeneratePage()
 }
 
-/// Order phrase play by ID
 #[component]
 fn OrderPhrasePlay(id: String) -> Element {
-    pages::order_phrases::OrderPhrasePlayPage(id)
+    crate::order_phrases::OrderPhrasePlayPage(id)
 }
 
-/// Fill blank list
 fn FillBlankList() -> Element {
-    pages::fill_blanks::FillBlankListPage()
+    crate::fill_blanks::FillBlankListPage()
 }
-
-/// Fill blank generate
 fn FillBlankGenerate() -> Element {
-    pages::fill_blanks::FillBlankGeneratePage()
+    crate::fill_blanks::FillBlankGeneratePage()
 }
 
-/// Fill blank play by ID
 #[component]
 fn FillBlankPlay(id: String) -> Element {
-    pages::fill_blanks::FillBlankPlayPage(id)
+    crate::fill_blanks::FillBlankPlayPage(id)
 }
 
-/// Course list
-fn CourseList() -> Element {
-    pages::courses::CourseListPage()
-}
-
-/// Course create
+fn CourseList() -> Element { pages::courses::CourseListPage() }
 fn CourseCreate() -> Element {
     pages::courses::CourseCreatePage()
 }
 
-/// Course detail by ID
 #[component]
 fn CourseDetail(id: String) -> Element {
     pages::courses::CourseDetailPage(id)
 }
 
-/// Session create
 #[component]
 fn SessionCreate(course_id: String) -> Element {
     pages::courses::SessionCreatePage(course_id)
 }
 
-/// Session view
 #[component]
-fn SessionView(
-    course_id: String,
-    sid: String,
-) -> Element {
-    pages::courses::SessionViewPage(
-        course_id, sid,
-    )
+fn SessionView(course_id: String, sid: String) -> Element {
+    pages::courses::SessionViewPage(course_id, sid)
 }
 
-/// Demo A
-fn DemoA() -> Element {
-    pages::demo::demo_a::DemoAPage()
-}
-
-/// Demo B
-fn DemoB() -> Element {
-    pages::demo::demo_b::DemoBPage()
-}
-
-/// Demo C
-fn DemoC() -> Element {
-    pages::demo::demo_c::DemoCPage()
-}
-
-/// Demo D
-fn DemoD() -> Element {
-    pages::demo::demo_d::DemoDPage()
-}
-
-/// Demo E
-fn DemoE() -> Element {
-    pages::demo::demo_e::DemoEPage()
-}
-
-/// Demo F
-fn DemoF() -> Element {
-    pages::demo::demo_f::DemoFPage()
-}
-
-/// Demo G
-fn DemoG() -> Element {
-    pages::demo::demo_g::DemoGPage()
-}
-
-/// Demo H
-fn DemoH() -> Element {
-    pages::demo::demo_h::DemoHPage()
-}
-
-/// UI testing sandbox
-fn TestingUi() -> Element {
-    pages::testing_ui::TestingUiPage()
-}
+fn DemoA() -> Element { crate::demo::DemoAPage() }
+fn DemoB() -> Element { crate::demo::DemoBPage() }
+fn DemoC() -> Element { crate::demo::DemoCPage() }
+fn DemoD() -> Element { crate::demo::DemoDPage() }
+fn DemoE() -> Element { crate::demo::DemoEPage() }
+fn DemoF() -> Element { crate::demo::DemoFPage() }
+fn DemoG() -> Element { crate::demo::DemoGPage() }
+fn DemoH() -> Element { crate::demo::DemoHPage() }
+fn TestingUi() -> Element { crate::demo::TestingUiPage() }
 
 fn CodingGenerate() -> Element {
-    pages::coding::CodingGeneratePage()
+    crate::coding::CodingGeneratePage()
 }
-
 fn CodingPlay() -> Element {
-    pages::coding::CodingPlayPage()
+    crate::coding::CodingPlayPage()
 }
 
-/// 404 catch-all
+/// 404 catch-all.
 #[component]
 fn NotFound(segments: Vec<String>) -> Element {
     rsx! {
         div {
             class: "flex items-center justify-center \
                 min-h-screen",
-            div {
-                class: "text-center",
+            div { class: "text-center",
                 h1 {
                     class: "text-4xl font-bold \
                         text-[var(--color-text-primary)] \

@@ -3,8 +3,8 @@
 use super::page_nav::{
     current_pathname, NAV_PAGES,
 };
-use crate::components::logo::NavLogo;
-use crate::components::ui::icon::Icon;
+use crate::home::NavLogo;
+use crate::ui::Icon;
 use crate::domain::palette_data::PALETTES;
 use crate::state::hooks::use_logout;
 use crate::state::palette_provider::use_palette;

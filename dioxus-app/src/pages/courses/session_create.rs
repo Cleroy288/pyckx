@@ -1,13 +1,13 @@
 //! Create a study session with topic and resources
 
 use crate::api;
-use crate::components::top_bar::HomeTopBar;
-use crate::components::ui::button::Button;
-use crate::components::ui::hero_banner::HeroBanner;
-use crate::components::ui::input::Input;
-use crate::components::ui::page_layout::PageLayout;
-use crate::components::ui::spinner::Spinner;
-use crate::components::ui::textarea::Textarea;
+use crate::home::HomeTopBar;
+use crate::ui::Button;
+use crate::ui::HeroBanner;
+use crate::ui::Input;
+use crate::ui::PageLayout;
+use crate::ui::Spinner;
+use crate::ui::Textarea;
 use crate::domain::course_types::CreateSessionRequest;
 use crate::state::hooks::use_async_navigate;
 use crate::state::use_auth_guard;

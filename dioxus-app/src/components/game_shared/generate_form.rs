@@ -1,16 +1,16 @@
 // ** generate_form.rs **
 // ==> Reusable AI generation form
 
-use crate::components::ui::button::{
+use crate::ui::{
     Button, ButtonVariant,
 };
-use crate::components::ui::file_upload::FileUpload;
-use crate::components::ui::input::Input;
-use crate::components::ui::select::{
+use crate::ui::FileUpload;
+use crate::ui::Input;
+use crate::ui::{
     Select, SelectOption,
 };
-use crate::components::ui::spinner::Spinner;
-use crate::components::ui::textarea::Textarea;
+use crate::ui::Spinner;
+use crate::ui::Textarea;
 use dioxus::prelude::*;
 
 /// Data emitted by the generate form

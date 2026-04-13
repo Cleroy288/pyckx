@@ -1,9 +1,9 @@
 //! SessionCard — brutalist card for study sessions
 
-use crate::components::ui::badge::{
+use crate::ui::{
     Badge, BadgeVariant,
 };
-use crate::components::ui::button::{
+use crate::ui::{
     Button, ButtonSize,
 };
 use dioxus::prelude::*;

@@ -1,10 +1,10 @@
 // ** resource_list.rs **
 // ==> Displays course resources with upload button
 
-use crate::components::ui::button::{
+use crate::ui::{
     Button, ButtonSize,
 };
-use crate::components::ui::empty_state::EmptyState;
+use crate::ui::EmptyState;
 use crate::domain::course_types::ResourceData;
 use dioxus::prelude::*;
 

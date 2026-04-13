@@ -1,7 +1,7 @@
 // ** game_progress.rs **
 // ==> Question X/Y progress bar during gameplay
 
-use crate::components::ui::progress::Progress;
+use crate::ui::Progress;
 use dioxus::prelude::*;
 
 /// Game progress indicator
