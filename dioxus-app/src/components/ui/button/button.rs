@@ -8,6 +8,7 @@ pub enum ButtonVariant {
     #[default]
     Primary,
     Outline,
+    Destructive,
 }
 
 /// Button size variant
@@ -22,43 +23,50 @@ pub enum ButtonSize {
 /// Base classes shared by all buttons
 const BASE: &str = "\
     inline-flex items-center justify-center \
-    font-semibold font-[var(--principal-font-family,sans-serif)] \
-    border-none cursor-pointer no-underline leading-relaxed \
-    transition-all duration-300 ease-out \
-    hover:scale-105 active:scale-95 \
+    font-['Unbounded',sans-serif] font-bold \
+    border-2 border-[var(--foreground)] \
+    rounded-[10px] cursor-pointer \
+    no-underline leading-relaxed \
+    shadow-[3px_3px_0_var(--foreground)] \
+    transition-all duration-150 ease-out \
+    active:translate-y-[1px] \
+    active:shadow-[2px_2px_0_var(--foreground)] \
     focus-visible:outline-2 \
-    focus-visible:outline-[var(--color-primary)] \
+    focus-visible:outline-[var(--primary)] \
     focus-visible:outline-offset-2 \
-    disabled:opacity-60 disabled:cursor-not-allowed \
-    disabled:hover:scale-100 disabled:active:scale-100";
+    disabled:opacity-60 \
+    disabled:cursor-not-allowed";
 
 /// Tailwind classes for a button variant
 fn variant_class(v: ButtonVariant) -> &'static str {
     match v {
         ButtonVariant::Primary => "\
-            text-[var(--color-background)] \
-            bg-[var(--color-primary)] \
-            shadow-md shadow-[color-mix(in_srgb,var(--color-primary)_40%,transparent)] \
-            hover:enabled:opacity-90 \
-            hover:shadow-lg hover:shadow-[color-mix(in_srgb,var(--color-primary)_60%,transparent)] \
-            active:enabled:opacity-80",
+            text-[var(--primary-foreground)] \
+            bg-[var(--primary)] \
+            hover:-translate-y-0.5 \
+            hover:shadow-[4px_4px_0_var(--foreground)]",
         ButtonVariant::Outline => "\
-            bg-transparent \
-            border-2 border-[var(--color-primary)] \
-            text-[var(--color-primary)] \
-            hover:enabled:bg-[var(--color-primary)] \
-            hover:enabled:text-[var(--color-background)] \
-            hover:shadow-lg hover:shadow-[color-mix(in_srgb,var(--color-primary)_40%,transparent)] \
-            active:enabled:opacity-80",
+            bg-[var(--card)] \
+            text-[var(--foreground)] \
+            hover:-translate-y-0.5 \
+            hover:shadow-[4px_4px_0_var(--foreground)]",
+        ButtonVariant::Destructive => "\
+            text-[var(--primary-foreground)] \
+            bg-[var(--destructive)] \
+            hover:-translate-y-0.5 \
+            hover:shadow-[4px_4px_0_var(--foreground)]",
     }
 }
 
 /// Tailwind classes for a button size
 fn size_class(s: ButtonSize) -> &'static str {
     match s {
-        ButtonSize::Small => "py-2 px-5 text-sm",
-        ButtonSize::Medium => "py-3 px-7 text-[0.9375rem]",
-        ButtonSize::Large => "py-4 px-10 text-base",
+        ButtonSize::Small => "\
+            py-1.5 px-4 text-[11px]",
+        ButtonSize::Medium => "\
+            py-2.5 px-6 text-[12px]",
+        ButtonSize::Large => "\
+            py-3 px-8 text-[13px]",
     }
 }
 

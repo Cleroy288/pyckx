@@ -2,4 +2,7 @@
 @source "./src/**/*.{rs,html,css}";
 @import "./assets/global.css" layer(base);
 @import "./assets/effects.css";
+@import "./assets/cards.css";
 @import "./assets/vitrine.css";
+@import "./assets/home.css";
+@import "./assets/demo.css";

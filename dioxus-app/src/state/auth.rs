@@ -77,7 +77,6 @@ pub fn use_auth() -> AuthState {
 }
 
 /// Redirects to /login if not authenticated.
-/// Returns the auth state for further use.
 pub fn use_auth_guard() -> AuthState {
     let auth = use_auth();
     let nav = navigator();
@@ -90,42 +89,3 @@ pub fn use_auth_guard() -> AuthState {
     });
     auth
 }
-
-// TODO: Tests commented out — Dioxus signals require
-// a component runtime. These tests used RwSignal::new()
-// outside components which is not supported in Dioxus.
-//
-// #[cfg(test)]
-// mod tests {
-//     use super::*;
-//     use crate::domain::auth_types::AuthResponse;
-//
-//     fn test_user() -> AuthResponse {
-//         AuthResponse {
-//             username: "alice".into(),
-//             email: "alice@test.com".into(),
-//             role: "user".into(),
-//         }
-//     }
-//
-//     #[test]
-//     fn test_new_not_authenticated() { ... }
-//
-//     #[test]
-//     fn test_set_user_makes_authenticated() { ... }
-//
-//     #[test]
-//     fn test_set_user_clears_error() { ... }
-//
-//     #[test]
-//     fn test_clear_user_removes_auth() { ... }
-//
-//     #[test]
-//     fn test_set_error_stores_message() { ... }
-//
-//     #[test]
-//     fn test_clear_error_removes_message() { ... }
-//
-//     #[test]
-//     fn test_default_same_as_new() { ... }
-// }

@@ -84,7 +84,7 @@ impl_game_set_info!(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::domain::intello_types::Level;
+    use crate::domain::game_types::Level;
 
     #[test]
     fn test_qcm_set_level_str_returns_enum_str() {

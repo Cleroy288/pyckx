@@ -1,6 +1,7 @@
 //! UI Components — Reusable building blocks
 
 pub mod badge;
+pub mod code_editor;
 pub mod button;
 pub mod card;
 pub mod empty_state;

@@ -234,6 +234,150 @@
     transform: translateX(-4px);
 }
 
+/* ── Split icon — top bar (1.6rem) ──────── */
+.split-icon {
+    position: relative;
+    display: inline-block;
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 900;
+    font-size: 1.6rem;
+    line-height: 1;
+    cursor: default;
+}
+
+.split-icon .split-top {
+    -webkit-text-stroke: 1.2px var(--foreground);
+    color: transparent;
+    transform: translateX(1px);
+}
+
+.split-icon .split-bottom {
+    color: var(--color-primary);
+    transform: translateX(-2px);
+}
+
+.split-icon .split-line line {
+    stroke: var(--foreground);
+    stroke-width: 1.2;
+}
+
+.split-icon:hover .split-top {
+    transform: translateX(2px);
+}
+
+.split-icon:hover .split-bottom {
+    transform: translateX(-3px);
+}
+
+/* ── Split icon — hero (large) ─────────── */
+.split-icon-lg {
+    position: relative;
+    display: inline-block;
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 900;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    line-height: 1;
+    cursor: default;
+}
+
+.split-icon-lg .split-top {
+    -webkit-text-stroke: 2px var(--foreground);
+    color: transparent;
+    transform: translateX(3px);
+}
+
+.split-icon-lg .split-bottom {
+    color: var(--color-primary);
+    transform: translateX(-6px);
+}
+
+.split-icon-lg .split-line line {
+    stroke: var(--foreground);
+    stroke-width: 2;
+}
+
+.split-icon-lg:hover .split-top {
+    transform: translateX(6px);
+}
+
+.split-icon-lg:hover .split-bottom {
+    transform: translateX(-9px);
+}
+
+/* ── Split icon — nav bar (medium) ─────── */
+.split-icon-sm {
+    position: relative;
+    display: inline-block;
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 900;
+    font-size: 28px;
+    line-height: 1;
+    cursor: default;
+}
+
+.split-icon-sm .split-top {
+    -webkit-text-stroke: 1.2px var(--ink);
+    color: transparent;
+    transform: translateX(1px);
+}
+
+.split-icon-sm .split-bottom {
+    color: var(--accent);
+    transform: translateX(-3px);
+}
+
+.split-icon-sm .split-line line {
+    stroke: var(--ink);
+    stroke-width: 1.2;
+}
+
+.split-icon-sm:hover .split-top {
+    transform: translateX(3px);
+}
+
+.split-icon-sm:hover .split-bottom {
+    transform: translateX(-5px);
+}
+
+/* ── Split icon — hub center P ─────────── */
+.split-icon-hub {
+    position: relative;
+    display: inline-block;
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 900;
+    font-size: 3.5rem;
+    line-height: 1;
+    cursor: default;
+}
+
+.split-icon-hub .split-top {
+    -webkit-text-stroke: 2.2px var(--foreground);
+    color: transparent;
+    transform: translateX(4px);
+    transition: transform .55s
+        cubic-bezier(.16, 1, .3, 1);
+}
+
+.split-icon-hub .split-bottom {
+    color: var(--color-primary);
+    transform: translateX(-4px);
+    transition: transform .55s
+        cubic-bezier(.16, 1, .3, 1);
+}
+
+.split-icon-hub .split-line line {
+    stroke: var(--foreground);
+    stroke-width: 2;
+}
+
+.split-icon-hub:hover .split-top {
+    transform: translateX(7px);
+}
+
+.split-icon-hub:hover .split-bottom {
+    transform: translateX(-7px);
+}
+
 /* Start-now: always animated (not hover) */
 .border-spin-always {
     border: 1px solid transparent;

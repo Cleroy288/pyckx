@@ -4,16 +4,15 @@ use dioxus::prelude::*;
 
 /// Track bar classes
 const TRACK_CLS: &str = "\
-    w-full h-2 \
-    bg-[var(--color-border,#333)] \
-    rounded overflow-hidden";
+    w-full h-2.5 \
+    border-2 border-[var(--color-border)] \
+    rounded-full bg-[var(--card)] \
+    overflow-hidden";
 
 /// Fill bar classes
 const FILL_CLS: &str = "\
-    h-full rounded \
-    bg-gradient-to-r \
-    from-[var(--color-primary,#6366f1)] \
-    to-[color-mix(in_srgb,var(--color-primary,#6366f1)_80%,#fff)] \
+    h-full rounded-full \
+    bg-[var(--color-primary,#6366f1)] \
     transition-[width] duration-300 ease-out";
 
 /// Horizontal progress bar component

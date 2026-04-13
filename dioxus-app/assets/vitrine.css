@@ -19,48 +19,105 @@
   overflow-x: hidden;
 }
 
-/* NAV */
+/* NAV — matches HomeTopBar style */
 .vitrine-page nav {
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 100;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 60px;
-  height: 72px;
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(13, 13, 26, 0.1);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
-  transition: all 0.3s ease;
+  padding: 0 48px;
+  height: 64px;
+  background: var(--white);
+  border-bottom: 1.5px solid var(--border);
 }
 
 .vitrine-page .logo-wrap {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-family: 'Unbounded', sans-serif;
-  font-size: 16px;
-  font-weight: 700;
-  letter-spacing: -.5px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform .2s ease;
+}
+
+.vitrine-page .logo-wrap:hover {
+  transform: scale(1.03);
+}
+
+.vitrine-page .logo-wrap .split-top {
+  -webkit-text-stroke: 1.5px var(--foreground);
+}
+
+.vitrine-page .logo-wrap .split-bottom {
+  color: var(--color-primary);
+}
+
+.vitrine-page .logo-wrap .split-line line {
+  stroke: var(--foreground);
+}
+
+.vitrine-page .nav-links {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .vitrine-page .nav-links a {
   text-decoration: none;
   color: var(--muted);
-  font-size: 13px;
-  font-weight: 600;
-  padding: 8px 16px;
-  border-radius: 8px;
-  transition: all .2s;
-  margin: 0 2px;
+  font-family: 'Unbounded', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 8px 20px;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  background: var(--white);
+  transition: color .15s ease, border-color .15s ease;
 }
 
 .vitrine-page .nav-links a:hover {
+  border-color: var(--accent);
   color: var(--accent);
-  background: var(--soft);
+}
+
+.vitrine-page .nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.vitrine-page nav .btn-ink {
+  padding: 8px 18px;
+  font-size: 11px;
+  border-radius: 12px;
+  border-width: 1.5px;
+  box-shadow: none;
+}
+
+.vitrine-page nav .btn-ink:hover {
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+  box-shadow: none;
+}
+
+.vitrine-page nav .btn-ink:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.vitrine-page nav .btn-ghost {
+  padding: 8px 18px;
+  font-size: 11px;
+  border-radius: 12px;
+  border-width: 1.5px;
+}
+
+.vitrine-page nav .btn-ghost:hover {
+  transform: translateY(-2px);
 }
 
 .vitrine-page .btn-ink {
@@ -135,7 +192,11 @@
   font-weight: 700;
   cursor: pointer;
   letter-spacing: .5px;
-  transition: all .3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition:
+    color .3s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color .3s cubic-bezier(0.4, 0, 0.2, 1),
+    transform .3s cubic-bezier(0.4, 0, 0.2, 1),
+    background-color .3s cubic-bezier(0.4, 0, 0.2, 1);
   text-decoration: none;
   display: inline-block;
 }
@@ -154,7 +215,7 @@
 /* HERO */
 .vitrine-page .hero {
   text-align: center;
-  padding: 90px 40px 0;
+  padding: 140px 40px 0;
   max-width: 860px;
   margin: 0 auto;
 }
@@ -166,16 +227,16 @@
   font-size: 72px;
 }
 
-.vitrine-page .split-top {
+.vitrine-page .hero .split-top {
   -webkit-text-stroke: 2px var(--ink);
   color: transparent;
 }
 
-.vitrine-page .split-bottom {
+.vitrine-page .hero .split-bottom {
   color: var(--accent);
 }
 
-.vitrine-page .split-line line {
+.vitrine-page .hero .split-line line {
   stroke: var(--ink);
   stroke-width: 1.5;
 }
@@ -243,8 +304,7 @@
   overflow: hidden;
   max-width: 480px;
   margin: 0 auto 0;
-  background: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.92);
   box-shadow: 0 10px 40px rgba(91, 71, 214, 0.08);
   transition: transform 0.3s ease;
 }
@@ -334,25 +394,19 @@
 .vitrine-page .hub-ring {
   width: 110px;
   height: 110px;
-  border-radius: 28px;
-  background: transparent;
+  border-radius: 22px;
+  background: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  filter: drop-shadow(0 0 0px rgba(91, 71, 214, 0));
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 6px rgba(91,71,214,.15);
   animation: hub-breathe 3s ease-in-out infinite;
 }
 
 @keyframes hub-breathe {
-
-  0%,
-  100% {
-    filter: drop-shadow(0 0 6px rgba(91, 71, 214, .15));
-  }
-
-  50% {
-    filter: drop-shadow(0 0 28px rgba(91, 71, 214, .55));
-  }
+  0%, 100% { box-shadow: 0 0 6px rgba(91,71,214,.15); }
+  50%      { box-shadow: 0 0 28px rgba(91,71,214,.55); }
 }
 
 .vitrine-page .hub-label {
@@ -411,7 +465,10 @@
   border-radius: 20px;
   padding: 32px;
   cursor: pointer;
-  transition: all .3s;
+  transition:
+    border-color .3s,
+    transform .3s,
+    box-shadow .3s;
   position: relative;
   overflow: hidden;
 }
@@ -421,14 +478,16 @@
   position: absolute;
   bottom: 0;
   left: 0;
-  width: 0;
+  width: 100%;
   height: 3px;
   background: var(--accent);
-  transition: width .3s;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .3s;
 }
 
 .vitrine-page .acard:hover::after {
-  width: 100%;
+  transform: scaleX(1);
 }
 
 .vitrine-page .acard:hover {
@@ -675,51 +734,38 @@
   transition: left .55s ease;
 }
 
-/* INTELLO PRODUCT — game types grid */
+/* GAME TYPES — vitrine overrides on shared .gcard */
 .vitrine-page .games-grid {
-  display: grid;
-  grid-template-columns: repeat(
-    auto-fill, minmax(200px, 1fr)
-  );
-  gap: 16px;
+  grid-template-columns: repeat(3, 1fr);
 }
 
-.vitrine-page .game-card {
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 24px;
-  transition: all 0.3s ease;
+.vitrine-page .games-grid > :last-child {
+  grid-column: 2;
 }
 
-.vitrine-page .game-card:hover {
-  border-color: var(--accent);
-  transform: translateY(-4px);
-  box-shadow: 0 12px 32px
-    rgba(91, 71, 214, 0.1);
+.vitrine-page .gcard {
+  --foreground: var(--ink);
+  --color-primary: var(--accent);
+  --card: var(--white);
+  --secondary: var(--soft);
 }
 
-.vitrine-page .game-emoji {
-  font-size: 28px;
-  display: block;
-  margin-bottom: 12px;
+@media (max-width: 768px) {
+  .vitrine-page .games-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .vitrine-page .games-grid > :last-child {
+    grid-column: auto;
+  }
 }
 
-.vitrine-page .game-card h3 {
-  font-family: 'Unbounded', sans-serif;
-  font-size: 15px;
-  font-weight: 700;
-  letter-spacing: -0.5px;
-  margin-bottom: 6px;
+@media (max-width: 480px) {
+  .vitrine-page .games-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
-.vitrine-page .game-card p {
-  font-size: 13px;
-  color: var(--muted);
-  line-height: 1.5;
-}
-
-/* INTELLO PRODUCT — how it works steps */
+/* GAME TYPES — how it works steps */
 .vitrine-page .steps-row {
   display: flex;
   align-items: center;
@@ -774,4 +820,94 @@
   font-size: 24px;
   color: var(--accent);
   font-weight: 700;
+}
+
+/* AUTH PAGES (login / register) */
+.vitrine-page .auth-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 72px);
+  padding: 40px 20px;
+}
+
+.vitrine-page .auth-card {
+  background: var(--white);
+  border: 2px solid var(--ink);
+  border-radius: 24px;
+  padding: 48px 40px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 8px 8px 0 var(--ink);
+}
+
+.vitrine-page .auth-card h1 {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 32px;
+  font-weight: 900;
+  letter-spacing: -2px;
+  color: var(--ink);
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.vitrine-page .auth-card .auth-sub {
+  font-size: 14px;
+  color: var(--muted);
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.vitrine-page .auth-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.vitrine-page .auth-input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 15px;
+  color: var(--ink);
+  background: var(--white);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+}
+
+.vitrine-page .auth-input::placeholder {
+  color: var(--muted);
+}
+
+.vitrine-page .auth-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+.vitrine-page .auth-error {
+  background: rgba(220, 38, 38, 0.08);
+  border: 1.5px solid rgba(220, 38, 38, 0.3);
+  color: #dc2626;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.vitrine-page .auth-link {
+  color: var(--muted);
+  font-size: 14px;
+  text-decoration: none;
+  transition: color 0.2s;
+  text-underline-offset: 3px;
+}
+
+.vitrine-page .auth-link:hover {
+  color: var(--accent);
+  text-decoration: underline;
 }

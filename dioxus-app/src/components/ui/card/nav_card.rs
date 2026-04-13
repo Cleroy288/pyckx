@@ -5,20 +5,22 @@ use dioxus::prelude::*;
 
 /// Navigation card classes
 const CARD_CLS: &str = "\
-    border-spin-card \
     flex flex-col items-center gap-3 \
     py-8 px-6 w-full \
-    bg-[var(--glass-bg)] \
-    backdrop-blur-[20px] \
-    border border-[var(--color-border)] \
+    bg-[var(--card)] \
+    border-[1.5px] border-[var(--border)] \
+    rounded-[12px] \
     text-[var(--color-text-primary)] \
-    cursor-pointer font-[inherit]";
+    cursor-pointer font-[inherit] \
+    transition-all duration-200 \
+    hover:-translate-y-0.5 \
+    hover:border-[var(--color-primary)]";
 
 /// Icon container classes
 const ICON_CLS: &str = "\
     w-14 h-14 flex items-center justify-center \
-    bg-[color-mix(in_srgb,var(--primary)_10%,transparent)] \
-    border border-[color-mix(in_srgb,var(--primary)_15%,transparent)] \
+    rounded-[12px] \
+    bg-[var(--secondary)] \
     text-[var(--color-primary)] \
     transition-[background] \
     duration-[var(--transition-fast)] \

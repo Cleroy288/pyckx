@@ -6,16 +6,13 @@ use dioxus::prelude::*;
 const INPUT_CLS: &str = "\
     w-full py-4 px-6 text-base \
     font-[var(--principal-font-family)] \
-    border-2 border-[color-mix(in_srgb,var(--primary)_20%,transparent)] \
-    bg-[var(--glass-bg)] \
-    backdrop-blur-[var(--glass-blur-sm)] \
+    border-2 border-[var(--color-border)] \
+    rounded-[12px] bg-[var(--card)] \
     text-[var(--color-text-primary)] \
-    transition-all duration-[var(--transition-base)] \
+    transition-all duration-200 \
     outline-none box-border \
     placeholder:text-[var(--color-text-secondary)] \
-    focus:border-[var(--color-primary)] \
-    focus:bg-[var(--glass-bg-hover)] \
-    focus:shadow-[0_0_0_3px_color-mix(in_srgb,var(--primary)_10%,transparent)]";
+    focus:border-[var(--color-primary)]";
 
 /// Error-state input override
 const INPUT_ERR: &str = "\

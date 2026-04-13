@@ -18,11 +18,11 @@ pub struct AppInfo {
 /// All known apps in the platform
 pub const APP_REGISTRY: &[AppInfo] = &[
     AppInfo {
-        name: "intello",
-        label: "Intello",
+        name: "study",
+        label: "Study",
         description: "Organize courses, track progress, and excel.",
         icon: "Book",
-        path: "/intello",
+        path: "/home",
     },
     AppInfo {
         name: "collection",
@@ -44,9 +44,9 @@ mod tests {
 
     #[test]
     fn test_find_app_existing() {
-        let app = find_app("intello");
+        let app = find_app("study");
         assert!(app.is_some());
-        assert_eq!(app.unwrap().label, "Intello");
+        assert_eq!(app.unwrap().label, "Study");
     }
 
     #[test]

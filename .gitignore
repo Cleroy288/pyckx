@@ -14,3 +14,7 @@ notes
 
 # Logs (contain machine-specific data)
 logs/
+
+# Environment files (contain secrets)
+.env
+.env.local

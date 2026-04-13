@@ -2,7 +2,7 @@
 
 use serde::{Deserialize, Serialize};
 
-use super::intello_types::Level;
+use super::game_types::Level;
 
 /// Single QCM question from API
 #[derive(Debug, Clone, PartialEq, Deserialize)]
@@ -86,6 +86,14 @@ impl QuickQcmApiResponse {
             questions: self.questions,
         }
     }
+}
+
+/// Response from AI QCM generation endpoint
+#[derive(Debug, Clone, Deserialize)]
+pub struct GenerateQcmResponse {
+    pub success: bool,
+    pub id: String,
+    pub questions: Vec<QcmQuestion>,
 }
 
 /// QCM set list response

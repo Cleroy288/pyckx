@@ -55,7 +55,7 @@ mod tests {
     fn test_deserialize_app_data() {
         let json = r#"{
             "id": 1,
-            "name": "intello",
+            "name": "study",
             "description": "Learn",
             "created_at": "2024-01-01",
             "updated_at": "2024-01-02"
@@ -63,7 +63,7 @@ mod tests {
         let a: AppData =
             serde_json::from_str(json).unwrap();
         assert_eq!(a.id, 1);
-        assert_eq!(a.name, "intello");
+        assert_eq!(a.name, "study");
     }
 
     #[test]
@@ -101,10 +101,10 @@ mod tests {
     #[test]
     fn test_serialize_add_user_app_request() {
         let req = AddUserAppRequest {
-            app_name: "intello".into(),
+            app_name: "study".into(),
         };
         let json =
             serde_json::to_string(&req).unwrap();
-        assert!(json.contains("intello"));
+        assert!(json.contains("study"));
     }
 }

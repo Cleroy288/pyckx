@@ -18,26 +18,26 @@ const BADGE_BASE: &str = "\
     inline-flex items-center \
     py-1 px-2.5 text-xs font-semibold \
     leading-none whitespace-nowrap \
-    bg-transparent";
+    rounded-[12px] bg-transparent";
 
 /// Tailwind classes per badge variant
 fn variant_class(v: BadgeVariant) -> &'static str {
     match v {
         BadgeVariant::Default => "\
             text-[var(--color-text-secondary)] \
-            border border-[var(--color-border)]",
+            border-[1.5px] border-[var(--color-border)]",
         BadgeVariant::Success => "\
             text-[var(--color-success-text)] \
-            border border-[var(--color-success-border)]",
+            border-[1.5px] border-[var(--color-success-border)]",
         BadgeVariant::Warning => "\
             text-[var(--color-warning-text)] \
-            border border-[var(--color-warning-border)]",
+            border-[1.5px] border-[var(--color-warning-border)]",
         BadgeVariant::Error => "\
             text-[var(--color-error-text)] \
-            border border-[var(--color-error-border)]",
+            border-[1.5px] border-[var(--color-error-border)]",
         BadgeVariant::Info => "\
             text-[var(--color-info-text)] \
-            border border-[var(--color-info-border)]",
+            border-[1.5px] border-[var(--color-info-border)]",
     }
 }
 

@@ -1,31 +1,29 @@
-<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="32" height="32" viewBox="0 0 900 900">
   <defs>
-    <linearGradient id="card-front" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#6D5AE6"/>
-      <stop offset="100%" style="stop-color:#5B47D6"/>
-    </linearGradient>
-    <linearGradient id="card-mid" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#2D2A6E"/>
-      <stop offset="100%" style="stop-color:#1E1B50"/>
-    </linearGradient>
-    <linearGradient id="shine" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:0.18"/>
-      <stop offset="100%" style="stop-color:#FFFFFF;stop-opacity:0"/>
-    </linearGradient>
-    <filter id="shadow">
-      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#4F46E5" flood-opacity="0.35"/>
-    </filter>
-    <filter id="shadow-soft">
-      <feDropShadow dx="4" dy="6" stdDeviation="8" flood-color="#000000" flood-opacity="0.15"/>
-    </filter>
+    <path id="p"
+      d="M497 0 Q599 0 671.5 33.5 Q744 67 782 128.5
+         Q820 190 820 273 Q820 356 782 417.5
+         Q744 479 671.5 512.5 Q599 546 497 546
+         H180 V345 H480 Q518 345 539 326
+         Q560 307 560 273 Q560 238 539 219.5
+         Q518 201 480 201 H202 L318 85 V750
+         H60 V0 Z"/>
+    <clipPath id="t" clipPathUnits="userSpaceOnUse">
+      <polygon points="-50,-50 950,-50 950,400 -50,340"/>
+    </clipPath>
+    <clipPath id="b" clipPathUnits="userSpaceOnUse">
+      <polygon points="-50,340 950,400 950,850 -50,850"/>
+    </clipPath>
   </defs>
-  <rect x="72" y="36" width="86" height="86" rx="22" fill="#DDD8FF" opacity="0.55" transform="rotate(-14, 115, 79)"/>
-  <rect x="62" y="48" width="86" height="86" rx="22" fill="url(#card-mid)" filter="url(#shadow-soft)" transform="rotate(-5, 105, 91)"/>
-  <rect x="36" y="56" width="96" height="96" rx="24" fill="url(#card-front)" filter="url(#shadow)"/>
-  <rect x="36" y="56" width="96" height="96" rx="24" fill="url(#shine)"/>
-  <text x="54" y="130" font-family="Arial Black, sans-serif" font-size="70" font-weight="900"
-        fill="white" fill-opacity="0.12" stroke="white" stroke-width="2.5">P</text>
-  <circle cx="144" cy="62" r="11" fill="#7C6FF0"/>
-  <circle cx="160" cy="54" r="6" fill="#A89DF5" opacity="0.75"/>
-  <circle cx="155" cy="72" r="3.5" fill="#C4BAF8" opacity="0.55"/>
+  <rect width="900" height="900" rx="130" fill="#F8F7FF"/>
+  <g transform="translate(40,75)">
+    <use href="#p" fill="none" stroke="#0D0D1A"
+         stroke-width="36" stroke-linejoin="round"
+         clip-path="url(#t)"/>
+    <use href="#p" fill="#5B47D6"
+         clip-path="url(#b)"/>
+    <line x1="30" y1="340" x2="850" y2="400"
+          stroke="#0D0D1A" stroke-width="14"/>
+  </g>
 </svg>

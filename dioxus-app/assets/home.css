@@ -1,0 +1,972 @@
+/* ============================================
+   HOME — Neo-brutalist game hub
+   ============================================
+   Matches vitrine design language:
+   bold borders, offset shadows, Unbounded type,
+   green accents, dot background.
+   ============================================ */
+
+/* ── Page background: dot pattern ────────── */
+.home-page {
+    position: relative;
+    background-color: var(--background);
+    background-image: radial-gradient(
+        color-mix(in srgb, var(--primary) 12%, transparent) 1px,
+        transparent 1px
+    );
+    background-size: 20px 20px;
+    min-height: 100vh;
+}
+
+/* ── Disable old glassmorphism effects ───── */
+.home-page .page-layout::before,
+.home-page .page-layout::after,
+.home-page .top-bar-grid::before,
+.home-page .hero-banner::before,
+.home-page .hero-banner::after {
+    display: none;
+}
+
+/* ── Top bar (GLOBAL — not scoped) ───────── */
+.home-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 48px;
+    height: 64px;
+    background: var(--card);
+    border-bottom: 2px solid var(--foreground);
+}
+
+.home-nav-links {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.home-nav-links a {
+    text-decoration: none;
+    color: var(--muted-foreground);
+    font-family: "Unbounded", sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 8px 20px;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    background: var(--card);
+    transition: all 0.15s ease;
+}
+
+.home-nav-links a:hover {
+    border-color: var(--foreground);
+    color: var(--foreground);
+    transform: translateY(-2px);
+    box-shadow: 3px 3px 0 var(--foreground);
+}
+
+.home-nav-links a.active {
+    color: var(--primary-foreground);
+    background: var(--primary);
+    border-color: var(--foreground);
+    box-shadow: 3px 3px 0 var(--foreground);
+}
+
+.home-nav .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.home-nav .nav-btn {
+    background: var(--primary);
+    color: var(--primary-foreground);
+    border: 2px solid var(--foreground);
+    padding: 8px 18px;
+    border-radius: 12px;
+    font-family: "Unbounded", sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 3px 3px 0 var(--foreground);
+    transition: all 0.15s ease;
+}
+
+.home-nav .nav-btn:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 5px 5px 0 var(--foreground);
+}
+
+.home-nav .nav-btn-ghost {
+    background: var(--card);
+    color: var(--foreground);
+    border: 2px solid var(--border);
+    padding: 7px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.home-nav .nav-btn-ghost svg {
+    width: 18px;
+    height: 18px;
+}
+
+.home-nav .nav-btn-ghost:hover {
+    border-color: var(--foreground);
+    box-shadow: 3px 3px 0 var(--foreground);
+    transform: translateY(-2px);
+}
+
+.home-nav .logo-wrap {
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.home-nav .logo-wrap:hover {
+    transform: scale(1.03);
+}
+
+/* ── Theme dropdown ──────────────────────── */
+.theme-dropdown {
+    position: relative;
+}
+
+.theme-btn-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--primary);
+    border: 2px solid var(--foreground);
+}
+
+.theme-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background: var(--card);
+    border: 2px solid var(--foreground);
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 var(--foreground);
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 180px;
+    z-index: 200;
+}
+
+.theme-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 8px;
+    background: none;
+    cursor: pointer;
+    font-family: "Unbounded", sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--foreground);
+    transition: all 0.15s ease;
+    text-align: left;
+    width: 100%;
+}
+
+.theme-menu-item:hover {
+    background: var(--secondary);
+}
+
+.theme-menu-item.active {
+    background: var(--secondary);
+    box-shadow: inset 3px 0 0 var(--primary);
+}
+
+.theme-menu-dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid var(--foreground);
+    flex-shrink: 0;
+}
+
+/* ── Split logo sm: dynamic palette ──────── */
+.home-nav .split-wrap-sm .split-top {
+    -webkit-text-stroke: 1.5px var(--foreground);
+}
+
+.home-nav .split-wrap-sm .split-bottom {
+    color: var(--primary);
+}
+
+.home-nav .split-wrap-sm .split-line line {
+    stroke: var(--foreground);
+}
+
+/* ── Main content area ───────────────────── */
+.home-main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 100px 40px 80px;
+}
+
+/* ── Hero section ────────────────────────── */
+.home-hero {
+    text-align: center;
+    margin-bottom: 64px;
+    padding: 56px 48px 48px;
+    border: 2px solid var(--foreground);
+    border-radius: 16px;
+    box-shadow: 8px 8px 0 var(--foreground);
+    position: relative;
+    overflow: hidden;
+
+    --s: 60px;
+    --c1: var(--card);
+    --c2: color-mix(in srgb, var(--primary) 100%, var(--card));
+    --_g: radial-gradient(
+        25% 25% at 25% 25%,
+        var(--c1) 99%,
+        rgba(0, 0, 0, 0) 101%
+    );
+    background:
+        var(--_g) var(--s) var(--s) / calc(2 * var(--s)) calc(2 * var(--s)),
+        var(--_g) 0 0 / calc(2 * var(--s)) calc(2 * var(--s)),
+        radial-gradient(50% 50%, var(--c2) 98%, rgba(0, 0, 0, 0)) 0 0 / var(--s)
+            var(--s),
+        repeating-conic-gradient(var(--c2) 0 50%, var(--c1) 0 100%)
+            calc(0.5 * var(--s)) 0 / calc(2 * var(--s)) var(--s);
+}
+
+/* White card on top of the pattern */
+.home-hero-card {
+    position: relative;
+    z-index: 1;
+    background: var(--card);
+    border: 2px solid var(--foreground);
+    border-radius: 12px;
+    padding: 40px 36px 36px;
+    box-shadow: 4px 4px 0 var(--foreground);
+    max-width: 75%;
+    margin: 0 auto;
+}
+
+/* ── Eyebrow badge ───────────────────────── */
+.home-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: color-mix(in srgb, var(--primary) 12%, transparent);
+    color: var(--primary);
+    font-family: "Unbounded", sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 6px 16px;
+    border-radius: 4px;
+    border: 1.5px solid color-mix(in srgb, var(--primary) 25%, transparent);
+    margin-bottom: 24px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* ── Split logo in hero (uses .split-wrap) ── */
+.home-split {
+    display: block;
+    width: fit-content;
+    margin: 0 auto 16px;
+    font-size: 56px;
+}
+
+.home-hero .split-top {
+    -webkit-text-stroke: 2px var(--foreground);
+    color: transparent;
+}
+
+.home-hero .split-bottom {
+    color: var(--primary);
+}
+
+.home-hero .split-line line {
+    stroke: var(--foreground);
+    stroke-width: 1.5;
+}
+
+/* ── Headline ────────────────────────────── */
+.home-headline {
+    font-family: "Unbounded", sans-serif;
+    font-size: 48px;
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -3px;
+    margin-bottom: 16px;
+    color: var(--foreground);
+}
+
+.home-headline .hi-accent {
+    color: var(--primary);
+    position: relative;
+}
+
+.home-headline .hi-accent::after {
+    content: "";
+    position: absolute;
+    bottom: 2px;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: #a3e635;
+    border-radius: 3px;
+    z-index: -1;
+    opacity: 0.6;
+}
+
+/* ── Description ─────────────────────────── */
+.home-desc {
+    font-size: 16px;
+    color: var(--muted-foreground);
+    line-height: 1.8;
+    font-weight: 400;
+    max-width: 480px;
+    margin: 0 auto 36px;
+}
+
+/* ── Stats row ───────────────────────────── */
+.home-stats {
+    display: flex;
+    gap: 0;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.home-stat {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 24px;
+    transition: transform 0.2s ease;
+}
+
+.home-stat:hover {
+    transform: translateY(-2px);
+}
+
+.home-stat-sep {
+    width: 2px;
+    height: 24px;
+    background: var(--border);
+    flex-shrink: 0;
+}
+
+.home-stat-val {
+    font-family: "Unbounded", sans-serif;
+    font-size: 20px;
+    font-weight: 900;
+    color: var(--primary);
+    letter-spacing: -1px;
+}
+
+.home-stat-lbl {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted-foreground);
+    letter-spacing: 0.5px;
+}
+
+/* ── Section headers ─────────────────────── */
+.home-section {
+    margin-bottom: 56px;
+}
+
+.home-section-hd {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+}
+
+.home-section-line {
+    width: 4px;
+    height: 28px;
+    background: #a3e635;
+    border-radius: 2px;
+    flex-shrink: 0;
+    box-shadow: 2px 2px 0 var(--foreground);
+}
+
+.home-section-hd h2 {
+    font-family: "Unbounded", sans-serif;
+    font-size: 20px;
+    font-weight: 900;
+    letter-spacing: -1px;
+    margin: 0;
+    color: var(--foreground);
+}
+
+/* ── Games banner — diagonal stripe card ─── */
+.games-banner-card {
+    margin-bottom: 28px;
+    border: 2.5px solid var(--foreground);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 6px 6px 0 var(--foreground);
+}
+
+.games-banner-stripes {
+    height: 48px;
+    background:
+        linear-gradient(
+            135deg,
+            transparent 18.75%,
+            var(--card) 0 31.25%,
+            transparent 0
+        ),
+        repeating-linear-gradient(
+            45deg,
+            var(--card) -6.25% 6.25%,
+            var(--foreground) 0 18.75%
+        );
+    background-size: 60px 60px;
+    background-color: var(--foreground);
+}
+
+.games-banner-body {
+    background: var(--card);
+    padding: 24px 32px;
+    border-top: 2.5px solid var(--foreground);
+    border-left: 6px solid #fbbf24;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.games-banner-num {
+    font-family: "Unbounded", sans-serif;
+    font-size: 32px;
+    font-weight: 900;
+    color: var(--foreground);
+    line-height: 1;
+    letter-spacing: -2px;
+}
+
+.games-banner-title {
+    font-family: "Unbounded", sans-serif;
+    font-size: 18px;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    margin: 0;
+    color: var(--foreground);
+}
+
+.games-banner-hi {
+    display: inline-block;
+    color: var(--primary-foreground);
+    background: var(--primary);
+    padding: 3px 10px 4px;
+    border: 2px solid var(--foreground);
+    border-radius: 4px;
+    transform: rotate(-2deg);
+    box-shadow: 2px 2px 0 var(--foreground);
+    margin: 0 2px;
+}
+
+/* ── Game list hero ─────────────────────── */
+.gl-hero {
+    margin-bottom: 48px;
+    border: 2.5px solid var(--foreground);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 8px 8px 0 var(--foreground);
+}
+
+.gl-hero-stripes {
+    height: 56px;
+    background:
+        linear-gradient(
+            135deg,
+            transparent 18.75%,
+            var(--card) 0 31.25%,
+            transparent 0
+        ),
+        repeating-linear-gradient(
+            45deg,
+            var(--card) -6.25% 6.25%,
+            var(--foreground) 0 18.75%
+        );
+    background-size: 60px 60px;
+    background-color: var(--foreground);
+}
+
+.gl-hero-body {
+    background: var(--card);
+    padding: 32px 36px;
+    border-top: 2.5px solid var(--foreground);
+    border-left: 6px solid #fbbf24;
+}
+
+.gl-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: color-mix(
+        in srgb, var(--primary) 12%, transparent
+    );
+    color: var(--primary);
+    font-family: "Unbounded", sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 5px 14px;
+    border-radius: 4px;
+    border: 1.5px solid color-mix(
+        in srgb, var(--primary) 25%, transparent
+    );
+    margin-bottom: 16px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.gl-title {
+    font-family: "Unbounded", sans-serif;
+    font-size: 36px;
+    font-weight: 900;
+    letter-spacing: -2px;
+    margin: 0 0 24px;
+    color: var(--foreground);
+}
+
+.gl-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.gl-actions button {
+    border: 2px solid var(--foreground);
+    box-shadow: 3px 3px 0 var(--foreground);
+    font-family: "Unbounded", sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 10px;
+    transition: all 0.15s ease;
+}
+
+.gl-actions button:hover {
+    transform: translateY(-2px);
+    box-shadow: 5px 5px 0 var(--foreground);
+}
+
+/* ── Item card enhancements ────────────── */
+.item-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: var(--primary);
+    transition: height 0.2s ease;
+}
+
+.item-card:hover::before {
+    height: 5px;
+}
+
+.item-card-title {
+    font-family: "Unbounded", sans-serif;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+
+/* ── Games grid: 3 cols desktop ──────────── */
+.home-games {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+/* first card (QCM featured) spans 2 rows */
+.home-games > :first-child {
+    grid-row: span 2;
+}
+
+/* ── Theme card override ─────────────────── */
+.home-page .theme-card {
+    background: var(--card);
+    border: 2px solid var(--foreground);
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 6px 6px 0 var(--foreground);
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.home-page .theme-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 8px 8px 0 var(--foreground);
+}
+
+/* ── Pattern box ─────────────────────────── */
+.pattern-box {
+    width: 100%;
+    height: 200px;
+    border: 2px solid var(--foreground);
+    border-radius: 16px;
+    box-shadow: 6px 6px 0 var(--foreground);
+    overflow: hidden;
+    --s: 60px;
+    --c1: var(--card);
+    --c2: var(--primary);
+    --_g: radial-gradient(
+        25% 25% at 25% 25%,
+        var(--c1) 99%,
+        rgba(0, 0, 0, 0) 101%
+    );
+    background:
+        var(--_g) var(--s) var(--s) / calc(2 * var(--s)) calc(2 * var(--s)),
+        var(--_g) 0 0 / calc(2 * var(--s)) calc(2 * var(--s)),
+        radial-gradient(50% 50%, var(--c2) 98%, rgba(0, 0, 0, 0)) 0 0 / var(--s)
+            var(--s),
+        repeating-conic-gradient(var(--c2) 0 50%, var(--c1) 0 100%)
+            calc(0.5 * var(--s)) 0 / calc(2 * var(--s)) var(--s);
+}
+
+/* ── Footer ──────────────────────────────── */
+.home-footer {
+    text-align: center;
+    padding: 48px 0 24px;
+    border-top: 2px solid var(--border);
+}
+
+.home-footer-link {
+    font-family: "Unbounded", sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--muted-foreground);
+    text-decoration: none;
+    padding: 10px 24px;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    transition: all 0.15s ease;
+}
+
+.home-footer-link:hover {
+    border-color: var(--foreground);
+    color: var(--foreground);
+    box-shadow: 3px 3px 0 var(--foreground);
+    transform: translateY(-2px);
+}
+
+/* ── Decorative stickers ─────────────────── */
+/*
+ * Scrapbook layout — organic scatter.
+ *
+ * Container: absolute inside .home-main
+ * (scrolls with page, not stuck to viewport).
+ *
+ * --mc = center of margin gutter.
+ * Drift ±70px from --mc for scattered feel.
+ * Vertical: %, irregular gaps, diagonal pairs.
+ */
+.deco-stickers {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2;
+    --mc: calc(25vw - 275px);
+}
+
+.deco {
+    position: absolute;
+    user-select: none;
+    color: var(--foreground);
+}
+
+.deco svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+/* ── LEFT GUTTER ────────────────────────── */
+
+/* 📝 Todo list (work hard / play hard / ...) */
+.deco-todo {
+    top: 4%;
+    left: calc(var(--mc) - 50px);
+    width: 10%;
+    height: 10%;
+    padding: 8px 10px;
+    transform: rotate(3deg);
+    opacity: 0.88;
+    background: var(--card);
+    border: 2px solid var(--foreground);
+    border-radius: 8px;
+    box-shadow: 4px 4px 0 var(--foreground);
+}
+
+/* ✏️ Crayon jaune avec gomme rose */
+.deco-pencil {
+    top: 14%;
+    left: calc(var(--mc) + 55px);
+    width: 36px;
+    height: 55px;
+    transform: rotate(-20deg);
+    opacity: 0.9;
+}
+
+/* 📈 Bar chart sketch — 3 barres + flèche */
+.deco-chart {
+    top: 28%;
+    left: calc(var(--mc) - 40px);
+    width: 100px;
+    height: 110px;
+    transform: rotate(-5deg);
+    opacity: 0.85;
+}
+
+/* 📓 Cahier spirale avec lignes + scribble */
+.deco-notebook {
+    top: 44%;
+    left: calc(var(--mc) + 40px);
+    width: 75px;
+    height: 90px;
+    transform: rotate(5deg);
+    opacity: 0.85;
+    filter: drop-shadow(3px 3px 0 var(--foreground));
+}
+
+/* ∑ Formule math (∑x² + π) */
+.deco-formula {
+    top: 56%;
+    left: calc(var(--mc) - 35px);
+    width: 110px;
+    height: 46px;
+    transform: rotate(-5deg);
+    opacity: 0.8;
+    background: var(--card);
+    border: 2px solid var(--foreground);
+    border-radius: 6px;
+    padding: 4px 8px;
+    box-shadow: 3px 3px 0 var(--foreground);
+}
+
+/* 📖 Livre ouvert avec lignes sur pages */
+.deco-book {
+    top: 72%;
+    left: calc(var(--mc) + 50px);
+    width: 88px;
+    height: 66px;
+    transform: rotate(3deg);
+    opacity: 0.82;
+}
+
+/* 📏 Règle graduée */
+.deco-ruler {
+    top: 88%;
+    left: calc(var(--mc) - 30px);
+    width: 125px;
+    height: 34px;
+    transform: rotate(-12deg);
+    opacity: 0.75;
+}
+
+/* ── RIGHT GUTTER ───────────────────────── */
+
+/* ✨ Étoiles scintillantes (verte + jaune) */
+.deco-sparkles {
+    top: 10%;
+    right: calc(var(--mc) - 55px);
+    width: 55px;
+    height: 55px;
+    transform: rotate(-5deg);
+    opacity: 0.9;
+}
+
+/* 🏅 Tampon "A+" dans cercle pointillé */
+.deco-grade {
+    top: 14%;
+    right: calc(var(--mc) - 35px);
+    width: 120px;
+    height: 120px;
+    transform: rotate(12deg);
+    opacity: 0.85;
+}
+
+/* 💡 Ampoule avec rayons verts */
+.deco-bulb {
+    top: 26%;
+    right: calc(var(--mc) + 40px);
+    width: 58px;
+    height: 66px;
+    transform: rotate(6deg);
+    opacity: 0.9;
+}
+
+/* ☕ Tasse de café avec vapeur */
+.deco-coffee {
+    top: 38%;
+    right: calc(var(--mc) - 15px);
+    width: 44px;
+    height: 44px;
+    transform: rotate(-7deg);
+    opacity: 0.82;
+}
+
+/* 📌 Post-it jaune avec coin plié + "TODO:" */
+.deco-sticky {
+    top: 47%;
+    right: calc(var(--mc) + 25px);
+    width: 80px;
+    height: 80px;
+    transform: rotate(9deg);
+    opacity: 0.88;
+    filter: drop-shadow(3px 3px 0 var(--foreground));
+}
+
+/* 🎯 Cible avec flèche plantée au centre */
+.deco-target {
+    top: 54%;
+    right: calc(var(--mc) - 45px);
+    width: 62px;
+    height: 62px;
+    transform: rotate(-4deg);
+    opacity: 0.85;
+}
+
+/* 🏆 Trophée doré avec "1" */
+.deco-trophy {
+    top: 66%;
+    right: calc(var(--mc) + 15px);
+    width: 68px;
+    height: 82px;
+    transform: rotate(7deg);
+    opacity: 0.88;
+}
+
+/* ✅ Coche verte dans cercle pointillé */
+.deco-check {
+    top: 78%;
+    right: calc(var(--mc) + 55px);
+    width: 42px;
+    height: 42px;
+    transform: rotate(-10deg);
+    opacity: 0.85;
+}
+
+/* ✈️ Avion en papier plié */
+.deco-plane {
+    top: 86%;
+    right: calc(var(--mc) - 30px);
+    width: 65px;
+    height: 56px;
+    transform: rotate(20deg);
+    opacity: 0.8;
+}
+
+/* 🔖 Marque-page ruban violet */
+.deco-bookmark {
+    top: 95%;
+    right: calc(var(--mc) + 40px);
+    width: 30px;
+    height: 52px;
+    transform: rotate(4deg);
+    opacity: 0.85;
+}
+
+/* ── Responsive ──────────────────────────── */
+@media (max-width: 1200px) {
+    .deco-stickers {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .home-nav {
+        padding: 0 24px;
+        height: 56px;
+    }
+
+    .home-nav-links {
+        display: none;
+    }
+
+    .home-main {
+        padding: 80px 20px 60px;
+    }
+
+    .home-hero {
+        padding: 36px 24px 32px;
+        box-shadow: 6px 6px 0 var(--foreground);
+    }
+
+    .home-split {
+        font-size: 40px;
+    }
+
+    .home-headline {
+        font-size: 32px;
+        letter-spacing: -2px;
+    }
+
+    .home-games {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .home-games > :first-child {
+        grid-row: auto;
+    }
+
+    .home-section-hd h2 {
+        font-size: 16px;
+    }
+
+    .gl-hero-body {
+        padding: 24px 20px;
+    }
+
+    .gl-title {
+        font-size: 24px;
+        letter-spacing: -1px;
+    }
+
+    .gl-hero-stripes {
+        height: 40px;
+    }
+
+    .home-stat-sep {
+        display: none;
+    }
+
+    .home-stats {
+        gap: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .home-split {
+        font-size: 32px;
+    }
+
+    .home-headline {
+        font-size: 24px;
+    }
+
+    .home-games {
+        grid-template-columns: 1fr;
+    }
+
+    .home-stats {
+        flex-direction: column;
+        align-items: center;
+    }
+}

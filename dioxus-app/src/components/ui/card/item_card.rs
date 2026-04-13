@@ -1,26 +1,26 @@
-//! ItemCard — Flat glass card for list items
+//! ItemCard — brutalist card for list items
 
 use dioxus::prelude::*;
 
-/// Card shell classes
+/// Card shell — neo-brutalist with offset shadow
 const CARD_CLS: &str = "\
-    border-spin-card \
-    flex flex-col gap-2.5 \
-    pt-6 px-6 pb-0 h-full \
-    bg-[var(--glass-bg)] \
-    backdrop-blur-[20px] \
-    border border-[var(--color-border)]";
+    item-card \
+    flex flex-col gap-4 \
+    p-6 h-full \
+    bg-[var(--card)] \
+    border-2 border-[var(--foreground)] \
+    rounded-xl overflow-hidden \
+    relative cursor-pointer \
+    shadow-[4px_4px_0_var(--foreground)] \
+    transition-all duration-200 \
+    hover:-translate-y-1 \
+    hover:shadow-[6px_6px_0_var(--foreground)]";
 
-/// Actions row classes
+/// Actions row — inline buttons
 const ACTIONS_CLS: &str = "\
-    flex mt-auto -mx-6 \
-    border-t border-[var(--color-border)] \
-    [&_button]:flex-1 [&_button]:rounded-none \
-    [&_button]:border-none [&_button]:shadow-none \
-    [&_button+button]:border-l \
-    [&_button+button]:border-[var(--color-border)]";
+    flex gap-3 mt-auto pt-2";
 
-/// Flat glass card for list items
+/// Brutalist card for list items
 #[component]
 pub fn ItemCard(
     /// Card title (displayed as h3)
@@ -38,9 +38,9 @@ pub fn ItemCard(
                 class: "flex items-center \
                     justify-between gap-3",
                 h3 {
-                    class: "m-0 text-[1.1rem] \
-                        font-semibold \
-                        text-[var(--color-text-primary)] \
+                    class: "item-card-title \
+                        m-0 text-[1.125rem] \
+                        text-[var(--foreground)] \
                         overflow-hidden text-ellipsis \
                         whitespace-nowrap",
                     "{name}"
@@ -48,7 +48,7 @@ pub fn ItemCard(
                 {header_end}
             }
             div {
-                class: "flex flex-col gap-1.5 flex-1",
+                class: "flex flex-col gap-2 flex-1",
                 {children}
             }
             div { class: "{ACTIONS_CLS}",

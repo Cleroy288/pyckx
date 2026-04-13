@@ -2,7 +2,7 @@
   "mcpServers": {
     "rustean": {
       "type": "stdio",
-      "command": "/Users/charlesleroy/Documents/LOCAL/PERSO/code-cli-ch/ch-cli/target/debug/rustean",
+      "command": "/Users/charlesleroy/Documents/LOCAL/PERSO/code-cli-ch/ch-cli/target/release/rustean",
       "args": [
         "mcp-server"
       ],

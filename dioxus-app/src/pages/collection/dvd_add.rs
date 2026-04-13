@@ -32,7 +32,14 @@ pub fn DvdAddPage() -> Element {
                 Ok(_) => {
                     nav.push("/collection");
                 }
-                Err(_e) => {}
+                Err(e) => {
+                    crate::api::log::log_error(
+                        &format!(
+                            "Add DVD failed: {e}"
+                        ),
+                        "dvd_add",
+                    );
+                }
             }
             loading.set(false);
         });

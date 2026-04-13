@@ -94,109 +94,17 @@
     --glass-bg: rgba(255, 255, 255, 0.5);
     --glass-bg-hover: rgba(255, 255, 255, 0.6);
     --glass-blur: blur(20px);
-    --glass-blur-sm: blur(10px);
-    --glass-blur-lg: blur(24px);
     --glass-border: 1px solid color-mix(
         in srgb, var(--primary) 12%, transparent
     );
     --glass-border-hover: 1px solid color-mix(
         in srgb, var(--primary) 20%, transparent
     );
-
-    /* ── Status color derivatives ────────────── */
-    --color-success-bg: color-mix(
-        in srgb, var(--color-success) 15%, transparent
-    );
-    --color-success-border: color-mix(
-        in srgb, var(--color-success) 40%, transparent
-    );
-    --color-success-text: color-mix(
-        in srgb, var(--color-success) 60%, white
-    );
-    --color-warning-bg: color-mix(
-        in srgb, var(--color-warning) 15%, transparent
-    );
-    --color-warning-border: color-mix(
-        in srgb, var(--color-warning) 40%, transparent
-    );
-    --color-warning-text: color-mix(
-        in srgb, var(--color-warning) 60%, white
-    );
-    --color-info-bg: color-mix(
-        in srgb, var(--color-info) 15%, transparent
-    );
-    --color-info-border: color-mix(
-        in srgb, var(--color-info) 40%, transparent
-    );
-    --color-info-text: color-mix(
-        in srgb, var(--color-info) 60%, white
-    );
-    --color-error-bg: color-mix(
-        in srgb, var(--color-error) 15%, transparent
-    );
-    --color-error-border: color-mix(
-        in srgb, var(--color-error) 40%, transparent
-    );
-    --color-error-text: color-mix(
-        in srgb, var(--color-error) 60%, white
-    );
-
-    /* ── Selectable hover tint ───────────────── */
-    --primary-tint-subtle: color-mix(
-        in srgb, var(--primary) 3%, transparent
-    );
-    --primary-tint-light: color-mix(
-        in srgb, var(--primary) 8%, transparent
-    );
-    --primary-tint-medium: color-mix(
-        in srgb, var(--primary) 15%, transparent
-    );
-
-    /* ── Grid overlay background ─────────────── */
-    --grid-overlay-image:
-        linear-gradient(
-            to right,
-            var(--grid-line) 1px,
-            transparent 1px
-        ),
-        linear-gradient(
-            to bottom,
-            var(--grid-line) 1px,
-            transparent 1px
-        ),
-        linear-gradient(
-            45deg,
-            var(--grid-dot) 1px,
-            transparent 1px
-        ),
-        linear-gradient(
-            -45deg,
-            var(--grid-dot) 1px,
-            transparent 1px
-        );
-    --grid-overlay-size:
-        16px 16px,
-        16px 16px,
-        24px 24px,
-        24px 24px;
 }
 
 /* ============================================
    GLOBAL ANIMATIONS
    ============================================ */
-
-/* Border-spin — animated conic-gradient border
-   Used by item_card, nav_card, vitrine cards.  */
-@property --border-angle {
-    syntax: "<angle>";
-    initial-value: 0deg;
-    inherits: false;
-}
-
-@keyframes border-spin {
-    to { --border-angle: 360deg; }
-}
-
 @keyframes fadeInUp {
     from {
         opacity: 0;

@@ -5,7 +5,7 @@
   var ctx = canvas.getContext('2d');
 
   var APPS = [
-    {emoji:'\u{1F9E0}',name:'Intello',sub:'AI Study',
+    {emoji:'\u{1F9E0}',name:'Study',sub:'AI Quiz',
      color:'#5B47D6',bg:'#EDE9FE'},
     {emoji:'\u{26A1}',name:'Quick Mode',
      sub:'PDF \u2192 Quiz 10s',

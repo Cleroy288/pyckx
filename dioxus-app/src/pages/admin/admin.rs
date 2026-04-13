@@ -6,26 +6,14 @@ use crate::components::ui::hero_banner::HeroBanner;
 use crate::components::ui::loading_boundary::LoadingBoundary;
 use crate::components::ui::page_layout::PageLayout;
 use crate::domain::admin_types::AdminStatsResponse;
-use crate::state::hooks::{use_fetch_on_mount, FetchFn};
-use crate::state::use_auth;
+use crate::state::hooks::{
+    use_admin_guard, use_fetch_on_mount, FetchFn,
+};
 use dioxus::prelude::*;
 
 /// Admin statistics page
 pub fn AdminPage() -> Element {
-    let auth = use_auth();
-    let nav = navigator();
-
-    // Auth guard — admin only
-    use_effect(move || {
-        if !(auth.is_checking_session)() {
-            let is_admin = (auth.user)()
-                .as_ref()
-                .is_some_and(|u| u.role == "admin");
-            if !is_admin {
-                nav.push("/home");
-            }
-        }
-    });
+    let _auth = use_admin_guard();
 
     let loading = use_signal(|| true);
     let stats: Signal<Option<AdminStatsResponse>> =
@@ -42,6 +30,7 @@ pub fn AdminPage() -> Element {
     use_fetch_on_mount(stats, loading, fetch);
 
     rsx! {
+        div { class: "home-page",
         HomeTopBar {}
         PageLayout {
             HeroBanner {
@@ -57,9 +46,9 @@ pub fn AdminPage() -> Element {
                             gap-4",
                         div {
                             class: "flex flex-col gap-2 p-5 \
-                                border border-[var(--color-border)] \
-                                bg-[var(--glass-bg)] \
-                                backdrop-blur-[20px]",
+                                border-2 border-[var(--color-border)] \
+                                bg-[var(--card)] \
+                                rounded-[20px]",
                             span {
                                 class: "text-[0.85rem] \
                                     text-[var(--color-text-secondary)]",
@@ -73,9 +62,9 @@ pub fn AdminPage() -> Element {
                         }
                         div {
                             class: "flex flex-col gap-2 p-5 \
-                                border border-[var(--color-border)] \
-                                bg-[var(--glass-bg)] \
-                                backdrop-blur-[20px]",
+                                border-2 border-[var(--color-border)] \
+                                bg-[var(--card)] \
+                                rounded-[20px]",
                             span {
                                 class: "text-[0.85rem] \
                                     text-[var(--color-text-secondary)]",
@@ -99,6 +88,7 @@ pub fn AdminPage() -> Element {
                         class: "flex flex-col gap-1",
                         for feat in s.features.iter() {
                             div {
+                                key: "{feat.feature}",
                                 class: "flex justify-between \
                                     items-center px-4 py-3 \
                                     border border-[var(--color-border)] \
@@ -122,6 +112,7 @@ pub fn AdminPage() -> Element {
                         class: "flex flex-col gap-1",
                         for model in s.models.iter() {
                             div {
+                                key: "{model.model}",
                                 class: "flex justify-between \
                                     items-center px-4 py-3 \
                                     border border-[var(--color-border)] \
@@ -139,6 +130,7 @@ pub fn AdminPage() -> Element {
                     }
                 }
             }
+        }
         }
     }
 }

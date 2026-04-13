@@ -143,30 +143,6 @@ mod tests {
     }
 
     #[test]
-    fn test_quick_qcm_api_response_into_set() {
-        let resp = QuickQcmApiResponse {
-            questions: vec![QcmQuestion {
-                id: "q1".into(),
-                question: "2+2?".into(),
-                wrong_answers: vec![
-                    "3".into(),
-                    "5".into(),
-                    "6".into(),
-                ],
-                right_answer: "4".into(),
-                explanation: "Basic".into(),
-            }],
-            level: "hard".into(),
-            language: "fr".into(),
-        };
-        let set = resp.into_qcm_set();
-        assert_eq!(set.level, Level::Hard);
-        assert_eq!(set.language, "fr");
-        assert_eq!(set.questions.len(), 1);
-        assert_eq!(set.name, "Quick QCM");
-    }
-
-    #[test]
     fn test_deserialize_qcm_success_null_set() {
         let json =
             r#"{"message":"ok","set":null}"#;

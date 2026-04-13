@@ -92,7 +92,7 @@
 - Use `/implement` skill for the full implementation workflow (understand → plan → implement → test → self-review).
 
 ## answering norm - standards
-- always answer in english
+- always answer in the same language the user used to ask the question. If the user writes in French, respond in French. If the user writes in English, respond in English. Structured format labels (Demand, What, Why, Summary, etc.) stay in English for consistency.
 - always answer shortly and concisely
 - only do what is asked, nothing more
 - if you don't know the answer, say "I don't know"

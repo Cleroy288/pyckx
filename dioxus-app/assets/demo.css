@@ -1,0 +1,1489 @@
+/* ═══════════════════════════════════════════
+   DEMO A — Neo-Brutalist (borders + offset shadow)
+   ═══════════════════════════════════════════ */
+
+.da { min-height: 100vh; background: var(--background); }
+
+.da-nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 48px; height: 72px;
+    background: var(--card);
+    border-bottom: 2px solid var(--foreground);
+    box-shadow: 0 4px 0 var(--foreground);
+}
+.da-logo {
+    font-family: "Unbounded", sans-serif;
+    font-size: 22px; font-weight: 900;
+    color: var(--color-primary);
+    letter-spacing: -1px;
+}
+.da-nav-links { display: flex; gap: 6px; }
+.da-pill {
+    font-family: "Unbounded", sans-serif;
+    font-size: 12px; font-weight: 700;
+    padding: 8px 20px; border-radius: 10px;
+    border: 2px solid var(--foreground);
+    background: var(--card); color: var(--muted-foreground);
+    box-shadow: 2px 2px 0 var(--foreground);
+    cursor: pointer; transition: all 0.15s;
+}
+.da-pill:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0 var(--foreground);
+    color: var(--color-primary);
+}
+.da-pill.active {
+    background: var(--color-primary);
+    color: var(--primary-foreground);
+}
+.da-nav-actions { display: flex; gap: 8px; }
+.da-ghost {
+    background: var(--card); color: var(--foreground);
+    border: 2px solid var(--foreground);
+    padding: 7px 12px; border-radius: 10px;
+    box-shadow: 2px 2px 0 var(--foreground);
+    cursor: pointer; font-weight: 700;
+    transition: all 0.15s;
+}
+.da-ghost:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0 var(--foreground);
+}
+.da-btn {
+    background: var(--color-primary);
+    color: var(--primary-foreground);
+    border: 2px solid var(--foreground);
+    padding: 8px 20px; border-radius: 10px;
+    font-family: "Unbounded", sans-serif;
+    font-size: 12px; font-weight: 700;
+    box-shadow: 3px 3px 0 var(--foreground);
+    cursor: pointer; transition: all 0.15s;
+}
+.da-btn:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 4px 4px 0 var(--foreground);
+}
+.da-btn-outline {
+    background: var(--card);
+    color: var(--foreground);
+    border: 2px solid var(--foreground);
+    padding: 8px 20px; border-radius: 10px;
+    font-family: "Unbounded", sans-serif;
+    font-size: 12px; font-weight: 700;
+    box-shadow: 3px 3px 0 var(--foreground);
+    cursor: pointer; transition: all 0.15s;
+}
+.da-btn-outline:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 4px 4px 0 var(--foreground);
+}
+
+.da-main {
+    max-width: 1100px; margin: 0 auto;
+    padding: 100px 32px 64px;
+}
+
+.da-hero {
+    background: var(--card);
+    border: 2px solid var(--foreground);
+    border-radius: 20px; padding: 48px 32px;
+    text-align: center; margin-bottom: 32px;
+    box-shadow: 6px 6px 0 var(--foreground);
+    position: relative;
+}
+.da-hero-title {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 800; margin: 0 0 8px;
+    background: linear-gradient(
+        135deg, var(--color-primary),
+        color-mix(in srgb, var(--color-primary) 60%, black));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.da-hero-sub {
+    color: var(--muted-foreground);
+    font-size: 1.1rem; margin: 0 0 24px;
+}
+.da-hero-actions { display: flex; gap: 10px; justify-content: center; }
+
+.da-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+.da-card {
+    background: var(--card);
+    border: 2px solid var(--foreground);
+    border-radius: 16px; padding: 28px 24px;
+    display: flex; flex-direction: column; gap: 8px;
+    box-shadow: 4px 4px 0 var(--foreground);
+    transition: all 0.15s; cursor: pointer;
+}
+.da-card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--foreground);
+}
+.da-card-icon {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    background: var(--secondary);
+    color: var(--color-primary);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 20px;
+    border: 2px solid var(--foreground);
+}
+.da-card-title {
+    font-size: 1.1rem; font-weight: 700;
+    margin: 0; color: var(--foreground);
+}
+.da-card-desc {
+    font-size: 0.85rem; margin: 0;
+    color: var(--muted-foreground);
+}
+.da-card-footer {
+    display: flex; justify-content: space-between;
+    align-items: center; margin-top: auto; padding-top: 12px;
+    border-top: 2px solid var(--border);
+}
+.da-badge {
+    font-size: 11px; font-weight: 700;
+    padding: 4px 10px; border-radius: 8px;
+    border: 2px solid var(--foreground);
+    background: var(--secondary);
+}
+.da-btn-sm {
+    background: var(--color-primary);
+    color: var(--primary-foreground);
+    border: 2px solid var(--foreground);
+    padding: 6px 16px; border-radius: 8px;
+    font-size: 12px; font-weight: 700;
+    box-shadow: 2px 2px 0 var(--foreground);
+    cursor: pointer; transition: all 0.15s;
+}
+.da-btn-sm:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0 var(--foreground);
+}
+.da-label {
+    text-align: center; margin-top: 48px;
+    color: var(--muted-foreground);
+    font-size: 14px; font-weight: 600;
+    opacity: 0.6;
+}
+
+/* ═══════════════════════════════════════════
+   DEMO B — Clean / Soft (Quizlet-inspired)
+   ═══════════════════════════════════════════ */
+
+.db { min-height: 100vh; background: #f6f7fb; }
+
+.db-nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 48px; height: 64px;
+    background: #fff;
+    border-bottom: 1px solid #e8e8ed;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+.db-logo {
+    font-family: "Unbounded", sans-serif;
+    font-size: 20px; font-weight: 900;
+    color: var(--color-primary);
+}
+.db-nav-links { display: flex; gap: 2px; }
+.db-pill {
+    font-size: 14px; font-weight: 600;
+    padding: 8px 18px; border-radius: 100px;
+    border: none; background: transparent;
+    color: #6b7280; cursor: pointer;
+    transition: all 0.2s;
+}
+.db-pill:hover {
+    background: #f3f4f6; color: #111;
+}
+.db-pill.active {
+    background: var(--color-primary);
+    color: #fff;
+    box-shadow: 0 2px 8px color-mix(in srgb, var(--color-primary) 30%, transparent);
+}
+.db-nav-actions { display: flex; gap: 8px; }
+.db-ghost {
+    background: #f3f4f6; color: #374151;
+    border: none; padding: 8px 12px;
+    border-radius: 12px; cursor: pointer;
+    font-weight: 600; transition: all 0.2s;
+}
+.db-ghost:hover { background: #e5e7eb; }
+.db-btn {
+    background: var(--color-primary);
+    color: #fff; border: none;
+    padding: 8px 20px; border-radius: 12px;
+    font-size: 14px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s;
+    box-shadow: 0 2px 8px color-mix(in srgb, var(--color-primary) 25%, transparent);
+}
+.db-btn:hover {
+    filter: brightness(1.08);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px color-mix(in srgb, var(--color-primary) 30%, transparent);
+}
+.db-btn-sec {
+    background: #fff; color: var(--color-primary);
+    border: 1.5px solid var(--color-primary);
+    padding: 8px 20px; border-radius: 12px;
+    font-size: 14px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s;
+}
+.db-btn-sec:hover {
+    background: color-mix(in srgb, var(--color-primary) 6%, #fff);
+    transform: translateY(-1px);
+}
+
+.db-main {
+    max-width: 1100px; margin: 0 auto;
+    padding: 96px 32px 64px;
+}
+
+.db-hero {
+    background: #fff; border: none;
+    border-radius: 24px; padding: 56px 32px;
+    text-align: center; margin-bottom: 32px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+.db-hero-title {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 800; margin: 0 0 8px;
+    color: var(--color-primary);
+}
+.db-hero-sub {
+    color: #6b7280; font-size: 1.1rem; margin: 0 0 24px;
+}
+.db-hero-actions { display: flex; gap: 12px; justify-content: center; }
+
+.db-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+}
+.db-card {
+    background: #fff; border: none;
+    border-radius: 20px; padding: 28px 24px;
+    display: flex; flex-direction: column; gap: 8px;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+    transition: all 0.2s; cursor: pointer;
+}
+.db-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+}
+.db-card-icon {
+    width: 48px; height: 48px;
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--color-primary) 10%, #fff);
+    color: var(--color-primary);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 20px;
+}
+.db-card-title {
+    font-size: 1.1rem; font-weight: 700;
+    margin: 0; color: #111;
+}
+.db-card-desc {
+    font-size: 0.85rem; margin: 0; color: #6b7280;
+}
+.db-card-footer {
+    display: flex; justify-content: space-between;
+    align-items: center; margin-top: auto; padding-top: 12px;
+    border-top: 1px solid #f0f0f4;
+}
+.db-badge {
+    font-size: 12px; font-weight: 600;
+    padding: 4px 12px; border-radius: 100px;
+    background: color-mix(in srgb, var(--color-primary) 8%, #fff);
+    color: var(--color-primary);
+}
+.db-btn-sm {
+    background: var(--color-primary);
+    color: #fff; border: none;
+    padding: 6px 18px; border-radius: 100px;
+    font-size: 13px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s;
+}
+.db-btn-sm:hover {
+    filter: brightness(1.08);
+    transform: translateY(-1px);
+}
+.db-label {
+    text-align: center; margin-top: 48px;
+    color: #9ca3af; font-size: 14px; font-weight: 600;
+}
+
+/* ═══════════════════════════════════════════
+   DEMO C — Hybrid (brutalist hero, soft cards)
+   ═══════════════════════════════════════════ */
+
+.dc { min-height: 100vh; background: var(--background); }
+
+.dc-nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 48px; height: 68px;
+    background: var(--card);
+    border-bottom: 2px solid var(--foreground);
+    box-shadow: 0 3px 0 var(--foreground);
+}
+.dc-logo {
+    font-family: "Unbounded", sans-serif;
+    font-size: 22px; font-weight: 900;
+    color: var(--color-primary);
+    letter-spacing: -1px;
+}
+.dc-nav-links { display: flex; gap: 4px; }
+.dc-pill {
+    font-size: 13px; font-weight: 600;
+    padding: 7px 18px; border-radius: 10px;
+    border: 1.5px solid var(--border);
+    background: var(--card); color: var(--muted-foreground);
+    cursor: pointer; transition: all 0.2s;
+}
+.dc-pill:hover {
+    color: var(--foreground);
+    border-color: var(--foreground);
+    background: var(--secondary);
+}
+.dc-pill.active {
+    background: var(--color-primary);
+    color: var(--primary-foreground);
+    border-color: var(--foreground);
+    box-shadow: 2px 2px 0 var(--foreground);
+}
+.dc-nav-actions { display: flex; gap: 8px; }
+.dc-ghost {
+    background: var(--card); color: var(--foreground);
+    border: 1.5px solid var(--border);
+    padding: 7px 12px; border-radius: 10px;
+    cursor: pointer; font-weight: 600;
+    transition: all 0.2s;
+}
+.dc-ghost:hover {
+    border-color: var(--foreground);
+    background: var(--secondary);
+}
+.dc-btn {
+    background: var(--color-primary);
+    color: var(--primary-foreground);
+    border: 2px solid var(--foreground);
+    padding: 8px 20px; border-radius: 10px;
+    font-family: "Unbounded", sans-serif;
+    font-size: 12px; font-weight: 700;
+    box-shadow: 3px 3px 0 var(--foreground);
+    cursor: pointer; transition: all 0.15s;
+}
+.dc-btn:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 4px 4px 0 var(--foreground);
+}
+
+.dc-main {
+    max-width: 1100px; margin: 0 auto;
+    padding: 100px 32px 64px;
+}
+
+/* Hero: brutalist (same as A) */
+.dc-hero {
+    background: var(--card);
+    border: 2px solid var(--foreground);
+    border-radius: 20px; padding: 48px 32px;
+    text-align: center; margin-bottom: 32px;
+    box-shadow: 6px 6px 0 var(--foreground);
+}
+.dc-hero-title {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 800; margin: 0 0 8px;
+    background: linear-gradient(
+        135deg, var(--color-primary),
+        color-mix(in srgb, var(--color-primary) 60%, black));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.dc-hero-sub {
+    color: var(--muted-foreground);
+    font-size: 1.1rem; margin: 0 0 24px;
+}
+.dc-hero-actions { display: flex; gap: 10px; justify-content: center; }
+.dc-btn-accent {
+    background: var(--color-primary);
+    color: var(--primary-foreground);
+    border: 2px solid var(--foreground);
+    padding: 8px 22px; border-radius: 10px;
+    font-family: "Unbounded", sans-serif;
+    font-size: 12px; font-weight: 700;
+    box-shadow: 3px 3px 0 var(--foreground);
+    cursor: pointer; transition: all 0.15s;
+}
+.dc-btn-accent:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 4px 4px 0 var(--foreground);
+}
+.dc-btn-outline {
+    background: var(--card); color: var(--foreground);
+    border: 2px solid var(--foreground);
+    padding: 8px 22px; border-radius: 10px;
+    font-family: "Unbounded", sans-serif;
+    font-size: 12px; font-weight: 700;
+    box-shadow: 3px 3px 0 var(--foreground);
+    cursor: pointer; transition: all 0.15s;
+}
+.dc-btn-outline:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 4px 4px 0 var(--foreground);
+}
+
+/* Cards: SOFT (no hard borders, subtle shadows) */
+.dc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 18px;
+}
+.dc-card {
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: 18px; padding: 28px 24px;
+    display: flex; flex-direction: column; gap: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    transition: all 0.2s; cursor: pointer;
+}
+.dc-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    border-color: var(--color-primary);
+}
+.dc-card-icon {
+    width: 48px; height: 48px;
+    border-radius: 14px;
+    background: var(--secondary);
+    color: var(--color-primary);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 20px;
+}
+.dc-card-title {
+    font-size: 1.1rem; font-weight: 700;
+    margin: 0; color: var(--foreground);
+}
+.dc-card-desc {
+    font-size: 0.85rem; margin: 0;
+    color: var(--muted-foreground);
+}
+.dc-card-footer {
+    display: flex; justify-content: space-between;
+    align-items: center; margin-top: auto; padding-top: 12px;
+    border-top: 1px solid var(--border);
+}
+.dc-badge {
+    font-size: 12px; font-weight: 600;
+    padding: 4px 12px; border-radius: 100px;
+    background: var(--secondary);
+    color: var(--color-primary);
+}
+.dc-btn-sm {
+    background: var(--color-primary);
+    color: var(--primary-foreground);
+    border: none; padding: 6px 18px;
+    border-radius: 100px;
+    font-size: 13px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s;
+    box-shadow: 0 2px 6px color-mix(in srgb, var(--color-primary) 25%, transparent);
+}
+.dc-btn-sm:hover {
+    filter: brightness(1.08);
+    transform: translateY(-1px);
+}
+.dc-label {
+    text-align: center; margin-top: 48px;
+    color: var(--muted-foreground);
+    font-size: 14px; font-weight: 600;
+    opacity: 0.6;
+}
+
+/* ═══════════════════════════════════════════
+   DEMO D — Clean + Primary border (defined edges)
+   Base = B softness, but border-left accent on cards,
+   border on navbar, primary-tinted borders everywhere.
+   ═══════════════════════════════════════════ */
+
+.dd { min-height: 100vh; background: #f6f7fb; }
+
+.dd-nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 48px; height: 64px;
+    background: #fff;
+    border-bottom: 2px solid
+        color-mix(in srgb, var(--color-primary) 20%, #e8e8ed);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.dd-logo {
+    font-family: "Unbounded", sans-serif;
+    font-size: 20px; font-weight: 900;
+    color: var(--color-primary);
+}
+.dd-nav-links { display: flex; gap: 4px; }
+.dd-pill {
+    font-size: 13px; font-weight: 600;
+    padding: 7px 18px; border-radius: 10px;
+    border: 1.5px solid transparent;
+    background: transparent;
+    color: #6b7280; cursor: pointer; transition: all 0.2s;
+}
+.dd-pill:hover {
+    border-color: color-mix(in srgb, var(--color-primary) 30%, transparent);
+    color: var(--color-primary);
+    background: color-mix(in srgb, var(--color-primary) 4%, #fff);
+}
+.dd-pill.active {
+    border-color: var(--color-primary);
+    background: color-mix(in srgb, var(--color-primary) 8%, #fff);
+    color: var(--color-primary); font-weight: 700;
+}
+.dd-nav-actions { display: flex; gap: 8px; }
+.dd-ghost {
+    background: #f3f4f6; color: #374151;
+    border: 1.5px solid #e5e7eb;
+    padding: 7px 12px; border-radius: 10px;
+    cursor: pointer; font-weight: 600; transition: all 0.2s;
+}
+.dd-ghost:hover { border-color: var(--color-primary); color: var(--color-primary); }
+.dd-btn {
+    background: var(--color-primary); color: #fff;
+    border: 1.5px solid color-mix(in srgb, var(--color-primary) 70%, black);
+    padding: 8px 20px; border-radius: 10px;
+    font-size: 13px; font-weight: 700; cursor: pointer;
+    box-shadow: 0 2px 8px color-mix(in srgb, var(--color-primary) 25%, transparent);
+    transition: all 0.2s;
+}
+.dd-btn:hover {
+    filter: brightness(1.08); transform: translateY(-1px);
+    box-shadow: 0 4px 16px color-mix(in srgb, var(--color-primary) 30%, transparent);
+}
+.dd-btn-sec {
+    background: #fff; color: var(--color-primary);
+    border: 1.5px solid var(--color-primary);
+    padding: 8px 20px; border-radius: 10px;
+    font-size: 13px; font-weight: 700; cursor: pointer;
+    transition: all 0.2s;
+}
+.dd-btn-sec:hover {
+    background: color-mix(in srgb, var(--color-primary) 6%, #fff);
+    transform: translateY(-1px);
+}
+
+.dd-main { max-width: 1100px; margin: 0 auto; padding: 96px 32px 64px; }
+
+.dd-hero {
+    background: #fff;
+    border: 2px solid color-mix(in srgb, var(--color-primary) 25%, #e8e8ed);
+    border-radius: 20px; padding: 48px 32px;
+    text-align: center; margin-bottom: 32px;
+    box-shadow: 0 4px 20px color-mix(in srgb, var(--color-primary) 8%, transparent);
+}
+.dd-hero-title {
+    font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; margin: 0 0 8px;
+    color: var(--color-primary);
+}
+.dd-hero-sub { color: #6b7280; font-size: 1.1rem; margin: 0 0 24px; }
+.dd-hero-actions { display: flex; gap: 12px; justify-content: center; }
+
+.dd-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+}
+.dd-card {
+    background: #fff;
+    border: 1.5px solid #e8e8ed;
+    border-left: 4px solid var(--color-primary);
+    border-radius: 16px; padding: 24px;
+    display: flex; flex-direction: column; gap: 8px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    transition: all 0.2s; cursor: pointer;
+}
+.dd-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--color-primary);
+    box-shadow: 0 8px 24px color-mix(in srgb, var(--color-primary) 10%, transparent);
+}
+.dd-card-icon {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: color-mix(in srgb, var(--color-primary) 10%, #fff);
+    color: var(--color-primary);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 18px;
+}
+.dd-card-title { font-size: 1.05rem; font-weight: 700; margin: 0; color: #111; }
+.dd-card-desc { font-size: 0.85rem; margin: 0; color: #6b7280; }
+.dd-card-footer {
+    display: flex; justify-content: space-between;
+    align-items: center; margin-top: auto; padding-top: 12px;
+    border-top: 1px solid #f0f0f4;
+}
+.dd-badge {
+    font-size: 12px; font-weight: 600;
+    padding: 3px 10px; border-radius: 100px;
+    background: color-mix(in srgb, var(--color-primary) 8%, #fff);
+    color: var(--color-primary);
+    border: 1px solid color-mix(in srgb, var(--color-primary) 15%, transparent);
+}
+.dd-btn-sm {
+    background: var(--color-primary); color: #fff; border: none;
+    padding: 6px 16px; border-radius: 8px;
+    font-size: 12px; font-weight: 700; cursor: pointer;
+    transition: all 0.2s;
+}
+.dd-btn-sm:hover { filter: brightness(1.08); transform: translateY(-1px); }
+.dd-label {
+    text-align: center; margin-top: 48px;
+    color: #9ca3af; font-size: 14px; font-weight: 600;
+}
+
+/* ═══════════════════════════════════════════
+   DEMO E — Clean + Top accent stripe
+   Cards have a thick color stripe at the top.
+   Hero has a gradient left border. "Cut-out" feel.
+   ═══════════════════════════════════════════ */
+
+.de { min-height: 100vh; background: #f4f5f9; }
+
+.de-nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 48px; height: 64px;
+    background: #fff;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+}
+.de-logo {
+    font-family: "Unbounded", sans-serif;
+    font-size: 20px; font-weight: 900;
+    color: var(--color-primary);
+}
+.de-nav-links {
+    display: flex; gap: 0;
+    background: #f3f4f6; border-radius: 12px; padding: 3px;
+}
+.de-pill {
+    font-size: 13px; font-weight: 600;
+    padding: 7px 20px; border-radius: 9px;
+    border: none; background: transparent;
+    color: #6b7280; cursor: pointer; transition: all 0.2s;
+}
+.de-pill:hover { color: #111; background: rgba(0,0,0,0.03); }
+.de-pill.active {
+    background: #fff; color: var(--color-primary);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+.de-nav-actions { display: flex; gap: 8px; }
+.de-ghost {
+    background: #f3f4f6; color: #374151; border: none;
+    padding: 8px 12px; border-radius: 10px;
+    cursor: pointer; font-weight: 600; transition: all 0.2s;
+}
+.de-ghost:hover { background: #e5e7eb; }
+.de-btn {
+    background: var(--color-primary); color: #fff; border: none;
+    padding: 8px 20px; border-radius: 10px;
+    font-size: 13px; font-weight: 700; cursor: pointer;
+    box-shadow: 0 2px 8px color-mix(in srgb, var(--color-primary) 25%, transparent);
+    transition: all 0.2s;
+}
+.de-btn:hover {
+    filter: brightness(1.08); transform: translateY(-1px);
+    box-shadow: 0 4px 16px color-mix(in srgb, var(--color-primary) 30%, transparent);
+}
+.de-btn-sec {
+    background: #fff; color: var(--color-primary);
+    border: 1.5px solid var(--color-primary);
+    padding: 8px 20px; border-radius: 10px;
+    font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.2s;
+}
+.de-btn-sec:hover { background: color-mix(in srgb, var(--color-primary) 6%, #fff); transform: translateY(-1px); }
+
+.de-main { max-width: 1100px; margin: 0 auto; padding: 96px 32px 64px; }
+
+.de-hero {
+    background: #fff; border-radius: 20px;
+    padding: 48px 32px; text-align: center; margin-bottom: 32px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+    border-top: 5px solid var(--color-primary);
+    position: relative; overflow: hidden;
+}
+.de-hero::after {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 5px;
+    background: linear-gradient(90deg,
+        var(--color-primary),
+        color-mix(in srgb, var(--color-primary) 50%, #c084fc),
+        var(--color-primary));
+}
+.de-hero-title {
+    font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; margin: 0 0 8px;
+    color: var(--color-primary);
+}
+.de-hero-sub { color: #6b7280; font-size: 1.1rem; margin: 0 0 24px; }
+.de-hero-actions { display: flex; gap: 12px; justify-content: center; }
+
+.de-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+}
+.de-card {
+    background: #fff; border: none;
+    border-radius: 16px; padding: 0;
+    display: flex; flex-direction: column;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+    transition: all 0.2s; cursor: pointer;
+    overflow: hidden;
+}
+.de-card::before {
+    content: ""; display: block;
+    height: 4px; width: 100%;
+    background: var(--color-primary);
+}
+.de-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.10);
+}
+.de-card-icon {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: color-mix(in srgb, var(--color-primary) 10%, #fff);
+    color: var(--color-primary);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 18px;
+    margin: 24px 24px 0;
+}
+.de-card-title {
+    font-size: 1.05rem; font-weight: 700;
+    margin: 0; color: #111; padding: 8px 24px 0;
+}
+.de-card-desc {
+    font-size: 0.85rem; margin: 0; color: #6b7280;
+    padding: 0 24px;
+}
+.de-card-footer {
+    display: flex; justify-content: space-between;
+    align-items: center; margin-top: auto;
+    padding: 12px 24px; border-top: 1px solid #f0f0f4;
+}
+.de-badge {
+    font-size: 12px; font-weight: 600;
+    padding: 3px 10px; border-radius: 100px;
+    background: color-mix(in srgb, var(--color-primary) 8%, #fff);
+    color: var(--color-primary);
+}
+.de-btn-sm {
+    background: var(--color-primary); color: #fff; border: none;
+    padding: 6px 16px; border-radius: 100px;
+    font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s;
+}
+.de-btn-sm:hover { filter: brightness(1.08); transform: translateY(-1px); }
+.de-label {
+    text-align: center; margin-top: 48px;
+    color: #9ca3af; font-size: 14px; font-weight: 600;
+}
+
+/* ═══════════════════════════════════════════
+   DEMO F — Paper Cutout (strong layered elevation)
+   Each element feels like a cut piece of paper
+   sitting on a surface. Stronger shadow, slight tilt
+   on hover, visible depth between layers.
+   ═══════════════════════════════════════════ */
+
+.df { min-height: 100vh; background: #eef0f5; }
+
+.df-nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 48px; height: 68px;
+    background: #fff;
+    box-shadow:
+        0 1px 0 #d1d5db,
+        0 4px 12px rgba(0,0,0,0.07);
+}
+.df-logo {
+    font-family: "Unbounded", sans-serif;
+    font-size: 22px; font-weight: 900;
+    color: var(--color-primary);
+    letter-spacing: -1px;
+}
+.df-nav-links { display: flex; gap: 6px; }
+.df-pill {
+    font-size: 13px; font-weight: 700;
+    padding: 8px 20px; border-radius: 10px;
+    border: none;
+    background: #f3f4f6; color: #6b7280;
+    box-shadow: 0 2px 0 #d1d5db;
+    cursor: pointer; transition: all 0.15s;
+}
+.df-pill:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 0 #d1d5db;
+    color: #111;
+}
+.df-pill.active {
+    background: var(--color-primary); color: #fff;
+    box-shadow: 0 2px 0 color-mix(in srgb, var(--color-primary) 60%, black);
+}
+.df-nav-actions { display: flex; gap: 8px; }
+.df-ghost {
+    background: #f3f4f6; color: #374151; border: none;
+    padding: 8px 12px; border-radius: 10px;
+    box-shadow: 0 2px 0 #d1d5db;
+    cursor: pointer; font-weight: 700; transition: all 0.15s;
+}
+.df-ghost:hover { transform: translateY(-1px); box-shadow: 0 3px 0 #d1d5db; }
+.df-btn {
+    background: var(--color-primary); color: #fff; border: none;
+    padding: 8px 20px; border-radius: 10px;
+    font-size: 13px; font-weight: 700; cursor: pointer;
+    box-shadow: 0 3px 0 color-mix(in srgb, var(--color-primary) 60%, black);
+    transition: all 0.15s;
+}
+.df-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 0 color-mix(in srgb, var(--color-primary) 60%, black);
+}
+.df-btn-sec {
+    background: #fff; color: var(--color-primary); border: none;
+    padding: 8px 20px; border-radius: 10px;
+    font-size: 13px; font-weight: 700; cursor: pointer;
+    box-shadow: 0 3px 0 #d1d5db;
+    transition: all 0.15s;
+}
+.df-btn-sec:hover { transform: translateY(-1px); box-shadow: 0 4px 0 #d1d5db; }
+
+.df-main { max-width: 1100px; margin: 0 auto; padding: 100px 32px 64px; }
+
+.df-hero {
+    background: #fff; border: none;
+    border-radius: 20px; padding: 48px 32px;
+    text-align: center; margin-bottom: 32px;
+    box-shadow:
+        0 1px 0 #d1d5db,
+        0 6px 0 -1px #fff,
+        0 7px 0 #d1d5db,
+        0 14px 24px rgba(0,0,0,0.06);
+}
+.df-hero-title {
+    font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; margin: 0 0 8px;
+    color: var(--color-primary);
+}
+.df-hero-sub { color: #6b7280; font-size: 1.1rem; margin: 0 0 24px; }
+.df-hero-actions { display: flex; gap: 12px; justify-content: center; }
+
+.df-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 18px;
+}
+.df-card {
+    background: #fff; border: none;
+    border-radius: 16px; padding: 24px;
+    display: flex; flex-direction: column; gap: 8px;
+    box-shadow:
+        0 1px 0 #d1d5db,
+        0 4px 0 -1px #fff,
+        0 5px 0 #d1d5db,
+        0 10px 20px rgba(0,0,0,0.04);
+    transition: all 0.2s; cursor: pointer;
+}
+.df-card:hover {
+    transform: translateY(-4px) rotate(-0.3deg);
+    box-shadow:
+        0 1px 0 #d1d5db,
+        0 4px 0 -1px #fff,
+        0 5px 0 #d1d5db,
+        0 16px 32px rgba(0,0,0,0.10);
+}
+.df-card-icon {
+    width: 48px; height: 48px; border-radius: 14px;
+    background: color-mix(in srgb, var(--color-primary) 10%, #fff);
+    color: var(--color-primary);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 20px;
+    box-shadow: 0 2px 0 color-mix(in srgb, var(--color-primary) 15%, transparent);
+}
+.df-card-title { font-size: 1.05rem; font-weight: 700; margin: 0; color: #111; }
+.df-card-desc { font-size: 0.85rem; margin: 0; color: #6b7280; }
+.df-card-footer {
+    display: flex; justify-content: space-between;
+    align-items: center; margin-top: auto; padding-top: 12px;
+    border-top: 1px solid #eef0f5;
+}
+.df-badge {
+    font-size: 12px; font-weight: 700;
+    padding: 4px 12px; border-radius: 8px;
+    background: #f3f4f6; color: #374151;
+    box-shadow: 0 1px 0 #d1d5db;
+}
+.df-btn-sm {
+    background: var(--color-primary); color: #fff; border: none;
+    padding: 6px 18px; border-radius: 8px;
+    font-size: 12px; font-weight: 700; cursor: pointer;
+    box-shadow: 0 2px 0 color-mix(in srgb, var(--color-primary) 60%, black);
+    transition: all 0.15s;
+}
+.df-btn-sm:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 0 color-mix(in srgb, var(--color-primary) 60%, black);
+}
+.df-label {
+    text-align: center; margin-top: 48px;
+    color: #9ca3af; font-size: 14px; font-weight: 600;
+}
+
+/* ═══════════════════════════════════════════
+   DEMO G — Brutalist Light
+   Heavy on: hero, CTA buttons, logo
+   Light on: navbar, pills, cards, badges, small buttons
+   ═══════════════════════════════════════════ */
+
+.dg {
+    min-height: 100vh;
+    background: var(--background);
+}
+
+/* ── Navbar: clean, thin bottom line ─── */
+.dg-nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex; align-items: center;
+    justify-content: space-between;
+    padding: 0 48px; height: 68px;
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.dg-logo {
+    font-family: "Unbounded", sans-serif;
+    font-size: 22px; font-weight: 900;
+    color: var(--color-primary);
+    letter-spacing: -1px;
+    /* Logo keeps the brutalist punch */
+    text-shadow:
+        2px 2px 0 var(--foreground);
+    -webkit-text-stroke: 0.5px var(--foreground);
+}
+
+/* ── Pills: simple, no border/shadow ─── */
+.dg-nav-links {
+    display: flex; gap: 4px;
+}
+.dg-pill {
+    font-size: 13px; font-weight: 600;
+    padding: 7px 18px; border-radius: 10px;
+    border: none;
+    background: transparent;
+    color: var(--muted-foreground);
+    cursor: pointer; transition: all 0.2s;
+}
+.dg-pill:hover {
+    color: var(--foreground);
+    background: var(--secondary);
+}
+.dg-pill.active {
+    color: var(--color-primary);
+    background:
+        color-mix(
+            in srgb,
+            var(--color-primary) 10%,
+            var(--card)
+        );
+    font-weight: 700;
+}
+
+/* ── Nav actions ─── */
+.dg-nav-actions {
+    display: flex; gap: 8px;
+}
+.dg-icon-btn {
+    background: var(--secondary);
+    color: var(--foreground);
+    border: 1px solid var(--border);
+    padding: 7px 12px; border-radius: 10px;
+    cursor: pointer; font-weight: 700;
+    transition: all 0.2s;
+}
+.dg-icon-btn:hover {
+    background: var(--card);
+    border-color: var(--foreground);
+}
+
+/* ── Primary button: BRUTALIST (signature) ─── */
+.dg-btn-primary {
+    background: var(--color-primary);
+    color: var(--primary-foreground);
+    border: 2px solid var(--foreground);
+    padding: 8px 22px; border-radius: 10px;
+    font-family: "Unbounded", sans-serif;
+    font-size: 12px; font-weight: 700;
+    box-shadow: 3px 3px 0 var(--foreground);
+    cursor: pointer; transition: all 0.15s;
+}
+.dg-btn-primary:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 4px 4px 0 var(--foreground);
+}
+
+/* ── Ghost button: BRUTALIST outline ─── */
+.dg-btn-ghost {
+    background: var(--card);
+    color: var(--foreground);
+    border: 2px solid var(--foreground);
+    padding: 8px 22px; border-radius: 10px;
+    font-family: "Unbounded", sans-serif;
+    font-size: 12px; font-weight: 700;
+    box-shadow: 3px 3px 0 var(--foreground);
+    cursor: pointer; transition: all 0.15s;
+}
+.dg-btn-ghost:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 4px 4px 0 var(--foreground);
+}
+
+/* ── Main content ─── */
+.dg-main {
+    max-width: 1100px; margin: 0 auto;
+    padding: 100px 32px 64px;
+}
+
+/* ── Hero: BRUTALIST (the signature piece) ─── */
+.dg-hero {
+    background: var(--card);
+    border: 2px solid var(--foreground);
+    border-radius: 20px;
+    padding: 48px 32px; text-align: center;
+    margin-bottom: 32px;
+    box-shadow: 6px 6px 0 var(--foreground);
+}
+.dg-hero-title {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 800; margin: 0 0 8px;
+    background: linear-gradient(
+        135deg,
+        var(--color-primary),
+        color-mix(
+            in srgb,
+            var(--color-primary) 60%,
+            black
+        )
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.dg-hero-sub {
+    color: var(--muted-foreground);
+    font-size: 1.1rem; margin: 0 0 24px;
+}
+.dg-hero-actions {
+    display: flex; gap: 10px;
+    justify-content: center;
+}
+
+/* ── Cards: SOFT (no thick border, subtle shadow) ─── */
+.dg-grid {
+    display: grid;
+    grid-template-columns:
+        repeat(auto-fill, minmax(280px, 1fr));
+    gap: 18px;
+}
+.dg-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    display: flex; flex-direction: column; gap: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    transition: all 0.2s; cursor: pointer;
+}
+.dg-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    border-color: var(--color-primary);
+}
+
+/* ── Card icon: subtle, no border ─── */
+.dg-card-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    background: var(--secondary);
+    color: var(--color-primary);
+    display: flex; align-items: center;
+    justify-content: center;
+    font-weight: 700; font-size: 18px;
+}
+.dg-card-title {
+    font-size: 1.05rem; font-weight: 700;
+    margin: 0; color: var(--foreground);
+}
+.dg-card-desc {
+    font-size: 0.85rem; margin: 0;
+    color: var(--muted-foreground);
+}
+.dg-card-footer {
+    display: flex; justify-content: space-between;
+    align-items: center;
+    margin-top: auto; padding-top: 12px;
+    border-top: 1px solid var(--border);
+}
+
+/* ── Badge: soft pill ─── */
+.dg-badge {
+    font-size: 12px; font-weight: 600;
+    padding: 3px 10px; border-radius: 100px;
+    background: var(--secondary);
+    color: var(--color-primary);
+}
+
+/* ── Small button: clean, no brutalist ─── */
+.dg-btn-sm {
+    background: var(--color-primary);
+    color: var(--primary-foreground);
+    border: none;
+    padding: 6px 16px; border-radius: 8px;
+    font-size: 12px; font-weight: 700;
+    cursor: pointer; transition: all 0.2s;
+    box-shadow:
+        0 2px 6px
+            color-mix(
+                in srgb,
+                var(--color-primary) 25%,
+                transparent
+            );
+}
+.dg-btn-sm:hover {
+    filter: brightness(1.08);
+    transform: translateY(-1px);
+}
+
+.dg-label {
+    text-align: center; margin-top: 48px;
+    color: var(--muted-foreground);
+    font-size: 14px; font-weight: 600;
+    opacity: 0.6;
+}
+
+/* ═══════════════════════════════════════════
+   DEMO H — "Split" design language (unified)
+
+   Design tokens used consistently everywhere:
+   - Border: 1.5px solid var(--border)
+   - Radius: 12px
+   - Hover: border → primary, translateY(-2px)
+   - Font UI: Unbounded 11px 700
+   - Primary btn: filled primary, no shadow
+   - All interactive: same hover transition
+   ═══════════════════════════════════════════ */
+
+.dh {
+    min-height: 100vh;
+    background: var(--background);
+    color: var(--foreground);
+}
+
+/* ── Navbar ─── */
+.dh-nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex; align-items: center;
+    justify-content: space-between;
+    padding: 0 40px; height: 64px;
+    background: var(--card);
+    border-bottom: 1.5px solid var(--border);
+}
+
+/* Logo */
+.dh-logo { transition: transform 0.2s; }
+.dh-logo:hover { transform: scale(1.03); }
+.dh-nav .split-wrap-sm .split-top {
+    -webkit-text-stroke: 1.5px var(--foreground);
+}
+.dh-nav .split-wrap-sm .split-bottom {
+    color: var(--color-primary);
+}
+.dh-nav .split-wrap-sm .split-line line {
+    stroke: var(--foreground);
+}
+
+/* Pills */
+.dh-nav-links {
+    display: flex; gap: 4px;
+}
+.dh-pill {
+    font-family: "Unbounded", sans-serif;
+    font-size: 11px; font-weight: 700;
+    padding: 8px 18px; border-radius: 12px;
+    border: 1.5px solid var(--border);
+    background: transparent;
+    color: var(--muted-foreground);
+    cursor: pointer; transition: all 0.15s;
+}
+.dh-pill:hover {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+.dh-pill.active {
+    background: var(--color-primary);
+    color: var(--primary-foreground);
+    border-color: var(--color-primary);
+}
+
+/* Nav actions */
+.dh-nav-actions {
+    display: flex; gap: 6px; align-items: center;
+}
+.dh-icon-btn {
+    width: 36px; height: 36px;
+    display: flex; align-items: center;
+    justify-content: center;
+    background: transparent;
+    color: var(--foreground);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    cursor: pointer; transition: all 0.15s;
+}
+.dh-icon-btn svg { width: 18px; height: 18px; }
+.dh-icon-btn:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+/* Primary button — used everywhere */
+.dh-btn-primary {
+    background: var(--color-primary);
+    color: var(--primary-foreground);
+    border: 1.5px solid var(--color-primary);
+    padding: 9px 22px; border-radius: 12px;
+    font-family: "Unbounded", sans-serif;
+    font-size: 11px; font-weight: 700;
+    cursor: pointer; transition: all 0.15s;
+}
+.dh-btn-primary:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+}
+
+/* Outline button — same shape as primary */
+.dh-btn-outline {
+    background: transparent;
+    color: var(--foreground);
+    border: 1.5px solid var(--border);
+    padding: 9px 22px; border-radius: 12px;
+    font-family: "Unbounded", sans-serif;
+    font-size: 11px; font-weight: 700;
+    cursor: pointer; transition: all 0.15s;
+}
+.dh-btn-outline:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    transform: translateY(-2px);
+}
+
+/* ── Main ─── */
+.dh-main {
+    max-width: 1100px; margin: 0 auto;
+    padding: 96px 32px 80px;
+}
+
+/* ── Hero ─── */
+.dh-hero {
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 56px 40px; text-align: center;
+    margin-bottom: 40px;
+}
+.dh-hero-split {
+    margin-bottom: 10px;
+}
+.dh-hero-split .split-wrap {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+}
+.dh-hero-split .split-top {
+    -webkit-text-stroke: 2px var(--foreground);
+}
+.dh-hero-split .split-bottom {
+    color: var(--color-primary);
+}
+.dh-hero-split .split-line line {
+    stroke: var(--foreground);
+}
+.dh-hero-sub {
+    color: var(--muted-foreground);
+    font-size: 1.05rem; margin: 0 0 28px;
+}
+.dh-hero-actions {
+    display: flex; gap: 8px;
+    justify-content: center;
+}
+
+/* ── Section headers ─── */
+.dh-section {
+    display: flex; align-items: baseline;
+    gap: 10px; margin: 0 0 16px;
+}
+.dh-section-label {
+    font-family: "Unbounded", sans-serif;
+    font-size: 0.95rem; font-weight: 800;
+    color: var(--foreground);
+    letter-spacing: -0.3px;
+}
+.dh-section-count {
+    font-size: 0.78rem; font-weight: 600;
+    color: var(--muted-foreground);
+}
+
+/* ── Game grid ─── */
+.dh-game-grid {
+    display: grid;
+    grid-template-columns:
+        repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px; margin-bottom: 48px;
+}
+.dh-game-card {
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 20px;
+    display: flex; flex-direction: column;
+    align-items: center; gap: 10px;
+    cursor: pointer; transition: all 0.15s;
+    text-align: center;
+}
+.dh-game-card:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-2px);
+}
+.dh-game-icon {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    background:
+        color-mix(
+            in srgb,
+            var(--color-primary) 10%,
+            var(--card)
+        );
+    color: var(--color-primary);
+    display: flex; align-items: center;
+    justify-content: center;
+}
+.dh-game-icon svg { width: 24px; height: 24px; }
+.dh-game-name {
+    font-family: "Unbounded", sans-serif;
+    font-size: 0.85rem; font-weight: 700;
+    color: var(--foreground);
+}
+.dh-game-desc {
+    font-size: 0.78rem;
+    color: var(--muted-foreground);
+    line-height: 1.4;
+}
+
+/* ── Set cards ─── */
+.dh-set-grid {
+    display: grid;
+    grid-template-columns:
+        repeat(auto-fill, minmax(260px, 1fr));
+    gap: 14px; margin-bottom: 48px;
+}
+.dh-set-card {
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 20px 0;
+    display: flex; flex-direction: column;
+    gap: 6px; overflow: hidden;
+    transition: all 0.15s;
+}
+.dh-set-card:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-2px);
+}
+.dh-set-header {
+    display: flex; align-items: center;
+    justify-content: space-between; gap: 8px;
+}
+.dh-set-name {
+    font-family: "Unbounded", sans-serif;
+    font-size: 0.85rem; font-weight: 700;
+    margin: 0; color: var(--foreground);
+    white-space: nowrap; overflow: hidden;
+    text-overflow: ellipsis;
+}
+.dh-level {
+    font-family: "Unbounded", sans-serif;
+    font-size: 9px; font-weight: 700;
+    padding: 3px 10px; border-radius: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+    border: 1.5px solid;
+}
+.dh-level-easy {
+    color: #16a34a; border-color: #16a34a;
+    background:
+        color-mix(in srgb, #16a34a 8%, var(--card));
+}
+.dh-level-medium {
+    color: #d97706; border-color: #d97706;
+    background:
+        color-mix(in srgb, #d97706 8%, var(--card));
+}
+.dh-level-hard {
+    color: #dc2626; border-color: #dc2626;
+    background:
+        color-mix(in srgb, #dc2626 8%, var(--card));
+}
+.dh-set-meta {
+    font-size: 0.8rem;
+    color: var(--muted-foreground);
+}
+.dh-set-actions {
+    display: flex; margin: auto -20px 0;
+    border-top: 1.5px solid var(--border);
+}
+.dh-action-play, .dh-action-del {
+    flex: 1; border: none; cursor: pointer;
+    padding: 11px 0;
+    font-family: "Unbounded", sans-serif;
+    font-size: 10px; font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.15s;
+    background: transparent;
+}
+.dh-action-play {
+    color: var(--color-primary);
+}
+.dh-action-play:hover {
+    background:
+        color-mix(
+            in srgb,
+            var(--color-primary) 8%,
+            transparent
+        );
+}
+.dh-action-del {
+    color: var(--muted-foreground);
+    border-left: 1.5px solid var(--border);
+}
+.dh-action-del:hover {
+    color: #dc2626;
+    background:
+        color-mix(in srgb, #dc2626 5%, transparent);
+}
+
+.dh-label {
+    text-align: center; margin-top: 48px;
+    color: var(--muted-foreground);
+    font-size: 14px; font-weight: 600;
+    opacity: 0.5;
+}

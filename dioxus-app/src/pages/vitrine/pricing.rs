@@ -1,5 +1,6 @@
 //! PricingSection — single pricing box
 
+use crate::components::vitrine::{CtaButton, CtaVariant};
 use dioxus::prelude::*;
 
 use super::data::PRICE_FEATURES;
@@ -20,25 +21,22 @@ pub fn PricingSection() -> Element {
                 }
                 PriceDisplay {}
                 p {
-                    style: "color:var(--muted);\
-                        font-size:15px",
+                    class: "text-[var(--muted)] \
+                        text-[15px]",
                     "Toutes les apps. \
                         Toutes les features. \
                         Pour toujours."
                 }
                 FeaturesList {}
-                Link { to: "/login",
-                    span { class: "btn-cta",
-                        "Commencer "
-                        span { class: "cta-hi",
-                            "gratuitement \u{2192}"
-                        }
-                    }
+                CtaButton {
+                    label: "Commencer ",
+                    highlight: "gratuitement \u{2192}",
+                    to: "/login",
+                    variant: CtaVariant::Full,
                 }
                 p {
-                    style: "font-size:12px;\
-                        color:var(--muted);\
-                        margin-top:16px",
+                    class: "text-xs \
+                        text-[var(--muted)] mt-4",
                     "Aucune carte requise."
                 }
             }
@@ -61,8 +59,8 @@ fn PriceDisplay() -> Element {
 fn FeaturesList() -> Element {
     rsx! {
         ul { class: "price-feats",
-            for feat in PRICE_FEATURES.iter() {
-                li { "{feat}" }
+            for (index, feat) in PRICE_FEATURES.iter().enumerate() {
+                li { key: "{index}", "{feat}" }
             }
         }
     }

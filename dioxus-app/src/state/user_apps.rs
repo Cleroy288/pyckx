@@ -119,21 +119,3 @@ pub fn UserAppsProvider(
 pub fn use_user_apps() -> UserAppsState {
     use_context::<UserAppsState>()
 }
-
-// TODO: Tests commented out — Dioxus signals require
-// a component runtime. These tests used RwSignal::new()
-// outside components which is not supported in Dioxus.
-//
-// #[cfg(test)]
-// mod tests {
-//     use super::*;
-//
-//     #[test]
-//     fn test_new_starts_empty() { ... }
-//
-//     #[test]
-//     fn test_new_not_loading() { ... }
-//
-//     #[test]
-//     fn test_default_same_as_new() { ... }
-// }

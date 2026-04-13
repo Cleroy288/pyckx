@@ -1,8 +1,10 @@
 mod card;
 mod card_grid;
+mod game_card;
 mod item_card;
 mod nav_card;
 pub use card::*;
 pub use card_grid::*;
+pub use game_card::*;
 pub use item_card::*;
 pub use nav_card::*;

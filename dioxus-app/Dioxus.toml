@@ -13,4 +13,4 @@ watch_path = ["src", "assets"]
 index_on_404 = true
 
 [[web.proxy]]
-backend = "http://localhost:8080/api/"
+backend = "http://localhost:8083/api/"

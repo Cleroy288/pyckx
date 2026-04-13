@@ -24,20 +24,11 @@ pub const STATS: [Stat; 3] = [
     },
 ];
 
-/// Intello featured-card bullet points
-pub const INTELLO_FEATURES: [&str; 5] = [
-    "7 types de jeux generes par IA",
-    "PDF, Word, TXT \u{2192} Quiz en 10s",
-    "Cours complets en 5 etapes",
-    "Correction automatique IA",
-    "Mode rapide sans compte",
-];
-
 /// Pricing section feature list
 pub const PRICE_FEATURES: [&str; 6] = [
-    "Intello \u{2014} Acces complet",
-    "Collection \u{2014} Acces complet",
-    "Toutes les futures apps",
+    "7 types de jeux illimites",
+    "Cours generes par IA",
+    "Collection DVD incluse",
     "Generations AI illimitees",
     "Support prioritaire",
     "Aucune carte requise",

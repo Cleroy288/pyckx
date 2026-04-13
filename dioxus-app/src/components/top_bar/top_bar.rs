@@ -1,139 +1,16 @@
-//! TopBar — fixed top navigation bar
-//!
-//! Two variants:
-//! - VitrineTopBar: public pages (logo + nav + login)
-//! - HomeTopBar: authenticated pages (logo + nav + logout)
+//! TopBar — fixed top navigation bar (HomeTopBar)
 
-use super::page_nav::PageNav;
+use super::page_nav::{
+    current_pathname, NAV_PAGES,
+};
+use crate::components::logo::NavLogo;
 use crate::components::ui::icon::Icon;
+use crate::domain::palette_data::PALETTES;
 use crate::state::hooks::use_logout;
 use crate::state::palette_provider::use_palette;
-use crate::state::use_auth;
 use dioxus::prelude::*;
 
-/// CSS class constants for top bar cells
-const TOP_BAR: &str = "top-bar-grid \
-    fixed top-0 inset-x-0 z-[100] \
-    bg-[var(--glass-bg)] backdrop-blur-[24px] \
-    border-b border-[var(--color-border)]";
-
-const NAV_CONTENT: &str = "relative z-10 \
-    max-w-[calc(1200px+4rem)] mx-auto px-8 \
-    flex items-stretch justify-between";
-
-const NAV_LOGO: &str = "relative z-[1] \
-    flex items-center gap-2 px-6 py-4 \
-    border-x border-[var(--color-border)] \
-    bg-[var(--color-background)] \
-    text-2xl font-extrabold \
-    text-[var(--color-primary)] no-underline \
-    uppercase tracking-wider \
-    transition-opacity duration-200 \
-    hover:opacity-80";
-
-const NAV_LINK: &str = "relative z-[1] \
-    flex items-center px-6 py-4 \
-    border-l border-[var(--color-border)] \
-    bg-[var(--color-background)] \
-    text-sm font-medium \
-    text-[var(--color-text-primary)] no-underline \
-    whitespace-nowrap \
-    transition-colors duration-200 \
-    hover:text-[var(--color-primary)]";
-
-const NAV_PRIMARY: &str = "relative z-[1] \
-    flex items-center px-6 py-4 \
-    border-l border-[var(--color-border)] \
-    text-sm font-semibold \
-    text-[var(--color-background)] no-underline \
-    whitespace-nowrap \
-    bg-[var(--color-primary)] \
-    hover:brightness-110 \
-    transition-all duration-200";
-
-const ICON_BTN: &str = "relative z-[1] \
-    flex items-center justify-center \
-    w-[3.25rem] p-0 border-0 \
-    border-l border-[var(--color-border)] \
-    bg-[var(--color-background)] \
-    text-[var(--color-text-primary)] \
-    cursor-pointer \
-    transition-colors duration-200 \
-    hover:text-[var(--color-primary)] \
-    [&_svg]:w-[1.125rem] [&_svg]:h-[1.125rem]";
-
-/// TopBar for public pages
-#[component]
-pub fn VitrineTopBar() -> Element {
-    let auth = use_auth();
-    let on_logout = use_logout();
-    let has_user = auth.user.read().is_some();
-
-    let home_href = if has_user {
-        "/home"
-    } else {
-        "/"
-    };
-
-    let username = auth
-        .user
-        .read()
-        .as_ref()
-        .map(|u| u.username.clone())
-        .unwrap_or_default();
-
-    rsx! {
-        nav { class: "{TOP_BAR}",
-            div { class: "{NAV_CONTENT}",
-                Link {
-                    to: "{home_href}",
-                    class: "{NAV_LOGO}",
-                    img {
-                        src: "/assets/favicon.svg",
-                        alt: "Pyckx",
-                        class: "w-14 h-14 shrink-0 \
-                            -my-3.5",
-                    }
-                    "PYCKX"
-                }
-                div {
-                    class: "flex items-stretch",
-                    a {
-                        href: "#services",
-                        class: "{NAV_LINK}",
-                        "Services"
-                    }
-                    a {
-                        href: "#pricing",
-                        class: "{NAV_LINK}",
-                        "Pricing"
-                    }
-                    if has_user {
-                        Link {
-                            to: "/home",
-                            class: "{NAV_LINK}",
-                            "{username}"
-                        }
-                        a {
-                            href: "#",
-                            class: "{NAV_PRIMARY}",
-                            onclick: on_logout,
-                            "Logout"
-                        }
-                    } else {
-                        Link {
-                            to: "/login",
-                            class: "{NAV_PRIMARY}",
-                            "Login"
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-/// Dark mode toggle button for the top bar
+/// Dark mode toggle (neo-brutalist ghost btn)
 #[component]
 fn DarkModeBtn() -> Element {
     let mut palette = use_palette();
@@ -145,7 +22,7 @@ fn DarkModeBtn() -> Element {
 
     rsx! {
         button {
-            class: "{ICON_BTN}",
+            class: "nav-btn-ghost",
             onclick: move |_| {
                 palette.toggle_dark();
             },
@@ -157,37 +34,103 @@ fn DarkModeBtn() -> Element {
     }
 }
 
-/// TopBar for authenticated pages
+/// Theme picker dropdown button
 #[component]
-pub fn HomeTopBar() -> Element {
-    let on_logout = use_logout();
+fn ThemeBtn() -> Element {
+    let mut open = use_signal(|| false);
+    let mut palette = use_palette();
+    let current_id = palette.palette_id();
 
     rsx! {
-        nav { class: "{TOP_BAR}",
-            div { class: "{NAV_CONTENT}",
-                Link {
-                    to: "/home",
-                    class: "{NAV_LOGO}",
-                    img {
-                        src: "/assets/favicon.svg",
-                        alt: "Pyckx",
-                        class: "w-14 h-14 shrink-0 \
-                            -my-3.5",
-                    }
-                    "PYCKX"
-                }
-                PageNav {}
-                div {
-                    class: "flex items-stretch",
-                    DarkModeBtn {}
-                    a {
-                        href: "#",
-                        class: "{NAV_PRIMARY}",
-                        onclick: on_logout,
-                        "Logout"
+        div { class: "theme-dropdown",
+            button {
+                class: "nav-btn-ghost",
+                onclick: move |_| {
+                    open.set(!open());
+                },
+                "aria-label": "Choose theme",
+                // Palette icon (small circle)
+                div { class: "theme-btn-dot" }
+            }
+            if open() {
+                div { class: "theme-menu",
+                    for p in PALETTES.iter() {
+                        button {
+                            class: if current_id == p.id {
+                                "theme-menu-item active"
+                            } else {
+                                "theme-menu-item"
+                            },
+                            onclick: {
+                                let id = p.id;
+                                move |_| {
+                                    palette.set_palette(id);
+                                    open.set(false);
+                                }
+                            },
+                            span {
+                                class: "theme-menu-dot",
+                                style: "background:{p.preview_hex}",
+                            }
+                            span { "{p.name}" }
+                        }
                     }
                 }
             }
+        }
+    }
+}
+
+/// TopBar for authenticated pages (neo-brutalist)
+#[component]
+pub fn HomeTopBar() -> Element {
+    let on_logout = use_logout();
+    let path = current_pathname();
+
+    rsx! {
+        nav { class: "home-nav",
+            Link {
+                to: "/home",
+                class: "logo-wrap no-underline",
+                NavLogo {}
+            }
+            // Center: pill nav links
+            div { class: "home-nav-links",
+                for (p, label) in NAV_PAGES {
+                    {pill_link(p, label, &path)}
+                }
+            }
+            // Right: theme + dark mode + logout
+            div { class: "nav-actions",
+                ThemeBtn {}
+                DarkModeBtn {}
+                button {
+                    class: "nav-btn",
+                    onclick: on_logout,
+                    "Logout"
+                }
+            }
+        }
+    }
+}
+
+/// Single pill nav link with active state
+fn pill_link(
+    href: &'static str,
+    label: &'static str,
+    path: &str,
+) -> Element {
+    let active = if path.starts_with(href) {
+        " active"
+    } else {
+        ""
+    };
+
+    rsx! {
+        Link {
+            to: href,
+            class: "{active}",
+            "{label}"
         }
     }
 }

@@ -1,8 +1,7 @@
 //! Logo component module
 
-mod logo;
-mod logo_icon;
+mod nav_logo;
 mod split_logo;
 
-pub use logo_icon::LogoIcon;
-pub use split_logo::SplitLogo;
+pub use nav_logo::NavLogo;
+pub use split_logo::SPLIT_LINE_SVG;

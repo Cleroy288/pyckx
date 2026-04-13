@@ -3,6 +3,7 @@
 
 use crate::domain::palette_types::{
     ModeColors, Palette, ThemeColors,
+    DEFAULT_PALETTE_ID,
 };
 
 /// All available color palettes
@@ -45,18 +46,18 @@ const TEAL_TECH: Palette = Palette {
         dark: ModeColors {
             primary: "oklch(0.78 0.15 190)",
             primary_fg: "oklch(0.13 0.008 260)",
-            secondary: "oklch(0.22 0.008 260)",
-            secondary_fg: "oklch(0.85 0 0)",
+            secondary: "oklch(0.25 0.015 260)",
+            secondary_fg: "oklch(0.85 0.01 260)",
             accent: "oklch(0.78 0.15 190)",
             accent_fg: "oklch(0.13 0.008 260)",
-            muted: "oklch(0.25 0.006 260)",
-            muted_fg: "oklch(0.60 0 0)",
-            background: "oklch(0.16 0.008 260)",
-            foreground: "oklch(0.93 0 0)",
-            card: "oklch(0.20 0.008 260)",
-            card_fg: "oklch(0.93 0 0)",
-            border: "oklch(0.28 0.008 260)",
-            input: "oklch(0.22 0.008 260)",
+            muted: "oklch(0.30 0.015 260)",
+            muted_fg: "oklch(0.68 0.01 260)",
+            background: "oklch(0.23 0.015 260)",
+            foreground: "oklch(0.90 0.01 260)",
+            card: "oklch(0.27 0.018 260)",
+            card_fg: "oklch(0.90 0.01 260)",
+            border: "oklch(0.34 0.015 260)",
+            input: "oklch(0.25 0.015 260)",
             ring: "oklch(0.78 0.15 190)",
             destructive: "oklch(0.55 0.22 27)",
             destructive_fg: "oklch(0.98 0 0)",
@@ -97,18 +98,18 @@ const PURPLE_DREAM: Palette = Palette {
         dark: ModeColors {
             primary: "oklch(0.72 0.18 280)",
             primary_fg: "oklch(0.13 0.012 270)",
-            secondary: "oklch(0.22 0.012 270)",
-            secondary_fg: "oklch(0.85 0 0)",
+            secondary: "oklch(0.25 0.018 270)",
+            secondary_fg: "oklch(0.85 0.01 270)",
             accent: "oklch(0.7 0.16 300)",
             accent_fg: "oklch(0.13 0.012 270)",
-            muted: "oklch(0.25 0.010 270)",
-            muted_fg: "oklch(0.60 0 0)",
-            background: "oklch(0.16 0.012 270)",
-            foreground: "oklch(0.93 0 0)",
-            card: "oklch(0.20 0.012 270)",
-            card_fg: "oklch(0.93 0 0)",
-            border: "oklch(0.28 0.012 270)",
-            input: "oklch(0.22 0.012 270)",
+            muted: "oklch(0.30 0.018 270)",
+            muted_fg: "oklch(0.68 0.01 270)",
+            background: "oklch(0.23 0.018 270)",
+            foreground: "oklch(0.90 0.01 270)",
+            card: "oklch(0.27 0.020 270)",
+            card_fg: "oklch(0.90 0.01 270)",
+            border: "oklch(0.34 0.018 270)",
+            input: "oklch(0.25 0.018 270)",
             ring: "oklch(0.72 0.18 280)",
             destructive: "oklch(0.55 0.22 27)",
             destructive_fg: "oklch(0.98 0 0)",
@@ -149,18 +150,18 @@ const OCEAN_BLUE: Palette = Palette {
         dark: ModeColors {
             primary: "oklch(0.7 0.18 240)",
             primary_fg: "oklch(0.13 0.010 250)",
-            secondary: "oklch(0.22 0.010 250)",
-            secondary_fg: "oklch(0.85 0 0)",
+            secondary: "oklch(0.25 0.016 250)",
+            secondary_fg: "oklch(0.85 0.01 250)",
             accent: "oklch(0.68 0.16 220)",
             accent_fg: "oklch(0.13 0.010 250)",
-            muted: "oklch(0.25 0.008 250)",
-            muted_fg: "oklch(0.60 0 0)",
-            background: "oklch(0.16 0.010 250)",
-            foreground: "oklch(0.93 0 0)",
-            card: "oklch(0.20 0.010 250)",
-            card_fg: "oklch(0.93 0 0)",
-            border: "oklch(0.28 0.010 250)",
-            input: "oklch(0.22 0.010 250)",
+            muted: "oklch(0.30 0.016 250)",
+            muted_fg: "oklch(0.68 0.01 250)",
+            background: "oklch(0.23 0.016 250)",
+            foreground: "oklch(0.90 0.01 250)",
+            card: "oklch(0.27 0.018 250)",
+            card_fg: "oklch(0.90 0.01 250)",
+            border: "oklch(0.34 0.016 250)",
+            input: "oklch(0.25 0.016 250)",
             ring: "oklch(0.7 0.18 240)",
             destructive: "oklch(0.55 0.22 27)",
             destructive_fg: "oklch(0.98 0 0)",
@@ -201,18 +202,18 @@ const EMERALD_FOREST: Palette = Palette {
         dark: ModeColors {
             primary: "oklch(0.72 0.16 155)",
             primary_fg: "oklch(0.13 0.010 160)",
-            secondary: "oklch(0.22 0.010 160)",
-            secondary_fg: "oklch(0.85 0 0)",
+            secondary: "oklch(0.25 0.016 160)",
+            secondary_fg: "oklch(0.85 0.01 160)",
             accent: "oklch(0.68 0.14 140)",
             accent_fg: "oklch(0.13 0.010 160)",
-            muted: "oklch(0.25 0.008 160)",
-            muted_fg: "oklch(0.60 0 0)",
-            background: "oklch(0.16 0.010 160)",
-            foreground: "oklch(0.93 0 0)",
-            card: "oklch(0.20 0.010 160)",
-            card_fg: "oklch(0.93 0 0)",
-            border: "oklch(0.28 0.010 160)",
-            input: "oklch(0.22 0.010 160)",
+            muted: "oklch(0.30 0.016 160)",
+            muted_fg: "oklch(0.68 0.01 160)",
+            background: "oklch(0.23 0.016 160)",
+            foreground: "oklch(0.90 0.01 160)",
+            card: "oklch(0.27 0.018 160)",
+            card_fg: "oklch(0.90 0.01 160)",
+            border: "oklch(0.34 0.016 160)",
+            input: "oklch(0.25 0.016 160)",
             ring: "oklch(0.72 0.16 155)",
             destructive: "oklch(0.55 0.22 27)",
             destructive_fg: "oklch(0.98 0 0)",
@@ -253,18 +254,18 @@ const SUNSET_ORANGE: Palette = Palette {
         dark: ModeColors {
             primary: "oklch(0.75 0.18 45)",
             primary_fg: "oklch(0.13 0.010 50)",
-            secondary: "oklch(0.22 0.010 50)",
-            secondary_fg: "oklch(0.85 0 0)",
+            secondary: "oklch(0.25 0.016 50)",
+            secondary_fg: "oklch(0.85 0.01 50)",
             accent: "oklch(0.7 0.16 30)",
             accent_fg: "oklch(0.13 0.010 50)",
-            muted: "oklch(0.25 0.008 50)",
-            muted_fg: "oklch(0.60 0 0)",
-            background: "oklch(0.16 0.010 50)",
-            foreground: "oklch(0.93 0 0)",
-            card: "oklch(0.20 0.010 50)",
-            card_fg: "oklch(0.93 0 0)",
-            border: "oklch(0.28 0.010 50)",
-            input: "oklch(0.22 0.010 50)",
+            muted: "oklch(0.30 0.016 50)",
+            muted_fg: "oklch(0.68 0.01 50)",
+            background: "oklch(0.23 0.016 50)",
+            foreground: "oklch(0.90 0.01 50)",
+            card: "oklch(0.27 0.018 50)",
+            card_fg: "oklch(0.90 0.01 50)",
+            border: "oklch(0.34 0.016 50)",
+            input: "oklch(0.25 0.016 50)",
             ring: "oklch(0.75 0.18 45)",
             destructive: "oklch(0.55 0.22 27)",
             destructive_fg: "oklch(0.98 0 0)",
@@ -273,3 +274,85 @@ const SUNSET_ORANGE: Palette = Palette {
         },
     },
 };
+
+/// Lookup a palette by id
+pub fn palette_by_id(
+    id: &str,
+) -> Option<&'static Palette> {
+    PALETTES.iter().find(|p| p.id == id)
+}
+
+/// Returns the default palette
+pub fn default_palette() -> &'static Palette {
+    palette_by_id(DEFAULT_PALETTE_ID)
+        .unwrap_or(&PALETTES[0])
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_palette_by_id_valid() {
+        let cases = vec![
+            ("teal-tech", "Teal Tech"),
+            ("purple-dream", "Purple Dream"),
+            ("ocean-blue", "Ocean Blue"),
+            ("emerald-forest", "Emerald Forest"),
+            ("sunset-orange", "Sunset Orange"),
+        ];
+        for (id, expected_name) in cases {
+            let p = palette_by_id(id);
+            assert!(
+                p.is_some(),
+                "palette '{}' should exist",
+                id,
+            );
+            assert_eq!(
+                p.unwrap().name, expected_name,
+                "palette '{}' name mismatch",
+                id,
+            );
+        }
+    }
+
+    #[test]
+    fn test_palette_by_id_unknown() {
+        assert!(
+            palette_by_id("nonexistent").is_none()
+        );
+    }
+
+    #[test]
+    fn test_default_palette_returns_purple() {
+        let p = default_palette();
+        assert_eq!(p.id, "purple-dream");
+    }
+
+    #[test]
+    fn test_palettes_have_distinct_ids() {
+        let ids: Vec<&str> =
+            PALETTES.iter().map(|p| p.id).collect();
+        for (i, id) in ids.iter().enumerate() {
+            assert!(
+                !ids[i + 1..].contains(id),
+                "duplicate palette id: {}",
+                id,
+            );
+        }
+    }
+
+    #[test]
+    fn test_palettes_all_have_valid_fields() {
+        for p in PALETTES.iter() {
+            assert!(!p.id.is_empty());
+            assert!(!p.name.is_empty());
+            assert!(!p.description.is_empty());
+            assert!(
+                p.preview_hex.starts_with('#'),
+                "{}: bad preview_hex",
+                p.id,
+            );
+        }
+    }
+}

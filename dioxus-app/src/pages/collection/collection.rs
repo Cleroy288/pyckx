@@ -60,7 +60,14 @@ pub fn CollectionPage() -> Element {
                     }
                     edit_id.set(None);
                 }
-                Err(_e) => {}
+                Err(e) => {
+                    crate::api::log::log_error(
+                        &format!(
+                            "DVD update failed: {e}"
+                        ),
+                        "collection",
+                    );
+                }
             }
             form_loading.set(false);
         });
@@ -69,14 +76,10 @@ pub fn CollectionPage() -> Element {
     // Delete handler
     let on_delete = move |id: String| {
         spawn(async move {
-            match api::collection::delete_dvd(&id)
-                .await
-            {
-                Ok(true) => {
-                    dvds.write()
-                        .retain(|d| d.id != id);
-                }
-                _ => {}
+            if let Ok(true) = api::collection::delete_dvd(&id)
+                .await {
+                dvds.write()
+                    .retain(|d| d.id != id);
             }
         });
     };
@@ -93,6 +96,7 @@ pub fn CollectionPage() -> Element {
     });
 
     rsx! {
+        div { class: "home-page",
         HomeTopBar {}
         PageLayout {
             HeroBanner {
@@ -114,6 +118,7 @@ pub fn CollectionPage() -> Element {
                 on_edit: open_edit,
                 on_delete: on_delete,
             }
+        }
         }
         // Edit modal
         if (edit_id)().is_some() {

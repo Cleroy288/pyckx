@@ -14,19 +14,14 @@ pub fn PalettePicker() -> Element {
     let state = use_palette();
 
     rsx! {
-        div {
-            class: "flex flex-col gap-4 \
-                px-6 py-8 w-full \
-                bg-[var(--glass-bg)] \
-                backdrop-blur-[20px] \
-                border border-[var(--color-border)] \
-                text-[var(--color-text-primary)]",
+        div { class: "theme-card",
             // Swatches row
             div {
                 class: "flex justify-center gap-3 \
                     flex-wrap",
                 for p in PALETTES.iter() {
                     SwatchBtn {
+                        key: "{p.id}",
                         id: p.id,
                         hex: p.preview_hex,
                         name: p.name,
@@ -50,8 +45,9 @@ fn SwatchBtn(
 ) -> Element {
     let is_active = state.palette_id() == id;
     let active_cls = if is_active {
-        "border-[var(--color-text-primary)] \
-         shadow-[0_0_0_3px_var(--glow),0_0_16px_var(--glow)]"
+        "border-[var(--foreground)] \
+         shadow-[0_0_0_3px_var(--glow),\
+         0_0_16px_var(--glow)]"
     } else {
         "border-transparent"
     };
@@ -65,7 +61,9 @@ fn SwatchBtn(
                     relative \
                     transition-all duration-200 \
                     hover:scale-[1.15] \
-                    hover:shadow-[0_0_12px_color-mix(in_srgb,var(--primary)_40%,transparent)]",
+                    hover:shadow-[0_0_12px_\
+                    color-mix(in_srgb,\
+                    var(--primary)_40%,transparent)]",
                 style: "background: {hex}",
                 title: "{name}",
                 onclick: move |_| {
@@ -74,7 +72,7 @@ fn SwatchBtn(
             }
             div {
                 class: "text-xs \
-                    text-[var(--color-text-secondary)] \
+                    text-[var(--muted-foreground)] \
                     text-center mt-1",
                 "{name}"
             }
@@ -100,12 +98,13 @@ fn DarkToggle(mut state: PaletteState) -> Element {
 
     rsx! {
         div {
-            class: "flex items-center justify-center \
-                gap-2 pt-2 \
-                border-t border-[var(--color-border)]",
+            class: "flex items-center \
+                justify-center gap-2 pt-4 mt-4 \
+                border-t-2 \
+                border-[var(--color-border)]",
             span {
                 class: "text-sm \
-                    text-[var(--color-text-secondary)]",
+                    text-[var(--muted-foreground)]",
                 "Dark mode"
             }
             button {
@@ -120,9 +119,10 @@ fn DarkToggle(mut state: PaletteState) -> Element {
                 div {
                     class: "w-[18px] h-[18px] \
                         rounded-full bg-white \
-                        shadow-[0_1px_3px_rgba(0,0,0,0.2)] \
-                        transition-transform duration-300 \
-                        {knob_cls}",
+                        shadow-[0_1px_3px_\
+                        rgba(0,0,0,0.2)] \
+                        transition-transform \
+                        duration-300 {knob_cls}",
                 }
             }
         }

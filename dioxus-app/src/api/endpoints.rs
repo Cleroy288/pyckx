@@ -13,27 +13,33 @@ pub const ALL_APPS: &str = "/api/apps";
 // -- Collection --
 pub const DVDS: &str = "/api/collection/dvds";
 
-// -- Intello games --
-pub const QCM: &str = "/api/intello/qcm";
+// -- Study games --
+pub const QCM: &str = "/api/study/qcm";
+pub const QCM_GENERATE: &str =
+    "/api/study/qcm/generate";
 pub const QCM_QUICK: &str =
-    "/api/intello/qcm/generate-quick";
-pub const FLASHCARDS: &str = "/api/intello/flashcards";
-pub const TRUE_FALSE: &str = "/api/intello/true-false";
-pub const OPEN_QUESTIONS: &str = "/api/intello/open-questions";
+    "/api/study/qcm/generate-quick";
+pub const FLASHCARDS: &str = "/api/study/flashcards";
+pub const TRUE_FALSE: &str = "/api/study/true-false";
+pub const OPEN_QUESTIONS: &str = "/api/study/open-questions";
 pub const OPEN_QUESTIONS_CHECK: &str =
-    "/api/intello/open-questions/check";
-pub const KEYWORDS: &str = "/api/intello/keywords";
-pub const ORDER_PHRASES: &str = "/api/intello/order-phrases";
-pub const FILL_BLANKS: &str = "/api/intello/fill-blanks";
-pub const GAMES: &str = "/api/intello/games";
+    "/api/study/open-questions/check";
+pub const KEYWORDS: &str = "/api/study/keywords";
+pub const ORDER_PHRASES: &str = "/api/study/order-phrases";
+pub const FILL_BLANKS: &str = "/api/study/fill-blanks";
+pub const GAMES: &str = "/api/study/games";
+pub const CODING_GENERATE: &str =
+    "/api/study/games/coding/generate";
+pub const CODING_CHECK: &str =
+    "/api/study/games/coding/check";
 
 // -- Courses --
-pub const COURSES: &str = "/api/intello/courses";
+pub const COURSES: &str = "/api/study/courses";
 pub const GENERATE_COURSE: &str =
-    "/api/intello/generate-course";
-pub const RESOURCES: &str = "/api/intello/resources";
+    "/api/study/generate-course";
+pub const RESOURCES: &str = "/api/study/resources";
 pub const RESOURCES_CHECK: &str =
-    "/api/intello/resources/check";
+    "/api/study/resources/check";
 
 // -- Admin --
 pub const ADMIN_STATS: &str = "/api/admin/stats";
@@ -53,6 +59,7 @@ mod tests {
             ("ALL_APPS", ALL_APPS),
             ("DVDS", DVDS),
             ("QCM", QCM),
+            ("QCM_GENERATE", QCM_GENERATE),
             ("QCM_QUICK", QCM_QUICK),
             ("FLASHCARDS", FLASHCARDS),
             ("TRUE_FALSE", TRUE_FALSE),
@@ -62,6 +69,8 @@ mod tests {
             ("ORDER_PHRASES", ORDER_PHRASES),
             ("FILL_BLANKS", FILL_BLANKS),
             ("GAMES", GAMES),
+            ("CODING_GENERATE", CODING_GENERATE),
+            ("CODING_CHECK", CODING_CHECK),
             ("COURSES", COURSES),
             ("GENERATE_COURSE", GENERATE_COURSE),
             ("RESOURCES", RESOURCES),
@@ -80,10 +89,12 @@ mod tests {
     fn test_no_trailing_slash() {
         let endpoints = [
             LOGIN, LOGOUT, REGISTER, ME,
-            USER_APPS, ALL_APPS, DVDS, QCM, QCM_QUICK,
+            USER_APPS, ALL_APPS, DVDS,
+            QCM, QCM_GENERATE, QCM_QUICK,
             FLASHCARDS, TRUE_FALSE,
             OPEN_QUESTIONS, KEYWORDS,
             ORDER_PHRASES, FILL_BLANKS,
+            CODING_GENERATE, CODING_CHECK,
             COURSES, RESOURCES, ADMIN_STATS,
         ];
         for url in endpoints {

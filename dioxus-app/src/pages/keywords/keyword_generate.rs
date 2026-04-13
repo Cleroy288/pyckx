@@ -1,0 +1,32 @@
+//! Keywords generation page (thin wrapper)
+
+use crate::api;
+use crate::components::game_shared::game_generate_page::{
+    build_form_data, ApiCall, GameGeneratePage,
+};
+use dioxus::prelude::*;
+use std::sync::Arc;
+
+/// Keywords generation page
+pub fn KeywordsGeneratePage() -> Element {
+    let api_call: ApiCall =
+        ApiCall(Arc::new(|data| {
+            Box::pin(async move {
+                let form = build_form_data(&data);
+                api::keywords::create_keywords(
+                    &form,
+                )
+                .await
+                .map(|_| ())
+            })
+        }));
+
+    rsx! {
+        GameGeneratePage {
+            title: "Generate Keywords",
+            success_msg: "Generated!",
+            redirect: "/keywords",
+            api_call: api_call,
+        }
+    }
+}
